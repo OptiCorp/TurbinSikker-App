@@ -1,5 +1,8 @@
+import { LoginContainer, BackgroundContainer } from "./styles"
+
+
 export const Login = () => {
     return (
-        <div>Login</div>
+      <LoginContainer> <BackgroundContainer/> </LoginContainer>
     )
 }
