@@ -1,6 +1,6 @@
-import { useState } from 'react'
-
-import './App.css'
+import React, { FunctionComponent, useState, useEffect } from 'react';
+import '././BasicStyling/App.css'
+import { Login } from './components/Login';
 
 function App() {
 
@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <div>
-      <h1> TurbinSikker </h1> 
+     <Login/>
       </div>
     
     </>
