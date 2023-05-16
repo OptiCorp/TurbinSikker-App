@@ -1,15 +1,15 @@
-import './App.css'
+
+import { Login } from './components/Login'
+import './BasicStyling/App.css'
+
 
 function App() {
 
-
   return (
-    <>
       <div>
-      <h1> TurbinSikker </h1> 
+     <Login/>
       </div>
     
-    </>
   )
 }
 
