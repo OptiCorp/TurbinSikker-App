@@ -1,10 +1,17 @@
 import { Button, Icon, Progress, TextField } from "@equinor/eds-core-react";
-import { LoginContainer, BackgroundContainer } from "./styles";
+import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header,Wrapper } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, TLoginSchema } from "./validator";
 import { error_filled, } from '@equinor/eds-icons'
 import { useState } from "react";
+import { Typography } from '@equinor/eds-core-react'
+
+
+
+
+
+
 
 export const Login = () => {
   const {
@@ -34,11 +41,17 @@ export const Login = () => {
 
   return (
     <BackgroundContainer>
-      
+
       <LoginContainer>
+        <Header>  <TitleHeader>Sign in to your 
+Account</TitleHeader>
+<Typography color="secondary" link href="#" token={{  fontWeight: 600 }} >Or get access here</Typography></Header>
+      
+
         <form onSubmit={handleSubmit(LoginUser)}>
           <TextField
             id="username"
+            label="Username"
             {...register("username")}
             placeholder="Username..."
             variant={errors.username && "error"}
@@ -49,6 +62,7 @@ export const Login = () => {
           <TextField
             {...register("password")}
             type="password"
+            label="Password"
             id="textfield-password"
             placeholder="Password..."
             variant={errors.password && "error"}
@@ -71,7 +85,12 @@ export const Login = () => {
 
 
         </form>
+   
+        <Infotext >Having Trouble with your account?
+        <Typography color="secondary" link href="#" token={{  fontWeight: 600 }} 
+  >Contact Support</Typography></Infotext>
       </LoginContainer>
+    
     </BackgroundContainer>
   );
 };
