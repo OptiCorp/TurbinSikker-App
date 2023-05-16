@@ -3,7 +3,7 @@ import { LoginContainer, BackgroundContainer } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, TLoginSchema } from "./validator";
-import { error_filled, refresh, send } from '@equinor/eds-icons'
+import { error_filled, } from '@equinor/eds-icons'
 import { useState } from "react";
 
 export const Login = () => {
@@ -11,7 +11,6 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<TLoginSchema>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -58,7 +57,7 @@ export const Login = () => {
           <p>{errors.password && errors.password.message}</p>
         
           <Button
-           type="Submit"
+           type="submit"
         aria-disabled={isSubmitting ? true : false}
         aria-label={isSubmitting ? 'loading data' : ''}
         onClick={!isSubmitting ? onSubmit : undefined}
