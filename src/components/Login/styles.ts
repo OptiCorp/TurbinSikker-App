@@ -1,23 +1,22 @@
 import styled from "styled-components"
-import backgrounddestop from '../../Images/original1blur.png'
+import backgrounddestop from '../../Images/destopwindturbinebackground.png'
 
 import background from '../../Images/Kateraterateru_can_you_make_this_bigger_and_in_better_quality_H_8043e93a-1e91-4653-9725-960aa1454f66.png'
-import { text_field } from "@equinor/eds-icons";
+
 
 export const LoginContainer = styled.div`
 min-width: 220px;
 display: grid;
-grid-template-rows: 1fr 1fr 1fr;
+grid-template-columns: min(1fr);
 
+justify-content: center;
+grid-template-rows: 1fr 1fr 1fr;
 align-items: center;
 text-align: center;
 margin: 0 auto;
 `;
 
-export const Wrapper = styled.div`
 
-
-`;
 
 
 
@@ -28,6 +27,7 @@ background-repeat: no-repeat;
 background-position: center;
 margin: 0;
 display: flex;
+width: 100%;
 justify-content: center;
 align-items: center;
 min-height: 100vh;
@@ -36,6 +36,8 @@ min-height: 100vh;
 background-size: cover;
 background-repeat: no-repeat;
 background-position: center; }
+
+
 `;
 
 
@@ -46,6 +48,7 @@ color: white;
 text-shadow: 2px 0px 3px rgba(0,0,0,0.5);
   font-weight: 500;
   margin: 0 auto;
+  
 `;
 
 

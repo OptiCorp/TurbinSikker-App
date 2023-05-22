@@ -1,5 +1,5 @@
 import { Button, Icon, Progress, TextField } from "@equinor/eds-core-react";
-import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header,Wrapper } from "./styles";
+import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, TLoginSchema } from "./validator";
