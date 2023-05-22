@@ -1,13 +1,11 @@
 import { Button, Icon, Progress, TextField } from "@equinor/eds-core-react";
-import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header } from "./styles";
+import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header,FormWrapper } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, TLoginSchema } from "./validator";
 import { error_filled, } from '@equinor/eds-icons'
 import { useState } from "react";
 import { Typography } from '@equinor/eds-core-react'
-
-
 
 
 
@@ -41,14 +39,15 @@ export const Login = () => {
 
   return (
     <BackgroundContainer>
-
+    
       <LoginContainer>
+
         <Header>  <TitleHeader>Sign in to your 
 Account</TitleHeader>
-<Typography color="secondary" link href="#" token={{  fontWeight: 600 }} >Or get access here</Typography></Header>
+<Typography  color="white" link href="#" token={{  fontWeight: '500', fontSize: '0.9rem' }} >Or get access here</Typography></Header>
       
 
-        <form onSubmit={handleSubmit(LoginUser)}>
+        <FormWrapper onSubmit={handleSubmit(LoginUser)}>
           <TextField
             id="username"
             label="Username"
@@ -84,13 +83,13 @@ Account</TitleHeader>
 
 
 
-        </form>
+        </FormWrapper>
    
         <Infotext >Having Trouble with your account?
-        <Typography color="secondary" link href="#" token={{  fontWeight: 600 }} 
+        <Typography color="white" link href="#" token={{  fontWeight: '500',fontSize: '0.9rem' }} 
   >Contact Support</Typography></Infotext>
       </LoginContainer>
-    
+  
     </BackgroundContainer>
   );
 };
