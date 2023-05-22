@@ -6,8 +6,7 @@ import { LoginSchema, TLoginSchema } from "./validator";
 import { error_filled, } from '@equinor/eds-icons'
 import { useState } from "react";
 import { Typography } from '@equinor/eds-core-react'
-
-
+import { useNavigate } from "react-router";
 
 
 
@@ -34,8 +33,11 @@ export const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const onSubmit = () => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
+    navigate('/LandingPage')
   }
+
+  const navigate = useNavigate();
 
   return (
     <BackgroundContainer>
