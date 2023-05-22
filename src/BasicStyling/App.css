@@ -1,6 +1,7 @@
-body {
+body,html {
     margin: 0;
    width: 100%;
+   font-family: equinor;
    height:100%;
   }
   

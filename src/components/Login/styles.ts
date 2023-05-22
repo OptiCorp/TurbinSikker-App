@@ -5,18 +5,26 @@ import background from '../../Images/Kateraterateru_can_you_make_this_bigger_and
 
 
 export const LoginContainer = styled.div`
-min-width: 220px;
-display: grid;
-grid-template-columns: min(1fr);
 
-justify-content: center;
+display: grid;
+grid-template-columns: 1fr;
 grid-template-rows: 1fr 1fr 1fr;
 align-items: center;
+background-color: rgb(35 54 69 / 0.1);
+backdrop-filter: blur(5px);
+height: 100vh;
+width: 100%;
 text-align: center;
-margin: 0 auto;
+
 `;
+export const FormWrapper = styled.form`
+width: 50%;
+min-width: 300px;
+margin: 0 auto;
+color: red;
+max-height: 200px;
 
-
+`;
 
 
 
@@ -25,16 +33,13 @@ background-image: url(${background});
 background-size: cover;
 background-repeat: no-repeat;
 background-position: center;
-margin: 0;
 display: flex;
-width: 100%;
 justify-content: center;
 align-items: center;
 min-height: 100vh;
 
 @media (min-width:1025px) {background-image: url(${backgrounddestop});
 background-size: cover;
-background-repeat: no-repeat;
 background-position: center; }
 
 
@@ -42,43 +47,32 @@ background-position: center; }
 
 
 export const TitleHeader = styled.h1`
- font-family: Equinor;
+
 font-style: italic;
 color: white;
 text-shadow: 2px 0px 3px rgba(0,0,0,0.5);
   font-weight: 500;
   margin: 0 auto;
-  
+
 `;
 
 
 export const Header = styled.div`
-
-
-
+text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
 display: flex;
 flex-direction: column;
  align-items: center;
 gap: 20px;
-margin: 0 auto;
-
-`;
-
-export const LinkTextHeader = styled.h3`
- font-family: Equinor;
-font-style: italic;
-  font-weight: 300;
-  margin: 0 auto;
 `;
 
 
 export const Infotext = styled.p`
- font-family: Equinor;
+
 font-style: italic;
 max-width: 270px;
-line-height: 40px;
-text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-  font-weight: 500;
+line-height: 60px;
+text-shadow: 2px 1px 1px rgba(0,0,0,0.5);
+  font-weight: 600;
   color: white;
   margin:  0 auto;
 
