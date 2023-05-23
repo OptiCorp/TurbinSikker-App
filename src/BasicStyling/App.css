@@ -5,6 +5,17 @@ body,html {
    height:100%;
   }
   
-  .opt-appBar{
-    background: #243746;
-  }
+.wrapper{
+
+display: grid;
+height: 100vh;
+grid-template-columns: 1fr;
+grid-template-rows: auto 1fr auto;
+
+
+    align-items: center;
+
+
+
+}
+

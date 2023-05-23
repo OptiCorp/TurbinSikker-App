@@ -1,18 +1,25 @@
 
-import { Login } from './components/Login'
+import { Login } from './Pages/Login'
 import './BasicStyling/App.css'
-import { Routes, Route,  } from 'react-router-dom';
-import { LandingPage } from './components/LandingPage/LandingPage';
+import { Routes, Route } from 'react-router-dom';
+import { LandingPage } from './Pages/LandingPage/LandingPage';
 
+import Layout from "./components/Layout";
 
-function App() {
+const App = () =>  {
 
   return (
-      <div>
+      <div className='wrapper'>
+       
         	<Routes>
           <Route path="/" element={<Login />}/>
+          <Route element={<Layout />}>
+      
+     
             <Route path= 'LandingPage' element={<LandingPage/>}/>
+            </Route>
      </Routes>
+  
      
       </div>
     

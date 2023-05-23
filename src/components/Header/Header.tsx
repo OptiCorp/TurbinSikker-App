@@ -12,8 +12,12 @@ const NewTopBar = styled(TopBar)`
 `;
 
 
+
+
 export const Header = () => {
 
+
+    
     const navigate = useNavigate();
 
     const onClick = () => {navigate('/')}
@@ -37,11 +41,6 @@ return (
   </NewTopBar>
 
 )
-
-
-
-
-
 
 
 
