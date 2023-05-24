@@ -9,12 +9,15 @@ import { useIsAuthenticated} from "@azure/msal-react";
 
 
 
+
+
 const App = () =>  {
-  
 
 
   const isAuthenticated = useIsAuthenticated();
  
+
+
 
 
   return (
