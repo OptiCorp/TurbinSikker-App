@@ -7,7 +7,7 @@ export const LoginContainer = styled.div`
 
 display: grid;
 grid-template-columns: 1fr;
-grid-template-rows: 1fr 1fr 1fr;
+grid-template-rows: 1fr auto 1fr;
 align-items: center;
 background-color: rgb(35 54 69 / 0.1);
 backdrop-filter: blur(5px);
@@ -16,12 +16,10 @@ width: 100%;
 text-align: center;
 
 `;
-export const FormWrapper = styled.form`
+export const ButtonWrapper = styled.div`
 width: 50%;
 min-width: 300px;
 margin: 0 auto;
-color: red;
-max-height: 200px;
 
 `;
 

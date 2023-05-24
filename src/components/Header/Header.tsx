@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import {useNavigate} from 'react-router'
 
 
+
 const NewTopBar = styled(TopBar)`
  background: #243746;
 `;
@@ -17,12 +18,11 @@ const NewTopBar = styled(TopBar)`
 export const Header = () => {
 
 
-    
     const navigate = useNavigate();
 
     const onClick = () => {navigate('/')}
 return (
-
+<>
     <NewTopBar>
     <TopBar.Header>
    
@@ -38,8 +38,10 @@ return (
         
      
     </TopBar.Actions>
+  
   </NewTopBar>
 
+</>
 )
 
 
