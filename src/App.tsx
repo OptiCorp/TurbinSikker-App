@@ -5,10 +5,11 @@ import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LandingPage } from './Pages/LandingPage/LandingPage';
 import Layout from "./components/Layout";
-import { useMsalAuthentication, useIsAuthenticated, useMsal} from "@azure/msal-react";
+import { useMsalAuthentication, useIsAuthenticated} from "@azure/msal-react";
+import { InteractionType } from '@azure/msal-browser';
 
 const App = () =>  {
-  const {login, result, error} = useMsalAuthentication("redirect");
+  const {error} = useMsalAuthentication(InteractionType.Redirect);
   const isAuthenticated = useIsAuthenticated();
 
   useEffect(() => {
@@ -16,8 +17,6 @@ const App = () =>  {
         console.log(error)
     }
   });
-
-  const { accounts } = useMsal();
 
   return (
     <div className='wrapper'>
