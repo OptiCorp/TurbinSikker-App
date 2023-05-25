@@ -26,14 +26,14 @@ return ( <> <Scrim
       open={open}
       
       onClose={() => setOpen(!open)}
-      style={{ height: '100%' , width: '50%', top:'63px', display: 'grid', gridTemplateRows:'repeat(6,1fr)',gridTemplateColumns:'1fr', background:'#243746',
+      style={{ height: '100%' , width: '40%', top:'63px',  display: 'grid', gridTemplateRows:'repeat(7,1fr)',gridTemplateColumns:'1fr', background:'#243746',
    }} >
      <Container> 
          <img src={Logosidebar}/></Container>
    
    
         
-        <Icon data={menu}size={40} color='white' onClick={() => setOpen(!open)}  style={{gridRow:'6/6'}}/>
+        <Icon data={menu}size={40} color='#73B1B5'  onClick={() => setOpen(!open)}  style={{gridRow:'7/7' }}/>
     </SideSheet>
   </Scrim>
 </>
