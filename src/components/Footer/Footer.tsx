@@ -1,6 +1,6 @@
-import { FooterContainer,ImageContainerActive, ImageContainer} from "./styles"
+import { FooterContainer,ImageContainerActive, ImageContainer} from './styles'
 import { menu, assignment } from '@equinor/eds-icons'
-import Sidebar from "../Sidebar/Sidebar"
+import Sidebar from "../sidebar/Sidebar"
 import { Icon} from '@equinor/eds-core-react'
 import { useState } from "react"
 import { Tabs } from '@equinor/eds-core-react'

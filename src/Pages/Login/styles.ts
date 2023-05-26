@@ -1,6 +1,6 @@
 import styled from "styled-components"
-import backgrounddestop from '../../Images/destopwindturbinebackground.png'
-import background from '../../Images/Kateraterateru_can_you_make_this_bigger_and_in_better_quality_H_8043e93a-1e91-4653-9725-960aa1454f66.png'
+import backgrounddestop from '../../assets/images/destopBackground.png'
+import background from '../../assets/images/phoneBackground.png'
 
 
 export const LoginContainer = styled.div`
