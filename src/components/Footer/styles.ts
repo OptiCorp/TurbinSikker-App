@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import punch from '../../Images/punch.png'
-import activepunch from '../../Images/activepunch.png'
+import punch from '../../assets/images/punch.png'
+import activepunch from '../../assets/images/activepunch.png'
 export const FooterContainer = styled.div`
 
 min-height: 64px;

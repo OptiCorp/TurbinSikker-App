@@ -1,5 +1,5 @@
 import { Button, Progress } from "@equinor/eds-core-react";
-import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header, ButtonWrapper } from "./styles";
+import { LoginContainer, BackgroundContainer,TitleHeader, Infotext, Header, ButtonWrapper } from './styles'
 
 import { useState } from "react";
 import { Typography } from '@equinor/eds-core-react'
@@ -14,7 +14,7 @@ export const Login = () => {
   const onSubmit = () => {
     setIsSubmitting(true);
     instance.loginPopup()
-   
+ 
   }
 
   return (
