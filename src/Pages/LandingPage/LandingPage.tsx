@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useMsal, useAccount } from "@azure/msal-react";
 import { InteractionRequiredAuthError, InteractionStatus,} from "@azure/msal-browser";
@@ -52,16 +53,23 @@ export const LandingPage = () => {
               console.log(error);
             });
         }
+
       }, [account, apiData, inProgress, accounts, instance]);
-   
+
     if (accounts.length > 0) {
         return (
             <>
-                <span>There are currently {accounts.length} users signed in!</span>
-                {apiData && (<span>Data retrieved from API: {JSON.stringify(apiData)}</span>)}
+                <span>
+                    There are currently {accounts.length} users signed in!
+                </span>
+                {apiData && (
+                    <span>
+                        Data retrieved from API: {JSON.stringify(apiData)}
+                    </span>
+                )}
             </>
-        );
-    } else if (inProgress === "login") {
+        )
+    } else if (inProgress === 'login') {
         return <span>Login is currently in progress!</span>
     } else {
         return <span>There are currently no users signed in!</span>
