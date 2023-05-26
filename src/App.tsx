@@ -4,8 +4,8 @@ import Layout from "./Pages/Layout";
 import { Routes, Route } from 'react-router-dom';
 import { useIsAuthenticated} from "@azure/msal-react";
 
-import { LandingPage } from './Pages/landingPage/LandingPage';
-import { Login} from './Pages/login';
+import { LandingPage } from './Pages/LandingPage/LandingPage';
+import { Login } from './Pages/Login';
 
 
 
