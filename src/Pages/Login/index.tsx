@@ -5,8 +5,7 @@ import {
     TitleHeader,
     Infotext,
     Header,
-    ButtonWrapper,
-} from './styles'
+    ButtonWrapper } from './styles'
 
 import { useState } from 'react'
 import { Typography } from '@equinor/eds-core-react'
