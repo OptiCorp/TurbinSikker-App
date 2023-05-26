@@ -1,12 +1,12 @@
 import './assets/App.css'
-import Layout from './pages/Layout'
+import Layout from './Pages/Layout'
 
 import { Routes, Route } from 'react-router-dom'
 import { useIsAuthenticated } from '@azure/msal-react'
 
-import { LandingPage } from './pages/landingPage/LandingPage'
-import { Login } from './pages/login'
-import { Profile } from './pages/profile'
+import { LandingPage } from './Pages/LandingPage/LandingPage'
+import { Login } from './Pages/Login'
+import { Profile } from './Pages/profile'
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
