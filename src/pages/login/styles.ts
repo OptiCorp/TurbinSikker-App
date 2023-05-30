@@ -11,6 +11,7 @@ export const LoginContainer = styled.div`
     backdrop-filter: blur(5px);
     height: 100vh;
     width: 100%;
+
     text-align: center;
 `
 export const ButtonWrapper = styled.div`
@@ -54,8 +55,11 @@ export const Header = styled.div`
 
 export const Infotext = styled.p`
     font-style: italic;
-    max-width: 270px;
-    line-height: 60px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
     text-shadow: 2px 1px 1px rgba(0, 0, 0, 0.5);
     font-weight: 600;
     color: white;
