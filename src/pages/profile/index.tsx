@@ -6,7 +6,7 @@ import { Wrapper, ImageContainer, Info } from './styles'
 import styled from 'styled-components'
 import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
-import circleContainer from '../../assets/images/circlecontainer.png'
+
 import { useMsal } from '@azure/msal-react'
 
 const Image = styled.image`
