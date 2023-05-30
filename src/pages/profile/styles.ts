@@ -10,12 +10,11 @@ export const Wrapper = styled.div`
 `
 
 export const ImageContainer = styled.div`
-    margin: 0px auto;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 60%;
-
-    justify-items: end;
+    align-items: end;
+    grid-template-columns: 120px 1fr;
+    grid-template-rows: 1fr 50px;
 `
 export const Info = styled.div`
     margin: 1rem auto;
