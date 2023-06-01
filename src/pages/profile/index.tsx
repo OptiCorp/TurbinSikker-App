@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { useState } from 'react'
 
 import { Button, Typography } from '@equinor/eds-core-react'
@@ -29,13 +29,13 @@ const ContainerIcon = styled.div`
     margin: 0 auto;
 `
 
-export const Profile = () => {
+export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
     const { instance } = useMsal()
     const handleSubmit = () => {
         instance.logoutPopup()
     }
-    var loadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const loadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             setstate(URL.createObjectURL(event.target.files[0]))
             console.log(URL.createObjectURL(event.target.files[0]))
@@ -84,6 +84,7 @@ export const Profile = () => {
                 />
                 <Info>
                     <Typography variant="h5">Roger Hellesen</Typography>
+
                     <Typography variant="body_short">Inspector</Typography>
                 </Info>
                 <Button color="secondary" onClick={handleSubmit}>

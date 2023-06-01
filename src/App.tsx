@@ -7,6 +7,7 @@ import { useIsAuthenticated } from '@azure/msal-react'
 import { LandingPage } from './pages/landingPage/LandingPage'
 import { Login } from './pages/login'
 import { Profile } from './pages/profile'
+import { AddUser } from './pages/users/AddUser'
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
@@ -18,6 +19,7 @@ const App = () => {
                     <Route element={<Layout />}>
                         <Route path="/" element={<LandingPage />} />
                         <Route path="/profile" element={<Profile />} />
+                        <Route path="/Adduser" element={<AddUser />} />
                     </Route>
                 </Routes>
             )}
