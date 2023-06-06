@@ -8,6 +8,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
+import useAuth from '../landingPage/context/LandingPageContextProvider'
 
 const Image = styled.image`
     border-radius: 50%;
@@ -41,6 +42,8 @@ export const Profile: FunctionComponent = () => {
             console.log(URL.createObjectURL(event.target.files[0]))
         }
     }
+
+    const { account } = useAuth()
 
     return (
         <>
@@ -83,7 +86,7 @@ export const Profile: FunctionComponent = () => {
                     style={{ display: 'none' }}
                 />
                 <Info>
-                    <Typography variant="h5">Roger Hellesen</Typography>
+                    <Typography variant="h5">{account.name}</Typography>
 
                     <Typography variant="body_short">Inspector</Typography>
                 </Info>

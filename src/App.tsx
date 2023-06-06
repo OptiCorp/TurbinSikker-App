@@ -8,20 +8,26 @@ import { LandingPage } from './pages/landingPage/LandingPage'
 import { Login } from './pages/login'
 import { Profile } from './pages/profile'
 import { AddUser } from './pages/users/AddUser'
-
+import { LandingPageContextProvider } from './pages/landingPage/context/LandingPageContextProvider'
+import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
 
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <Routes>
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/profile" element={<Profile />} />
-                        <Route path="/Adduser" element={<AddUser />} />
-                    </Route>
-                </Routes>
+                <LandingPageContextProvider>
+                    <AuthProvider>
+                        <Routes>
+                            <Route element={<Layout />}>
+                                <Route path="/" element={<LandingPage />} />
+
+                                <Route path="/profile" element={<Profile />} />
+                                <Route path="/Adduser" element={<AddUser />} />
+                            </Route>
+                        </Routes>{' '}
+                    </AuthProvider>
+                </LandingPageContextProvider>
             )}
             {!isAuthenticated && <Login />}
         </div>
