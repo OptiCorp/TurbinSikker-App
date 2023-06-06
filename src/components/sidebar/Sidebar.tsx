@@ -53,7 +53,12 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                         >
                             <RouteName>Profile</RouteName>
                         </Button>
-                        <Button fullWidth variant="ghost">
+                        <Button
+                            as={Link}
+                            to="/adduser"
+                            fullWidth
+                            variant="ghost"
+                        >
                             <RouteName>Users</RouteName>
                         </Button>
                         <Button
