@@ -1,13 +1,14 @@
 import { Wrapper, FormWrapper } from './styles'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { Autocomplete, TextField } from '@equinor/eds-core-react'
+import { Autocomplete, Button, TextField } from '@equinor/eds-core-react'
+import Select from 'react-select'
 
 export type FormValues = {
     name: string
     password: string
     email: string
     options: []
-    role: string
+    role: { label: string; value: string }
 }
 
 const options = [
@@ -21,6 +22,7 @@ export const AddUser = () => {
         formState: { errors },
         control,
         register,
+        reset,
     } = useForm<FormValues>()
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -30,27 +32,19 @@ export const AddUser = () => {
     return (
         <Wrapper>
             <FormWrapper onSubmit={handleSubmit(onSubmit)}>
-                <TextField
-                    label="Name"
-                    style={{ height: '80px' }}
-                    id="name"
-                    {...register('name')}
-                />
+                <TextField label="Name" id="name" {...register('name')} />
                 <Controller
-                    control={control}
                     name="role"
-                    render={({ field: { onChange, value } }) => (
-                        <Autocomplete
-                            onOptionsChange={({ selectedItems }) => {
-                                const [selectedItem] = selectedItems
-                                selectedItem && onChange(selectedItem.value)
-                            }}
-                            optionLabel={(option) => option.label}
-                            selectedOptions={
-                                options?.filter((x) => x.value === value) || []
-                            }
-                            label="Role"
-                            options={options}
+                    control={control}
+                    render={({ field }) => (
+                        <Select
+                            {...register('role')}
+                            {...field}
+                            options={[
+                                { value: 'inspector', label: 'inspector' },
+                                { value: 'leader', label: 'leader' },
+                            ]}
+                            placeholder="Test..."
                         />
                     )}
                 />
@@ -69,6 +63,12 @@ export const AddUser = () => {
                 >
                     Hey you! This field is required
                 </span>
+                <div style={{ display: 'flex', gap: '16px' }}>
+                    <Button type="submit">I have made my decisions!</Button>
+                    <Button variant="outlined" onClick={() => reset()}>
+                        Reset
+                    </Button>
+                </div>
             </FormWrapper>
         </Wrapper>
     )
