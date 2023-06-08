@@ -50,7 +50,8 @@ function useLandingPageContext() {
 interface AuthContextType {
     // We defined the user type in `index.d.ts`, but it's
     // a simple object with email, name and password.
-
+    idToken: string
+    accessToken: string
     account: any
     accounts: any
     apiData: string | undefined
@@ -67,6 +68,8 @@ export function AuthProvider({
 }): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
+    const [idToken, setIdToken] = useState('')
+    const [accessToken, setAccessToken] = useState('')
     const { apiData } = useLandingPageContext()
     useEffect(() => {
         if (!apiData && inProgress === InteractionStatus.None) {
@@ -75,16 +78,13 @@ export function AuthProvider({
                 account: accounts[0],
             }
 
-            console.log(account, 'fdf')
-
             instance
                 .acquireTokenSilent(accessTokenRequest)
-                .then((accessTokenResponse) => {
-                    // Acquire token silent success
-                    const accessToken = accessTokenResponse.accessToken
-                    console.log('Accesstoken: ' + accessToken)
-                    /* Call your API with token
+                .then((tokenResponse) => {
+                    setAccessToken(tokenResponse.accessToken)
+                    setIdToken(tokenResponse.idToken)
 
+                    /* Call your API with token
               callApi(accessToken).then((response) => {
                 console.log(response)
                 setApiData(response);
@@ -119,6 +119,8 @@ export function AuthProvider({
     const memoedValue = useMemo(
         () => ({
             account,
+            idToken,
+            accessToken,
             accounts,
             apiData,
             inProgress,
