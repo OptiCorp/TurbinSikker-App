@@ -10,6 +10,8 @@ import { Profile } from './pages/profile'
 import { AddUser } from './pages/users/AddUser'
 import { LandingPageContextProvider } from './pages/landingPage/context/LandingPageContextProvider'
 import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
+import { ListUsers } from './pages/users/listUsers/ListUsers'
+
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
 
@@ -23,6 +25,10 @@ const App = () => {
                                 <Route path="/" element={<LandingPage />} />
 
                                 <Route path="/profile" element={<Profile />} />
+                                <Route
+                                    path="/ListUsers"
+                                    element={<ListUsers />}
+                                />
                                 <Route path="/Adduser" element={<AddUser />} />
                             </Route>
                         </Routes>{' '}
