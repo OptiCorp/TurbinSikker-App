@@ -4,7 +4,7 @@ import activepunch from '../../assets/images/activepunch.png'
 export const FooterContainer = styled.div`
     min-height: 64px;
     width: 100%;
-    position: sticky;
+    position: fixed;
     bottom: 0;
     box-sizing: border-box;
     background: #243746;

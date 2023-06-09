@@ -25,13 +25,16 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                 open={open}
                 onClose={() => setOpen(!open)}
                 isDismissable
-                style={{ position: 'absolute', overflow: 'hidden' }}
+                style={{
+                    overflow: 'hidden',
+                }}
             >
                 <SideSheet
                     open={open}
                     onClose={() => setOpen(!open)}
                     style={{
                         height: '100%',
+
                         width: '40%',
                         top: '63px',
                         display: 'grid',
@@ -55,7 +58,7 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                         </Button>
                         <Button
                             as={Link}
-                            to="/adduser"
+                            to="/ListUsers"
                             fullWidth
                             variant="ghost"
                         >

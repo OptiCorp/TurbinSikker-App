@@ -33,7 +33,6 @@ const options = [
 export const AddUser = () => {
     const { idToken } = useAuth()
     const [makeUser, setMakeUser] = useState('')
-    const [userId, setUserId] = useState('')
 
     const {
         handleSubmit,
