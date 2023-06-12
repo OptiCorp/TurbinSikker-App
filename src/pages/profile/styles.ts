@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 800px;
+    padding-top: 4rem;
     width: 100%;
 `
 
@@ -26,4 +26,24 @@ export const Info = styled.div`
     height: 100px;
     max-width: 400px;
     min-width: 200px;
+`
+export const Placeholder = styled.div`
+    background: #d9d9d9;
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+`
+
+export const ContainerIcon = styled.div`
+    background: #007079;
+    border-radius: 50%;
+    padding: 5px;
+    display: flex;
+
+    margin: 0 auto;
+`
+
+export const Image = styled.image`
+    border-radius: 50%;
 `

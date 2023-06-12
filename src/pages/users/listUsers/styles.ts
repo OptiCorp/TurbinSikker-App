@@ -2,31 +2,44 @@ import styled from 'styled-components'
 import { Table } from '@equinor/eds-core-react'
 
 export const StyledTable = styled(Table)`
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
+    margin: 30px auto;
+    width: 100%;
 
     padding-top: 2rem;
+    padding: 0.5rem;
 
     padding-bottom: 2rem;
 `
 
-export const Test = styled(Table.Cell)`
-    width: 100%;
-    line-height: 2rem;
-    padding: 0;
-    height: 10px;
+export const ContainerForm = styled.div`
+    height: 60vh;
+    margin: 0;
+
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
 
-export const StyledHead = styled(Table.Head)`
-    width: 100%;
+export const StyledTableCell = styled(Table.Cell)`
+    line-height: 2rem;
+    padding: 0;
+
+    padding-right: 1rem;
 `
+
+export const StyledHead = styled(Table.Head)``
 
 export const TableData = styled.p`
     line-height: 40px;
+
+    font-size: 0.7rem;
 `
 
 export const ListWrapper = styled.div`
-    margin: 1rem;
+    margin: 0 auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 `

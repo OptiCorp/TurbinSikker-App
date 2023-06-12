@@ -2,33 +2,20 @@ import React, { FunctionComponent } from 'react'
 import { useState } from 'react'
 
 import { Button, Typography } from '@equinor/eds-core-react'
-import { Wrapper, ImageContainer, Info } from './styles'
-import styled from 'styled-components'
+import {
+    Wrapper,
+    ImageContainer,
+    Info,
+    Placeholder,
+    ContainerIcon,
+    Image,
+} from './styles'
+
 import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
-
-const Image = styled.image`
-    border-radius: 50%;
-`
-
-const Placeholder = styled.div`
-    background: #d9d9d9;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-`
-
-const ContainerIcon = styled.div`
-    background: #007079;
-    border-radius: 50%;
-    padding: 5px;
-    display: flex;
-
-    margin: 0 auto;
-`
 
 export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
@@ -48,7 +35,6 @@ export const Profile: FunctionComponent = () => {
     return (
         <>
             <Wrapper>
-                <h1>Profile </h1>
                 <ImageContainer>
                     {state ? (
                         <img
