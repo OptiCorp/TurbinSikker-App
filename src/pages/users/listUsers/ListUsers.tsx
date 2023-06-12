@@ -1,93 +1,63 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { useContext } from 'react'
 
-import { Button, Table, Typography } from '@equinor/eds-core-react'
+import { Button, Table } from '@equinor/eds-core-react'
 import { Icon } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
-import { TableData, StyledTable, ListWrapper, Test, StyledHead } from './styles'
+import {
+    TableData,
+    StyledTable,
+    ListWrapper,
+    StyledTableCell,
+    StyledHead,
+    ContainerForm,
+} from './styles'
 import { Link } from 'react-router-dom'
-import { RouteName } from '../../../components/sidebar/styles'
-
-export type IUser = {
-    email: string
-    first_name: string
-    last_name: string
-    id: string
-    role_id: string
-    username: string
-}
-
-interface Data {
-    data: any[]
-    isLoading: boolean
-}
+import { ApiContext } from '../context/apiContextProvider'
 
 export const ListUsers = () => {
-    const [result, setResult] = useState<IUser[]>([
-        {
-            first_name: 'first_name',
-            last_name: 'last_name',
-            role_id: 'role_id',
+    const { result } = useContext(ApiContext)
 
-            email: 'email',
-            id: 'id',
-            username: 'username',
-        },
-    ])
-
-    useEffect(() => {
-        fetch('https://localhost:7290/User')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Failed with HTTP code ' + response.status)
-                }
-                return response
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                setResult(data)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }, [])
-
-    const user = result.map((item) => {
+    const user = result.map((item, myKey) => {
         return (
-            <Table.Row>
-                <Test>
+            <Table.Row key={myKey}>
+                <StyledTableCell>
                     {item.first_name} {item.last_name}
-                    <Test>
-                        {' '}
-                        <TableData> {item.email}</TableData>
-                    </Test>
-                </Test>
+                </StyledTableCell>
+                <StyledTableCell>
+                    <TableData>{item.email}</TableData>
+                </StyledTableCell>
 
-                <Test>{item.role_id}</Test>
-                <Test>
-                    <Icon data={edit} />
-                </Test>
+                <StyledTableCell>{item.role_id}</StyledTableCell>
+                <StyledTableCell>
+                    <Icon data={edit} size={16} color="#007079" />
+                </StyledTableCell>
             </Table.Row>
         )
     })
 
     return (
         <ListWrapper>
-            <StyledTable>
-                <Table.Caption></Table.Caption>
-                <StyledHead sticky>
-                    <Table.Row>
-                        <Table.Cell>Name/Email</Table.Cell>
+            <ContainerForm>
+                <StyledTable>
+                    <Table.Caption></Table.Caption>
+                    <StyledHead sticky>
+                        <Table.Row>
+                            <StyledTableCell>Name</StyledTableCell>
 
-                        <Table.Cell>Role</Table.Cell>
-                    </Table.Row>
-                </StyledHead>
-                <Table.Body>{user} </Table.Body>
-            </StyledTable>{' '}
+                            <StyledTableCell>Email</StyledTableCell>
+                            <StyledTableCell>Role</StyledTableCell>
+                            <StyledTableCell></StyledTableCell>
+                        </Table.Row>
+                    </StyledHead>
+
+                    <Table.Body>{user}</Table.Body>
+                </StyledTable>{' '}
+            </ContainerForm>
             <Button
                 style={{
                     maxHeight: '30px',
                     width: '30%',
-                    marginBottom: '100px',
+                    margin: '2rem',
                 }}
                 as={Link}
                 to="/AddUser"

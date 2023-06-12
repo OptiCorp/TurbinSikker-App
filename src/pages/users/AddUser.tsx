@@ -5,7 +5,7 @@ import Select from 'react-select'
 import { Icon } from '@equinor/eds-core-react'
 import { error_filled } from '@equinor/eds-icons'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
-import { useState } from 'react'
+
 import { v4 as uuidv4 } from 'uuid'
 
 type IOptions = {
@@ -32,7 +32,6 @@ const options = [
 
 export const AddUser = () => {
     const { idToken } = useAuth()
-    const [makeUser, setMakeUser] = useState('')
 
     const {
         handleSubmit,
@@ -53,16 +52,6 @@ export const AddUser = () => {
             },
             body: JSON.stringify(data),
         })
-            .then((resp) => resp.json())
-            .then((data) => {
-                setMakeUser(data)
-
-                console.log('data: ', data)
-                reset(data)
-            })
-            .catch((error) => {
-                console.error('error: ', error)
-            })
         reset()
     }
 

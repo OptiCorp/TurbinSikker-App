@@ -3,7 +3,7 @@ import {
     InteractionRequiredAuthError,
     InteractionStatus,
 } from '@azure/msal-browser'
-import React, {
+import {
     createContext,
     useState,
     useContext,
@@ -12,38 +12,6 @@ import React, {
     useMemo,
 } from 'react'
 // create context
-
-export type ContextType = {
-    apiData: string | undefined
-
-    setApiData: React.Dispatch<React.SetStateAction<string | undefined>>
-}
-
-const LandingPageContext = createContext<ContextType | undefined>(undefined)
-
-const LandingPageContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode
-}) => {
-    // the value that will be given to the context
-    const [apiData, setApiData] = useState<string>()
-
-    return (
-        // the Provider gives access to the context to its children
-        <LandingPageContext.Provider value={{ apiData, setApiData }}>
-            {children}
-        </LandingPageContext.Provider>
-    )
-}
-
-function useLandingPageContext() {
-    const context = useContext(LandingPageContext)
-    if (!context) {
-        throw new Error('error')
-    }
-    return context
-}
 
 /////////
 
@@ -54,7 +22,8 @@ interface AuthContextType {
     accessToken: string
     account: any
     accounts: any
-    apiData: string | undefined
+    accountUsername: any
+    accountname: any
     inProgress: InteractionStatus
     instance: any
 }
@@ -68,11 +37,13 @@ export function AuthProvider({
 }): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
+    const accountUsername = account?.username
+    const accountname = account?.name
     const [idToken, setIdToken] = useState('')
     const [accessToken, setAccessToken] = useState('')
-    const { apiData } = useLandingPageContext()
+
     useEffect(() => {
-        if (!apiData && inProgress === InteractionStatus.None) {
+        if (inProgress === InteractionStatus.None) {
             const accessTokenRequest = {
                 scopes: ['user.read'],
                 account: accounts[0],
@@ -114,7 +85,7 @@ export function AuthProvider({
                     console.log(error)
                 })
         }
-    }, [account, apiData, inProgress, accounts, instance])
+    }, [account, inProgress, accounts, instance, accountname, accountUsername])
 
     const memoedValue = useMemo(
         () => ({
@@ -122,11 +93,12 @@ export function AuthProvider({
             idToken,
             accessToken,
             accounts,
-            apiData,
+            accountUsername,
+            accountname,
             inProgress,
             instance,
         }),
-        [account, apiData, inProgress, accounts, instance]
+        [account, inProgress, idToken, accounts, instance]
     )
 
     if (accounts.length > 0) {
@@ -159,5 +131,3 @@ export function AuthProvider({
 export default function useAuth() {
     return useContext(AuthContext)
 }
-
-export { useLandingPageContext, LandingPageContextProvider }

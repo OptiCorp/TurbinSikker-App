@@ -8,7 +8,7 @@ import { LandingPage } from './pages/landingPage/LandingPage'
 import { Login } from './pages/login'
 import { Profile } from './pages/profile'
 import { AddUser } from './pages/users/AddUser'
-import { LandingPageContextProvider } from './pages/landingPage/context/LandingPageContextProvider'
+import { ApiContextProvider } from './pages/users/context/apiContextProvider'
 import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
 
@@ -18,13 +18,13 @@ const App = () => {
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <LandingPageContextProvider>
+                <ApiContextProvider>
                     <AuthProvider>
                         <Routes>
                             <Route element={<Layout />}>
                                 <Route path="/" element={<LandingPage />} />
 
-                                <Route path="/profile" element={<Profile />} />
+                                <Route path="/Profile" element={<Profile />} />
                                 <Route
                                     path="/ListUsers"
                                     element={<ListUsers />}
@@ -33,7 +33,7 @@ const App = () => {
                             </Route>
                         </Routes>{' '}
                     </AuthProvider>
-                </LandingPageContextProvider>
+                </ApiContextProvider>
             )}
             {!isAuthenticated && <Login />}
         </div>

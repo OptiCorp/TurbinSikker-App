@@ -1,26 +1,23 @@
 import { useEffect } from 'react'
-
-import { useLandingPageContext } from './context/LandingPageContextProvider'
 import useAuth from './context/LandingPageContextProvider'
 export const LandingPage = () => {
-    const { apiData, setApiData } = useLandingPageContext()
-    const { accounts, inProgress } = useAuth()
+    const {
+        accounts,
 
-    setApiData('hella')
+        accountname,
 
-    useEffect(() => {}, [apiData])
+        inProgress,
+    } = useAuth()
+
+    useEffect(() => {}, [accountname, accounts])
 
     if (accounts.length > 0) {
         return (
             <>
                 <span>
-                    There are currently {accounts.length} users signed in!
+                    There are currently {accounts.length} users signed in!{' '}
+                    <p>{accountname}</p>
                 </span>
-                {apiData && (
-                    <span>
-                        Data retrieved from API: {JSON.stringify(apiData)}
-                    </span>
-                )}
             </>
         )
     } else if (inProgress === 'login') {
