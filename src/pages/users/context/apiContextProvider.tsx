@@ -31,7 +31,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [makeUser, setMakeUser] = useState('')
 
     const getUsers = async () => {
-        const res = await fetch('https://localhost:7290/User')
+        const res = await fetch('https://localhost:7290/Api/GetAllUsers')
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)

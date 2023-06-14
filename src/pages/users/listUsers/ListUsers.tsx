@@ -11,11 +11,15 @@ import {
     StyledHead,
     ContainerForm,
 } from './styles'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ApiContext } from '../context/apiContextProvider'
 
 export const ListUsers = () => {
     const { result } = useContext(ApiContext)
+    const navigate = useNavigate()
+    const clickHandler = () => {
+        navigate('/EditUser')
+    }
 
     const user = result.map((item, myKey) => {
         return (
@@ -29,7 +33,12 @@ export const ListUsers = () => {
 
                 <StyledTableCell>{item.role_id}</StyledTableCell>
                 <StyledTableCell>
-                    <Icon data={edit} size={16} color="#007079" />
+                    <Icon
+                        data={edit}
+                        size={16}
+                        color="#007079"
+                        onClick={clickHandler}
+                    />
                 </StyledTableCell>
             </Table.Row>
         )

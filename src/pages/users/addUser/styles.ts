@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-    margin: 0 auto;
+    margin: 2rem auto;
     display: grid;
 
     align-items: center;
@@ -19,4 +19,12 @@ export const FormWrapper = styled.form`
     flex-direction: column;
     align-items: left;
     gap: 30px;
+`
+export const BtnWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    margin: 0 auto;
+
+    justify-content: space-evenly;
 `
