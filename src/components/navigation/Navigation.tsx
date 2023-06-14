@@ -4,6 +4,7 @@ import Sidebar from '../sidebar/Sidebar'
 import { Icon } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Tabs } from '@equinor/eds-core-react'
+import { useLocation } from 'react-router'
 
 export const Navigation: React.FC = () => {
     const [activeTab, setActiveTab] = useState(1)
@@ -12,6 +13,7 @@ export const Navigation: React.FC = () => {
         setActiveTab(index)
     }
     const [open, setOpen] = useState(false)
+    const appLocation = useLocation()
 
     const items = [
         {
@@ -55,21 +57,23 @@ export const Navigation: React.FC = () => {
     return (
         <>
             <Sidebar open={open} setOpen={setOpen} />
-            <FooterContainer>
-                <Tabs activeTab={activeTab} onChange={handleChange}>
-                    <Tabs.List
-                        style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr 1fr',
-                            gap: '70px',
-                        }}
-                    >
-                        {items.map(({ name, value }, index) => (
-                            <Tabs.Tab key={name}>{value(index)}</Tabs.Tab>
-                        ))}
-                    </Tabs.List>
-                </Tabs>
-            </FooterContainer>
+            {appLocation.pathname === '/AddUser' ? null : (
+                <FooterContainer>
+                    <Tabs activeTab={activeTab} onChange={handleChange}>
+                        <Tabs.List
+                            style={{
+                                display: 'grid',
+                                gridTemplateColumns: '1fr 1fr 1fr',
+                                gap: '70px',
+                            }}
+                        >
+                            {items.map(({ name, value }, index) => (
+                                <Tabs.Tab key={name}>{value(index)}</Tabs.Tab>
+                            ))}
+                        </Tabs.List>
+                    </Tabs>
+                </FooterContainer>
+            )}
         </>
     )
 }
