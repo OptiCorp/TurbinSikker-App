@@ -1,5 +1,5 @@
 import { TopBar } from '@equinor/eds-core-react'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { arrow_back_ios } from '@equinor/eds-icons'
 import { Icon } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
@@ -26,6 +26,23 @@ export const HeaderLocation = styled.p`
 export const Header = () => {
     const navigate = useNavigate()
     const appLocation = useLocation()
+    const [activeUrl, setActiveUrl] = useState<string>('')
+
+    useEffect(() => {
+        setActiveUrl(window.location.pathname)
+    }, [appLocation])
+
+    const useBasePath = () => {
+        const location = useLocation()
+        const params = useParams<Record<string, string>>()
+
+        return Object.values(params).reduce(
+            (path, param) => path.replace('/' + param, ''),
+            location.pathname.slice(1)
+        )
+    }
+    const basePath = useBasePath()
+
     const onClick = () => {
         navigate(-1)
     }
@@ -33,11 +50,6 @@ export const Header = () => {
     const homeClick = () => {
         navigate('/')
     }
-    const [activeUrl, setActiveUrl] = useState<string>('')
-
-    useEffect(() => {
-        setActiveUrl(window.location.pathname)
-    }, [appLocation])
 
     return (
         <NewTopBar>
@@ -50,7 +62,10 @@ export const Header = () => {
                             onClick={onClick}
                         />
                         <HeaderLocation>
-                            {location.pathname.slice(1)}
+                            {basePath}{' '}
+                            {/* {location.pathname === '/Adduser'
+                                ? location.pathname.slice(2)
+                                : null} */}
                         </HeaderLocation>
                     </HeaderContents>
                 )}

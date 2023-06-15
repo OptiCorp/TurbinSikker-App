@@ -29,7 +29,11 @@ const App = () => {
                                     path="/ListUsers"
                                     element={<ListUsers />}
                                 />
-                                <Route path="/Adduser" element={<AddUser />} />
+                                <Route path="/AddUser" element={<AddUser />} />
+                                <Route
+                                    path="/EditUser/:id"
+                                    element={<AddUser />}
+                                />
                             </Route>
                         </Routes>{' '}
                     </AuthProvider>

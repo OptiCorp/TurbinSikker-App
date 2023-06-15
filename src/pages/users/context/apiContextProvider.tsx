@@ -8,27 +8,29 @@ import React, {
 
 export type ContextType = {
     result: IUser[]
+    userById: IUser[]
 }
 
 type IUser = {
     email: string
-    first_name: string
-    last_name: string
+    firstName: string
+    lastName: string
     id: string
-    role_id: string
+    userRoleId: string
 
     username: string
 }
 
 export const postsContextDefaultValue: ContextType = {
     result: [],
+    userById: [],
 }
 
 const ApiContext = createContext<ContextType>(postsContextDefaultValue)
 
 const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [result, setResult] = useState<IUser[]>([])
-    const [makeUser, setMakeUser] = useState('')
+    const [userById, setUserById] = useState<IUser[]>([])
 
     const getUsers = async () => {
         const res = await fetch('https://localhost:7290/Api/GetAllUsers')
@@ -39,6 +41,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         getUsers()
+        // findById()
     }, [])
 
     const memoedValue = useMemo(
@@ -46,10 +49,10 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             result,
             setResult,
 
-            makeUser,
-            setMakeUser,
+            userById,
+            setUserById,
         }),
-        [result, setResult, makeUser, setMakeUser]
+        [result, setResult, userById, setUserById]
     )
 
     return (
