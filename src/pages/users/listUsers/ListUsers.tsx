@@ -17,27 +17,27 @@ import { ApiContext } from '../context/apiContextProvider'
 export const ListUsers = () => {
     const { result } = useContext(ApiContext)
     const navigate = useNavigate()
-    const clickHandler = () => {
-        navigate('/EditUser')
+    const clickHandler = (id: string) => {
+        navigate(`/EditUser/${id}`)
     }
 
     const user = result.map((item, myKey) => {
         return (
             <Table.Row key={myKey}>
                 <StyledTableCell>
-                    {item.first_name} {item.last_name}
+                    {item.firstName} {item.lastName}
                 </StyledTableCell>
                 <StyledTableCell>
                     <TableData>{item.email}</TableData>
                 </StyledTableCell>
 
-                <StyledTableCell>{item.role_id}</StyledTableCell>
+                <StyledTableCell>{item.userRoleId}</StyledTableCell>
                 <StyledTableCell>
                     <Icon
                         data={edit}
                         size={16}
                         color="#007079"
-                        onClick={clickHandler}
+                        onClick={() => clickHandler(item.id)}
                     />
                 </StyledTableCell>
             </Table.Row>
@@ -69,7 +69,7 @@ export const ListUsers = () => {
                     margin: '2rem',
                 }}
                 as={Link}
-                to="/AddUser"
+                to="/AddUser/"
             >
                 AddUser
             </Button>

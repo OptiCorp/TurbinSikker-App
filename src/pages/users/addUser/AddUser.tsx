@@ -11,6 +11,11 @@ import { Icon } from '@equinor/eds-core-react'
 import { error_filled } from '@equinor/eds-icons'
 import useAuth from '../../landingPage/context/LandingPageContextProvider'
 import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
+import { useContext, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router'
+import { ApiContext } from '../context/apiContextProvider'
+import { EditUserNav } from '../editUserNavigation/editUserNav'
+import { useLocation } from 'react-router'
 
 type IOptions = {
     value: string
@@ -35,7 +40,7 @@ const options = [
 
 export const AddUser = () => {
     const { idToken } = useAuth()
-
+    const navigate = useNavigate()
     const methods = useForm<FormValues>()
 
     const {
@@ -45,16 +50,57 @@ export const AddUser = () => {
         register,
         reset,
     } = methods
+    const { id } = useParams()
+    const { result } = useContext(ApiContext)
+    const appLocation = useLocation()
+    const user = result.find((x) => x.id === id)
+
+    useEffect(() => {
+        if (!user) return
+        reset(user)
+    }, [user])
 
     const onSubmit: SubmitHandler<FormValues> = (data) => {
-        fetch('https://localhost:7290/api/AddUser', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${idToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+        if (appLocation.pathname === '/AddUser/') {
+            fetch('https://localhost:7290/api/AddUser', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+
+            reset()
+
+            {
+                navigate('/ListUsers')
+            }
+        } else {
+            fetch(`https://localhost:7290/api/UpdateUser?id=${id}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+
+            {
+                navigate('/ListUsers')
+            }
+        }
+    }
+
+    const deleteUser = () => {
+        fetch(`https://localhost:7290/api/DeleteUser?id=${id}`, {
+            method: 'DELETE',
         })
+            .then((response) => response.json())
+            .then(() => {
+                console.log(deleteUser)
+                reset()
+            })
         reset()
     }
 
@@ -225,12 +271,11 @@ export const AddUser = () => {
                         defaultValue=""
                         control={control}
                         name="userRoleId"
-                        render={({ field, value }) => (
-                            <Select
-                                {...field}
+                        render={({ field: { value, onChange } }) => (
+                            <Select<IOptions>
                                 options={options}
                                 value={options.find((c) => c.value === value)}
-                                onChange={(val) => field.onChange(val.value)}
+                                onChange={(val) => onChange(val?.value)}
                             />
                         )}
                     />
@@ -253,7 +298,11 @@ export const AddUser = () => {
                     </span>
                 </FormWrapper>
             </Wrapper>
-            <AddUserButtonNavigation />
+            {appLocation.pathname === '/AddUser/' ? (
+                <AddUserButtonNavigation />
+            ) : (
+                <EditUserNav deleteUser={deleteUser} user={undefined} />
+            )}
         </FormProvider>
     )
 }
