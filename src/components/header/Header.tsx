@@ -4,24 +4,7 @@ import { arrow_back_ios } from '@equinor/eds-icons'
 import { Icon } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import logo from '../../assets/images/smallLogo.png'
-import styled from 'styled-components'
-
-const NewTopBar = styled(TopBar)`
-    background: #243746;
-`
-
-export const HeaderContents = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-`
-
-export const HeaderLocation = styled.p`
-    margin: 0 auto;
-    grid-column: 3/3;
-    font-size: 1rem;
-    color: white;
-`
+import { NewTopBar, HeaderContents, HeaderLocation } from './styles'
 
 export const Header = () => {
     const navigate = useNavigate()
@@ -61,16 +44,17 @@ export const Header = () => {
                             color="white"
                             onClick={onClick}
                         />
-                        <HeaderLocation>
-                            {basePath}{' '}
-                            {/* {location.pathname === '/Adduser'
-                                ? location.pathname.slice(2)
-                                : null} */}
-                        </HeaderLocation>
                     </HeaderContents>
                 )}
             </TopBar.Header>
-
+            <TopBar.CustomContent>
+                {' '}
+                <HeaderLocation>
+                    {location.pathname === '/AddUser/'
+                        ? location.pathname.slice(1, -1)
+                        : basePath}
+                </HeaderLocation>{' '}
+            </TopBar.CustomContent>
             <TopBar.Actions>
                 <img src={logo} onClick={homeClick} />
             </TopBar.Actions>

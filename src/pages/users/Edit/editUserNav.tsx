@@ -1,21 +1,17 @@
 import { Button, Typography } from '@equinor/eds-core-react'
 import { FooterContainer } from '../../../components/navigation/styles'
-import { ApiContext } from '../context/apiContextProvider'
+import { useApiContext } from '../context/apiContextProvider'
 import { Dialog } from '@equinor/eds-core-react'
 import { BtnWrapper } from '../addUser/styles'
-import { useContext, useState } from 'react'
+import { FC, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-interface IEditUser {
-    user: undefined
-    onClick?(): void
-    deleteUser: (params: any) => any
-}
+interface IEditUser {}
 
-export const EditUserNav = ({ deleteUser }: IEditUser) => {
-    const { result } = useContext(ApiContext)
+export const EditUserNav: FC<IEditUser> = () => {
     const { id } = useParams()
-    const user = result.find((x) => x.id === id)
+    const { setRefreshUsers } = useApiContext()
+
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenSecond, setIsOpenSecond] = useState(false)
@@ -37,8 +33,13 @@ export const EditUserNav = ({ deleteUser }: IEditUser) => {
         setIsOpenSecond(false)
     }
 
-    const handleClick = () => {
-        deleteUser(user.id)
+    const handleClick = async () => {
+        await fetch(`https://localhost:7290/api/DeleteUser?id=${id}`, {
+            method: 'DELETE',
+        })
+
+        setRefreshUsers((prevRefresh) => !prevRefresh)
+
         navigate('/ListUsers')
     }
     return (
@@ -62,18 +63,23 @@ export const EditUserNav = ({ deleteUser }: IEditUser) => {
                             </Typography>
                         </Dialog.CustomContent>
                         <Dialog.Actions>
-                            <div>
+                            <BtnWrapper>
                                 <Button
+                                    style={{ fontSize: '0.8rem' }}
                                     type="submit"
                                     form="add-user"
                                     onClick={clearAndClose}
                                 >
                                     Update User
                                 </Button>
-                                <Button variant="ghost" onClick={handleClose}>
+                                <Button
+                                    style={{ fontSize: '0.8rem' }}
+                                    variant="ghost"
+                                    onClick={handleClose}
+                                >
                                     Cancel
                                 </Button>
-                            </div>
+                            </BtnWrapper>
                         </Dialog.Actions>
                     </Dialog>
                     <Dialog open={isOpenSecond}>
@@ -88,10 +94,15 @@ export const EditUserNav = ({ deleteUser }: IEditUser) => {
                         </Dialog.CustomContent>
                         <Dialog.Actions>
                             <div>
-                                <Button color="danger" onClick={handleClick}>
+                                <Button
+                                    style={{ fontSize: '0.8rem' }}
+                                    color="danger"
+                                    onClick={handleClick}
+                                >
                                     Delete User
                                 </Button>{' '}
                                 <Button
+                                    style={{ fontSize: '0.8rem' }}
                                     variant="ghost"
                                     onClick={handleCloseSecond}
                                 >

@@ -5,10 +5,12 @@ import React, {
     useEffect,
     useMemo,
 } from 'react'
+import { useLocation } from 'react-router'
 
 export type ContextType = {
     result: IUser[]
-    userById: IUser[]
+    refreshUsers: boolean
+    setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type IUser = {
@@ -17,20 +19,23 @@ type IUser = {
     lastName: string
     id: string
     userRoleId: string
-
     username: string
 }
 
 export const postsContextDefaultValue: ContextType = {
     result: [],
-    userById: [],
+    refreshUsers: false,
+    setRefreshUsers: () => {},
 }
 
 const ApiContext = createContext<ContextType>(postsContextDefaultValue)
 
 const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [result, setResult] = useState<IUser[]>([])
-    const [userById, setUserById] = useState<IUser[]>([])
+
+    const { state } = useLocation()
+    const newUser = state ? state?.newUser : null
+    const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
 
     const getUsers = async () => {
         const res = await fetch('https://localhost:7290/Api/GetAllUsers')
@@ -42,17 +47,16 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         getUsers()
         // findById()
-    }, [])
+    }, [newUser, refreshUsers])
 
     const memoedValue = useMemo(
         () => ({
             result,
             setResult,
-
-            userById,
-            setUserById,
+            setRefreshUsers,
+            refreshUsers,
         }),
-        [result, setResult, userById, setUserById]
+        [result, setResult, setRefreshUsers, refreshUsers]
     )
 
     return (
