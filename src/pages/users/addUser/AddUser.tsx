@@ -11,13 +11,14 @@ import { Icon } from '@equinor/eds-core-react'
 import { error_filled } from '@equinor/eds-icons'
 import useAuth from '../../landingPage/context/LandingPageContextProvider'
 import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { ApiContext } from '../context/apiContextProvider'
-import { EditUserNav } from '../editUserNavigation/editUserNav'
-import { useLocation } from 'react-router'
 
-type IOptions = {
+import { useLocation } from 'react-router'
+import { EditUserNav } from '../Edit/editUserNav'
+
+interface Option {
     value: string
     label: string
 }
@@ -26,17 +27,12 @@ export type FormValues = {
     firstName: string
     lastName: string
     password: string
+    userRoleId: string | Option
     email: string
+    options: string | Option
     username: string
-    options: string | IOptions
-    userRoleId: string | IOptions
-    value: IOptions
+    created: string
 }
-
-const options = [
-    { value: 'inspector', label: 'inspector' },
-    { value: 'leader', label: 'leader' },
-]
 
 export const AddUser = () => {
     const { idToken } = useAuth()
@@ -45,24 +41,27 @@ export const AddUser = () => {
 
     const {
         handleSubmit,
-        formState: { errors },
+
         control,
         register,
         reset,
     } = methods
     const { id } = useParams()
+
     const { result } = useContext(ApiContext)
     const appLocation = useLocation()
     const user = result.find((x) => x.id === id)
+
+    const [options, setOptions] = useState<Option[]>([])
 
     useEffect(() => {
         if (!user) return
         reset(user)
     }, [user])
 
-    const onSubmit: SubmitHandler<FormValues> = (data) => {
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
         if (appLocation.pathname === '/AddUser/') {
-            fetch('https://localhost:7290/api/AddUser', {
+            await fetch('https://localhost:7290/api/AddUser', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
@@ -73,11 +72,9 @@ export const AddUser = () => {
 
             reset()
 
-            {
-                navigate('/ListUsers')
-            }
+            navigate('/ListUsers', { state: { newUser: data.email } })
         } else {
-            fetch(`https://localhost:7290/api/UpdateUser?id=${id}`, {
+            await fetch(`https://localhost:7290/api/UpdateUser?id=${id}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
@@ -86,23 +83,26 @@ export const AddUser = () => {
                 body: JSON.stringify(data),
             })
 
-            {
-                navigate('/ListUsers')
-            }
+            navigate('/ListUsers', { state: { newUser: data.email } })
         }
     }
 
-    const deleteUser = () => {
-        fetch(`https://localhost:7290/api/DeleteUser?id=${id}`, {
-            method: 'DELETE',
-        })
-            .then((response) => response.json())
-            .then(() => {
-                console.log(deleteUser)
-                reset()
-            })
-        reset()
-    }
+    useEffect(() => {
+        const fetchUserRoles = async () => {
+            const res = await fetch(
+                'https://localhost:7290/api/GetAllUserRoles'
+            )
+            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+            const data = await res.json()
+
+            const options = data.map((item: any) => ({
+                value: item.id,
+                label: item.name,
+            }))
+            setOptions(options)
+        }
+        fetchUserRoles()
+    }, [])
 
     return (
         <FormProvider {...methods}>
@@ -234,6 +234,7 @@ export const AddUser = () => {
                             />
                         )}
                     />
+
                     <Controller
                         defaultValue=""
                         name="password"
@@ -268,40 +269,26 @@ export const AddUser = () => {
                     />
 
                     <Controller
-                        defaultValue=""
                         control={control}
                         name="userRoleId"
-                        render={({ field: { value, onChange } }) => (
-                            <Select<IOptions>
+                        rules={{
+                            required: 'Required',
+                        }}
+                        defaultValue={options[0]}
+                        render={({ field: { onChange, value } }) => (
+                            <Select
                                 options={options}
                                 value={options.find((c) => c.value === value)}
                                 onChange={(val) => onChange(val?.value)}
                             />
                         )}
                     />
-
-                    <span
-                        role="alert"
-                        id="error-county-required"
-                        style={{
-                            color: 'red',
-                            paddingTop: '0.5rem',
-                            fontSize: '0.75rem',
-                            display:
-                                errors.options &&
-                                errors.options.type === 'required'
-                                    ? 'block'
-                                    : 'none',
-                        }}
-                    >
-                        Hey you! This field is required
-                    </span>
                 </FormWrapper>
             </Wrapper>
             {appLocation.pathname === '/AddUser/' ? (
                 <AddUserButtonNavigation />
             ) : (
-                <EditUserNav deleteUser={deleteUser} user={undefined} />
+                <EditUserNav />
             )}
         </FormProvider>
     )

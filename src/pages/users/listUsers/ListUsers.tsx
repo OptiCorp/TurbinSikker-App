@@ -16,6 +16,7 @@ import { ApiContext } from '../context/apiContextProvider'
 
 export const ListUsers = () => {
     const { result } = useContext(ApiContext)
+
     const navigate = useNavigate()
     const clickHandler = (id: string) => {
         navigate(`/EditUser/${id}`)
@@ -66,7 +67,7 @@ export const ListUsers = () => {
                 style={{
                     maxHeight: '30px',
                     width: '30%',
-                    margin: '2rem',
+                    marginTop: '2rem',
                 }}
                 as={Link}
                 to="/AddUser/"

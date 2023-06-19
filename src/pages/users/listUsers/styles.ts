@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { Table } from '@equinor/eds-core-react'
+import { Cell } from '@equinor/eds-core-react/dist/types/components/Table/Cell'
 
 export const StyledTable = styled(Table)`
     margin: 30px auto;
-    width: 100%;
 
     padding-top: 2rem;
     padding: 0.5rem;
@@ -24,16 +24,20 @@ export const ContainerForm = styled.div`
 export const StyledTableCell = styled(Table.Cell)`
     line-height: 2rem;
     padding: 0;
+    text-align: center;
+    min-width: 20vw;
 
-    padding-right: 1rem;
+    font-size: 0.7rem;
+    right: 1rem;
 `
 
 export const StyledHead = styled(Table.Head)``
-
 export const TableData = styled.p`
-    line-height: 40px;
-
+    word-wrap: break-word;
     font-size: 0.7rem;
+    text-overflow: clip;
+    width: 200px;
+    margin: 0 auto;
 `
 
 export const ListWrapper = styled.div`
