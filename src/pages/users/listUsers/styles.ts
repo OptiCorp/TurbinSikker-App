@@ -31,7 +31,9 @@ export const StyledTableCell = styled(Table.Cell)`
     right: 1rem;
 `
 
-export const StyledHead = styled(Table.Head)``
+export const StyledHead = styled(Table.Head)`
+    display: table-header-group;
+`
 export const TableData = styled.p`
     word-wrap: break-word;
     font-size: 0.7rem;

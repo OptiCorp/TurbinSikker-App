@@ -11,6 +11,8 @@ import { AddUser } from './pages/users/addUser/AddUser'
 import { ApiContextProvider } from './pages/users/context/apiContextProvider'
 import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
+import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
+import { SnackbarComponent } from './components/snackbar/SnackBar'
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
@@ -20,22 +22,31 @@ const App = () => {
             {isAuthenticated && (
                 <ApiContextProvider>
                     <AuthProvider>
-                        <Routes>
-                            <Route element={<Layout />}>
-                                <Route path="/" element={<LandingPage />} />
+                        <SnackbarContextProvider>
+                            <Routes>
+                                <Route element={<Layout />}>
+                                    <Route path="/" element={<LandingPage />} />
 
-                                <Route path="/Profile" element={<Profile />} />
-                                <Route
-                                    path="/ListUsers"
-                                    element={<ListUsers />}
-                                />
-                                <Route path="/AddUser" element={<AddUser />} />
-                                <Route
-                                    path="/EditUser/:id"
-                                    element={<AddUser />}
-                                />
-                            </Route>
-                        </Routes>{' '}
+                                    <Route
+                                        path="/Profile"
+                                        element={<Profile />}
+                                    />
+                                    <Route
+                                        path="/ListUsers"
+                                        element={<ListUsers />}
+                                    />
+                                    <Route
+                                        path="/AddUser"
+                                        element={<AddUser />}
+                                    />
+                                    <Route
+                                        path="/EditUser/:id"
+                                        element={<AddUser />}
+                                    />
+                                </Route>
+                            </Routes>{' '}
+                            <SnackbarComponent />
+                        </SnackbarContextProvider>{' '}
                     </AuthProvider>
                 </ApiContextProvider>
             )}

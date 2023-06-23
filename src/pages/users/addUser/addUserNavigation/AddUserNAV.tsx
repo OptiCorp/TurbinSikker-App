@@ -1,12 +1,13 @@
 import { Button, Typography } from '@equinor/eds-core-react'
 import { FooterContainer } from '../../../../components/navigation/styles'
 import { Dialog } from '@equinor/eds-core-react'
-import { useFormContext } from 'react-hook-form'
+
 import { BtnWrapper } from '../styles'
 import { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 export const AddUserButtonNavigation = () => {
-    const { reset } = useFormContext()
+    const methods = useFormContext()
 
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenSecond, setIsOpenSecond] = useState(false)
@@ -16,16 +17,13 @@ export const AddUserButtonNavigation = () => {
     const handleOpenSecond = () => {
         setIsOpenSecond(true)
     }
-    const handleClose = () => {
-        setIsOpen(false)
-    }
 
     const handleCloseSecond = () => {
         setIsOpenSecond(false)
     }
 
     const clearAndClose = () => {
-        reset()
+        methods.reset()
 
         setIsOpenSecond(false)
     }
@@ -59,7 +57,7 @@ export const AddUserButtonNavigation = () => {
                                 <Button type="submit" form="add-user">
                                     Create User
                                 </Button>
-                                <Button variant="ghost" onClick={handleClose}>
+                                <Button variant="ghost" onClick={clearAndClose}>
                                     Cancel
                                 </Button>
                             </div>
@@ -94,4 +92,3 @@ export const AddUserButtonNavigation = () => {
         </>
     )
 }
-//
