@@ -54,12 +54,6 @@ export function AuthProvider({
                 .then((tokenResponse) => {
                     setAccessToken(tokenResponse.accessToken)
                     setIdToken(tokenResponse.idToken)
-
-                    /* Call your API with token
-              callApi(accessToken).then((response) => {
-                console.log(response)
-                setApiData(response);
-              });*/
                 })
                 .catch((error) => {
                     if (error instanceof InteractionRequiredAuthError) {
@@ -70,12 +64,6 @@ export function AuthProvider({
                                 const accessToken =
                                     accessTokenResponse.accessToken
                                 console.log('Accesstoken: ' + accessToken)
-                                /* Call your API with token
-
-                    callApi(accessToken).then((response) => {
-                      setApiData(response);
-                    });
-                    */
                             })
                             .catch(function (error) {
                                 // Acquire token interactive failure
@@ -107,20 +95,6 @@ export function AuthProvider({
                 {children}
             </AuthContext.Provider>
         )
-
-        {
-            /* <span>
-                    <h1>{account?.name}</h1>
-                    There are currently {accounts.length} users signed in!
-                </span>
-                {apiData && (
-                    <span>
-                        Data retrieved from API: {JSON.stringify(apiData)}
-                    </span>
-                )}
-            </>
-        ) */
-        }
     } else if (inProgress === 'login') {
         return <span>Login is currently in progress!</span>
     } else {

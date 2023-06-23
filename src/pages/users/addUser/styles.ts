@@ -18,7 +18,7 @@ export const FormWrapper = styled.form`
 
     display: flex;
     flex-direction: column;
-    align-items: left;
+    align-items: center;
     gap: 30px;
 `
 export const BtnWrapper = styled.div`

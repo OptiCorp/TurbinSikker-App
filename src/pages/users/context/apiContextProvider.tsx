@@ -13,7 +13,7 @@ export type ContextType = {
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type IUser = {
+export type IUser = {
     email: string
     firstName: string
     lastName: string

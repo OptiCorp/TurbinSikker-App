@@ -1,17 +1,18 @@
 import { Button, Typography } from '@equinor/eds-core-react'
-import { FooterContainer } from '../../../components/navigation/styles'
+import { FooterContainer } from '@components/navigation/styles'
 import { useApiContext } from '../context/apiContextProvider'
 import { Dialog } from '@equinor/eds-core-react'
 import { BtnWrapper } from '../addUser/styles'
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 
 interface IEditUser {}
 
 export const EditUserNav: FC<IEditUser> = () => {
     const { id } = useParams()
     const { setRefreshUsers } = useApiContext()
-
+    const { openSnackbar } = useContext(SnackbarContext)
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenSecond, setIsOpenSecond] = useState(false)
