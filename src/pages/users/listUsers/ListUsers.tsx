@@ -1,37 +1,83 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 import { Button, Table } from '@equinor/eds-core-react'
 import {
     StyledTable,
     ListWrapper,
     StyledTableCell,
-    StyledHead,
     ContainerForm,
+    CellSize,
 } from './styles'
 import { Link } from 'react-router-dom'
 import { ApiContext } from '../context/apiContextProvider'
 import { UserRow } from './userRow'
 
+import { Icon } from '@equinor/eds-core-react'
+import { visibility, visibility_off } from '@equinor/eds-icons'
+
 export const ListUsers = () => {
     const { result: users } = useContext(ApiContext)
+    const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 
+    const handleClick = () => {
+        setShowInactiveUsers(!showInactiveUsers)
+    }
+
+    const filteredUsers = showInactiveUsers
+        ? users
+        : users.filter((user) => user.status === 0)
     return (
         <ListWrapper>
             <ContainerForm>
                 <StyledTable>
-                    <Table.Caption></Table.Caption>
-                    <StyledHead sticky>
+                    <Table.Head sticky>
                         <Table.Row>
-                            <StyledTableCell>Name</StyledTableCell>
+                            <StyledTableCell>
+                                <CellSize>
+                                    Name /<div>Email</div>
+                                </CellSize>
+                            </StyledTableCell>
 
-                            <StyledTableCell>Email</StyledTableCell>
-                            <StyledTableCell>Role</StyledTableCell>
-                            <StyledTableCell></StyledTableCell>
+                            <StyledTableCell>
+                                <CellSize>Role</CellSize>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                                <CellSize>
+                                    <Button
+                                        style={{
+                                            margin: '0 auto',
+                                            width: '80px',
+                                            height: '25px',
+
+                                            fontSize: '0.7rem',
+                                        }}
+                                        onClick={handleClick}
+                                    >
+                                        Status
+                                        {showInactiveUsers ? (
+                                            <Icon
+                                                size={16}
+                                                data={visibility_off}
+                                                onClick={handleClick}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        ) : (
+                                            <Icon
+                                                size={16}
+                                                data={visibility}
+                                                onClick={handleClick}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        )}
+                                    </Button>
+                                </CellSize>
+                            </StyledTableCell>
+                            <StyledTableCell> </StyledTableCell>
                         </Table.Row>
-                    </StyledHead>
+                    </Table.Head>
 
                     <Table.Body>
-                        {users.map((user) => (
+                        {filteredUsers.map((user) => (
                             <UserRow user={user} />
                         ))}
                     </Table.Body>

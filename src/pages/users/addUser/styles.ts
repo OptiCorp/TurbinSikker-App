@@ -15,10 +15,8 @@ export const FormWrapper = styled.form`
     width: 100%;
     min-width: 300px;
     margin: 0 auto;
-
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 30px;
 `
 export const BtnWrapper = styled.div`

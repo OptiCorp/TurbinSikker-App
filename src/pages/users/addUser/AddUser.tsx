@@ -1,15 +1,20 @@
 import { Wrapper, FormWrapper } from './styles'
 import { FormProvider } from 'react-hook-form'
 import { FC } from 'react'
-
 import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
 import { EditUserNav } from '../Edit/editUserNav'
 import { InputField } from './inputField'
 import { RoleSelector } from './roleSelector'
 import { useAddUser } from './hooks/useAddUser'
+import { StatusSwitch } from './status/StatusSwitch'
+import { IUser } from '../context/apiContextProvider'
+
+export interface IAddUser {
+    user: IUser
+}
 
 export const AddUser: FC = () => {
-    const { methods, onSubmit, location } = useAddUser()
+    const { methods, onSubmit, location, user } = useAddUser()
     const { handleSubmit } = methods
 
     return (
@@ -38,8 +43,10 @@ export const AddUser: FC = () => {
                         type="email"
                     />
                     <RoleSelector />
+                    {user && <StatusSwitch />}
                 </FormWrapper>
             </Wrapper>
+
             {location === '/AddUser/' ? (
                 <AddUserButtonNavigation />
             ) : (

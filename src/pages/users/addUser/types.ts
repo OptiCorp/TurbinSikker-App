@@ -10,4 +10,5 @@ export type FormValues = {
     email: string
     options: Option
     username: string
+    status: number
 }
