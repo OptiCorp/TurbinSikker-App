@@ -4,13 +4,14 @@ import { Table, Icon } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
 import { StyledTableCell, TableData } from '../styles'
 import { useNavigate } from 'react-router'
-
+import { Chip } from '@equinor/eds-core-react'
 interface UserRowProps {
     user: IUser
 }
 
 export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
     const navigate = useNavigate()
+
     const clickHandler = (id: string) => {
         navigate(`/EditUser/${id}`)
     }
@@ -18,13 +19,30 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
     return (
         <Table.Row>
             <StyledTableCell>
-                {user.firstName} {user.lastName}
-            </StyledTableCell>
-            <StyledTableCell>
+                <p
+                    style={{
+                        fontWeight: 'bold',
+
+                        margin: '0 auto',
+                    }}
+                >
+                    {user.firstName} {user.lastName}
+                </p>
                 <TableData>{user.email}</TableData>
             </StyledTableCell>
 
             <StyledTableCell>{user.userRoleId}</StyledTableCell>
+            <StyledTableCell>
+                {user.status === 0 ? (
+                    <Chip variant="active" style={{ margin: '0 auto' }}>
+                        active
+                    </Chip>
+                ) : (
+                    <Chip variant="error" style={{ margin: '0 auto' }}>
+                        inactive
+                    </Chip>
+                )}
+            </StyledTableCell>
             <StyledTableCell>
                 <Icon
                     data={edit}

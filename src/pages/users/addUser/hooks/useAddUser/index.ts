@@ -61,5 +61,6 @@ export const useAddUser = () => {
         methods,
         onSubmit,
         location: appLocation.pathname,
+        user,
     }
 }

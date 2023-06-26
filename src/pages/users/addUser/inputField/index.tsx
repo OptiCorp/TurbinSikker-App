@@ -14,7 +14,6 @@ export const InputField: FunctionComponent<InputFieldProps> = ({
     name,
     label,
     placeholder,
-    type,
 }) => {
     const { control, register } = useFormContext()
 
@@ -37,7 +36,7 @@ export const InputField: FunctionComponent<InputFieldProps> = ({
                         ) : undefined
                     }
                     label={label}
-                    type={type}
+                    type=""
                     placeholder={placeholder}
                     {...register(name)}
                     helperText={error?.message}

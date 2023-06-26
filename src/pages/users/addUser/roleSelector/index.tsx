@@ -5,6 +5,7 @@ import { Option } from '../types'
 
 export const RoleSelector = () => {
     const { control } = useFormContext()
+
     const [options, setOptions] = useState<Option[]>([])
 
     useEffect(() => {
@@ -25,20 +26,22 @@ export const RoleSelector = () => {
     }, [])
 
     return (
-        <Controller
-            control={control}
-            name="userRoleId"
-            rules={{
-                required: 'Required',
-            }}
-            defaultValue={options[0]}
-            render={({ field: { onChange, value } }) => (
-                <Select
-                    options={options}
-                    value={options.find((c) => c.value === value)}
-                    onChange={(val) => onChange(val?.value)}
-                />
-            )}
-        />
+        <>
+            <Controller
+                control={control}
+                name="userRoleId"
+                rules={{
+                    required: 'Required',
+                }}
+                defaultValue={options[0]}
+                render={({ field: { onChange, value } }) => (
+                    <Select
+                        options={options}
+                        value={options.find((c) => c.value === value)}
+                        onChange={(val) => onChange(val?.value)}
+                    />
+                )}
+            />
+        </>
     )
 }

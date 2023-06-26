@@ -14,6 +14,7 @@ export type ContextType = {
 }
 
 export type IUser = {
+    status: number
     email: string
     firstName: string
     lastName: string
