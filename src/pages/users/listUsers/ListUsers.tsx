@@ -17,6 +17,7 @@ import { visibility, visibility_off } from '@equinor/eds-icons'
 
 export const ListUsers = () => {
     const { result: users } = useContext(ApiContext)
+
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 
     const handleClick = () => {
@@ -25,7 +26,8 @@ export const ListUsers = () => {
 
     const filteredUsers = showInactiveUsers
         ? users
-        : users.filter((user) => user.status === 0)
+        : users.filter((user) => user.status === 'Active')
+
     return (
         <ListWrapper>
             <ContainerForm>
@@ -57,14 +59,14 @@ export const ListUsers = () => {
                                         {showInactiveUsers ? (
                                             <Icon
                                                 size={16}
-                                                data={visibility_off}
+                                                data={visibility}
                                                 onClick={handleClick}
                                                 style={{ cursor: 'pointer' }}
                                             />
                                         ) : (
                                             <Icon
                                                 size={16}
-                                                data={visibility}
+                                                data={visibility_off}
                                                 onClick={handleClick}
                                                 style={{ cursor: 'pointer' }}
                                             />
@@ -78,7 +80,7 @@ export const ListUsers = () => {
 
                     <Table.Body>
                         {filteredUsers.map((user) => (
-                            <UserRow user={user} />
+                            <UserRow user={user} key={user.id} />
                         ))}
                     </Table.Body>
                 </StyledTable>{' '}

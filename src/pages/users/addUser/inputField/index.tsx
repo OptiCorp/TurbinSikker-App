@@ -5,7 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 interface InputFieldProps {
     name: string
-    label: string
+    label: React.HTMLInputTypeAttribute
     placeholder?: string
     type?: React.HTMLInputTypeAttribute
 }
