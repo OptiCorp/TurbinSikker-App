@@ -2,10 +2,8 @@ import styled from 'styled-components'
 import { Table } from '@equinor/eds-core-react'
 
 export const StyledTable = styled(Table)`
-    margin: 30px auto;
-    padding-top: 2rem;
-    padding: 0.5rem;
-    padding-bottom: 2rem;
+    margin: 0;
+    padding-top: 30px;
 `
 
 export const ContainerForm = styled.div`
@@ -46,6 +44,7 @@ export const ListWrapper = styled.div`
     margin: 0 auto;
     overflow: hidden;
     display: flex;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
 `

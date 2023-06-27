@@ -14,7 +14,7 @@ export type ContextType = {
 }
 
 export type IUser = {
-    status: number
+    status: string
     email: string
     firstName: string
     lastName: string
@@ -39,7 +39,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
 
     const getUsers = async () => {
-        const res = await fetch('https://localhost:7290/Api/GetAllUsers')
+        const res = await fetch('https://localhost:7290/Api/GetAllUsersAdmin')
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
