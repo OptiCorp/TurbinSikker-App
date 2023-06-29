@@ -31,7 +31,7 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
                 <TableData>{user.email}</TableData>
             </StyledTableCell>
 
-            <StyledTableCell>{user.userRoleId}</StyledTableCell>
+            <StyledTableCell>{user.userRole.name}</StyledTableCell>
             <StyledTableCell>
                 {user.status === 'Active' ? (
                     <Chip variant="active" style={{ margin: '0 auto' }}>

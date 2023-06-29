@@ -4,11 +4,11 @@ import Sidebar from '../sidebar/Sidebar'
 import { Icon } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Tabs } from '@equinor/eds-core-react'
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 export const Navigation: React.FC = () => {
     const [activeTab, setActiveTab] = useState(1)
-
+    const navigate = useNavigate()
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
@@ -35,6 +35,7 @@ export const Navigation: React.FC = () => {
                         color: activeTab === index ? '#73B1B5' : 'white',
                         width: 'min(500px)',
                     }}
+                    onClick={() => navigate('/CheckList')}
                 />
             ),
         },

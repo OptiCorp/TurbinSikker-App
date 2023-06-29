@@ -33,7 +33,7 @@ export const EditUserNav: FC<IEditUser> = () => {
     }
 
     const handleClick = async () => {
-        await fetch(`https://localhost:7290/api/DeleteUser?id=${id}`, {
+        await fetch(`http://20.251.37.226:8080/api/DeleteUser?id=${id}`, {
             method: 'DELETE',
         })
 
