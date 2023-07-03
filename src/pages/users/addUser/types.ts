@@ -6,7 +6,7 @@ export interface Option {
 export type FormValues = {
     firstName: string
     lastName: string
-    userRoleId: string
+    userRole: { id: string; name: string }
     email: string
     options: Option
     username: string

@@ -4,9 +4,7 @@ html {
     width: 100%;
     font-family: equinor;
     height: 100%;
-    @media only screen and (min-width: 1025px) {
-        font-size: 20px;
-    }
+    font-size: 13px;
 }
 
 .wrapper {

@@ -1,6 +1,6 @@
 import { Button, Typography } from '@equinor/eds-core-react'
 import { FooterContainer } from '@components/navigation/styles'
-import { useApiContext } from '../context/apiContextProvider'
+import { useApiContext } from '../../context/apiContextProvider'
 import { Dialog } from '@equinor/eds-core-react'
 import { BtnWrapper } from '../addUser/styles'
 import { FC, useState } from 'react'
@@ -33,7 +33,7 @@ export const EditUserNav: FC<IEditUser> = () => {
     }
 
     const handleClick = async () => {
-        await fetch(`https://localhost:7290/api/DeleteUser?id=${id}`, {
+        await fetch(`http://20.251.37.226:8080/api/DeleteUser?id=${id}`, {
             method: 'DELETE',
         })
 

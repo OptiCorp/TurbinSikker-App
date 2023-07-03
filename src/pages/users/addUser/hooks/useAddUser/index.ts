@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate, useLocation, useParams } from 'react-router'
 import { SnackbarContext } from '../../../../../components/snackbar/SnackBarContext'
 import useAuth from '../../../../landingPage/context/LandingPageContextProvider'
-import { ApiContext } from '../../../context/apiContextProvider'
+import { ApiContext } from '../../../../context/apiContextProvider'
 import { FormValues } from '../../types'
 
 export const useAddUser = () => {
@@ -24,7 +24,7 @@ export const useAddUser = () => {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         if (appLocation.pathname === '/AddUser/') {
-            await fetch('https://localhost:7290/api/AddUser', {
+            await fetch('http://20.251.37.226:8080/api/AddUser', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
@@ -41,7 +41,7 @@ export const useAddUser = () => {
                 openSnackbar('User added successfully!')
             }
         } else {
-            await fetch(`https://localhost:7290/api/UpdateUser?id=${id}`, {
+            await fetch(`http://20.251.37.226:8080/api/UpdateUser?id=${id}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
