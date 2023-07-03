@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate, useLocation, useParams } from 'react-router'
 import { SnackbarContext } from '../../../../../components/snackbar/SnackBarContext'
 import useAuth from '../../../../landingPage/context/LandingPageContextProvider'
-import { ApiContext } from '../../../context/apiContextProvider'
+import { ApiContext } from '../../../../context/apiContextProvider'
 import { FormValues } from '../../types'
 
 export const useAddUser = () => {

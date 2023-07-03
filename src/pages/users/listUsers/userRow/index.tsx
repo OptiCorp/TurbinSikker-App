@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react'
-import { IUser } from '../../context/apiContextProvider'
+import { IUser } from '../../../context/apiContextProvider'
 import { Table, Icon } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
 import { StyledTableCell, TableData } from '../styles'

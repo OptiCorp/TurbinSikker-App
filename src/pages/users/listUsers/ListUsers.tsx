@@ -9,7 +9,7 @@ import {
     CellSize,
 } from './styles'
 import { Link } from 'react-router-dom'
-import { ApiContext } from '../context/apiContextProvider'
+import { ApiContext } from '../../context/apiContextProvider'
 import { UserRow } from './userRow'
 
 import { Icon } from '@equinor/eds-core-react'

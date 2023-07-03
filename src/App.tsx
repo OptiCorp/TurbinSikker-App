@@ -6,12 +6,15 @@ import { LandingPage } from './pages/landingPage/LandingPage'
 import { Login } from './pages/login'
 import { Profile } from './pages/profile'
 import { AddUser } from './pages/users/addUser/AddUser'
-import { ApiContextProvider } from './pages/users/context/apiContextProvider'
+import { ApiContextProvider } from './pages/context/apiContextProvider'
 import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
 import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
 import { SnackbarComponent } from './components/snackbar/SnackBar'
 import { CheckList } from './pages/checklist/CheckList'
+import { IndexCheckLists } from './pages/checklist'
+import { MyCheckLists } from './pages/checklist/checkListID/MyCheckLists'
+import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
@@ -30,9 +33,19 @@ const App = () => {
                                         path="/Profile"
                                         element={<Profile />}
                                     />
+                                    <Route element={<IndexCheckLists />}>
+                                        <Route
+                                            path="/CheckList"
+                                            element={<CheckList />}
+                                        />
+                                        <Route
+                                            path="/MyChecklists"
+                                            element={<MyCheckLists />}
+                                        />
+                                    </Route>
                                     <Route
-                                        path="/CheckList"
-                                        element={<CheckList />}
+                                        path="/PreviewCheckList/:id"
+                                        element={<PreviewCheckList />}
                                     />
                                     <Route
                                         path="/ListUsers"

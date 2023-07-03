@@ -9,6 +9,7 @@ import { useLocation, useParams } from 'react-router'
 
 export type ContextType = {
     result: IUser[]
+    userIdCheckList: ICheckListUserID[]
     allCheckList: ICheckList[]
     refreshUsers: boolean
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
@@ -76,6 +77,7 @@ export type IUser = {
 
 export const postsContextDefaultValue: ContextType = {
     result: [],
+    userIdCheckList: [],
     allCheckList: [],
     refreshUsers: false,
     setRefreshUsers: () => {},
@@ -89,8 +91,10 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const newUser = state ? state?.newUser : null
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
     const [allCheckList, setAllCheckList] = useState<ICheckList[]>([])
-    const [userIdCL, setUserIdCL] = useState<ICheckListUserID[]>([])
-    const { id } = useParams()
+    const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
+        []
+    )
+    const { id } = useParams<{ id: string }>()
 
     const getUsers = async () => {
         const res = await fetch(
@@ -118,22 +122,33 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         fetchAllChechLists()
-        // findById()
     }, [])
 
-    useEffect(() => {
-        const fetchCheckListUserId = async () => {
+    const fetchCheckListUserId = async () => {
+        try {
             const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllChecklistsByUser?id=${id}`
+                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=3dc14bce-7e99-4a9f-a8e7-83febaefc64b`
             )
-            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+            if (!res.ok) {
+                throw new Error('Failed with HTTP code ' + res.status)
+            }
             const data = await res.json()
-
-            setUserIdCL(data)
+            return data
+        } catch (error) {
+            console.error(error)
+            throw error
         }
+    }
 
+    useEffect(() => {
         fetchCheckListUserId()
-        // findById()
+            .then((data) => {
+                setUserIdCheckList(data)
+            })
+            .catch((error) => {
+                console.error(error)
+                console.log(setUserIdCheckList, 'dsfdf')
+            })
     }, [])
 
     const memoedValue = useMemo(
@@ -144,8 +159,8 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             refreshUsers,
             setAllCheckList,
             allCheckList,
-            userIdCL,
-            setUserIdCL,
+            userIdCheckList,
+            setUserIdCheckList,
         }),
         [
             result,
@@ -154,8 +169,8 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             refreshUsers,
             setAllCheckList,
             allCheckList,
-            userIdCL,
-            setUserIdCL,
+            userIdCheckList,
+            setUserIdCheckList,
         ]
     )
 
