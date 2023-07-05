@@ -1,40 +1,48 @@
-import { useContext } from 'react'
 import { Table } from '@equinor/eds-core-react'
+import { useContext } from 'react'
 import { ApiContext } from '../../context/apiContextProvider'
 
-import { ListWrapperCheckMyList, StyledTableh3 } from '../styles'
 import { CheckListUserIDRow } from './CheckListIDrow'
+import {
+    BackgroundWrap,
+    HeadCell,
+    ListWrapperCheckMyList,
+    Styledh3,
+} from './styles'
 
 export const MyCheckLists = () => {
     const { userIdCheckList } = useContext(ApiContext)
 
     return (
         <>
-            <ListWrapperCheckMyList>
-                <Table style={{ marginTop: '30px' }}>
-                    <Table.Head>
-                        <Table.Row>
-                            <Table.Cell>
-                                <StyledTableh3>Name</StyledTableh3>
-                            </Table.Cell>
-                            <Table.Cell>
-                                <StyledTableh3>Category</StyledTableh3>
-                            </Table.Cell>
-                            <Table.Cell>
-                                <StyledTableh3>Date</StyledTableh3>
-                            </Table.Cell>
-                        </Table.Row>
-                    </Table.Head>
+            <BackgroundWrap>
+                <ListWrapperCheckMyList>
+                    <Table>
+                        <Table.Head sticky>
+                            <Table.Row>
+                                <HeadCell>
+                                    <Styledh3>Name</Styledh3>
+                                </HeadCell>
+                                <HeadCell>
+                                    <Styledh3>Status</Styledh3>
+                                </HeadCell>
+                                <HeadCell>
+                                    <Styledh3>Date</Styledh3>
+                                </HeadCell>
+                            </Table.Row>
+                        </Table.Head>
 
-                    <Table.Body>
-                        {userIdCheckList?.map((userIdCheckList) => (
-                            <CheckListUserIDRow
-                                userIdCheckList={userIdCheckList}
-                            />
-                        ))}
-                    </Table.Body>
-                </Table>
-            </ListWrapperCheckMyList>
+                        <Table.Body>
+                            {userIdCheckList?.map((userIdCheckList) => (
+                                <CheckListUserIDRow
+                                    userIdCheckList={userIdCheckList}
+                                    key={userIdCheckList.id}
+                                />
+                            ))}
+                        </Table.Body>
+                    </Table>
+                </ListWrapperCheckMyList>
+            </BackgroundWrap>
         </>
     )
 }

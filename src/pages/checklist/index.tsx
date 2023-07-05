@@ -2,13 +2,7 @@ import { useState } from 'react'
 
 import { Tabs } from '@equinor/eds-core-react'
 import { Link, Outlet } from 'react-router-dom'
-import {
-    StyledTabs,
-    StyledTabList,
-    Wrapper,
-    Test,
-    ContentWrapper,
-} from './styles'
+import { MainWrap, StyledTabh3, TabSubmittedWrap, TabWrap } from './styles'
 
 export const IndexCheckLists = () => {
     const [activeTab, setActiveTab] = useState(1)
@@ -18,29 +12,40 @@ export const IndexCheckLists = () => {
     }
 
     return (
-        <>
-            <Wrapper>
-                <StyledTabs
-                    variant="minWidth"
-                    activeTab={activeTab}
-                    onChange={handleChange}
-                >
-                    <StyledTabList>
-                        <Tabs.Tab as={Link} to="/CheckList">
+        <MainWrap>
+            <Tabs
+                variant="minWidth"
+                activeTab={activeTab}
+                onChange={handleChange}
+            >
+                <Tabs.List>
+                    <TabSubmittedWrap>
+                        <Tabs.Tab
+                            as={Link}
+                            to="/CheckList"
+                            style={{
+                                borderBottom: 'none',
+                            }}
+                        >
                             Submitted CheckLists
                         </Tabs.Tab>
-
-                        <Test>
-                            <Tabs.Tab as={Link} to="/MyCheckLists">
-                                My CheckLists
-                            </Tabs.Tab>
-                        </Test>
-                    </StyledTabList>
-                    <ContentWrapper>
-                        <Outlet />
-                    </ContentWrapper>
-                </StyledTabs>
-            </Wrapper>
-        </>
+                    </TabSubmittedWrap>
+                    <TabWrap>
+                        <Tabs.Tab
+                            as={Link}
+                            to="/MyCheckLists"
+                            style={{
+                                borderBottom: 'none',
+                            }}
+                        >
+                            <StyledTabh3> My CheckLists</StyledTabh3>
+                        </Tabs.Tab>
+                    </TabWrap>
+                </Tabs.List>
+                <>
+                    <Outlet />
+                </>
+            </Tabs>
+        </MainWrap>
     )
 }

@@ -22,17 +22,17 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
         <>
             <Table.Row>
                 <StyledTableCellCheckL>
-                    {allCheckList.title}
+                    <CellContent> {allCheckList.title} </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        {allCheckList.user.firstName}{' '}
-                        {allCheckList.user.lastName}{' '}
+                        {allCheckList.user.firstName} {` `}
+                        {allCheckList.user.lastName}
                     </CellContent>
                     {formattedCreatedDateUser}
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
-                    {formattedCreatedDate}
+                    <CellContent> {formattedCreatedDate} </CellContent>
                 </StyledTableCellCheckL>
             </Table.Row>
         </>

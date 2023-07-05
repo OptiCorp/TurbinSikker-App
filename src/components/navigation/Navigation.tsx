@@ -1,10 +1,9 @@
-import { FooterContainer, ImageContainerActive, ImageContainer } from './styles'
-import { menu, assignment } from '@equinor/eds-icons'
-import Sidebar from '../sidebar/Sidebar'
-import { Icon } from '@equinor/eds-core-react'
+import { Icon, Tabs } from '@equinor/eds-core-react'
+import { assignment, menu } from '@equinor/eds-icons'
 import { useState } from 'react'
-import { Tabs } from '@equinor/eds-core-react'
 import { useLocation, useNavigate } from 'react-router'
+import Sidebar from '../sidebar/Sidebar'
+import { FooterContainer, ImageContainer, ImageContainerActive } from './styles'
 
 export const Navigation: React.FC = () => {
     const [activeTab, setActiveTab] = useState(1)
@@ -59,7 +58,8 @@ export const Navigation: React.FC = () => {
         <>
             <Sidebar open={open} setOpen={setOpen} />
             {appLocation.pathname === '/AddUser/' ||
-            appLocation.pathname.includes('EditUser') ? null : (
+            appLocation.pathname.includes('EditUser') ||
+            appLocation.pathname.includes('/PreviewCheckList/') ? null : (
                 <FooterContainer>
                     <Tabs activeTab={activeTab} onChange={handleChange}>
                         <Tabs.List
