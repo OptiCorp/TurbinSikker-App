@@ -2,15 +2,20 @@ import { useEffect, useState } from 'react'
 
 import { Card, TextField } from '@equinor/eds-core-react'
 import { useParams } from 'react-router'
-import { Wrapper } from '../styles'
-import { InfoHeader } from './styles'
 
+import { InfoHeader, Wrapper } from './styles'
+
+import { useLocation } from 'react-router'
 import { CheckListEntity } from 'src/models/CheckListEntity'
+import { TaskEntity } from 'src/models/TaskEntity'
 import { PreviewList } from './PreviewList'
+import { PreviewNav } from './PreviewNav'
 
 export const PreviewCheckList = () => {
     const [checkListId, setCheckListId] = useState<CheckListEntity | null>(null)
     const { id } = useParams()
+    const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
+    const location = useLocation()
 
     useEffect(() => {
         const fetchAllChechLists = async () => {
@@ -19,9 +24,21 @@ export const PreviewCheckList = () => {
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
+            const sorted = data.tasks.sort((a: any, b: any) => {
+                // Compare the category names
+                if (a.category.name < b.category.name) {
+                    return -1
+                } else if (a.category.name > b.category.name) {
+                    return 1
+                } else {
+                    return 0
+                }
+            })
 
+            setSortedTasks(sorted)
             setCheckListId(data)
         }
+
         console.log(checkListId)
         fetchAllChechLists()
     }, [])
@@ -63,10 +80,16 @@ export const PreviewCheckList = () => {
                     </InfoHeader>
 
                     <Wrapper>
-                        <PreviewList tasks={checkListId} />
+                        <PreviewList
+                            tasks={checkListId}
+                            sortedTasks={sortedTasks}
+                        />
                     </Wrapper>
                 </div>
             )}
+            {location.pathname.includes('PreviewCheckList/') ? (
+                <PreviewNav />
+            ) : null}
         </div>
     )
 }

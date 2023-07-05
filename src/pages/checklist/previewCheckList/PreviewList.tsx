@@ -1,34 +1,56 @@
 import { CheckListEntity } from 'src/models/CheckListEntity'
-import { PreviewListPoints, PreviewListWrap, StyledCard } from './styles'
+import {
+    CategoryName,
+    Container,
+    PreviewListPoints,
+    PreviewListWrap,
+    StyledCard,
+} from './styles'
 
 type Props = {
     tasks: CheckListEntity
+    sortedTasks: CheckListEntity['tasks']
 }
 
-export const PreviewList = ({ tasks }: Props) => {
+export const PreviewList = ({ sortedTasks }: Props) => {
+    let lastCategoryName = ''
+
     return (
         <>
             <PreviewListWrap>
-                {tasks.tasks.map((task) => (
-                    <>
-                        <p>{task.category.name}</p>
-                        <StyledCard
-                            style={{
-                                width: '100%',
-                            }}
-                        >
-                            <PreviewListPoints
-                                key={task.id}
-                                id="storybook-multi-readonly"
-                                label=""
-                                placeholder={task.description}
-                                multiline
-                                readOnly
-                                rows={3}
-                            />
-                        </StyledCard>
-                    </>
-                ))}
+                {sortedTasks.map((task) => {
+                    // Render the category name if it's different from the last one
+                    const categoryName =
+                        task.category.name !== lastCategoryName
+                            ? task.category.name
+                            : ''
+
+                    // Update the last displayed category name
+                    lastCategoryName = task.category.name
+
+                    return (
+                        <>
+                            <Container>
+                                <CategoryName>{categoryName}</CategoryName>
+                                <StyledCard
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                >
+                                    <PreviewListPoints
+                                        label=""
+                                        key={task.id}
+                                        id="storybook-multi-readonly"
+                                        placeholder={task.description}
+                                        multiline
+                                        readOnly
+                                        rows={3}
+                                    />
+                                </StyledCard>
+                            </Container>
+                        </>
+                    )
+                })}
             </PreviewListWrap>
         </>
     )

@@ -1,14 +1,11 @@
-import { Button, Typography } from '@equinor/eds-core-react'
 import { FooterContainer } from '@components/navigation/styles'
-import { useApiContext } from '../../context/apiContextProvider'
-import { Dialog } from '@equinor/eds-core-react'
-import { BtnWrapper } from '../addUser/styles'
-import { FC, useState } from 'react'
+import { Button, Dialog, Typography } from '@equinor/eds-core-react'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
+import { useApiContext } from '../../context/apiContextProvider'
+import { BtnWrapper } from '../addUser/styles'
 
-interface IEditUser {}
-
-export const EditUserNav: FC<IEditUser> = () => {
+export const EditUserNav = () => {
     const { id } = useParams()
     const { setRefreshUsers } = useApiContext()
     const navigate = useNavigate()
