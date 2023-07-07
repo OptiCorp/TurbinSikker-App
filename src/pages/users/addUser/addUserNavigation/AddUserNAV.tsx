@@ -1,10 +1,9 @@
-import { Button, Typography } from '@equinor/eds-core-react'
+import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { FooterContainer } from '../../../../components/navigation/styles'
-import { Dialog } from '@equinor/eds-core-react'
 
-import { BtnWrapper } from '../styles'
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { BtnWrapper } from '../styles'
 
 export const AddUserButtonNavigation = () => {
     const methods = useFormContext()
@@ -57,6 +56,7 @@ export const AddUserButtonNavigation = () => {
                                 <Button type="submit" form="add-user">
                                     Create User
                                 </Button>
+
                                 <Button variant="ghost" onClick={clearAndClose}>
                                     Cancel
                                 </Button>

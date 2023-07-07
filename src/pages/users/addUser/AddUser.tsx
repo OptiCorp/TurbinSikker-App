@@ -1,13 +1,13 @@
-import { Wrapper, FormWrapper } from './styles'
-import { FormProvider } from 'react-hook-form'
 import { FC } from 'react'
-import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
+import { FormProvider } from 'react-hook-form'
+import { IUser } from '../../context/apiContextProvider'
 import { EditUserNav } from '../Edit/editUserNav'
+import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
+import { useAddUser } from './hooks/useAddUser'
 import { InputField } from './inputField'
 import { RoleSelector } from './roleSelector'
-import { useAddUser } from './hooks/useAddUser'
 import { StatusSwitch } from './status/StatusSwitch'
-import { IUser } from '../../context/apiContextProvider'
+import { FormWrapper, Wrapper } from './styles'
 
 export interface IAddUser {
     user: IUser
@@ -20,7 +20,6 @@ export const AddUser: FC = () => {
     return (
         <FormProvider {...methods}>
             <Wrapper>
-                hb
                 <FormWrapper onSubmit={handleSubmit(onSubmit)} id="add-user">
                     <InputField
                         name="username"

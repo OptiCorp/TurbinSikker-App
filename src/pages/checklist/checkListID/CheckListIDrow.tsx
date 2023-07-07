@@ -14,8 +14,12 @@ interface CheckListRowProps {
 export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
     userIdCheckList,
 }) => {
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string | null) => {
+        if (!dateString) {
+            return 'No updates'
+        }
         const date = new Date(dateString)
+
         return date.toLocaleDateString('en-GB')
     }
     const navigate = useNavigate()
@@ -34,53 +38,74 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
                         <Typography variant="body_short_bold">
                             {userIdCheckList.title}
                         </Typography>
-                        <Typography
-                            group="table"
-                            variant="cell_numeric_monospaced"
-                            token={{
-                                fontWeight: 300,
-                                textAlign: 'left',
+
+                        <Chip style={{ paddingLeft: '0', lineHeight: '0' }}>
+                            <Icon
+                                data={assignment_user}
+                                color="#243746"
+                                style={{ height: '15px' }}
+                            />
+                            submitted to 0 inspectors{' '}
+                        </Chip>
+                        <Chip
+                            style={{
+                                paddingLeft: '0',
+                                lineHeight: '0',
+                                background: 'none',
                             }}
                         >
-                            {formattedCreatedDate}
-                        </Typography>
-                        <Chip>
-                            <Icon data={assignment_user} />
-                            submitted to 0 inspectors
+                            <Icon
+                                data={calendar}
+                                color="#243746"
+                                style={{ height: '15px' }}
+                            />
+                            <Typography
+                                variant="caption"
+                                token={{
+                                    textAlign: 'center',
+                                    fontSize: '0.8rem',
+                                }}
+                            >
+                                Created {formattedCreatedDate}
+                            </Typography>
                         </Chip>
                     </CellContentMyList>
                 </MyCheckListCell>
                 <MyCheckListCell>
                     <Chip variant="active" style={{ margin: '0 auto' }}>
-                        {' '}
                         {userIdCheckList.status}
                     </Chip>
                 </MyCheckListCell>
 
                 <MyCheckListCell>
-                    <Typography
-                        group="input"
-                        variant="label"
-                        token={{
-                            fontStyle: 'italic',
-                            textAlign: 'center',
-                        }}
-                    >
-                        {formattedUpdatedDate}
-                        <Icon data={timer} size={16} />
-                    </Typography>
-                    <Button
-                        style={{
-                            width: '55px',
-                            fontSize: '0.8rem',
-                            height: '25px',
-                            margin: '0 auto',
-                        }}
-                        color="primary"
-                        onClick={() => clickHandler(userIdCheckList.id)}
-                    >
-                        Preview
-                    </Button>
+                    <CellContentMyList>
+                        <Typography
+                            variant="caption"
+                            token={{
+                                textAlign: 'center',
+                            }}
+                        >
+                            {formattedUpdatedDate}
+                            <Icon
+                                data={timer}
+                                color="#243746"
+                                style={{ height: '14px' }}
+                            />
+                        </Typography>
+                        <Button
+                            style={{
+                                width: '55px',
+                                fontSize: '0.8rem',
+                                height: '25px',
+                                margin: '0 auto',
+                                gridRow: '3/3',
+                            }}
+                            color="primary"
+                            onClick={() => clickHandler(userIdCheckList.id)}
+                        >
+                            Preview
+                        </Button>
+                    </CellContentMyList>
                 </MyCheckListCell>
             </Table.Row>
         </>
