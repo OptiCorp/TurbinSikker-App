@@ -3,17 +3,22 @@ import { Button } from '@equinor/eds-core-react'
 import { Link } from 'react-router-dom'
 import { BtnWrapper } from '../../users/addUser/styles'
 
-export const PreviewNav = () => {
+export const MyCheckListNav = () => {
     return (
         <>
             <FooterContainer>
                 <BtnWrapper>
-                    <Button color="danger" as={Link} to="/AddCheckList:id/">
-                        Edit CheckList
+                    <Button
+                        variant="outlined"
+                        as={Link}
+                        to="/AddCheckList/"
+                        style={{ color: 'white', borderColor: 'white' }}
+                    >
+                        New CheckList
                     </Button>
 
                     <div>
-                        <Button variant="ghost">Cancel</Button>
+                        <Button color="primary">Send CheckList</Button>
                     </div>
                 </BtnWrapper>
             </FooterContainer>

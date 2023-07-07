@@ -1,9 +1,9 @@
 import React, {
     createContext,
-    useState,
     useContext,
     useEffect,
     useMemo,
+    useState,
 } from 'react'
 import { useLocation, useParams } from 'react-router'
 
@@ -89,6 +89,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [result, setResult] = useState<IUser[]>([])
     const { state } = useLocation()
     const newUser = state ? state?.newUser : null
+    const refreshCheckLists = state ? state?.refreshCheckLists : null
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
     const [allCheckList, setAllCheckList] = useState<ICheckList[]>([])
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
@@ -110,19 +111,20 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         // findById()
     }, [newUser, refreshUsers])
 
+    const fetchAllCheckLists = async () => {
+        const res = await fetch(
+            `http://20.251.37.226:8080/api/GetAllChecklists`
+        )
+        if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+        const data = await res.json()
+
+        setAllCheckList(data)
+    }
+
     useEffect(() => {
-        const fetchAllChechLists = async () => {
-            const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllChecklists`
-            )
-            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-            const data = await res.json()
-
-            setAllCheckList(data)
-        }
-
-        fetchAllChechLists()
-    }, [])
+        fetchAllCheckLists()
+        // findById()
+    }, [refreshCheckLists])
 
     const fetchCheckListUserId = async () => {
         try {
@@ -147,9 +149,13 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             })
             .catch((error) => {
                 console.error(error)
-                console.log(setUserIdCheckList, 'dsfdf')
+                console.log(setUserIdCheckList)
             })
     }, [])
+
+    useEffect(() => {
+        fetchCheckListUserId()
+    }, [refreshCheckLists])
 
     const memoedValue = useMemo(
         () => ({

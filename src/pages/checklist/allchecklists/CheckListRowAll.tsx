@@ -1,6 +1,6 @@
 import { Table } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
-import { ICheckList } from '../context/apiContextProvider'
+import { ICheckList } from '../../context/apiContextProvider'
 
 import { CellContent, StyledTableCellCheckL } from './styles'
 

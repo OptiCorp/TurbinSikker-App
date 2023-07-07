@@ -1,9 +1,9 @@
 import { Table } from '@equinor/eds-core-react'
 import { useContext } from 'react'
-import { ApiContext } from '../context/apiContextProvider'
+import { ApiContext } from '../../context/apiContextProvider'
 import { CheckListUserRow } from './CheckListRowAll'
 
-import { HeadCell } from './checkListID/styles'
+import { HeadCell } from '../checkListID/styles'
 import { ListWrapperCheckL, StyledTableh3, Wrap } from './styles'
 
 export const CheckList = () => {

@@ -32,14 +32,23 @@ export const Styledh3 = styled.h3`
 `
 
 export const MyCheckListCell = styled(Table.Cell)`
-    text-align: center;
+    padding-right: 0;
 `
-export const CellContentMyList = styled.div`
-    font-weight: 600;
-    margin: 1rem 0;
+
+export const Test = styled.div`
     display: grid;
 
-    grid-template-columns: 1fr;
-    grid-row-gap: 10px;
+    margin: 1rem 0;
+    grid-gap: 15px;
     grid-template-rows: 1fr auto 1fr;
+    grid-template-columns: 1fr;
+`
+
+export const CellContentMyList = styled.div`
+    display: grid;
+    margin: 1rem 0;
+    grid-gap: 10px;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-auto-flow: row;
+    grid-template-columns: minmax(125px, 1fr);
 `

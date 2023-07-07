@@ -59,6 +59,7 @@ export const Navigation: React.FC = () => {
             <Sidebar open={open} setOpen={setOpen} />
             {appLocation.pathname === '/AddUser/' ||
             appLocation.pathname.includes('EditUser') ||
+            appLocation.pathname.includes('MyCheckLists') ||
             appLocation.pathname.includes('/PreviewCheckList/') ? null : (
                 <FooterContainer>
                     <Tabs activeTab={activeTab} onChange={handleChange}>
