@@ -5,7 +5,6 @@ import { SnackbarComponent } from './components/snackbar/SnackBar'
 import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
 import Layout from './pages/Layout'
 import { IndexCheckLists } from './pages/checklist'
-import { AddCheckList } from './pages/checklist/addchecklists/AddCheckList'
 import { CheckList } from './pages/checklist/allchecklists/CheckList'
 import { MyCheckLists } from './pages/checklist/checkListID/MyCheckLists'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
@@ -48,14 +47,7 @@ const App = () => {
                                         path="/PreviewCheckList/:id"
                                         element={<PreviewCheckList />}
                                     />
-                                    <Route
-                                        path="/AddCheckList"
-                                        element={<AddCheckList />}
-                                    />
-                                    <Route
-                                        path="/AddCheckList/:id"
-                                        element={<AddCheckList />}
-                                    />
+
                                     <Route
                                         path="/ListUsers"
                                         element={<ListUsers />}

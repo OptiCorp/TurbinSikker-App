@@ -1,8 +1,5 @@
-export type FormValues = {
-    title: string
-    status: string
-    createdBy: string
-    id: string
-    createdDate: string
-    updatedDate: string
+export type FormValuesEntity = {
+    checklistid: string
+    task: string
+    category: string
 }

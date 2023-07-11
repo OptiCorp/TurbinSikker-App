@@ -5,7 +5,11 @@ import React, {
     useMemo,
     useState,
 } from 'react'
-import { useLocation, useParams } from 'react-router'
+
+import { useLocation } from 'react-router'
+import { Category } from 'src/models/CategoryEntity'
+
+import { TaskEntity } from 'src/models/TaskEntity'
 
 export type ContextType = {
     result: IUser[]
@@ -13,6 +17,13 @@ export type ContextType = {
     allCheckList: ICheckList[]
     refreshUsers: boolean
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
+    category: Category[]
+    tasks: TaskEntity[]
+    selectedTask: string
+    refreshList: boolean
+    selectedOption: string
+    handleSelectTask: React.Dispatch<React.SetStateAction<string>>
+    handleCategorySelect: React.Dispatch<React.SetStateAction<string>>
 }
 
 export type ICheckList = {
@@ -81,6 +92,13 @@ export const postsContextDefaultValue: ContextType = {
     allCheckList: [],
     refreshUsers: false,
     setRefreshUsers: () => {},
+    category: [],
+    tasks: [],
+    selectedTask: '',
+    refreshList: false,
+    selectedOption: '',
+    handleSelectTask: () => {},
+    handleCategorySelect: () => {},
 }
 
 const ApiContext = createContext<ContextType>(postsContextDefaultValue)
@@ -95,7 +113,20 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
-    const { id } = useParams<{ id: string }>()
+
+    const [refreshList, setRefreshList] = useState<boolean>(false)
+    const [tasks, setTasks] = useState<TaskEntity[]>([])
+    const [selectedOption, setSelectedOption] = useState('')
+    const [selectedTask, setSelectedTask] = useState('')
+    const [category, setCategory] = useState<Category[]>([])
+
+    const handleCategorySelect = (selectedCategory: any) => {
+        setSelectedOption(selectedCategory.value)
+    }
+
+    const handleSelectTask = (task: any) => {
+        setSelectedTask(task)
+    }
 
     const getUsers = async () => {
         const res = await fetch(
@@ -111,7 +142,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         // findById()
     }, [newUser, refreshUsers])
 
-    const fetchAllCheckLists = async () => {
+    const fetchCheckLists = async () => {
         const res = await fetch(
             `http://20.251.37.226:8080/api/GetAllChecklists`
         )
@@ -122,7 +153,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     useEffect(() => {
-        fetchAllCheckLists()
+        fetchCheckLists()
         // findById()
     }, [refreshCheckLists])
 
@@ -157,6 +188,42 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         fetchCheckListUserId()
     }, [refreshCheckLists])
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const res = await fetch(
+                'http://20.251.37.226:8080/api/GetAllCategories'
+            )
+            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+            const data = await res.json()
+
+            const category = data.map((item: any) => ({
+                value: item.id,
+                label: item.name,
+            }))
+            setCategory(category)
+        }
+        fetchCategories()
+    }, [])
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const res = await fetch(
+                `http://20.251.37.226:8080/api/GetAllTasksByCategoryId?id=${selectedOption}`
+            )
+            const data = await res.json()
+
+            const tasks = data.map((task: any) => ({
+                value: task.id,
+                label: task.description,
+            }))
+            setTasks(tasks)
+        }
+
+        if (selectedOption) {
+            fetchTasks()
+        }
+    }, [selectedOption])
+
     const memoedValue = useMemo(
         () => ({
             result,
@@ -167,6 +234,19 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             allCheckList,
             userIdCheckList,
             setUserIdCheckList,
+            fetchCheckLists,
+
+            selectedOption,
+            tasks,
+            setTasks,
+            category,
+            setCategory,
+            handleSelectTask,
+            handleCategorySelect,
+            selectedTask,
+            refreshList,
+            setSelectedTask,
+            setSelectedOption,
         }),
         [
             result,
@@ -177,6 +257,19 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             allCheckList,
             userIdCheckList,
             setUserIdCheckList,
+            fetchCheckLists,
+
+            selectedOption,
+            tasks,
+            setTasks,
+            category,
+            setCategory,
+            handleSelectTask,
+            handleCategorySelect,
+            selectedTask,
+            refreshList,
+            setSelectedTask,
+            setSelectedOption,
         ]
     )
 

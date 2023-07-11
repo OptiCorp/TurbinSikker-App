@@ -22,6 +22,7 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
 
         return date.toLocaleDateString('en-GB')
     }
+
     const navigate = useNavigate()
     const formattedCreatedDate = formatDate(userIdCheckList.createdDate)
     const formattedUpdatedDate = formatDate(userIdCheckList.updatedDate)
