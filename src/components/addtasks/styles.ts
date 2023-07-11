@@ -10,10 +10,9 @@ export const TitleHeader = styled.div`
 
 export const FormWrap = styled.form``
 export const Container = styled.div`
-    height: 80vh;
-    margin: 0 auto;
+    margin: 10px auto;
     display: flex;
-
+    height: 100px;
     flex-direction: column;
     align-items: center;
     background-color: #f0f3f3;
