@@ -6,7 +6,6 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f3f3;
 `
 export const InfoHeader = styled.div`
     display: flex;

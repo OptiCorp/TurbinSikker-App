@@ -48,7 +48,7 @@ export const CellContentMyList = styled.div`
     display: grid;
     margin: 1rem 0;
     grid-gap: 10px;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     grid-auto-flow: row;
     grid-template-columns: minmax(125px, 1fr);
 `

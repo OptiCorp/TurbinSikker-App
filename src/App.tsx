@@ -7,6 +7,7 @@ import Layout from './pages/Layout'
 import { IndexCheckLists } from './pages/checklist'
 import { CheckList } from './pages/checklist/allchecklists/CheckList'
 import { MyCheckLists } from './pages/checklist/checkListID/MyCheckLists'
+import { EditCheckList } from './pages/checklist/editchecklist'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { ApiContextProvider } from './pages/context/apiContextProvider'
 import { LandingPage } from './pages/landingPage/LandingPage'
@@ -15,7 +16,6 @@ import { Login } from './pages/login'
 import { Profile } from './pages/profile'
 import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
-
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
 
@@ -43,9 +43,15 @@ const App = () => {
                                             element={<MyCheckLists />}
                                         />
                                     </Route>
+
                                     <Route
                                         path="/PreviewCheckList/:id"
                                         element={<PreviewCheckList />}
+                                    />
+
+                                    <Route
+                                        path="/EditCheckList/:id"
+                                        element={<EditCheckList />}
                                     />
 
                                     <Route
@@ -61,7 +67,8 @@ const App = () => {
                                         element={<AddUser />}
                                     />
                                 </Route>
-                            </Routes>{' '}
+                            </Routes>
+
                             <SnackbarComponent />
                         </SnackbarContextProvider>{' '}
                     </AuthProvider>
