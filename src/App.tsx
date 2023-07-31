@@ -53,6 +53,10 @@ const App = () => {
                                         path="/EditCheckList/:id"
                                         element={<EditCheckList />}
                                     />
+                                    {/* <Route
+                                        path="/EditCheckList/"
+                                        element={<EditCheckList />}
+                                    /> */}
 
                                     <Route
                                         path="/ListUsers"

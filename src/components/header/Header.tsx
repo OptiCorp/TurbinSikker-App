@@ -1,16 +1,18 @@
-import { TopBar } from '@equinor/eds-core-react'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
+import { Icon, TopBar } from '@equinor/eds-core-react'
 import { arrow_back_ios } from '@equinor/eds-icons'
-import { Icon } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import logo from '../../assets/images/smallLogo.png'
-import { NewTopBar, HeaderContents, HeaderLocation } from './styles'
+import { useApiContext } from '../../pages/context/apiContextProvider'
+import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
+    const { refreshList, setRefreshList } = useApiContext()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')
-
+    const {} = useAddTaskForm()
     useEffect(() => {
         setActiveUrl(window.location.pathname)
     }, [appLocation])
@@ -27,6 +29,8 @@ export const Header = () => {
     const basePath = useBasePath()
 
     const onClick = () => {
+        setRefreshList((prev) => !prev)
+        console.log(setRefreshList)
         navigate(-1)
     }
 

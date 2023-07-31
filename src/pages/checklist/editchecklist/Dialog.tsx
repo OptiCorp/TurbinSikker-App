@@ -1,8 +1,8 @@
 import { Button, Dialog } from '@equinor/eds-core-react'
 
-import { EditListPoints, StyledDialog, Wrapper } from './styles'
-
 import { useState } from 'react'
+
+import { EditListPoints, StyledDialog, Wrapper } from './styles'
 
 export const DialogTask = ({
     isOpen = false,

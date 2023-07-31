@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
+import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import useAuth from '../../../../../pages/landingPage/context/LandingPageContextProvider'
 
 type EditTaskEntity = {
@@ -25,18 +27,19 @@ export const useEditTaskForm = () => {
     const [categoryId, setCategoryId] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
 
+    const { openSnackbar } = useContext(SnackbarContext)
+    const { refreshList, setRefreshList } = useAddTaskForm()
     const handleClose = () => {
         setIsOpen(false)
     }
 
-    const updateCheckList = async (data: {
+    const updateCheckListTask = async (data: {
         taskId: string
         description: string
         categoryId: string
     }) => {
-        const { idToken } = useAuth()
         const res = await fetch(
-            `http://20.251.37.226:8080/api/UpdateChecklistTask?id=${taskId}`,
+            `http://20.251.37.226:8080/api/UpdateChecklistTask?id=${data.taskId}`,
             {
                 method: 'POST',
                 headers: {
@@ -49,7 +52,11 @@ export const useEditTaskForm = () => {
                 }),
             }
         )
-        return res
+        if (res.ok) setRefreshList((prev) => !prev)
+        setIsOpen(false)
+        if (openSnackbar) {
+            openSnackbar(`Task updated`)
+        }
     }
 
     return {
@@ -61,6 +68,6 @@ export const useEditTaskForm = () => {
         taskId,
         isOpen,
         setIsOpen,
-        updateCheckList,
+        updateCheckListTask,
     }
 }

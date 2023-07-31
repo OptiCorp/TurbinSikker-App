@@ -160,7 +160,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         fetchCheckListUserId()
-    }, [refreshCheckLists])
+    }, [refreshCheckLists, refreshList])
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -196,7 +196,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         if (selectedOption) {
             fetchTasks()
         }
-    }, [selectedOption, refreshList])
+    }, [selectedOption])
 
     const memoedValue = useMemo(
         () => ({

@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 import { useLocation } from 'react-router'
 import { AddTasks } from '../../../components/addtasks/AddTasks'
+import { useApiContext } from '../../../pages/context/apiContextProvider'
 import { InfoHeader, Wrapper } from '../previewCheckList/styles'
 import { EditList } from './EditList/EditList'
 import { EditNav } from './EditNav/EditNav'
@@ -29,7 +30,7 @@ export const EditCheckList = () => {
                             >
                                 <TextField
                                     id="storybook-readonly"
-                                    placeholder={checkListId.title}
+                                    defaultValue={checkListId.title}
                                     label=""
                                     readOnly
                                     style={{
