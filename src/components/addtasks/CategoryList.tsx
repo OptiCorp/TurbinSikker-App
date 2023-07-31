@@ -6,15 +6,29 @@ import { ApiContext } from '../../pages/context/apiContextProvider'
 import { ControllerWrap } from './styles'
 
 const customStyles = {
-    control: (styles: any) => ({ ...styles }),
+    control: (styles: any) => ({
+        ...styles,
+        background: '#F7F7F7',
+        borderBottom: '1px solid black',
+    }),
+
     option: (styles: any) => ({ ...styles }),
-    container: (styles: any) => ({ ...styles, width: 330 }),
-    menu: (styles: any) => ({ ...styles, width: '200px' }),
+    container: (styles: any) => ({
+        ...styles,
+        width: 250,
+        paddingBottom: '10px',
+    }),
+    menu: (styles: any) => ({
+        ...styles,
+        width: '200',
+        lineHeight: '20px',
+    }),
 }
 
 export const CategorySelector = () => {
-    const { handleCategorySelect, handleSelectTask, category, tasks } =
+    const { handleCategorySelect, category, tasks, handleTaskSelect } =
         useContext(ApiContext)
+
     const { control } = useFormContext()
 
     return (
@@ -30,11 +44,16 @@ export const CategorySelector = () => {
                     render={({ field: { onChange, value } }) => (
                         <Select
                             styles={customStyles}
+                            isClearable
                             options={category}
                             value={category.find((c) => c.value === value)}
                             onChange={(val) => {
-                                onChange(val?.value)
-                                handleCategorySelect(value)
+                                if (val === null) {
+                                    onChange(null)
+                                } else {
+                                    onChange(val.value)
+                                    handleCategorySelect(val.value)
+                                }
                             }}
                         />
                     )}
@@ -45,14 +64,20 @@ export const CategorySelector = () => {
                     rules={{
                         required: 'Required',
                     }}
+                    defaultValue={[tasks[0]]}
                     render={({ field: { onChange, value } }) => (
                         <Select
                             styles={customStyles}
                             options={tasks}
-                            value={tasks.find((c) => c.value === value)}
+                            isClearable
+                            value={tasks.find((c) => c.id === value)}
                             onChange={(val) => {
-                                onChange(val?.value)
-                                handleSelectTask(value)
+                                if (val === null) {
+                                    onChange(null)
+                                } else {
+                                    onChange(val.value)
+                                    handleTaskSelect(val.value)
+                                }
                             }}
                         />
                     )}

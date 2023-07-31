@@ -8,42 +8,24 @@ import React, {
 
 import { useLocation } from 'react-router'
 import { Category } from 'src/models/CategoryEntity'
-
+import { CheckListEntity } from 'src/models/CheckListEntity'
 import { TaskEntity } from 'src/models/TaskEntity'
+import { UserEntity } from 'src/models/UserEntity'
 
 export type ContextType = {
-    result: IUser[]
+    result: UserEntity[]
     userIdCheckList: ICheckListUserID[]
-    allCheckList: ICheckList[]
+    allCheckList: CheckListEntity[]
     refreshUsers: boolean
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
     category: Category[]
     tasks: TaskEntity[]
     selectedTask: string
     refreshList: boolean
+    setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
     selectedOption: string
-    handleSelectTask: React.Dispatch<React.SetStateAction<string>>
-    handleCategorySelect: React.Dispatch<React.SetStateAction<string>>
-}
-
-export type ICheckList = {
-    id: string
-    title: string
-    status: string
-    createdDate: string
-    user: {
-        createdDate: string
-
-        email: string
-        firstName: string
-        id: string
-        lastName: string
-        status: number
-        updatedDate: string
-        userRole: null
-        userRoleId: string
-        username: string
-    }
+    handleTaskSelect: (task: string) => void
+    handleCategorySelect: (category: string) => void
 }
 
 export type ICheckListUserID = {
@@ -54,7 +36,7 @@ export type ICheckListUserID = {
     updatedDate: string
 }
 
-export const checkList: ICheckList = {
+export const checkList: CheckListEntity = {
     id: '',
     title: '',
     status: '',
@@ -68,22 +50,14 @@ export const checkList: ICheckList = {
         lastName: '',
         status: 0,
         updatedDate: '',
-        userRole: null,
+        userRole: {
+            id: '',
+            name: '',
+        },
         userRoleId: '',
         username: '',
     },
-}
-
-export type IUser = {
-    status: string
-    email: string
-    firstName: string
-    lastName: string
-    id: string
-    userRole: { id: string; name: string }
-    username: string
-    createdDate: string
-    updatedDate: string | null
+    tasks: [],
 }
 
 export const postsContextDefaultValue: ContextType = {
@@ -92,40 +66,42 @@ export const postsContextDefaultValue: ContextType = {
     allCheckList: [],
     refreshUsers: false,
     setRefreshUsers: () => {},
+
     category: [],
     tasks: [],
     selectedTask: '',
     refreshList: false,
+    setRefreshList: () => {},
     selectedOption: '',
-    handleSelectTask: () => {},
+    handleTaskSelect: () => {},
     handleCategorySelect: () => {},
 }
 
 const ApiContext = createContext<ContextType>(postsContextDefaultValue)
 
 const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [result, setResult] = useState<IUser[]>([])
+    const [result, setResult] = useState<UserEntity[]>([])
     const { state } = useLocation()
     const newUser = state ? state?.newUser : null
     const refreshCheckLists = state ? state?.refreshCheckLists : null
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
-    const [allCheckList, setAllCheckList] = useState<ICheckList[]>([])
+    const [allCheckList, setAllCheckList] = useState<CheckListEntity[]>([])
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
 
-    const [refreshList, setRefreshList] = useState<boolean>(false)
+    const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [tasks, setTasks] = useState<TaskEntity[]>([])
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
     const [category, setCategory] = useState<Category[]>([])
 
-    const handleCategorySelect = (selectedCategory: any) => {
-        setSelectedOption(selectedCategory.value)
+    const handleCategorySelect = (selectedCategory: string) => {
+        setSelectedOption(selectedCategory)
     }
 
-    const handleSelectTask = (task: any) => {
-        setSelectedTask(task)
+    const handleTaskSelect = (selectedTask: any) => {
+        setSelectedTask(selectedTask.value)
     }
 
     const getUsers = async () => {
@@ -139,7 +115,6 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         getUsers()
-        // findById()
     }, [newUser, refreshUsers])
 
     const fetchCheckLists = async () => {
@@ -154,7 +129,6 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         fetchCheckLists()
-        // findById()
     }, [refreshCheckLists])
 
     const fetchCheckListUserId = async () => {
@@ -222,7 +196,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         if (selectedOption) {
             fetchTasks()
         }
-    }, [selectedOption])
+    }, [selectedOption, refreshList])
 
     const memoedValue = useMemo(
         () => ({
@@ -235,13 +209,14 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             userIdCheckList,
             setUserIdCheckList,
             fetchCheckLists,
-
+            refreshCheckLists,
             selectedOption,
             tasks,
             setTasks,
             category,
             setCategory,
-            handleSelectTask,
+            setRefreshList,
+            handleTaskSelect,
             handleCategorySelect,
             selectedTask,
             refreshList,
@@ -258,13 +233,14 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             userIdCheckList,
             setUserIdCheckList,
             fetchCheckLists,
-
+            setRefreshList,
+            refreshCheckLists,
             selectedOption,
             tasks,
             setTasks,
             category,
             setCategory,
-            handleSelectTask,
+            handleTaskSelect,
             handleCategorySelect,
             selectedTask,
             refreshList,

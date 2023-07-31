@@ -1,17 +1,17 @@
-import { Card, TextField } from '@equinor/eds-core-react'
-
-import { InfoHeader, Wrapper } from './styles'
-
-import { useContext } from 'react'
-
 import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
+import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
 
-import { ApiContext } from '../../context/apiContextProvider'
-import { PreviewList } from './PreviewList'
-import { PreviewNav } from './PreviewNav'
+import { useState } from 'react'
 
-export const PreviewCheckList = () => {
-    const { userIdCheckList } = useContext(ApiContext)
+import { useLocation } from 'react-router'
+import { AddTasks } from '../../../components/addtasks/AddTasks'
+import { InfoHeader, Wrapper } from '../previewCheckList/styles'
+import { EditList } from './EditList/EditList'
+import { EditNav } from './EditNav/EditNav'
+
+export const EditCheckList = () => {
+    const appLocation = useLocation()
+    const [isOpenn, setIsOpenn] = useState(false)
     const { checkListId, sortedTasks } = useAddTaskForm()
 
     return (
@@ -37,12 +37,28 @@ export const PreviewCheckList = () => {
                                         background: '#F7F7F7',
                                     }}
                                 />
+                                <Button
+                                    color="secondary"
+                                    onClick={() => setIsOpenn(!isOpenn)}
+                                >
+                                    <Typography
+                                        variant="caption"
+                                        token={{
+                                            textAlign: 'center',
+                                            color: 'white',
+                                        }}
+                                    >
+                                        Add Task
+                                    </Typography>
+                                </Button>
                             </Card.Header>
                         </Card>
                     </InfoHeader>
 
                     <Wrapper>
-                        <PreviewList
+                        {isOpenn && <AddTasks />}
+
+                        <EditList
                             key={checkListId.id}
                             tasks={checkListId}
                             sortedTasks={sortedTasks}
@@ -50,10 +66,9 @@ export const PreviewCheckList = () => {
                     </Wrapper>
                 </div>
             )}
-
-            {userIdCheckList?.map((userIdCheckList) => (
-                <PreviewNav key={userIdCheckList.id} />
-            ))}
+            {appLocation.pathname.includes('EditCheckList') ? (
+                <EditNav />
+            ) : null}
         </div>
     )
 }

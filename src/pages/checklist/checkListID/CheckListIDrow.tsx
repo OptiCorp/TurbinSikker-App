@@ -87,11 +87,6 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
                             }}
                         >
                             {formattedUpdatedDate}
-                            <Icon
-                                data={timer}
-                                color="#243746"
-                                style={{ height: '14px' }}
-                            />
                         </Typography>
                         <Button
                             style={{
@@ -101,10 +96,10 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
                                 margin: '0 auto',
                                 gridRow: '3/3',
                             }}
-                            color="primary"
+                            variant="outlined"
                             onClick={() => clickHandler(userIdCheckList.id)}
                         >
-                            Preview
+                            view
                         </Button>
                     </CellContentMyList>
                 </MyCheckListCell>

@@ -1,5 +1,5 @@
 export type FormValuesEntity = {
-    checklistid: string
+    checklistId: string
     task: string
     category: string
 }

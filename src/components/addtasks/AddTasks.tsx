@@ -1,44 +1,24 @@
-import { Button, Card } from '@equinor/eds-core-react'
-
+import { Button } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 
-import { StyledCard } from '../../pages/checklist/previewCheckList/styles'
-
 import { CategorySelector } from './CategoryList'
-import { Container, TitleHeader } from './styles'
+import { StyledCard, StyledCardContent, TitleHeader } from './styles'
 import { useAddTaskForm } from './useAddTaskForm'
 
 export const AddTasks = () => {
-    const { onSubmit, methods } = useAddTaskForm()
-
+    const { methods, onSubmit } = useAddTaskForm()
     const { handleSubmit } = methods
-
     return (
         <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} id="add-checklist">
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <TitleHeader>
-                    <Card>
-                        <Card.Header
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                margin: '0 auto',
-                            }}
-                        ></Card.Header>
-                    </Card>
+                    <StyledCard>
+                        <StyledCardContent>
+                            <CategorySelector />
+                        </StyledCardContent>
+                        <Button type="submit">Add Task</Button>
+                    </StyledCard>
                 </TitleHeader>
-                <Container>
-                    <CategorySelector />
-                </Container>
-                <StyledCard
-                    style={{
-                        width: '100%',
-                    }}
-                ></StyledCard>
-
-                <Button type="submit" form="add-checklist">
-                    Submit
-                </Button>
             </form>
         </FormProvider>
     )

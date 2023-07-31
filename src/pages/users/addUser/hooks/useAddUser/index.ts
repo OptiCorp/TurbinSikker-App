@@ -1,16 +1,17 @@
 import { useContext, useEffect } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useNavigate, useLocation, useParams } from 'react-router'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { useLocation, useNavigate, useParams } from 'react-router'
+import { UserEntity } from 'src/models/UserEntity'
 import { SnackbarContext } from '../../../../../components/snackbar/SnackBarContext'
-import useAuth from '../../../../landingPage/context/LandingPageContextProvider'
 import { ApiContext } from '../../../../context/apiContextProvider'
+import useAuth from '../../../../landingPage/context/LandingPageContextProvider'
 import { FormValues } from '../../types'
 
 export const useAddUser = () => {
     const { idToken } = useAuth()
     const navigate = useNavigate()
     const appLocation = useLocation()
-    const methods = useForm<FormValues>()
+    const methods = useForm<UserEntity>()
     const { reset } = methods
     const { id } = useParams()
     const { result: users } = useContext(ApiContext)

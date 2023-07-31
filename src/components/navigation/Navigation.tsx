@@ -60,6 +60,7 @@ export const Navigation: React.FC = () => {
             {appLocation.pathname === '/AddUser/' ||
             appLocation.pathname.includes('EditUser') ||
             appLocation.pathname.includes('MyCheckLists') ||
+            appLocation.pathname.includes('EditCheckList') ||
             appLocation.pathname.includes('/PreviewCheckList/') ? null : (
                 <FooterContainer>
                     <Tabs activeTab={activeTab} onChange={handleChange}>

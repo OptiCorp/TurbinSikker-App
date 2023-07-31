@@ -19,18 +19,16 @@ export const PreviewList = ({ sortedTasks }: Props) => {
         <>
             <PreviewListWrap>
                 {sortedTasks.map((task) => {
-                    // Render the category name if it's different from the last one
                     const categoryName =
                         task.category.name !== lastCategoryName
                             ? task.category.name
                             : ''
 
-                    // Update the last displayed category name
                     lastCategoryName = task.category.name
 
                     return (
                         <>
-                            <Container>
+                            <Container key={task.id}>
                                 <CategoryName>{categoryName}</CategoryName>
                                 <StyledCard
                                     style={{
@@ -41,7 +39,7 @@ export const PreviewList = ({ sortedTasks }: Props) => {
                                         label=""
                                         key={task.id}
                                         id="storybook-multi-readonly"
-                                        placeholder={task.description}
+                                        defaultValue={task.description}
                                         multiline
                                         readOnly
                                         rows={3}
