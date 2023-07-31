@@ -1,6 +1,6 @@
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useContext, useState } from 'react'
 import { CheckListEntity } from 'src/models/CheckListEntity'
-
-import { useState } from 'react'
 import {
     CategoryName,
     Container,
@@ -11,7 +11,10 @@ import {
 
 import { TaskEntity } from 'src/models/TaskEntity'
 
+import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 import useAuth from '../../../../pages/landingPage/context/LandingPageContextProvider'
+
+import { DialogTask } from '../Dialog'
 
 type Props = {
     tasks: CheckListEntity
@@ -19,6 +22,10 @@ type Props = {
 }
 
 export const EditList = (props: Props) => {
+    const { idToken } = useAuth()
+    const { refreshList, setRefreshList } = useAddTaskForm()
+
+    const { openSnackbar } = useContext(SnackbarContext)
     let lastCategoryName = ''
     const [isOpen, setIsOpen] = useState(false)
     const [task, setTask] = useState<TaskEntity>()
@@ -28,9 +35,8 @@ export const EditList = (props: Props) => {
         description: string
         categoryId: string
     }) => {
-        const { idToken } = useAuth()
         const res = await fetch(
-            `http://20.251.37.226:8080/api/UpdateChecklistTask?id=${taskId}`,
+            `http://20.251.37.226:8080/api/UpdateChecklistTask?id=${data.taskId}`,
             {
                 method: 'POST',
                 headers: {
@@ -43,7 +49,12 @@ export const EditList = (props: Props) => {
                 }),
             }
         )
-        return res
+
+        if (res.ok) setRefreshList((prev) => !prev)
+        setIsOpen(false)
+        if (openSnackbar) {
+            openSnackbar(`Task updated`)
+        }
     }
 
     return (
@@ -84,7 +95,7 @@ export const EditList = (props: Props) => {
                     )
                 })}
             </PreviewListWrap>
-            {/* <DialogTask
+            <DialogTask
                 isOpen={isOpen}
                 handleClose={() => {
                     setIsOpen(false)
@@ -98,7 +109,7 @@ export const EditList = (props: Props) => {
                         taskId: task?.id ?? '',
                     })
                 }}
-            /> */}
+            />
         </>
     )
 }

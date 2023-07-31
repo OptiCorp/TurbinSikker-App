@@ -1,4 +1,4 @@
-import { Button, Card } from '@equinor/eds-core-react'
+import { Button } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 
 import { CategorySelector } from './CategoryList'
@@ -16,7 +16,7 @@ export const AddTasks = () => {
                         <StyledCardContent>
                             <CategorySelector />
                         </StyledCardContent>
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit">Add Task</Button>
                     </StyledCard>
                 </TitleHeader>
             </form>

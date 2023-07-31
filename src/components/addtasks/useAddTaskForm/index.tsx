@@ -23,9 +23,9 @@ export const useAddTaskForm = () => {
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        console.log('test')
+        console.log(data)
         const res = await fetch(
-            `https://localhost:7290/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
+            `http://20.251.37.226:8080/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
             {
                 method: 'POST',
                 headers: {
@@ -35,7 +35,7 @@ export const useAddTaskForm = () => {
                 body: JSON.stringify(data.task),
             }
         )
-        if (res.ok) if (res.ok) setRefreshList((prev) => !prev)
+        if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
             openSnackbar('Task added!')

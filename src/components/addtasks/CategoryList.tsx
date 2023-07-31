@@ -4,7 +4,6 @@ import Select from 'react-select'
 
 import { ApiContext } from '../../pages/context/apiContextProvider'
 import { ControllerWrap } from './styles'
-import { useAddTaskForm } from './useAddTaskForm'
 
 const customStyles = {
     control: (styles: any) => ({
@@ -29,8 +28,6 @@ const customStyles = {
 export const CategorySelector = () => {
     const { handleCategorySelect, category, tasks, handleTaskSelect } =
         useContext(ApiContext)
-
-    const { methods, register } = useAddTaskForm()
 
     const { control } = useFormContext()
 
