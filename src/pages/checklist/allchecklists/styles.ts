@@ -5,6 +5,7 @@ import styled from 'styled-components'
 export const StyledTableCellCheckL = styled(Table.Cell)`
     padding-bottom: 10px;
     max-width: 100px;
+
     word-wrap: break-word;
 `
 

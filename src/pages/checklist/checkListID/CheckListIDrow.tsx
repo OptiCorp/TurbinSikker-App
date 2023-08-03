@@ -1,18 +1,28 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { ICheckListUserID } from '../../context/apiContextProvider'
 
-import { Button, Chip, Icon, Table, Typography } from '@equinor/eds-core-react'
-import { assignment_user, calendar, timer } from '@equinor/eds-icons'
+import {
+    Button,
+    Checkbox,
+    Chip,
+    Icon,
+    Typography,
+} from '@equinor/eds-core-react'
+import { assignment_user, calendar } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
-import { CellContentMyList, MyCheckListCell } from './styles'
+import { CellContentMyList, MyCheckListCell, StyledRow, Test } from './styles'
 
 interface CheckListRowProps {
     userIdCheckList: ICheckListUserID
+    activeRow: boolean
+    setActiveRow: (open: boolean) => void
 }
 
 export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
     userIdCheckList,
+    activeRow,
+    setActiveRow,
 }) => {
     const formatDate = (dateString: string | null) => {
         if (!dateString) {
@@ -31,15 +41,26 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
         navigate(`/PreviewCheckList/${id}`)
     }
 
+    const [colorChange, setColorChange] = useState(false)
+
     return (
         <>
-            <Table.Row>
+            <StyledRow colorChange={colorChange}>
                 <MyCheckListCell>
                     <CellContentMyList>
-                        <Typography variant="body_short_bold">
-                            {userIdCheckList.title}
-                        </Typography>
-
+                        <Test>
+                            <Checkbox
+                                name="multiple"
+                                onChange={(e) => {
+                                    setActiveRow(e.target.checked)
+                                }}
+                                onClick={() => setColorChange(!colorChange)}
+                                style={{ padding: '0' }}
+                            />
+                            <Typography variant="body_short_bold">
+                                {userIdCheckList.title}
+                            </Typography>
+                        </Test>
                         <Chip style={{ paddingLeft: '0', lineHeight: '0' }}>
                             <Icon
                                 data={assignment_user}
@@ -103,7 +124,7 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
                         </Button>
                     </CellContentMyList>
                 </MyCheckListCell>
-            </Table.Row>
+            </StyledRow>
         </>
     )
 }
