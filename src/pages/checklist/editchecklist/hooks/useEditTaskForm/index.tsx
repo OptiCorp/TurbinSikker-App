@@ -1,13 +1,8 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 
-import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useApiContext } from '../../../../../pages/context/apiContextProvider'
 import useAuth from '../../../../../pages/landingPage/context/LandingPageContextProvider'
-
-type EditTaskEntity = {
-    categoryId: string
-    description: string
-}
 
 export const useEditTaskForm = () => {
     const { idToken } = useAuth()
@@ -28,7 +23,7 @@ export const useEditTaskForm = () => {
     const [taskDescription, setTaskDescription] = useState('')
 
     const { openSnackbar } = useContext(SnackbarContext)
-    const { refreshList, setRefreshList } = useAddTaskForm()
+    const { setRefreshList } = useApiContext()
     const handleClose = () => {
         setIsOpen(false)
     }

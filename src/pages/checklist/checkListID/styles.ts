@@ -1,4 +1,4 @@
-import { Chip, Dialog, Table, TextField } from '@equinor/eds-core-react'
+import { Dialog, Table, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
 export const ListWrapperCheckMyList = styled.div`
@@ -35,18 +35,8 @@ export const MyCheckListCell = styled(Table.Cell)`
     padding-right: 0;
 `
 
-export const StyledRow = styled(Table.Row)<{ colorChange: boolean }>`
-    background-color: ${(props) => (props.colorChange ? '#e6faec' : 'null')};
-`
-
 export const StyledTableBody = styled(Table.Body)`
     padding-right: 0;
-`
-
-export const Test = styled.div`
-    display: grid;
-    align-items: center;
-    grid-template-columns: 50px 200px;
 `
 
 export const CellContentMyList = styled.div`

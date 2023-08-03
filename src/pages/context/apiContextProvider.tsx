@@ -156,7 +156,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
                 console.error(error)
                 console.log(setUserIdCheckList)
             })
-    }, [])
+    }, [refreshList])
 
     useEffect(() => {
         fetchCheckListUserId()

@@ -1,9 +1,9 @@
 import { FooterContainer } from '@components/navigation/styles'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { Button, Dialog, TextField } from '@equinor/eds-core-react'
+import { Button, Dialog } from '@equinor/eds-core-react'
 
-import { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useApiContext } from '../../../pages/context/apiContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { BtnWrapper } from '../../users/addUser/styles'
@@ -21,9 +21,8 @@ export const MyCheckListNav = ({ activeRow }: Props) => {
     }
     const [title, setTitle] = useState('')
     const navigate = useNavigate()
-    const { id } = useParams()
 
-    const { refreshList, setRefreshList } = useApiContext()
+    const { setRefreshList } = useApiContext()
     const { openSnackbar } = useContext(SnackbarContext)
 
     const handleSubmit = async (data: { title: string }) => {
@@ -51,17 +50,6 @@ export const MyCheckListNav = ({ activeRow }: Props) => {
         setIsOpen(false)
         if (openSnackbar) {
             openSnackbar(`CheckList Created`)
-        }
-    }
-    const handleDelete = async () => {
-        await fetch(`http://20.251.37.226:8080/api/DeleteChecklist?id=${id}`, {
-            method: 'DELETE',
-        })
-        setRefreshList((prev) => !prev)
-
-        setIsOpen(false)
-        if (openSnackbar) {
-            openSnackbar(`CheckList Deleted`)
         }
     }
 
@@ -104,59 +92,43 @@ export const MyCheckListNav = ({ activeRow }: Props) => {
 
                 <div>
                     <Dialog open={isOpen}>
-                        {activeRow === true ? (
+                        <>
                             <Dialog.Header>
-                                <Dialog.Title>Delete CheckList?</Dialog.Title>
+                                <Dialog.Title>Title of CheckList</Dialog.Title>
                             </Dialog.Header>
-                        ) : (
-                            <>
-                                <Dialog.Header>
-                                    <Dialog.Title>
-                                        Title of CheckList
-                                    </Dialog.Title>
-                                </Dialog.Header>
-                                <StyledDialog>
-                                    <MakeTitleField
-                                        id="storybook-readonly"
-                                        placeholder="name"
-                                        label=""
-                                        onChange={(
-                                            event: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            setTitle(event.target.value)
-                                        }}
-                                        style={{
-                                            borderBottom: '1px solid #243746',
-                                            background: '#F7F7F7',
-                                        }}
-                                    />
-                                </StyledDialog>{' '}
-                            </>
-                        )}
+                            <StyledDialog>
+                                <MakeTitleField
+                                    id="storybook-readonly"
+                                    placeholder="name"
+                                    label=""
+                                    onChange={(
+                                        event: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setTitle(event.target.value)
+                                    }}
+                                    style={{
+                                        borderBottom: '1px solid #243746',
+                                        background: '#F7F7F7',
+                                    }}
+                                />
+                            </StyledDialog>{' '}
+                        </>
 
                         <Dialog.Actions>
                             <ButtonWrap>
                                 <Button variant="ghost" onClick={handleClose}>
                                     Cancel
                                 </Button>
-                                {activeRow === true ? (
-                                    <Button
-                                        color="danger"
-                                        onClick={handleDelete}
-                                    >
-                                        Delete
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        onClick={() => {
-                                            handleSubmit({
-                                                title,
-                                            })
-                                        }}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
+
+                                <Button
+                                    onClick={() => {
+                                        handleSubmit({
+                                            title,
+                                        })
+                                    }}
+                                >
+                                    Save
+                                </Button>
                             </ButtonWrap>
                         </Dialog.Actions>
                     </Dialog>
