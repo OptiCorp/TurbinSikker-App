@@ -1,5 +1,5 @@
 import { Table } from '@equinor/eds-core-react'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useLocation } from 'react-router'
 import { ApiContext } from '../../context/apiContextProvider'
 import { CheckListUserIDRow } from './CheckListIDrow'
@@ -14,6 +14,7 @@ import {
 export const MyCheckLists = () => {
     const { userIdCheckList } = useContext(ApiContext)
     const location = useLocation()
+    const [activeRow, setActiveRow] = useState(false)
     return (
         <>
             <BackgroundWrap>
@@ -38,6 +39,8 @@ export const MyCheckLists = () => {
                                 <CheckListUserIDRow
                                     userIdCheckList={userIdCheckList}
                                     key={userIdCheckList.id}
+                                    setActiveRow={setActiveRow}
+                                    activeRow={activeRow}
                                 />
                             ))}
                         </Table.Body>
@@ -45,7 +48,7 @@ export const MyCheckLists = () => {
                 </ListWrapperCheckMyList>
             </BackgroundWrap>
             {location.pathname.includes('MyCheckLists') ? (
-                <MyCheckListNav />
+                <MyCheckListNav activeRow={activeRow} />
             ) : null}
         </>
     )

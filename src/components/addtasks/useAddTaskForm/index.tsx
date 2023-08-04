@@ -17,13 +17,13 @@ export const useAddTaskForm = () => {
     const { reset, watch, handleSubmit, register, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
     const { refreshList, setRefreshList } = useApiContext()
-    const [selectedOption, setSelectedOption] = useState('')
-    const [selectedTask, setSelectedTask] = useState('')
+
+    const [selectedOption] = useState('')
+    const [selectedTask] = useState('')
     const [checkListId, setCheckListId] = useState<CheckListEntity | null>(null)
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        console.log(data)
         const res = await fetch(
             `http://20.251.37.226:8080/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
             {
@@ -80,7 +80,5 @@ export const useAddTaskForm = () => {
         selectedTask,
         sortedTasks,
         checkListId,
-        setRefreshList,
-        refreshList,
     }
 }

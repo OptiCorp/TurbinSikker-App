@@ -11,9 +11,9 @@ import {
 
 import { TaskEntity } from 'src/models/TaskEntity'
 
-import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 import useAuth from '../../../../pages/landingPage/context/LandingPageContextProvider'
 
+import { useApiContext } from '../../../context/apiContextProvider'
 import { DialogTask } from '../Dialog'
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 
 export const EditList = (props: Props) => {
     const { idToken } = useAuth()
-    const { refreshList, setRefreshList } = useAddTaskForm()
+    const { setRefreshList } = useApiContext()
 
     const { openSnackbar } = useContext(SnackbarContext)
     let lastCategoryName = ''

@@ -1,12 +1,13 @@
-import { TopBar } from '@equinor/eds-core-react'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { Icon, TopBar } from '@equinor/eds-core-react'
 import { arrow_back_ios } from '@equinor/eds-icons'
-import { Icon } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import logo from '../../assets/images/smallLogo.png'
-import { NewTopBar, HeaderContents, HeaderLocation } from './styles'
+import { useApiContext } from '../../pages/context/apiContextProvider'
+import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
+    const { setRefreshList } = useApiContext()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')
@@ -27,6 +28,8 @@ export const Header = () => {
     const basePath = useBasePath()
 
     const onClick = () => {
+        setRefreshList((prev) => !prev)
+
         navigate(-1)
     }
 

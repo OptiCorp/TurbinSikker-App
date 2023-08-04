@@ -1,4 +1,4 @@
-import { Table } from '@equinor/eds-core-react'
+import { Dialog, Table, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
 export const ListWrapperCheckMyList = styled.div`
@@ -35,20 +35,33 @@ export const MyCheckListCell = styled(Table.Cell)`
     padding-right: 0;
 `
 
-export const Test = styled.div`
-    display: grid;
-
-    margin: 1rem 0;
-    grid-gap: 15px;
-    grid-template-rows: 1fr auto 1fr;
-    grid-template-columns: 1fr;
+export const StyledTableBody = styled(Table.Body)`
+    padding-right: 0;
 `
 
 export const CellContentMyList = styled.div`
     display: grid;
+
     margin: 1rem 0;
-    grid-gap: 10px;
+    grid-row-gap: 10px;
     grid-template-rows: 1fr 1fr;
     grid-auto-flow: row;
     grid-template-columns: minmax(125px, 1fr);
+`
+export const ButtonWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50%;
+`
+export const StyledDialog = styled(Dialog.CustomContent)`
+    min-height: 60px;
+    padding: 1.5rem;
+`
+export const MakeTitleField = styled(TextField)`
+    text-align: center;
+    padding: 0;
+    margin: 0 auto;
+    color: red;
+    line-height: 5px;
 `

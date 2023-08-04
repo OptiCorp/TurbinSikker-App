@@ -1,11 +1,11 @@
 import { Table } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
-import { ICheckList } from '../../context/apiContextProvider'
+import { CheckListEntity } from '../../../models/CheckListEntity'
 
 import { CellContent, StyledTableCellCheckL } from './styles'
 
 interface CheckListRowProps {
-    allCheckList: ICheckList
+    allCheckList: CheckListEntity
 }
 
 export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({

@@ -7,7 +7,7 @@ import { BtnWrapper } from '../../users/addUser/styles'
 
 export const PreviewNav = () => {
     const navigate = useNavigate()
-    const { checkListId, sortedTasks } = useAddTaskForm()
+    const { checkListId } = useAddTaskForm()
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
@@ -18,7 +18,7 @@ export const PreviewNav = () => {
                 {checkListId && (
                     <BtnWrapper>
                         <Button
-                            color="danger"
+                            color="secondary"
                             onClick={() => clickHandler(checkListId.id)}
                         >
                             Edit CheckList
