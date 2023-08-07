@@ -1,13 +1,12 @@
-import { Chip, Table } from '@equinor/eds-core-react'
+import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { CheckListEntity } from '../../../models/CheckListEntity'
 
-import {
-    CellContent,
-    StyledChip,
-    StyledTableCellCheckL,
-    styledChip,
-} from './styles'
+import { assignment_user } from '@equinor/eds-icons'
+import { useNavigate } from 'react-router'
+import { ICheckListUserID } from 'src/models/CheckListUserIdEntity'
+import { StyledTableRow } from '../checkListID/styles'
+import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 
 interface CheckListRowProps {
     allCheckList: CheckListEntity
@@ -23,29 +22,71 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
 
     const formattedCreatedDate = formatDate(allCheckList.createdDate)
     const formattedCreatedDateUser = formatDate(allCheckList.user.createdDate)
+    const navigate = useNavigate()
+
+    const clickHandler = (id: string) => {
+        navigate(`/PreviewCheckList/${id}`)
+    }
+
     return (
         <>
-            <Table.Row>
+            <StyledTableRow onClick={() => clickHandler(allCheckList.id)}>
                 <StyledTableCellCheckL>
-                    <CellContent> {allCheckList.title} </CellContent>
+                    <CellContent>
+                        <Typography variant="body_short_bold">
+                            {allCheckList.title}
+                        </Typography>
+                    </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        {allCheckList.user.firstName}
-                        {allCheckList.user.lastName}
-                    </CellContent>{' '}
-                    <CellContent>{formattedCreatedDateUser} </CellContent>
+                        <Chip
+                            style={{
+                                paddingLeft: '0',
+                                lineHeight: '0',
+                                margin: '0 auto',
+                            }}
+                        >
+                            <Icon
+                                data={assignment_user}
+                                color="#243746"
+                                style={{ height: '15px' }}
+                            />
+                            {allCheckList.user.firstName}{' '}
+                            {allCheckList.user.lastName}
+                        </Chip>
+                        <Typography
+                            variant="caption"
+                            token={{
+                                textAlign: 'center',
+                                fontSize: '0.8rem',
+                            }}
+                            style={{ gridRow: '3/3' }}
+                        >
+                            {formattedCreatedDateUser}
+                        </Typography>
+                    </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
-                    <CellContent> {formattedCreatedDate} </CellContent>
-
-                    {allCheckList.status === 'Active' ? (
-                        <StyledChip variant="active">Active</StyledChip>
-                    ) : (
-                        <StyledChip variant="error">Inactive</StyledChip>
-                    )}
+                    <CellContent>
+                        {allCheckList.status === 'Active' ? (
+                            <StyledChip variant="active">Active</StyledChip>
+                        ) : (
+                            <StyledChip variant="error">Inactive</StyledChip>
+                        )}
+                        <Typography
+                            variant="caption"
+                            token={{
+                                textAlign: 'center',
+                                fontSize: '0.8rem',
+                            }}
+                            style={{ gridRow: '3/3' }}
+                        >
+                            {formattedCreatedDate}
+                        </Typography>
+                    </CellContent>
                 </StyledTableCellCheckL>
-            </Table.Row>
+            </StyledTableRow>
         </>
     )
 }

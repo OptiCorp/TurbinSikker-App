@@ -3,7 +3,7 @@ import { Chip, Table } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
 export const StyledTableCellCheckL = styled(Table.Cell)`
-    padding-bottom: 10px;
+    padding-bottom: 1rem;
     max-width: 100px;
 
     word-wrap: break-word;
@@ -11,12 +11,19 @@ export const StyledTableCellCheckL = styled(Table.Cell)`
 
 export const StyledChip = styled(Chip)`
     margin: 0 auto;
+    line-height: 0;
 `
 
 export const CellContent = styled.div`
     font-weight: 600;
-    margin: 20px auto;
+    margin: 10px 0;
+
+    display: grid;
+    grid-row-gap: 20px;
+    justify-items: center;
+    grid-template-rows: 1fr auto 0;
     text-align: center;
+    grid-template-columns: minmax(100px, 1fr);
 `
 
 export const ListWrapperCheckL = styled.div`
