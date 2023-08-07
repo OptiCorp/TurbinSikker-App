@@ -1,12 +1,17 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
+import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useNavigate, useParams } from 'react-router'
+import { CheckListEntity } from 'src/models/CheckListEntity'
+import { TaskEntity } from 'src/models/TaskEntity'
 import { useApiContext } from '../../../../../pages/context/apiContextProvider'
 import useAuth from '../../../../../pages/landingPage/context/LandingPageContextProvider'
 
 export const useEditTaskForm = () => {
     const { idToken } = useAuth()
-
+    const { checkListId } = useAddTaskForm()
+    const navigate = useNavigate()
     const handleOpen = (
         taskId: string,
         taskDescription: string,
@@ -18,15 +23,41 @@ export const useEditTaskForm = () => {
         setTaskDescription(taskDescription)
     }
     const [isOpen, setIsOpen] = useState(false)
+    const [task, setTask] = useState<TaskEntity>()
     const [taskId, setTaskId] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
+    const [title, setTitle] = useState<CheckListEntity | any>()
+    const [isOpenn, setIsOpenn] = useState(false)
+    const [isOpenTask, setIsOpenTask] = useState(false)
+
+    const [changeTitle, setChangeTitle] = useState('')
+    const { id } = useParams()
+
+    const handleTitleChange = (title: string) => {
+        setTitle(title)
+    }
 
     const { openSnackbar } = useContext(SnackbarContext)
     const { setRefreshList } = useApiContext()
     const handleClose = () => {
         setIsOpen(false)
     }
+    const [checked, setChecked] = useState(!!checkListId?.status)
+
+    useEffect(() => {
+        setChecked(checkListId?.status === 'Active')
+    }, [checkListId])
+
+    function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
+        return status ? 'Active' : 'Inactive'
+    }
+
+    useEffect(() => {
+        if (checkListId && checkListId.tasks.length === 0) {
+            setIsOpenn(true)
+        }
+    }, [checkListId])
 
     const updateCheckListTask = async (data: {
         taskId: string
@@ -48,14 +79,41 @@ export const useEditTaskForm = () => {
             }
         )
         if (res.ok) setRefreshList((prev) => !prev)
-        setIsOpen(false)
+        setIsOpenTask(false)
         if (openSnackbar) {
             openSnackbar(`Task updated`)
         }
     }
 
+    const handleSave = async (data: { title: string; status: string }) => {
+        const res = await fetch(
+            `http://20.251.37.226:8080/api/UpdateChecklist?id=${id}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${idToken}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: data.title || title,
+                    status: data.status,
+                }),
+            }
+        )
+        if (res.ok) {
+            setRefreshList((prev) => !prev)
+        }
+        navigate('/MyChecklists')
+
+        if (openSnackbar) {
+            openSnackbar(`Checklist updated`)
+        }
+    }
+
     return {
         setTaskId,
+        task,
+        setTask,
         handleOpen,
         handleClose,
         categoryId,
@@ -64,5 +122,18 @@ export const useEditTaskForm = () => {
         isOpen,
         setIsOpen,
         updateCheckListTask,
+        handleSave,
+        title,
+        setTitle,
+        changeTitle,
+        setChangeTitle,
+        handleTitleChange,
+        checked,
+        setChecked,
+        convertStatusToString,
+        isOpenn,
+        setIsOpenn,
+        isOpenTask,
+        setIsOpenTask,
     }
 }

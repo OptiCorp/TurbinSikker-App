@@ -48,7 +48,7 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
                                 color="#243746"
                                 style={{ height: '15px' }}
                             />
-                            submitted to 0 inspectors{' '}
+                            submitted to 0 inspectors
                         </Chip>
                         <Chip
                             style={{

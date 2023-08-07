@@ -17,6 +17,5 @@ export const EditListPoints = styled(TextField)`
 `
 
 export const StyledDialog = styled(Dialog.CustomContent)`
-    min-height: 150px;
     padding: 1.5rem;
 `

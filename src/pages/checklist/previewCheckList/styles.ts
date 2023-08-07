@@ -3,8 +3,12 @@ import styled from 'styled-components'
 
 export const Wrapper = styled.div`
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: max-content;
+    justify-content: center;
+    min-width: 300px;
+    min-height: 200px;
+
     align-items: center;
 `
 export const InfoHeader = styled.div`

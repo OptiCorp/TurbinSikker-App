@@ -1,4 +1,4 @@
-import { Card, TextField } from '@equinor/eds-core-react'
+import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
 
 import { InfoHeader, Wrapper } from './styles'
 
@@ -6,6 +6,7 @@ import { useContext } from 'react'
 
 import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 
+import { useNavigate } from 'react-router-dom'
 import { ApiContext } from '../../context/apiContextProvider'
 import { PreviewList } from './PreviewList'
 import { PreviewNav } from './PreviewNav'
@@ -13,7 +14,7 @@ import { PreviewNav } from './PreviewNav'
 export const PreviewCheckList = () => {
     const { userIdCheckList } = useContext(ApiContext)
     const { checkListId, sortedTasks } = useAddTaskForm()
-
+    const navigate = useNavigate()
     return (
         <div style={{ backgroundColor: '#f0f3f3' }}>
             {checkListId && (
@@ -40,13 +41,30 @@ export const PreviewCheckList = () => {
                             </Card.Header>
                         </Card>
                     </InfoHeader>
-
                     <Wrapper>
-                        <PreviewList
-                            key={checkListId.id}
-                            tasks={checkListId}
-                            sortedTasks={sortedTasks}
-                        />
+                        {checkListId?.tasks.length === 0 ? (
+                            <>
+                                <Typography variant="body_short_bold">
+                                    No tasks added yet!
+                                </Typography>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => {
+                                        navigate(
+                                            `/EditCheckList/${checkListId.id}`
+                                        )
+                                    }}
+                                >
+                                    Add some tasks here!
+                                </Button>
+                            </>
+                        ) : (
+                            <PreviewList
+                                key={checkListId.id}
+                                tasks={checkListId}
+                                sortedTasks={sortedTasks}
+                            />
+                        )}
                     </Wrapper>
                 </div>
             )}

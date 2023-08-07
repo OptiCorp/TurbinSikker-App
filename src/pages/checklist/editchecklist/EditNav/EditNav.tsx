@@ -7,12 +7,22 @@ import { useApiContext } from '../../../context/apiContextProvider'
 import { BtnWrapper } from '../../../users/addUser/styles'
 import { ButtonWrap } from '../../checkListID/styles'
 
-export const EditNav = () => {
+export const EditNav = ({
+    handleSubmit,
+    title,
+    status,
+}: {
+    handleSubmit: (data: { title: string; status: string }) => void
+    title: string
+    status: string
+}) => {
     const { openSnackbar } = useContext(SnackbarContext)
+    const { id } = useParams()
     const { setRefreshList } = useApiContext()
     const [isOpen, setIsOpen] = useState(false)
-    const { id } = useParams()
+
     const navigate = useNavigate()
+
     const handleDelete = async () => {
         await fetch(`http://20.251.37.226:8080/api/DeleteChecklist?id=${id}`, {
             method: 'DELETE',
@@ -46,7 +56,16 @@ export const EditNav = () => {
                     </Button>
 
                     <div>
-                        <Button>Save</Button>
+                        <Button
+                            onClick={() => {
+                                handleSubmit({
+                                    title: title,
+                                    status: status,
+                                })
+                            }}
+                        >
+                            Save
+                        </Button>
                     </div>
                 </BtnWrapper>
                 <div>

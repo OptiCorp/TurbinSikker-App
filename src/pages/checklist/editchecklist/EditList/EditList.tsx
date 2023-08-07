@@ -1,5 +1,3 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { useContext, useState } from 'react'
 import { CheckListEntity } from 'src/models/CheckListEntity'
 import {
     CategoryName,
@@ -8,13 +6,8 @@ import {
     PreviewListWrap,
     StyledCard,
 } from '../../previewCheckList/styles'
-
-import { TaskEntity } from 'src/models/TaskEntity'
-
-import useAuth from '../../../../pages/landingPage/context/LandingPageContextProvider'
-
-import { useApiContext } from '../../../context/apiContextProvider'
 import { DialogTask } from '../Dialog'
+import { useEditTaskForm } from '../hooks/useEditTaskForm'
 
 type Props = {
     tasks: CheckListEntity
@@ -22,40 +15,10 @@ type Props = {
 }
 
 export const EditList = (props: Props) => {
-    const { idToken } = useAuth()
-    const { setRefreshList } = useApiContext()
-
-    const { openSnackbar } = useContext(SnackbarContext)
     let lastCategoryName = ''
-    const [isOpen, setIsOpen] = useState(false)
-    const [task, setTask] = useState<TaskEntity>()
 
-    const updateCheckList = async (data: {
-        taskId: string
-        description: string
-        categoryId: string
-    }) => {
-        const res = await fetch(
-            `http://20.251.37.226:8080/api/UpdateChecklistTask?id=${data.taskId}`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${idToken}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    description: data.description,
-                    categoryId: data.categoryId,
-                }),
-            }
-        )
-
-        if (res.ok) setRefreshList((prev) => !prev)
-        setIsOpen(false)
-        if (openSnackbar) {
-            openSnackbar(`Task updated`)
-        }
-    }
+    const { task, setTask, updateCheckListTask, isOpenTask, setIsOpenTask } =
+        useEditTaskForm()
 
     return (
         <>
@@ -86,7 +49,7 @@ export const EditList = (props: Props) => {
                                         rows={3}
                                         onClick={() => {
                                             setTask(task)
-                                            setIsOpen(true)
+                                            setIsOpenTask(true)
                                         }}
                                     />
                                 </StyledCard>
@@ -96,14 +59,14 @@ export const EditList = (props: Props) => {
                 })}
             </PreviewListWrap>
             <DialogTask
-                isOpen={isOpen}
+                isOpen={isOpenTask}
                 handleClose={() => {
-                    setIsOpen(false)
+                    setIsOpenTask(false)
                 }}
                 taskDescription={task?.description ?? ''}
                 taskId={task?.id ?? ''}
                 handleSubmit={(data) => {
-                    updateCheckList({
+                    updateCheckListTask({
                         description: data.content,
                         categoryId: task?.categoryId ?? '',
                         taskId: task?.id ?? '',

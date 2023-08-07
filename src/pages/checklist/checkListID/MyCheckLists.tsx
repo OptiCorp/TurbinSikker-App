@@ -29,7 +29,7 @@ export const MyCheckLists = () => {
                                     <Styledh3>Status</Styledh3>
                                 </HeadCell>
                                 <HeadCell>
-                                    <Styledh3>Date</Styledh3>
+                                    <Styledh3>Last Update</Styledh3>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
