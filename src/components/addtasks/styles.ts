@@ -8,11 +8,6 @@ export const TitleHeader = styled.div`
     flex-direction: column;
 `
 
-export const FormWrap = styled.form``
-
-export const Wrap = styled.div``
-export const StyledCardContent = styled(Card.Content)``
-
 export const ControllerWrap = styled.div`
     grid-column: 1/2;
     margin: 0 auto;

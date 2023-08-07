@@ -1,4 +1,4 @@
-import { Table } from '@equinor/eds-core-react'
+import { Chip, Table } from '@equinor/eds-core-react'
 
 import styled from 'styled-components'
 
@@ -9,9 +9,14 @@ export const StyledTableCellCheckL = styled(Table.Cell)`
     word-wrap: break-word;
 `
 
+export const StyledChip = styled(Chip)`
+    margin: 0 auto;
+`
+
 export const CellContent = styled.div`
     font-weight: 600;
-    margin: 20px 0;
+    margin: 20px auto;
+    text-align: center;
 `
 
 export const ListWrapperCheckL = styled.div`

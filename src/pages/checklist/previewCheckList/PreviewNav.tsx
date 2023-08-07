@@ -25,7 +25,11 @@ export const PreviewNav = () => {
                         </Button>
 
                         <div>
-                            <Button>Send</Button>
+                            {checkListId.tasks.length === 0 ? (
+                                <Button disabled>Send</Button>
+                            ) : (
+                                <Button>Send</Button>
+                            )}
                         </div>
                     </BtnWrapper>
                 )}

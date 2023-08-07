@@ -21,7 +21,7 @@ export const Header = () => {
         const params = useParams<Record<string, string>>()
 
         return Object.values(params).reduce(
-            (path, param) => path.replace('/' + param, ''),
+            (path, param) => path?.replace('/' + param, ''),
             location.pathname.slice(1)
         )
     }
