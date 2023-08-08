@@ -33,20 +33,34 @@ export const Styledh3 = styled.h3`
 
 export const MyCheckListCell = styled(Table.Cell)`
     padding-right: 0;
+    padding-bottom: 1rem;
 `
 
 export const StyledTableBody = styled(Table.Body)`
     padding-right: 0;
 `
 
-export const CellContentMyList = styled.div`
-    display: grid;
+export const StyledTableRow = styled(Table.Row)`
+    cursor: pointer;
+    &:hover {
+        transform: scale(0.99);
+        box-shadow: 1px 2px 2px 0px rgba(0, 100, 121);
+    }
+    &:active {
+        transform: scale(0.98);
+    }
+`
 
-    margin: 1rem 0;
-    grid-row-gap: 10px;
-    grid-template-rows: 1fr 1fr;
-    grid-auto-flow: row;
-    grid-template-columns: minmax(125px, 1fr);
+export const CellContentMyList = styled.div`
+    font-weight: 600;
+    margin: 10px 0;
+
+    display: grid;
+    grid-row-gap: 20px;
+    justify-items: center;
+    grid-template-rows: 1fr auto 0;
+    text-align: center;
+    grid-template-columns: minmax(100px, 1fr);
 `
 export const ButtonWrap = styled.div`
     display: flex;

@@ -14,7 +14,7 @@ import { ButtonWrap, MakeTitleField } from '../checkListID/styles'
 import { InfoHeader, Wrapper } from '../previewCheckList/styles'
 import { EditList } from './EditList/EditList'
 import { EditNav } from './EditNav/EditNav'
-import { useEditTaskForm } from './hooks/useEditTaskForm'
+import { useEditCheckList } from './hooks/useEditCheckList'
 import { StyledDialog } from './styles'
 
 export const EditCheckList = () => {
@@ -35,7 +35,7 @@ export const EditCheckList = () => {
         convertStatusToString,
         isOpenn,
         setIsOpenn,
-    } = useEditTaskForm()
+    } = useEditCheckList()
 
     return (
         <div style={{ backgroundColor: '#f0f3f3' }}>

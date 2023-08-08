@@ -7,7 +7,7 @@ import {
     StyledCard,
 } from '../../previewCheckList/styles'
 import { DialogTask } from '../Dialog'
-import { useEditTaskForm } from '../hooks/useEditTaskForm'
+import { useEditCheckList } from '../hooks/useEditCheckList'
 
 type Props = {
     tasks: CheckListEntity
@@ -18,7 +18,7 @@ export const EditList = (props: Props) => {
     let lastCategoryName = ''
 
     const { task, setTask, updateCheckListTask, isOpenTask, setIsOpenTask } =
-        useEditTaskForm()
+        useEditCheckList()
 
     return (
         <>

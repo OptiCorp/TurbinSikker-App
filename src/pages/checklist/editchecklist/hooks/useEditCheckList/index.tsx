@@ -1,14 +1,13 @@
-import { useContext, useEffect, useState } from 'react'
-
 import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { CheckListEntity } from 'src/models/CheckListEntity'
 import { TaskEntity } from 'src/models/TaskEntity'
-import { useApiContext } from '../../../../../pages/context/apiContextProvider'
-import useAuth from '../../../../../pages/landingPage/context/LandingPageContextProvider'
+import { useApiContext } from '../../../../context/apiContextProvider'
+import useAuth from '../../../../landingPage/context/LandingPageContextProvider'
 
-export const useEditTaskForm = () => {
+export const useEditCheckList = () => {
     const { idToken } = useAuth()
     const { checkListId } = useAddTaskForm()
     const navigate = useNavigate()
