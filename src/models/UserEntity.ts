@@ -4,7 +4,7 @@ export type UserEntity = {
     firstName: string
     id: string
     lastName: string
-    status: number
+    status: string
     updatedDate: string
     userRole: { id: string; name: string }
     userRoleId: string

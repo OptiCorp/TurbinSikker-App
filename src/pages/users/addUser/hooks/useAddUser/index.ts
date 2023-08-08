@@ -11,7 +11,7 @@ export const useAddUser = () => {
     const { idToken } = useAuth()
     const navigate = useNavigate()
     const appLocation = useLocation()
-    const methods = useForm<UserEntity>()
+    const methods = useForm<FormValues>()
     const { reset } = methods
     const { id } = useParams()
     const { result: users } = useContext(ApiContext)

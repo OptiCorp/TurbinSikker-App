@@ -61,7 +61,8 @@ export const Navigation: React.FC = () => {
             appLocation.pathname.includes('EditUser') ||
             appLocation.pathname.includes('MyCheckLists') ||
             appLocation.pathname.includes('EditCheckList') ||
-            appLocation.pathname.includes('/PreviewCheckList/') ? null : (
+            appLocation.pathname.includes('/PreviewCheckList/') ||
+            appLocation.pathname.includes('SendCheckList') ? null : (
                 <FooterContainer>
                     <Tabs activeTab={activeTab} onChange={handleChange}>
                         <Tabs.List

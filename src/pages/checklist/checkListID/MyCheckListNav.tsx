@@ -9,6 +9,8 @@ import useAuth from '../../../pages/landingPage/context/LandingPageContextProvid
 import { BtnWrapper } from '../../users/addUser/styles'
 import { ButtonWrap, MakeTitleField, StyledDialog } from './styles'
 
+import { Link } from 'react-router-dom'
+
 type Props = {
     activeRow: boolean
 }
@@ -34,7 +36,7 @@ export const MyCheckListNav = ({ activeRow }: Props) => {
             },
             body: JSON.stringify({
                 title: data.title,
-                CreatedBy: '3dc14bce-7e99-4a9f-a8e7-83febaefc64b',
+                CreatedBy: '55ba8118-5880-4abf-afb4-44bbb7ac1a4c',
             }),
         })
 
@@ -86,7 +88,9 @@ export const MyCheckListNav = ({ activeRow }: Props) => {
                             New CheckList
                         </Button>
 
-                        <Button color="primary">Send CheckList</Button>
+                        <Button color="primary" as={Link} to="/SendCheckList">
+                            Send CheckList
+                        </Button>
                     </BtnWrapper>
                 )}
 

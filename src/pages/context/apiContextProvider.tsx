@@ -9,8 +9,11 @@ import React, {
 import { useLocation } from 'react-router'
 import { Category } from 'src/models/CategoryEntity'
 import { CheckListEntity } from 'src/models/CheckListEntity'
+import { ListEntity } from 'src/models/ListEntity'
 import { TaskEntity } from 'src/models/TaskEntity'
 import { UserEntity } from 'src/models/UserEntity'
+import { UserListEntity } from 'src/models/UserListEntity'
+import { IUser } from '../users/addUser/hooks/useAddUser/types'
 
 export type ContextType = {
     result: UserEntity[]
@@ -20,6 +23,8 @@ export type ContextType = {
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
     category: Category[]
     tasks: TaskEntity[]
+    userList: UserListEntity[]
+    list: ListEntity[]
     selectedTask: string
     refreshList: boolean
     setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
@@ -48,7 +53,7 @@ export const checkList: CheckListEntity = {
         firstName: '',
         id: '',
         lastName: '',
-        status: 0,
+        status: '',
         updatedDate: '',
         userRole: {
             id: '',
@@ -60,13 +65,19 @@ export const checkList: CheckListEntity = {
     tasks: [],
 }
 
+export interface Option {
+    value: string
+    label: string
+}
+
 export const postsContextDefaultValue: ContextType = {
     result: [],
     userIdCheckList: [],
     allCheckList: [],
     refreshUsers: false,
     setRefreshUsers: () => {},
-
+    list: [],
+    userList: [],
     category: [],
     tasks: [],
     selectedTask: '',
@@ -92,6 +103,8 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [tasks, setTasks] = useState<TaskEntity[]>([])
+    const [list, setList] = useState<ListEntity[]>([])
+    const [userList, setUserList] = useState<UserListEntity[]>([])
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
     const [category, setCategory] = useState<Category[]>([])
@@ -111,6 +124,11 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
+        const userList = data.map((item: any) => ({
+            value: item.id,
+            label: item.username,
+        }))
+        setUserList(userList)
     }
 
     useEffect(() => {
@@ -151,6 +169,12 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         fetchCheckListUserId()
             .then((data) => {
                 setUserIdCheckList(data)
+
+                const list = data.map((item: any) => ({
+                    value: item.id,
+                    label: item.title,
+                }))
+                setList(list)
             })
             .catch((error) => {
                 console.error(error)
@@ -222,6 +246,10 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             refreshList,
             setSelectedTask,
             setSelectedOption,
+            list,
+            setList,
+            userList,
+            setUserList,
         }),
         [
             result,
@@ -246,6 +274,10 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             refreshList,
             setSelectedTask,
             setSelectedOption,
+            list,
+            setList,
+            userList,
+            setUserList,
         ]
     )
 
