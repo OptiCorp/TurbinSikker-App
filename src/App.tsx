@@ -20,6 +20,7 @@ import { ListUsers } from "./pages/users/listUsers/ListUsers";
 const App = () => {
   const isAuthenticated = useIsAuthenticated();
 
+
   return (
     <div className="wrapper">
       {isAuthenticated && (
@@ -29,6 +30,7 @@ const App = () => {
               <Routes>
                 <Route element={<Layout />}>
                   <Route path="/" element={<LandingPage />} />
+
 
                   <Route path="/Profile" element={<Profile />} />
                   <Route element={<IndexCheckLists />}>
@@ -57,6 +59,7 @@ const App = () => {
                 </Route>
               </Routes>
 
+
               <SnackbarComponent />
             </SnackbarContextProvider>{" "}
           </AuthProvider>
@@ -66,5 +69,6 @@ const App = () => {
     </div>
   );
 };
+
 
 export default App;
