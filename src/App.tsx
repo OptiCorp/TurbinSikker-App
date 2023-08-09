@@ -23,8 +23,8 @@ const App = () => {
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <ApiContextProvider>
-                    <AuthProvider>
+                <AuthProvider>
+                    <ApiContextProvider>
                         <SnackbarContextProvider>
                             <Routes>
                                 <Route element={<Layout />}>
@@ -80,8 +80,8 @@ const App = () => {
 
                             <SnackbarComponent />
                         </SnackbarContextProvider>{' '}
-                    </AuthProvider>
-                </ApiContextProvider>
+                    </ApiContextProvider>
+                </AuthProvider>
             )}
             {!isAuthenticated && <Login />}
         </div>
