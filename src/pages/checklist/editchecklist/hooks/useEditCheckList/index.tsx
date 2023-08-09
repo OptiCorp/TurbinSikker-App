@@ -108,39 +108,12 @@ export const useEditCheckList = () => {
         if (res.ok) {
             setRefreshList((prev) => !prev)
         }
-        navigate('/MyChecklists')
+        navigate('/MyCheckLists')
 
         if (openSnackbar) {
             openSnackbar(`Checklist updated`)
         }
     }
-
-    // const handleSubmit = async (data: { title: string }) => {
-    //     const res = await fetch(`http://20.251.37.226:8080/api/AddChecklist`, {
-    //         method: 'POST',
-    //         headers: {
-    //             Authorization: `Bearer ${idToken}`,
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //             title: data.title,
-    //             CreatedBy: '55ba8118-5880-4abf-afb4-44bbb7ac1a4c',
-    //         }),
-    //     })
-
-    //     if (res.ok) {
-    //         const responseJson = await res.json()
-    //         if (responseJson && responseJson.id) {
-    //             const checklistId = responseJson.id
-    //             navigate(`/EditCheckList/${checklistId}`)
-    //         }
-    //         setRefreshList((prev) => !prev)
-    //     }
-    //     setIsOpenNew(false)
-    //     if (openSnackbar) {
-    //         openSnackbar(`CheckList Created`)
-    //     }
-    // }
 
     return {
         setTaskId,

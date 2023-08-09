@@ -22,8 +22,8 @@ export const CellContent = styled.div`
     grid-row-gap: 20px;
     justify-items: center;
     grid-template-rows: 1fr auto 0;
-    text-align: center;
-    grid-template-columns: minmax(100px, 1fr);
+
+    grid-template-columns: minmax(110px, 1fr);
 `
 
 export const ListWrapperCheckL = styled.div`

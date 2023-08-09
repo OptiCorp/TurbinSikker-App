@@ -43,7 +43,6 @@ export const StyledTableBody = styled(Table.Body)`
 export const StyledTableRow = styled(Table.Row)`
     cursor: pointer;
     &:hover {
-        transform: scale(0.99);
         box-shadow: 1px 2px 2px 0px rgba(0, 100, 121);
     }
     &:active {

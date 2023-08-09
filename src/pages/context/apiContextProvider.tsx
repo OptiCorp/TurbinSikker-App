@@ -6,19 +6,21 @@ import React, {
     useState,
 } from 'react'
 
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { Category } from 'src/models/CategoryEntity'
 import { CheckListEntity } from 'src/models/CheckListEntity'
 import { ListEntity } from 'src/models/ListEntity'
 import { TaskEntity } from 'src/models/TaskEntity'
 import { UserEntity } from 'src/models/UserEntity'
 import { UserListEntity } from 'src/models/UserListEntity'
+import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { IUser } from '../users/addUser/hooks/useAddUser/types'
 
 export type ContextType = {
     result: UserEntity[]
     userIdCheckList: ICheckListUserID[]
     allCheckList: CheckListEntity[]
+    handleSubmit: (data: { title: string }) => void
     refreshUsers: boolean
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
     category: Category[]
@@ -61,8 +63,10 @@ export const checkList: CheckListEntity = {
         },
         userRoleId: '',
         username: '',
+        AzureAdUser: '',
     },
     tasks: [],
+    updatedDate: '',
 }
 
 export interface Option {
@@ -74,6 +78,7 @@ export const postsContextDefaultValue: ContextType = {
     result: [],
     userIdCheckList: [],
     allCheckList: [],
+    handleSubmit: () => {},
     refreshUsers: false,
     setRefreshUsers: () => {},
     list: [],
@@ -100,7 +105,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
-
+    const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [tasks, setTasks] = useState<TaskEntity[]>([])
     const [list, setList] = useState<ListEntity[]>([])
@@ -108,6 +113,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
     const [category, setCategory] = useState<Category[]>([])
+    const { idToken } = useAuth()
 
     const handleCategorySelect = (selectedCategory: string) => {
         setSelectedOption(selectedCategory)
@@ -149,10 +155,33 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         fetchCheckLists()
     }, [refreshCheckLists])
 
+    const handleSubmit = async (data: { title: string }) => {
+        const res = await fetch(`http://20.251.37.226:8080/api/AddChecklist`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${idToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: data.title,
+                CreatedBy: '66e88e41-aa49-4bd4-aec4-b08cb553ee95',
+            }),
+        })
+
+        if (res.ok) {
+            const responseJson = await res.json()
+            if (responseJson && responseJson.id) {
+                const checklistId = responseJson.id
+                navigate(`/EditCheckList/${checklistId}`)
+            }
+            setRefreshList((prev) => !prev)
+        }
+    }
+
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=55ba8118-5880-4abf-afb4-44bbb7ac1a4c`
+                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
@@ -250,6 +279,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             setList,
             userList,
             setUserList,
+            handleSubmit,
         }),
         [
             result,
@@ -278,6 +308,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             setList,
             userList,
             setUserList,
+            handleSubmit,
         ]
     )
 
