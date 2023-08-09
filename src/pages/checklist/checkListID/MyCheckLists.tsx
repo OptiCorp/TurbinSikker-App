@@ -1,9 +1,11 @@
+import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { Table } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 import { ApiContext } from '../../context/apiContextProvider'
 import { CheckListUserIDRow } from './CheckListIDrow'
-import { MyCheckListNav } from './MyCheckListNav'
+import { ModalMyCheckList } from './ModalMyCheckList'
 import {
     BackgroundWrap,
     HeadCell,
@@ -12,6 +14,15 @@ import {
 } from './styles'
 
 export const MyCheckLists = () => {
+    const clickHandler = () => {
+        navigate(`/SendCheckList`)
+    }
+
+    const navigate = useNavigate()
+    const handleClose = () => {
+        setIsOpen(false)
+    }
+    const [isOpen, setIsOpen] = useState(false)
     const { userIdCheckList } = useContext(ApiContext)
     const location = useLocation()
     const [activeRow, setActiveRow] = useState(false)
@@ -47,9 +58,41 @@ export const MyCheckLists = () => {
                     </Table>
                 </ListWrapperCheckMyList>
             </BackgroundWrap>
-            {location.pathname.includes('MyCheckLists') ? (
-                <MyCheckListNav activeRow={activeRow} />
-            ) : null}
+            {activeRow === true ? (
+                <NavActionsComponent
+                    buttonColor="danger"
+                    onClick={() => {
+                        setIsOpen(true)
+                    }}
+                    ButtonMessage="Delete Checklist"
+                    secondButtonVariant="outlined"
+                    secondOnClick={handleClose}
+                    SecondButtonMessage="Cancel"
+                    isShown={true}
+                />
+            ) : (
+                <NavActionsComponent
+                    buttonVariant="outlined"
+                    onClick={() => {
+                        setIsOpen(true)
+                    }}
+                    ButtonMessage="New Checklist"
+                    secondButtonColor="primary"
+                    secondOnClick={() => {
+                        navigate(`/SendCheckList/`)
+                    }}
+                    isShown={true}
+                    SecondButtonMessage="Send Checklist"
+                    as="a"
+                    href="/SendCheckList/"
+                />
+            )}
+
+            <ModalMyCheckList
+                handleClose={handleClose}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+            />
         </>
     )
 }

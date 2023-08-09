@@ -2,17 +2,17 @@ import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
 
 import { InfoHeader, Wrapper } from './styles'
 
-import { useContext } from 'react'
-
 import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
 
+import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { useNavigate } from 'react-router-dom'
-import { ApiContext } from '../../context/apiContextProvider'
+
 import { PreviewList } from './PreviewList'
-import { PreviewNav } from './PreviewNav'
 
 export const PreviewCheckList = () => {
-    const { userIdCheckList } = useContext(ApiContext)
+    const clickHandler = (id: string) => {
+        navigate(`/EditCheckList/${id}`)
+    }
     const { checkListId, sortedTasks } = useAddTaskForm()
     const navigate = useNavigate()
     return (
@@ -68,10 +68,17 @@ export const PreviewCheckList = () => {
                     </Wrapper>
                 </div>
             )}
-
-            {userIdCheckList?.map((userIdCheckList) => (
-                <PreviewNav key={userIdCheckList.id} />
-            ))}
+            {checkListId && (
+                <NavActionsComponent
+                    buttonColor="primary"
+                    secondButtonColor="primary"
+                    buttonVariant="outlined"
+                    onClick={() => clickHandler(checkListId.id)}
+                    isShown={true}
+                    ButtonMessage="Edit Checklist"
+                    SecondButtonMessage="Send"
+                />
+            )}
         </div>
     )
 }
