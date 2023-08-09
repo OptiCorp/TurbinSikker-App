@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { FormProvider } from 'react-hook-form'
-import { IUser } from '../../context/apiContextProvider'
+
+import { UserEntity } from 'src/models/UserEntity'
 import { EditUserNav } from '../Edit/editUserNav'
 import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
 import { useAddUser } from './hooks/useAddUser'
@@ -10,7 +11,7 @@ import { StatusSwitch } from './status/StatusSwitch'
 import { FormWrapper, Wrapper } from './styles'
 
 export interface IAddUser {
-    user: IUser
+    user: UserEntity
 }
 
 export const AddUser: FC = () => {

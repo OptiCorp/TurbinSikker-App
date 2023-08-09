@@ -9,6 +9,7 @@ import { CheckList } from './pages/checklist/allchecklists/CheckList'
 import { MyCheckLists } from './pages/checklist/checkListID/MyCheckLists'
 import { EditCheckList } from './pages/checklist/editchecklist'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
+import { SendCheckList } from './pages/checklist/sendchecklist'
 import { ApiContextProvider } from './pages/context/apiContextProvider'
 import { LandingPage } from './pages/landingPage/LandingPage'
 import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
@@ -53,10 +54,14 @@ const App = () => {
                                         path="/EditCheckList/:id"
                                         element={<EditCheckList />}
                                     />
-                                    {/* <Route
-                                        path="/EditCheckList/"
-                                        element={<EditCheckList />}
-                                    /> */}
+                                    <Route
+                                        path="/SendCheckList"
+                                        element={<SendCheckList />}
+                                    />
+                                    <Route
+                                        path="/SendCheckList/:id"
+                                        element={<SendCheckList />}
+                                    />
 
                                     <Route
                                         path="/ListUsers"
