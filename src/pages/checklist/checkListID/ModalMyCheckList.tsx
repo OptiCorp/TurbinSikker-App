@@ -1,9 +1,8 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Button, Dialog } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { useApiContext } from '../../context/apiContextProvider'
-import useAuth from '../../landingPage/context/LandingPageContextProvider'
 
 import { ButtonWrap, MakeTitleField, StyledDialog } from './styles'
 
