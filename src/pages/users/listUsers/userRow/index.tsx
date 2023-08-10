@@ -1,10 +1,10 @@
-import { FunctionComponent } from 'react'
-import { IUser } from '../../../context/apiContextProvider'
-import { Table, Icon } from '@equinor/eds-core-react'
+import { Chip, Icon, Table } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
-import { StyledTableCell, TableData } from '../styles'
+import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { Chip } from '@equinor/eds-core-react'
+import { UserEntity } from 'src/models/UserEntity'
+import { IUser } from '../../addUser/hooks/useAddUser/types'
+import { StyledTableCell, TableData } from '../styles'
 interface UserRowProps {
     user: IUser
 }

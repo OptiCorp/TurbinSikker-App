@@ -6,6 +6,7 @@ export type CheckListEntity = {
     title: string
     status: string
     createdDate: string
+    updatedDate: string
     user: UserEntity
     tasks: TaskEntity[]
 }

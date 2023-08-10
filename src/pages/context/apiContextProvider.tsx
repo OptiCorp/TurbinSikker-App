@@ -6,19 +6,23 @@ import React, {
     useState,
 } from 'react'
 
-import { useLocation } from 'react-router'
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import decode from 'jwt-decode'
+import { useLocation, useNavigate } from 'react-router'
 import { Category } from 'src/models/CategoryEntity'
 import { CheckListEntity } from 'src/models/CheckListEntity'
 import { ListEntity } from 'src/models/ListEntity'
 import { TaskEntity } from 'src/models/TaskEntity'
 import { UserEntity } from 'src/models/UserEntity'
 import { UserListEntity } from 'src/models/UserListEntity'
-import { IUser } from '../users/addUser/hooks/useAddUser/types'
+import useAuth from '../landingPage/context/LandingPageContextProvider'
 
 export type ContextType = {
     result: UserEntity[]
     userIdCheckList: ICheckListUserID[]
     allCheckList: CheckListEntity[]
+    handleSubmit: (data: { title: string }) => void
+    handleDelete: (id: string) => void
     refreshUsers: boolean
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
     category: Category[]
@@ -31,6 +35,7 @@ export type ContextType = {
     selectedOption: string
     handleTaskSelect: (task: string) => void
     handleCategorySelect: (category: string) => void
+    currentUser: UserEntity | null
 }
 
 export type ICheckListUserID = {
@@ -61,8 +66,10 @@ export const checkList: CheckListEntity = {
         },
         userRoleId: '',
         username: '',
+        AzureAdUser: '',
     },
     tasks: [],
+    updatedDate: '',
 }
 
 export interface Option {
@@ -74,6 +81,8 @@ export const postsContextDefaultValue: ContextType = {
     result: [],
     userIdCheckList: [],
     allCheckList: [],
+    handleSubmit: () => {},
+    handleDelete: () => {},
     refreshUsers: false,
     setRefreshUsers: () => {},
     list: [],
@@ -86,6 +95,23 @@ export const postsContextDefaultValue: ContextType = {
     selectedOption: '',
     handleTaskSelect: () => {},
     handleCategorySelect: () => {},
+    currentUser: {
+        createdDate: '',
+
+        email: '',
+        firstName: '',
+        id: '',
+        lastName: '',
+        status: '',
+        updatedDate: '',
+        userRole: {
+            id: '',
+            name: '',
+        },
+        userRoleId: '',
+        username: '',
+        AzureAdUser: '',
+    },
 }
 
 const ApiContext = createContext<ContextType>(postsContextDefaultValue)
@@ -93,14 +119,15 @@ const ApiContext = createContext<ContextType>(postsContextDefaultValue)
 const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [result, setResult] = useState<UserEntity[]>([])
     const { state } = useLocation()
-    const newUser = state ? state?.newUser : null
+    const newUserFunc = state ? state?.newUserFunc : null
     const refreshCheckLists = state ? state?.refreshCheckLists : null
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
+    const [currentUser, setCurrentUser] = useState<UserEntity | null>(null)
     const [allCheckList, setAllCheckList] = useState<CheckListEntity[]>([])
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
-
+    const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [tasks, setTasks] = useState<TaskEntity[]>([])
     const [list, setList] = useState<ListEntity[]>([])
@@ -108,6 +135,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
     const [category, setCategory] = useState<Category[]>([])
+    const { idToken, firstName, lastName } = useAuth()
 
     const handleCategorySelect = (selectedCategory: string) => {
         setSelectedOption(selectedCategory)
@@ -116,6 +144,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const handleTaskSelect = (selectedTask: any) => {
         setSelectedTask(selectedTask.value)
     }
+    const { openSnackbar } = useContext(SnackbarContext)
 
     const getUsers = async () => {
         const res = await fetch(
@@ -133,7 +162,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         getUsers()
-    }, [newUser, refreshUsers])
+    }, [newUserFunc, refreshUsers])
 
     const fetchCheckLists = async () => {
         const res = await fetch(
@@ -149,10 +178,36 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         fetchCheckLists()
     }, [refreshCheckLists])
 
+    const handleSubmit = async (data: { title: string }) => {
+        const res = await fetch(`http://20.251.37.226:8080/api/AddChecklist`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${idToken}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: data.title,
+                CreatedBy: '66e88e41-aa49-4bd4-aec4-b08cb553ee95',
+            }),
+        })
+
+        if (res.ok) {
+            const responseJson = await res.json()
+            if (responseJson && responseJson.id) {
+                const checklistId = responseJson.id
+                navigate(`/EditCheckList/${checklistId}`)
+            }
+            if (openSnackbar) {
+                openSnackbar(`CheckList Created`)
+            }
+            setRefreshList((prev) => !prev)
+        }
+    }
+
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=55ba8118-5880-4abf-afb4-44bbb7ac1a4c`
+                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
@@ -222,6 +277,92 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [selectedOption])
 
+    const handleDelete = async (id: string) => {
+        await fetch(`http://20.251.37.226:8080/api/DeleteChecklist?id=${id}`, {
+            method: 'DELETE',
+        })
+        setRefreshList((prev) => !prev)
+    }
+
+    ////////////////////////////////////
+    const fetchUserAndUpdateContext = async (token: string) => {
+        try {
+            const userEmail = getUserEmailFromIdToken(token)
+            await fetchUserByEmail(userEmail)
+        } catch (error) {
+            console.error('Error fetching and updating user:', error)
+        }
+    }
+    function getUserEmailFromIdToken(token: string): string {
+        const decodedToken: any = decode(token)
+
+        return decodedToken?.preferred_username || ''
+    }
+    async function fetchUserByEmail(userEmail: string) {
+        const response = await fetch(
+            `http://20.251.37.226:8080/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
+        )
+        if (response.ok) {
+            const user = await response.json()
+            // Use the fetched user and set the result state
+            setCurrentUser(user)
+        } else if (response.status === 404) {
+            // User not found, create user
+            const newUser = await createUser(userEmail)
+            // Use the newly created user and set the result state
+            if (newUser) {
+                setCurrentUser(newUser)
+            }
+        } else {
+            console.error('Error fetching user by email')
+        }
+    }
+    useEffect(() => {
+        if (idToken) {
+            fetchUserAndUpdateContext(idToken)
+        }
+    }, [idToken])
+    async function createUser(userEmail: string) {
+        try {
+            const createUserResponse = await fetch(
+                'http://20.251.37.226:8080/Api/addUser',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        azureAdUserId: userEmail,
+                        firstName: 'demo',
+                        lastName: 'bruker',
+                        userName: 'demo.bruker',
+                        email: userEmail,
+                        // other user properties
+                    }),
+                }
+            )
+            console.log(
+                'User creation response status:',
+                createUserResponse.status
+            )
+            if (createUserResponse.status === 200) {
+                //const newUser = await createUserResponse.json();
+                await createUserResponse.json()
+
+                //return newUser; // Return the newly created user
+            } else {
+                console.log(
+                    'Error creating user:',
+                    createUserResponse.statusText
+                )
+                return null // Return null if there's an error
+            }
+        } catch (error) {
+            console.log('Error creating user:', error)
+            return null // Return null if there's an error
+        }
+    }
+
     const memoedValue = useMemo(
         () => ({
             result,
@@ -250,6 +391,9 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             setList,
             userList,
             setUserList,
+            handleSubmit,
+            handleDelete,
+            currentUser,
         }),
         [
             result,
@@ -278,6 +422,9 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             setList,
             userList,
             setUserList,
+            handleSubmit,
+            handleDelete,
+            currentUser,
         ]
     )
 

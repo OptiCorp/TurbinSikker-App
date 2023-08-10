@@ -20,6 +20,7 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
         return date.toLocaleDateString('en-GB')
     }
 
+    const formattedUpdatedDate = formatDate(allCheckList.updatedDate)
     const formattedCreatedDate = formatDate(allCheckList.createdDate)
     const formattedCreatedDateUser = formatDate(allCheckList.user.createdDate)
     const navigate = useNavigate()
@@ -63,7 +64,7 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
                             }}
                             style={{ gridRow: '3/3' }}
                         >
-                            {formattedCreatedDateUser}
+                            {formattedUpdatedDate}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>

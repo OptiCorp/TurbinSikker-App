@@ -1,15 +1,15 @@
 import { useContext, useState } from 'react'
 
 import { Button, Table } from '@equinor/eds-core-react'
-import {
-    StyledTable,
-    ListWrapper,
-    StyledTableCell,
-    ContainerForm,
-    CellSize,
-} from './styles'
 import { Link } from 'react-router-dom'
 import { ApiContext } from '../../context/apiContextProvider'
+import {
+    CellSize,
+    ContainerForm,
+    ListWrapper,
+    StyledTable,
+    StyledTableCell,
+} from './styles'
 import { UserRow } from './userRow'
 
 import { Icon } from '@equinor/eds-core-react'
