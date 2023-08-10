@@ -1,20 +1,20 @@
-import React, { FunctionComponent } from 'react'
-import { useState } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 
 import { Button, Typography } from '@equinor/eds-core-react'
 import {
-    Wrapper,
+    ContainerIcon,
+    Image,
     ImageContainer,
     Info,
     Placeholder,
-    ContainerIcon,
-    Image,
+    Wrapper,
 } from './styles'
 
 import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
+import { useApiContext } from '../context/apiContextProvider'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
 
 export const Profile: FunctionComponent = () => {
@@ -29,7 +29,7 @@ export const Profile: FunctionComponent = () => {
             console.log(URL.createObjectURL(event.target.files[0]))
         }
     }
-
+    const { currentUser } = useApiContext()
     const { account } = useAuth()
 
     return (
@@ -72,9 +72,13 @@ export const Profile: FunctionComponent = () => {
                     style={{ display: 'none' }}
                 />
                 <Info>
-                    <Typography variant="h5">{account.name}</Typography>
-
-                    <Typography variant="body_short">Inspector</Typography>
+                    <Typography variant="h5">
+                        {currentUser?.username}
+                    </Typography>
+                    <Typography variant="body_short">
+                        {currentUser?.firstName} {currentUser?.lastName}
+                    </Typography>
+                    <Typography variant="h5"> {currentUser?.email}</Typography>
                 </Info>
                 <Button color="secondary" onClick={handleSubmit}>
                     Sign Out

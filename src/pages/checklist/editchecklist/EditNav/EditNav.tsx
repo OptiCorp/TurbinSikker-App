@@ -18,21 +18,22 @@ export const EditNav = ({
 }) => {
     const { openSnackbar } = useContext(SnackbarContext)
     const { id } = useParams()
-    const { setRefreshList } = useApiContext()
+    const { handleDelete } = useApiContext()
     const [isOpen, setIsOpen] = useState(false)
 
     const navigate = useNavigate()
 
-    const handleDelete = async () => {
-        await fetch(`http://20.251.37.226:8080/api/DeleteChecklist?id=${id}`, {
-            method: 'DELETE',
-        })
-        setRefreshList((prev) => !prev)
-        setIsOpen(false)
-        navigate('/MyChecklists')
-
-        if (openSnackbar) {
-            openSnackbar(`CheckList Deleted`)
+    const handleDeleteChecklist = async () => {
+        try {
+            handleDelete(id)
+            setIsOpen(false)
+            navigate('/MyChecklists')
+            if (openSnackbar) {
+                openSnackbar(`CheckList deleted`)
+            }
+        } catch (error) {
+            // Handle error
+            console.error('Error creating checklist:', error)
         }
     }
 
@@ -78,7 +79,10 @@ export const EditNav = ({
 
                         <Dialog.Actions>
                             <ButtonWrap>
-                                <Button color="danger" onClick={handleDelete}>
+                                <Button
+                                    color="danger"
+                                    onClick={handleDeleteChecklist}
+                                >
                                     Delete
                                 </Button>
 

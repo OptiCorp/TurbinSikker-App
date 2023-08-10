@@ -27,6 +27,8 @@ interface AuthContextType {
     accountname: any
     inProgress: InteractionStatus
     instance: any
+    firstName: string
+    lastName: string
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
@@ -40,7 +42,7 @@ export function AuthProvider({
     const account = useAccount(accounts[0] || {})
     const accountUsername = account?.username
     const accountname = account?.name
-    const [idToken, setIdToken] = useState('')
+    const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
     const [userEmail, setUserEmail] = useState('')
     const [firstName, setFirstName] = useState('')
@@ -68,12 +70,10 @@ export function AuthProvider({
                         decodedIdToken.name?.split(' ')[0] || ''
                     const lastNameFromToken =
                         decodedIdToken.name?.split(' ')[1] || ''
-                    console.log(lastNameFromToken)
+
                     setUserEmail(decodedIdToken.preferred_username || '')
                     setFirstName(firstNameFromToken)
                     setLastName(lastNameFromToken)
-                    console.log('decodedIdToken: ', decodedIdToken)
-                    console.log('userEmail: ', userEmail)
                 })
                 .catch((error) => {
                     if (error instanceof InteractionRequiredAuthError) {
@@ -94,69 +94,6 @@ export function AuthProvider({
                 })
         }
     }, [account, inProgress, accounts, instance, accountname, accountUsername])
-    useEffect(() => {
-        async function getAzureAdUser() {
-            if (userEmail) {
-                try {
-                    const response = await fetch(
-                        `http://20.251.37.226:8080/api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
-                    )
-                    if (response.status === 404) {
-                        console.log('Azure AD user not found. Creating user...')
-                        await createUser()
-                    } else {
-                        const result = await response.json()
-                        console.log('Fetched Azure AD user:', result)
-                    }
-                } catch (error) {
-                    console.log('Error fetching Azure AD user:', error)
-                }
-            }
-        }
-        async function createUser() {
-            if (userEmail) {
-                try {
-                    console.log('userEmail here: ', userEmail)
-                    const createUserResponse = await fetch(
-                        'http://20.251.37.226:8080/api/AddUser',
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                azureAdUserId: userEmail,
-                                Email: userEmail,
-                                FirstName: firstName,
-                                LastName: lastName,
-                                UserName: `${firstName.replaceAll(
-                                    'ø',
-                                    'o'
-                                )}.${lastName}`,
-                                // other user properties
-                            }),
-                        }
-                    )
-                    if (createUserResponse.status === 200) {
-                        console.log(
-                            'User created successfully:',
-                            await createUserResponse.json()
-                        )
-                    } else {
-                        console.log(
-                            'Error creating user:',
-                            createUserResponse.statusText
-                        )
-                    }
-                } catch (error) {
-                    console.log('Error creating user:', error)
-                }
-            }
-        }
-        if (userEmail) {
-            getAzureAdUser()
-        }
-    }, [userEmail])
 
     const memoedValue = useMemo(
         () => ({
@@ -168,11 +105,11 @@ export function AuthProvider({
             accountname,
             inProgress,
             instance,
+            firstName,
+            lastName,
         }),
         [account, inProgress, idToken, accounts, instance]
     )
-    console.log('accessToken: ', accessToken)
-    console.log('idToken: ', idToken)
 
     if (accounts.length > 0) {
         return (

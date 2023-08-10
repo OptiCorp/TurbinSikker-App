@@ -163,6 +163,7 @@ export const EditCheckList = () => {
                     </Dialog>
                 </>
             )}
+
             {appLocation.pathname.includes('EditCheckList') ? (
                 <EditNav
                     status={convertStatusToString(checked)}
