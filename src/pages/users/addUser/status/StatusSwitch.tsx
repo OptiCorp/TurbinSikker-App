@@ -6,16 +6,16 @@ import { useAddUser } from '../hooks/useAddUser'
 export const StatusSwitch = () => {
     const { control, register } = useFormContext()
     const { user } = useAddUser()
-    const [checked, setChecked] = useState(!!user?.status)
+    const [checked, setChecked] = useState(user?.status === 'Active')
 
     useEffect(() => {
-        setChecked(!!user?.status)
+        setChecked(user?.status === 'Active')
     }, [user])
 
     return (
         <>
             <Chip
-                variant={checked ? 'active' : 'error'}
+                variant={user?.status ? 'active' : 'error'}
                 style={{ display: 'flex', width: '200px', height: '20px' }}
             >
                 <Controller
@@ -24,19 +24,18 @@ export const StatusSwitch = () => {
                     rules={{
                         required: 'Required',
                     }}
-                    defaultValue={user?.status}
+                    defaultValue={user?.status || 'Disabled'}
                     render={({ field: { onChange, value } }) => (
                         <Switch
                             size="small"
                             type="checkbox"
                             value={value}
                             {...register(String(user?.status))}
-                            checked={checked}
+                            checked={value === 'Active'}
                             onChange={(e) => {
-                                setChecked(e.target.checked)
-                                onChange(
-                                    e.target.checked ? 'Active' : 'Disabled'
-                                )
+                                const newChecked = e.target.checked
+                                setChecked(newChecked)
+                                onChange(newChecked ? 'Active' : 'Disabled')
                             }}
                             label={`User is ${checked ? 'Active' : 'Disabled'}`}
                         />

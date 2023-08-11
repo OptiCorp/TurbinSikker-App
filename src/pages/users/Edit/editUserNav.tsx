@@ -30,7 +30,7 @@ export const EditUserNav = () => {
     }
 
     const handleClick = async () => {
-        await fetch(`http://20.251.37.226:8080/api/DeleteUser?id=${id}`, {
+        await fetch(`http://20.251.37.226:8080/api/SoftDeleteUser?id=${id}`, {
             method: 'DELETE',
         })
 
