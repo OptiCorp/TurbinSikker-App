@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
+import { useAddUser } from '../hooks/useAddUser'
 import { Option } from '../types'
 
 export const RoleSelector = () => {
     const { control } = useFormContext()
-
+    const { user } = useAddUser()
     const [options, setOptions] = useState<Option[]>([])
 
     useEffect(() => {
@@ -36,6 +37,7 @@ export const RoleSelector = () => {
                 defaultValue={options[0]}
                 render={({ field: { onChange, value } }) => (
                     <Select
+                        placeholder={user?.userRole.name}
                         options={options}
                         value={options.find((c) => c.value === value)}
                         onChange={(val) => onChange(val?.value)}
