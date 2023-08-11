@@ -108,10 +108,11 @@ export const useEditCheckList = () => {
         if (res.ok) {
             setRefreshList((prev) => !prev)
         }
-        navigate('/MyCheckLists')
+        navigate('/MyChecklists')
 
         if (openSnackbar) {
             openSnackbar(`Checklist updated`)
+            setTimeout(() => openSnackbar(''), 3000)
         }
     }
 

@@ -7,18 +7,43 @@ import {
     TextField,
     Typography,
 } from '@equinor/eds-core-react'
-import { useLocation } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
+import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useContext, useState } from 'react'
 import { AddTasks } from '../../../components/addtasks/AddTasks'
+import { useApiContext } from '../../../pages/context/apiContextProvider'
 import { ButtonWrap, MakeTitleField } from '../checkListID/styles'
 import { InfoHeader, Wrapper } from '../previewCheckList/styles'
 import { EditList } from './EditList/EditList'
-import { EditNav } from './EditNav/EditNav'
+
 import { useEditCheckList } from './hooks/useEditCheckList'
 import { StyledDialog } from './styles'
 
 export const EditCheckList = () => {
-    const appLocation = useLocation()
+    const navigate = useNavigate()
+    const [isOpenDelete, setIsOpenDelete] = useState(false)
+    const { openSnackbar } = useContext(SnackbarContext)
+    const { handleDelete } = useApiContext()
+    const { id } = useParams()
+
+    const handleDeleteChecklist = async () => {
+        try {
+            handleDelete(id)
+            setIsOpen(false)
+            navigate('/MyChecklists')
+            if (openSnackbar) {
+                openSnackbar(`CheckList deleted`)
+            }
+        } catch (error) {
+            console.error('Error creating checklist:', error)
+        }
+    }
+
+    const handleCloseDelete = () => {
+        setIsOpenDelete(false)
+    }
 
     const { checkListId, sortedTasks } = useAddTaskForm()
     const {
@@ -52,7 +77,6 @@ export const EditCheckList = () => {
                                     }}
                                 >
                                     <Switch
-                                        defaultValue={checkListId.status}
                                         checked={checked}
                                         style={{
                                             display: 'flex',
@@ -164,18 +188,40 @@ export const EditCheckList = () => {
                 </>
             )}
 
-            {appLocation.pathname.includes('EditCheckList') ? (
-                <EditNav
-                    status={convertStatusToString(checked)}
-                    title={title}
-                    handleSubmit={() => {
-                        handleSave({
-                            title: changeTitle,
-                            status: convertStatusToString(checked),
-                        })
-                    }}
-                />
-            ) : null}
+            <NavActionsComponent
+                buttonColor="danger"
+                secondButtonColor="primary"
+                onClick={() => {
+                    setIsOpenDelete(true)
+                }}
+                secondOnClick={() =>
+                    handleSave({
+                        title,
+                        status: convertStatusToString(checked),
+                    })
+                }
+                ButtonMessage="Delete"
+                SecondButtonMessage="Save"
+                isShown={true}
+            />
+
+            <Dialog open={isOpenDelete}>
+                <>
+                    <Dialog.Header>
+                        <Dialog.Title>Delete CheckList?</Dialog.Title>
+                    </Dialog.Header>
+                </>
+
+                <Dialog.Actions>
+                    <ButtonWrap>
+                        <Button color="danger" onClick={handleDeleteChecklist}>
+                            Delete
+                        </Button>
+
+                        <Button onClick={handleCloseDelete}>Cancel</Button>
+                    </ButtonWrap>
+                </Dialog.Actions>
+            </Dialog>
         </div>
     )
 }
