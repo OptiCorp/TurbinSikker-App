@@ -33,6 +33,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
     ButtonMessage,
     SecondButtonMessage,
 }) => {
+    console.log(secondOnClick)
     return (
         <>
             {isShown ? (
@@ -43,6 +44,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                             color={buttonColor}
                             onClick={onClick}
                         >
+                            {children}
                             <Typography variant="caption" color="white">
                                 {ButtonMessage}
                             </Typography>
@@ -51,7 +53,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                             <Button
                                 variant={secondButtonVariant}
                                 color={secondButtonColor}
-                                SecondonClick={secondOnClick}
+                                onClick={secondOnClick}
                                 as={as}
                                 href={href}
                             >

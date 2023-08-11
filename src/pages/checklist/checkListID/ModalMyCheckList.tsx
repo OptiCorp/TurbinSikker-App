@@ -22,13 +22,12 @@ export const ModalMyCheckList = ({ setIsOpen, isOpen, handleClose }: Props) => {
         try {
             handleSubmit({
                 title,
-            }) // Pass your checklist data here
+            })
             setIsOpen(false)
             if (openSnackbar) {
                 openSnackbar(`CheckList Created`)
             }
         } catch (error) {
-            // Handle error
             console.error('Error creating checklist:', error)
         }
     }
