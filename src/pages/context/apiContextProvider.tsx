@@ -286,7 +286,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [selectedOption]);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string | undefined) => {
     await fetch(`http://20.251.37.226:8080/api/DeleteChecklist?id=${id}`, {
       method: "DELETE",
     });
