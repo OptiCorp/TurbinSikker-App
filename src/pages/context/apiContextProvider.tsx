@@ -22,7 +22,7 @@ export type ContextType = {
   userIdCheckList: ICheckListUserID[];
   allCheckList: CheckListEntity[];
   handleSubmit: (data: { title: string }) => void;
-  handleDelete: (id: string) => void;
+  handleDelete: (id: string | undefined) => void;
   refreshUsers: boolean;
   setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>;
   category: Category[];
