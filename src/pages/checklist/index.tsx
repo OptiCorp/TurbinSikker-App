@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { Tabs } from '@equinor/eds-core-react'
 import { Link, Outlet } from 'react-router-dom'
+import { useApiContext } from '../context/apiContextProvider'
 import { MainWrap, StyledTabh3, TabSubmittedWrap, TabWrap } from './styles'
 
 export const IndexCheckLists = () => {
@@ -9,6 +10,13 @@ export const IndexCheckLists = () => {
 
     const handleChange = (index: number) => {
         setActiveTab(index)
+    }
+
+    const { currentUser } = useApiContext()
+    const handleLink = () => {
+        if (currentUser?.userRole.name === 'Inspector') {
+            return '/InProgress'
+        }
     }
 
     return (
@@ -42,9 +50,8 @@ export const IndexCheckLists = () => {
                         </Tabs.Tab>
                     </TabWrap>
                 </Tabs.List>
-                <>
-                    <Outlet />
-                </>
+
+                <Outlet />
             </Tabs>
         </MainWrap>
     )
