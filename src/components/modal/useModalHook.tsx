@@ -11,7 +11,7 @@ interface DialogProps {
     isOpen: boolean
     onClose?: () => void
     children?: React.ReactNode
-    buttonColor?: 'primary' | 'secondary' | 'danger'
+    negativeButtonColor?: 'primary' | 'secondary' | 'danger'
     positiveButtonColor?: 'primary' | 'secondary' | 'danger'
     buttonVariant?: 'contained' | 'outlined' | 'ghost'
     positiveButtonVariant?: 'contained' | 'outlined' | 'ghost'
@@ -28,7 +28,7 @@ const CustomDialog: React.FC<DialogProps> = ({
     isOpen,
     onClose,
     children,
-    buttonColor,
+    negativeButtonColor,
     positiveButtonColor,
     buttonVariant,
     positiveButtonVariant,
@@ -46,7 +46,7 @@ const CustomDialog: React.FC<DialogProps> = ({
                 <BtnWrap>
                     <Button
                         onClick={negativeButtonOnClick}
-                        color={buttonColor}
+                        color={negativeButtonColor}
                         variant={buttonVariant}
                     >
                         {negativeButtonText}

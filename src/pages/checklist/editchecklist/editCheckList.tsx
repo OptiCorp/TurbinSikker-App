@@ -79,7 +79,7 @@ export const EditCheckList = () => {
                         title="Delete checklist?"
                         negativeButtonText="Cancel"
                         positiveButtonText="Delete"
-                        secondButtonColor="danger"
+                        positiveButtonColor="danger"
                         positiveButtonOnClick={handleDeleteChecklist}
                         negativeButtonOnClick={handleCloseDelete}
                         isOpen={dialogDelete}
