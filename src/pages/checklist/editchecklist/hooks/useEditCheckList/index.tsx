@@ -16,21 +16,18 @@ export const useEditCheckList = () => {
         taskDescription: string,
         categoryId: string
     ) => {
-        setIsOpen(true)
         setTaskId(taskId)
         setCategoryId(categoryId)
         setTaskDescription(taskDescription)
     }
-    const [isOpen, setIsOpen] = useState(false)
+
     const [task, setTask] = useState<TaskEntity>()
     const [taskId, setTaskId] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
     const [title, setTitle] = useState<CheckListEntity | any>()
     const [isOpenn, setIsOpenn] = useState(false)
-    const [isOpenTask, setIsOpenTask] = useState(false)
 
-    const [changeTitle, setChangeTitle] = useState('')
     const { id } = useParams()
 
     const handleTitleChange = (title: string) => {
@@ -39,9 +36,7 @@ export const useEditCheckList = () => {
 
     const { openSnackbar } = useContext(SnackbarContext)
     const { setRefreshList } = useApiContext()
-    const handleClose = () => {
-        setIsOpen(false)
-    }
+
     const [checked, setChecked] = useState(!!checkListId?.status)
 
     const [isOpenNew, setIsOpenNew] = useState(false)
@@ -84,7 +79,7 @@ export const useEditCheckList = () => {
             }
         )
         if (res.ok) setRefreshList((prev) => !prev)
-        setIsOpenTask(false)
+
         if (openSnackbar) {
             openSnackbar(`Task updated`)
         }
@@ -121,26 +116,22 @@ export const useEditCheckList = () => {
         task,
         setTask,
         handleOpen,
-        handleClose,
+
         categoryId,
         taskDescription,
         taskId,
-        isOpen,
-        setIsOpen,
+
         updateCheckListTask,
         handleSave,
         title,
         setTitle,
-        changeTitle,
-        setChangeTitle,
+
         handleTitleChange,
         checked,
         setChecked,
         convertStatusToString,
         isOpenn,
         setIsOpenn,
-        isOpenTask,
-        setIsOpenTask,
 
         isOpenNew,
         setIsOpenNew,

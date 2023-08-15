@@ -1,3 +1,5 @@
+import CustomDialog from '@components/modal/useModalHook'
+import { useState } from 'react'
 import { CheckListEntity } from 'src/models/CheckListEntity'
 import {
     CategoryName,
@@ -6,8 +8,8 @@ import {
     PreviewListWrap,
     StyledCard,
 } from '../../previewCheckList/styles'
-import { DialogTask } from '../Dialog'
 import { useEditCheckList } from '../hooks/useEditCheckList'
+import { EditListPoints } from '../styles'
 
 type Props = {
     tasks: CheckListEntity
@@ -16,9 +18,18 @@ type Props = {
 
 export const EditList = (props: Props) => {
     let lastCategoryName = ''
+    const [content, setContent] = useState('')
+    const [dialogShowing, setDialogShowing] = useState(false)
+    const { task, setTask, updateCheckListTask } = useEditCheckList()
 
-    const { task, setTask, updateCheckListTask, isOpenTask, setIsOpenTask } =
-        useEditCheckList()
+    const handleSubmit = () => {
+        updateCheckListTask({
+            description: content,
+            categoryId: task?.categoryId ?? '',
+            taskId: task?.id ?? '',
+        })
+        setDialogShowing(false)
+    }
 
     return (
         <>
@@ -49,7 +60,7 @@ export const EditList = (props: Props) => {
                                         rows={3}
                                         onClick={() => {
                                             setTask(task)
-                                            setIsOpenTask(true)
+                                            setDialogShowing(true)
                                         }}
                                     />
                                 </StyledCard>
@@ -58,21 +69,27 @@ export const EditList = (props: Props) => {
                     )
                 })}
             </PreviewListWrap>
-            <DialogTask
-                isOpen={isOpenTask}
-                handleClose={() => {
-                    setIsOpenTask(false)
-                }}
-                taskDescription={task?.description ?? ''}
-                taskId={task?.id ?? ''}
-                handleSubmit={(data) => {
-                    updateCheckListTask({
-                        description: data.content,
-                        categoryId: task?.categoryId ?? '',
-                        taskId: task?.id ?? '',
-                    })
-                }}
-            />
+            <CustomDialog
+                isOpen={dialogShowing}
+                negativeButtonOnClick={() => setDialogShowing(false)}
+                title="Edit task"
+                negativeButtonText="Cancel"
+                positiveButtonText="Save"
+                buttonVariant="ghost"
+                positiveButtonOnClick={handleSubmit}
+            >
+                <EditListPoints
+                    label=""
+                    key={task?.id ?? ''}
+                    id="storybook-multi-readonly"
+                    defaultValue={task?.description ?? ''}
+                    multiline
+                    rows={5}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setContent(event.target.value)
+                    }}
+                />
+            </CustomDialog>
         </>
     )
 }

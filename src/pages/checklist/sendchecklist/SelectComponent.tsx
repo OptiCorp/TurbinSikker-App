@@ -1,6 +1,6 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useContext } from 'react'
-import { Controller, useForm, useFormContext } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 
 import { ApiContext } from '../../context/apiContextProvider'
