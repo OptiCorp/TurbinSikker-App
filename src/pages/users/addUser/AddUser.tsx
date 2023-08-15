@@ -2,10 +2,10 @@ import { FC } from 'react'
 import { FormProvider } from 'react-hook-form'
 
 import { UserEntity } from 'src/models/UserEntity'
-import { EditUserNav } from '../Edit/editUserNav'
-import { AddUserButtonNavigation } from './addUserNavigation/AddUserNAV'
+
 import { useAddUser } from './hooks/useAddUser'
 import { InputField } from './inputField'
+import { ModifyUserNav } from './modifyUserNav/modifyUserNav'
 import { RoleSelector } from './roleSelector'
 import { StatusSwitch } from './status/StatusSwitch'
 import { FormWrapper, Wrapper } from './styles'
@@ -15,7 +15,7 @@ export interface IAddUser {
 }
 
 export const AddUser: FC = () => {
-    const { methods, onSubmit, location, user } = useAddUser()
+    const { methods, onSubmit, user } = useAddUser()
     const { handleSubmit } = methods
 
     return (
@@ -47,12 +47,7 @@ export const AddUser: FC = () => {
                     {user && <StatusSwitch />}
                 </FormWrapper>
             </Wrapper>
-
-            {location === '/AddUser/' ? (
-                <AddUserButtonNavigation />
-            ) : (
-                <EditUserNav />
-            )}
+            <ModifyUserNav />
         </FormProvider>
     )
 }

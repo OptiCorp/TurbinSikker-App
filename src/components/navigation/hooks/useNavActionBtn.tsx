@@ -17,6 +17,7 @@ interface NavProps {
     SecondButtonMessage: string
     as?: ElementType
     href?: string
+    type?: 'submit' | 'reset' | 'button' | undefined
 }
 
 export const NavActionsComponent: FunctionComponent<NavProps> = ({
@@ -27,13 +28,13 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
     isShown,
     as,
     href,
+    type,
     secondButtonColor,
     buttonVariant,
     secondButtonVariant,
     ButtonMessage,
     SecondButtonMessage,
 }) => {
-    console.log(secondOnClick)
     return (
         <>
             {isShown ? (
@@ -56,6 +57,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                                 onClick={secondOnClick}
                                 as={as}
                                 href={href}
+                                type={type}
                             >
                                 <Typography variant="caption" color="white">
                                     {SecondButtonMessage}

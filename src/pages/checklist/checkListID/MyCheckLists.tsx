@@ -1,31 +1,50 @@
+import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Table } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
-import { Link } from 'react-router-dom'
-import { ApiContext } from '../../context/apiContextProvider'
+import { useNavigate } from 'react-router'
+
+import { ApiContext, useApiContext } from '../../context/apiContextProvider'
 import { CheckListUserIDRow } from './CheckListIDrow'
-import { ModalMyCheckList } from './ModalMyCheckList'
+
 import {
     BackgroundWrap,
     HeadCell,
     ListWrapperCheckMyList,
+    MakeTitleField,
     Styledh3,
 } from './styles'
 
 export const MyCheckLists = () => {
-    const clickHandler = () => {
-        navigate(`/SendCheckList`)
+    const { handleSubmit } = useApiContext()
+    const { openSnackbar } = useContext(SnackbarContext)
+
+    const handleCreateChecklist = async () => {
+        try {
+            handleSubmit({
+                title,
+            })
+            setDialogShowing(false)
+            if (openSnackbar) {
+                openSnackbar(`CheckList Created`)
+            }
+        } catch (error) {
+            console.error('Error creating checklist:', error)
+        }
     }
 
     const navigate = useNavigate()
     const handleClose = () => {
-        setIsOpen(false)
+        setDialogShowing(false)
     }
+    const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
+    const [dialogShowing, setDialogShowing] = useState(false)
     const { userIdCheckList } = useContext(ApiContext)
-    const location = useLocation()
+
     const [activeRow, setActiveRow] = useState(false)
+
     return (
         <>
             <BackgroundWrap>
@@ -74,7 +93,7 @@ export const MyCheckLists = () => {
                 <NavActionsComponent
                     buttonVariant="outlined"
                     onClick={() => {
-                        setIsOpen(true)
+                        setDialogShowing(true)
                     }}
                     ButtonMessage="New Checklist"
                     secondButtonColor="primary"
@@ -87,12 +106,28 @@ export const MyCheckLists = () => {
                     href="/SendCheckList/"
                 />
             )}
-
-            <ModalMyCheckList
-                handleClose={handleClose}
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-            />
+            <CustomDialog
+                title="Title of checklist"
+                buttonVariant="ghost"
+                positiveButtonText="Save"
+                negativeButtonText="Cancel"
+                positiveButtonOnClick={handleCreateChecklist}
+                negativeButtonOnClick={() => setDialogShowing(false)}
+                isOpen={dialogShowing}
+            >
+                <MakeTitleField
+                    id="storybook-readonly"
+                    placeholder="name"
+                    label=""
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setTitle(event.target.value)
+                    }}
+                    style={{
+                        borderBottom: '1px solid #243746',
+                        background: '#F7F7F7',
+                    }}
+                />
+            </CustomDialog>
         </>
     )
 }
