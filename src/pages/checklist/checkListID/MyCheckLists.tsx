@@ -41,10 +41,10 @@ export const MyCheckLists = () => {
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { userIdCheckList } = useApiContext()
+    const { userIdCheckList } = useContext(ApiContext)
 
     const [activeRow, setActiveRow] = useState(false)
-    console.log(userIdCheckList)
+
     return (
         <>
             <BackgroundWrap>
