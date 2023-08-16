@@ -1,15 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Tabs } from '@equinor/eds-core-react'
 import { Link, Outlet } from 'react-router-dom'
+import { useApiContext } from '../context/apiContextProvider'
 import { MainWrap, StyledTabh3, TabSubmittedWrap, TabWrap } from './styles'
+
+const LeaderTabs = () => {
+    return (
+        <>
+            <TabSubmittedWrap>
+                <Tabs.Tab
+                    as={Link}
+                    to="/CheckList"
+                    style={{
+                        borderBottom: 'none',
+                    }}
+                >
+                    Submitted CheckLists
+                </Tabs.Tab>
+            </TabSubmittedWrap>
+            <TabWrap>
+                <Tabs.Tab
+                    as={Link}
+                    to="/MyCheckLists"
+                    style={{
+                        borderBottom: 'none',
+                    }}
+                >
+                    <StyledTabh3> My CheckLists</StyledTabh3>
+                </Tabs.Tab>
+            </TabWrap>
+        </>
+    )
+}
 
 export const IndexCheckLists = () => {
     const [activeTab, setActiveTab] = useState(1)
-
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
+
+    const { currentUser } = useApiContext()
 
     return (
         <MainWrap>
@@ -19,29 +50,36 @@ export const IndexCheckLists = () => {
                 onChange={handleChange}
             >
                 <Tabs.List>
-                    <TabSubmittedWrap>
-                        <Tabs.Tab
-                            as={Link}
-                            to="/CheckList"
-                            style={{
-                                borderBottom: 'none',
-                            }}
-                        >
-                            Submitted CheckLists
-                        </Tabs.Tab>
-                    </TabSubmittedWrap>
-                    <TabWrap>
-                        <Tabs.Tab
-                            as={Link}
-                            to="/MyCheckLists"
-                            style={{
-                                borderBottom: 'none',
-                            }}
-                        >
-                            <StyledTabh3> My CheckLists</StyledTabh3>
-                        </Tabs.Tab>
-                    </TabWrap>
+                    {currentUser?.userRole.name === 'Leader' ? (
+                        <LeaderTabs />
+                    ) : (
+                        <>
+                            <TabSubmittedWrap>
+                                <Tabs.Tab
+                                    as={Link}
+                                    to="/CheckList"
+                                    style={{
+                                        borderBottom: 'none',
+                                    }}
+                                >
+                                    In progress
+                                </Tabs.Tab>
+                            </TabSubmittedWrap>
+                            <TabWrap>
+                                <Tabs.Tab
+                                    as={Link}
+                                    to="/MyCheckLists"
+                                    style={{
+                                        borderBottom: 'none',
+                                    }}
+                                >
+                                    <StyledTabh3> Pending</StyledTabh3>
+                                </Tabs.Tab>
+                            </TabWrap>
+                        </>
+                    )}
                 </Tabs.List>
+
                 <>
                     <Outlet />
                 </>

@@ -114,7 +114,7 @@ export const ModifyUserNav = () => {
                 title="Clear form?"
                 negativeButtonOnClick={clearDeleteClose}
                 negativeButtonText="Clear"
-                buttonColor="danger"
+                positiveButtonColor="danger"
                 positiveButtonVariant="ghost"
                 positiveButtonOnClick={handleCloseSecond}
                 positiveButtonText="Cancel"
