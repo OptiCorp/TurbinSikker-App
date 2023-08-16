@@ -67,7 +67,13 @@ export const checkList: CheckListEntity = {
     createdDate: '',
     user: {
         createdDate: '',
-
+        checklistWorkFlow: {
+            id: '',
+            checklistId: '',
+            status: '',
+            updatedDate: '',
+            userId: '',
+        },
         email: '',
         firstName: '',
         id: '',
@@ -112,7 +118,13 @@ export const postsContextDefaultValue: ContextType = {
     handleCategorySelect: () => {},
     currentUser: {
         createdDate: '',
-
+        checklistWorkFlow: {
+            id: '',
+            checklistId: '',
+            status: '',
+            updatedDate: '',
+            userId: '',
+        },
         email: '',
         firstName: '',
         id: '',
@@ -242,7 +254,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=01996602-fc62-4b88-9bcf-31d1b77594a5`
+                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)

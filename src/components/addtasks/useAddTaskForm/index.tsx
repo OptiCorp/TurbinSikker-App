@@ -9,6 +9,7 @@ import { useApiContext } from '../../../pages/context/apiContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 
 export const useAddTaskForm = () => {
+    const { id } = useParams()
     const { idToken } = useAuth()
     const appLocation = useLocation()
 
@@ -16,7 +17,7 @@ export const useAddTaskForm = () => {
     const { reset, watch, handleSubmit, register, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
     const { refreshList, setRefreshList } = useApiContext()
-    const { id } = useParams()
+
     const [selectedOption] = useState('')
     const [selectedTask] = useState('')
     const [checkListId, setCheckListId] = useState<CheckListEntity | null>(null)
@@ -60,9 +61,10 @@ export const useAddTaskForm = () => {
         setSortedTasks(sorted)
         setCheckListId(data)
     }
+
     useEffect(() => {
         fetchAllCheckListsId()
-    }, [])
+    }, [refreshList])
 
     return {
         methods,

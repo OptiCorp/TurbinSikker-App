@@ -4,10 +4,17 @@ import { ApiContext } from '../../context/apiContextProvider'
 import { CheckListUserRow } from './CheckListRowAll'
 
 import { HeadCell } from '../checkListID/styles'
+import { ReceivedCheckLists } from './receivedCheckLists'
 import { ListWrapperCheckL, StyledTableh3, Wrap } from './styles'
 
 export const CheckList = () => {
-    const { allCheckList } = useContext(ApiContext)
+    const {
+        allCheckList,
+        checklistWorkFlow,
+        currentUser,
+        userIdCheckList,
+        result,
+    } = useContext(ApiContext)
 
     return (
         <>
@@ -28,12 +35,28 @@ export const CheckList = () => {
                             </Table.Row>
                         </Table.Head>
                         <Table.Body>
-                            {allCheckList?.map((allCheckList) => (
-                                <CheckListUserRow
-                                    allCheckList={allCheckList}
-                                    key={allCheckList.id}
-                                />
-                            ))}
+                            {currentUser?.userRole.name === 'Inspector' ? (
+                                <>
+                                    {checklistWorkFlow?.map(
+                                        (checklistWorkFlow) => (
+                                            <ReceivedCheckLists
+                                                checklistWorkFlow={
+                                                    checklistWorkFlow
+                                                }
+                                            />
+                                        )
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    {allCheckList?.map((allCheckList) => (
+                                        <CheckListUserRow
+                                            allCheckList={allCheckList}
+                                            key={allCheckList.id}
+                                        />
+                                    ))}
+                                </>
+                            )}
                         </Table.Body>
                     </Table>
                 </ListWrapperCheckL>
