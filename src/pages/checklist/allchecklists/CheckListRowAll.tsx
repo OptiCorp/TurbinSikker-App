@@ -1,10 +1,11 @@
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { CheckListEntity } from '../../../models/CheckListEntity'
 
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { ICheckListUserID } from 'src/models/CheckListUserIdEntity'
+import { useApiContext } from '../../../pages/context/apiContextProvider'
 import { StyledTableRow } from '../checkListID/styles'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 
@@ -20,9 +21,11 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
         return date.toLocaleDateString('en-GB')
     }
 
+    const { checklistWorkFlow } = useApiContext()
+
     const formattedUpdatedDate = formatDate(allCheckList.updatedDate)
     const formattedCreatedDate = formatDate(allCheckList.createdDate)
-    const formattedCreatedDateUser = formatDate(allCheckList.user.createdDate)
+
     const navigate = useNavigate()
 
     const clickHandler = (id: string) => {
@@ -53,8 +56,6 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
                                 color="#243746"
                                 style={{ height: '15px' }}
                             />
-                            {allCheckList.user.firstName}{' '}
-                            {allCheckList.user.lastName}
                         </Chip>
                         <Typography
                             variant="caption"

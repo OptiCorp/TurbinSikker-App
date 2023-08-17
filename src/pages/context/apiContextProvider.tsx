@@ -213,7 +213,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const fetchCheckListWorkFlow = async () => {
         const res = await fetch(
-            `http://20.251.37.226:8080/api/GetAllChecklistWorkflowsByUserId?userId=0515ec01-ae6c-420f-af67-8c3f7b33bcb9`
+            `http://20.251.37.226:8080/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
         )
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
