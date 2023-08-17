@@ -1,4 +1,12 @@
 export type UserEntity = {
+    checklistWorkFlow: {
+        id: string
+        checklistId: string
+        status: string
+        updatedDate: string
+        userId: string
+    }
+
     createdDate: string
     email: string
     firstName: string
