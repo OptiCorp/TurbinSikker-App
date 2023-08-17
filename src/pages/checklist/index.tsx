@@ -42,6 +42,13 @@ export const IndexCheckLists = () => {
 
     const { currentUser } = useApiContext()
 
+    const handleLink = () => {
+        if (currentUser?.userRole.name === 'Inspector') {
+            return '/InProgress'
+        }
+    }
+
+
     return (
         <MainWrap>
             <Tabs
@@ -80,9 +87,11 @@ export const IndexCheckLists = () => {
                     )}
                 </Tabs.List>
 
+
                 <>
                     <Outlet />
                 </>
+
             </Tabs>
         </MainWrap>
     )

@@ -10,7 +10,10 @@ import { MyCheckLists } from './pages/checklist/checkListID/MyCheckLists'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
-import { ApiContextProvider } from './pages/context/apiContextProvider'
+import {
+    ApiContextProvider,
+    useApiContext,
+} from './pages/context/apiContextProvider'
 import { LandingPage } from './pages/landingPage/LandingPage'
 import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
 import { Login } from './pages/login'
@@ -19,7 +22,7 @@ import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
-
+    const { currentUser } = useApiContext()
     return (
         <div className="wrapper">
             {isAuthenticated && (
@@ -34,6 +37,7 @@ const App = () => {
                                         path="/Profile"
                                         element={<Profile />}
                                     />
+
                                     <Route element={<IndexCheckLists />}>
                                         <Route
                                             path="/CheckList"
