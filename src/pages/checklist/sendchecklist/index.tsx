@@ -6,10 +6,7 @@ import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
 import { CheckListEntity } from 'src/models/CheckListEntity'
 import { ICheckListUserID } from 'src/models/CheckListUserIdEntity'
-import {
-    IWorkFlow,
-    useApiContext,
-} from '../../../pages/context/apiContextProvider'
+import { useApiContext } from '../../../pages/context/apiContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { SelectComponent } from './SelectComponent'
 import { SendBackgroundWrap } from './styles'

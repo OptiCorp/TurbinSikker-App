@@ -4,8 +4,6 @@ import { CheckListEntity } from '../../../models/CheckListEntity'
 
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { ICheckListUserID } from 'src/models/CheckListUserIdEntity'
-import { useApiContext } from '../../../pages/context/apiContextProvider'
 import { StyledTableRow } from '../checkListID/styles'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 
@@ -20,8 +18,6 @@ export const CheckListUserRow: FunctionComponent<CheckListRowProps> = ({
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')
     }
-
-    const { checklistWorkFlow } = useApiContext()
 
     const formattedUpdatedDate = formatDate(allCheckList.updatedDate)
     const formattedCreatedDate = formatDate(allCheckList.createdDate)

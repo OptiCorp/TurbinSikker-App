@@ -29,7 +29,7 @@ export type ContextType = {
     tasks: TaskEntity[]
     userList: UserListEntity[]
     list: ListEntity[]
-    checklistWorkFlow: IWorkFlow[]
+
     selectedTask: string
     refreshList: boolean
     setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
@@ -44,14 +44,6 @@ export type ICheckListUserID = {
     title: string
     status: string
     createdDate: string
-    updatedDate: string
-}
-
-export type IWorkFlow = {
-    id: string
-    checklistId: string
-    userId: string
-    status: string
     updatedDate: string
 }
 
@@ -106,7 +98,7 @@ export const postsContextDefaultValue: ContextType = {
     refreshUsers: false,
     setRefreshUsers: () => {},
     list: [],
-    checklistWorkFlow: [],
+
     userList: [],
     category: [],
     tasks: [],
@@ -154,7 +146,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
-    const [checklistWorkFlow, setChecklistWorkFlow] = useState<IWorkFlow[]>([])
+
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [tasks, setTasks] = useState<TaskEntity[]>([])
@@ -209,20 +201,6 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         fetchCheckLists()
-    }, [refreshCheckLists])
-
-    const fetchCheckListWorkFlow = async () => {
-        const res = await fetch(
-            `http://20.251.37.226:8080/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
-        )
-        if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-        const data = await res.json()
-
-        setChecklistWorkFlow(data)
-    }
-
-    useEffect(() => {
-        fetchCheckListWorkFlow()
     }, [refreshCheckLists])
 
     const handleSubmit = async (data: { title: string }) => {
@@ -457,7 +435,6 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             handleSubmit,
             handleDelete,
             currentUser,
-            checklistWorkFlow,
         }),
         [
             result,
@@ -489,7 +466,6 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             handleSubmit,
             handleDelete,
             currentUser,
-            checklistWorkFlow,
         ]
     )
 
