@@ -1,95 +1,29 @@
-import { useIsAuthenticated } from '@azure/msal-react'
-import { Route, Routes } from 'react-router-dom'
-import './assets/App.css'
-import { SnackbarComponent } from './components/snackbar/SnackBar'
-import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
-import Layout from './pages/Layout'
-import { IndexCheckLists } from './pages/checklist'
-import { CheckList } from './pages/checklist/allchecklists/CheckList'
-import { MyCheckLists } from './pages/checklist/checkListID/MyCheckLists'
-import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
-import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
-import { SendCheckList } from './pages/checklist/sendchecklist'
-import {
-    ApiContextProvider,
-    useApiContext,
-} from './pages/context/apiContextProvider'
-import { LandingPage } from './pages/landingPage/LandingPage'
-import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
-import { Login } from './pages/login'
-import { Profile } from './pages/profile'
-import { AddUser } from './pages/users/addUser/AddUser'
-import { ListUsers } from './pages/users/listUsers/ListUsers'
+import { useIsAuthenticated } from "@azure/msal-react";
+import { RoutesContainer } from "@components/RoutesContainer";
+import "./assets/App.css";
+import { SnackbarComponent } from "./components/snackbar/SnackBar";
+import { SnackbarContextProvider } from "./components/snackbar/SnackBarContext";
+import { ApiContextProvider } from "./pages/context/apiContextProvider";
+import { AuthProvider } from "./pages/landingPage/context/LandingPageContextProvider";
+import { Login } from "./pages/login";
 const App = () => {
-    const isAuthenticated = useIsAuthenticated()
-    const { currentUser } = useApiContext()
-    return (
-        <div className="wrapper">
-            {isAuthenticated && (
-                <AuthProvider>
-                    <ApiContextProvider>
-                        <SnackbarContextProvider>
-                            <Routes>
-                                <Route element={<Layout />}>
-                                    <Route path="/" element={<LandingPage />} />
+  const isAuthenticated = useIsAuthenticated();
 
-                                    <Route
-                                        path="/Profile"
-                                        element={<Profile />}
-                                    />
+  return (
+    <div className="wrapper">
+      {isAuthenticated && (
+        <AuthProvider>
+          <ApiContextProvider>
+            <SnackbarContextProvider>
+              <RoutesContainer />
+              <SnackbarComponent />
+            </SnackbarContextProvider>
+          </ApiContextProvider>
+        </AuthProvider>
+      )}
+      {!isAuthenticated && <Login />}
+    </div>
+  );
+};
 
-                                    <Route element={<IndexCheckLists />}>
-                                        <Route
-                                            path="/CheckList"
-                                            element={<CheckList />}
-                                        />
-                                        <Route
-                                            path="/MyChecklists"
-                                            element={<MyCheckLists />}
-                                        />
-                                    </Route>
-
-                                    <Route
-                                        path="/PreviewCheckList/:id"
-                                        element={<PreviewCheckList />}
-                                    />
-
-                                    <Route
-                                        path="/EditCheckList/:id"
-                                        element={<EditCheckList />}
-                                    />
-                                    <Route
-                                        path="/SendCheckList"
-                                        element={<SendCheckList />}
-                                    />
-                                    <Route
-                                        path="/SendCheckList/:id"
-                                        element={<SendCheckList />}
-                                    />
-
-                                    <Route
-                                        path="/ListUsers"
-                                        element={<ListUsers />}
-                                    />
-                                    <Route
-                                        path="/AddUser"
-                                        element={<AddUser />}
-                                    />
-                                    <Route
-                                        path="/EditUser/:id"
-                                        element={<AddUser />}
-                                    />
-                                </Route>
-                            </Routes>
-
-                            <SnackbarComponent />
-                        </SnackbarContextProvider>{' '}
-                    </ApiContextProvider>
-                </AuthProvider>
-            )}
-            {!isAuthenticated && <Login />}
-        </div>
-    )
-}
-
-export default App
+export default App;
