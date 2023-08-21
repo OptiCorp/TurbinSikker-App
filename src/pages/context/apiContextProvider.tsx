@@ -154,7 +154,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { openSnackbar } = useContext(SnackbarContext);
 
   const getUsers = async () => {
-    const res = await fetch("http://20.251.37.226:8080/Api/GetAllUsersAdmin");
+    const res = await fetch("https://localhost:7290/Api/GetAllUsersAdmin");
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
     const data = await res.json();
     setResult(data);
@@ -172,7 +172,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [newUserFunc, refreshUsers]);
 
   const fetchCheckLists = async () => {
-    const res = await fetch(`http://20.251.37.226:8080/api/GetAllChecklists`);
+    const res = await fetch(`https://localhost:7290/api/GetAllChecklists`);
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
     const data = await res.json();
 
@@ -184,7 +184,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [refreshCheckLists]);
 
   const handleSubmit = async (data: { title: string }) => {
-    const res = await fetch(`http://20.251.37.226:8080/api/AddChecklist`, {
+    const res = await fetch(`https://localhost:7290/api/AddChecklist`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${idToken}`,
@@ -212,7 +212,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchCheckListUserId = async () => {
     try {
       const res = await fetch(
-        `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
+        `https://localhost:7290/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
       );
       if (!res.ok) {
         throw new Error("Failed with HTTP code " + res.status);
@@ -250,7 +250,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await fetch("http://20.251.37.226:8080/api/GetAllCategories");
+      const res = await fetch("https://localhost:7290/api/GetAllCategories");
       if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
       const data = await res.json();
 
@@ -268,7 +268,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchTasks = async () => {
       const res = await fetch(
-        `http://20.251.37.226:8080/api/GetAllTasksByCategoryId?id=${selectedOption}`
+        `https://localhost:7290/api/GetAllTasksByCategoryId?id=${selectedOption}`
       );
       const data = await res.json();
 
@@ -287,7 +287,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [selectedOption]);
 
   const handleDelete = async (id: string | undefined) => {
-    await fetch(`http://20.251.37.226:8080/api/DeleteChecklist?id=${id}`, {
+    await fetch(`https://localhost:7290/api/DeleteChecklist?id=${id}`, {
       method: "DELETE",
     });
     setRefreshList((prev) => !prev);
@@ -315,7 +315,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }
   async function fetchUserByEmail(userEmail: string, name: string) {
     const response = await fetch(
-      `http://20.251.37.226:8080/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
+      `https://localhost:7290/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
     );
     if (response.ok) {
       const user = await response.json();
@@ -343,7 +343,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`;
     try {
       const createUserResponse = await fetch(
-        "http://20.251.37.226:8080/Api/addUser",
+        "https://localhost:7290/Api/addUser",
         {
           method: "POST",
           headers: {
@@ -353,18 +353,24 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
             azureAdUserId: userEmail,
             firstName: firstName,
             lastName: lastName,
-            userName: username,
+            userName: username
+              .replace("æ", "ae")
+              .replace("ø", "o")
+              .replace("å", "a"),
             email: userEmail,
             // other user properties
           }),
         }
       );
+
       console.log("User creation response status:", createUserResponse.status);
       if (createUserResponse.status === 200) {
         //const newUser = await createUserResponse.json();
         await createUserResponse.json();
 
         //return newUser; // Return the newly created user
+      } else if (createUserResponse.status === 400) {
+        navigate("/PageNotFound");
       } else {
         console.log("Error creating user:", createUserResponse.statusText);
         return null; // Return null if there's an error
