@@ -1,6 +1,6 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useContext } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
 
 import { ApiContext } from '../../context/apiContextProvider'
@@ -9,7 +9,7 @@ import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 export const SelectComponent = () => {
     const { list, userList } = useContext(ApiContext)
 
-    const { control } = useForm()
+    const { control, register } = useFormContext()
 
     return (
         <>
@@ -29,7 +29,7 @@ export const SelectComponent = () => {
                 <FormContainer>
                     <Controller
                         control={control}
-                        name="Checklist"
+                        name="checklistId"
                         rules={{
                             required: 'Required',
                         }}
@@ -59,7 +59,7 @@ export const SelectComponent = () => {
                 <RecipientsContainer>
                     <Controller
                         control={control}
-                        name="userList"
+                        name="userId"
                         rules={{
                             required: 'Required',
                         }}

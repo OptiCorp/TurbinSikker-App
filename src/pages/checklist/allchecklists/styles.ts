@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 export const StyledTableCellCheckL = styled(Table.Cell)`
     padding-bottom: 1rem;
-    max-width: 100px;
 
     word-wrap: break-word;
 `
@@ -16,14 +15,13 @@ export const StyledChip = styled(Chip)`
 
 export const CellContent = styled.div`
     font-weight: 600;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 80px;
+    justify-content: space-around;
     margin: 10px 0;
-
-    display: grid;
-    grid-row-gap: 20px;
-    justify-items: center;
-    grid-template-rows: 1fr auto 0;
-
-    grid-template-columns: minmax(110px, 1fr);
 `
 
 export const ListWrapperCheckL = styled.div`
