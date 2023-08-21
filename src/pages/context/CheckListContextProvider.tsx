@@ -54,9 +54,7 @@ const CheckListContextProvider = ({
 
     /// fetch checklist
     const fetchCheckLists = async () => {
-        const res = await fetch(
-            `http://20.251.37.226:8080/api/GetAllChecklists`
-        )
+        const res = await fetch(`https://localhost:7290/api/GetAllChecklists`)
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
 
@@ -70,7 +68,7 @@ const CheckListContextProvider = ({
     // submitt checklist
 
     const handleSubmit = async (data: { title: string }) => {
-        const res = await fetch(`http://20.251.37.226:8080/api/AddChecklist`, {
+        const res = await fetch(`https://localhost:7290/api/AddChecklist`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${idToken}`,
@@ -99,7 +97,7 @@ const CheckListContextProvider = ({
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
+                `https://localhost:7290/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)

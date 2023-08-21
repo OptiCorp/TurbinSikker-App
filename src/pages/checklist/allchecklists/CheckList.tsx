@@ -28,7 +28,7 @@ export const CheckList = () => {
         const fetchCheckListWorkFlow = async () => {
             try {
                 const res = await fetch(
-                    `http://20.251.37.226:8080/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
+                    `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)

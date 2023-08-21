@@ -73,9 +73,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { user } = useAddUser()
 
     const getUsers = async () => {
-        const res = await fetch(
-            'http://20.251.37.226:8080/Api/GetAllUsersAdmin'
-        )
+        const res = await fetch('https://localhost:7290/Api/GetAllUsersAdmin')
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
@@ -97,7 +95,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchUserRoles = async () => {
             const res = await fetch(
-                'http://20.251.37.226:8080/api/GetAllUserRoles'
+                'https://localhost:7290/api/GetAllUserRoles'
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -115,7 +113,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     // Delete user //
 
     const handleDeleteUser = async (id: string | undefined) => {
-        await fetch(`http://20.251.37.226:8080/api/SoftDeleteUser?id=${id}`, {
+        await fetch(`https://localhost:7290/api/SoftDeleteUser?id=${id}`, {
             method: 'DELETE',
         })
 
@@ -147,7 +145,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     async function fetchUserByEmail(userEmail: string, name: string) {
         const response = await fetch(
-            `http://20.251.37.226:8080/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
+            `https://localhost:7290/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
         )
         if (response.ok) {
             const user = await response.json()
@@ -177,7 +175,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
         try {
             const createUserResponse = await fetch(
-                'http://20.251.37.226:8080/Api/addUser',
+                'https://localhost:7290/Api/addUser',
                 {
                     method: 'POST',
                     headers: {
