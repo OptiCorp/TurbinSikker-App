@@ -19,10 +19,14 @@ import { AuthProvider } from './pages/landingPage/context/LandingPageContextProv
 import { Login } from './pages/login'
 import { Profile } from './pages/profile'
 import { AddUser } from './pages/users/addUser/AddUser'
+import {
+    UserContextProvider,
+    useUserContext,
+} from './pages/users/context/userContextProvider'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
-    const { currentUser } = useApiContext()
+    const { currentUser } = useUserContext()
     return (
         <div className="wrapper">
             {isAuthenticated && (
