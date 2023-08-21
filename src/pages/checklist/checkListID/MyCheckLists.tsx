@@ -5,7 +5,10 @@ import { Table } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { ApiContext, useApiContext } from '../../context/apiContextProvider'
+import {
+    CheckListContext,
+    useCheckListContext,
+} from '../../context/CheckListContextProvider'
 import { CheckListUserIDRow } from './CheckListIDrow'
 
 import {
@@ -17,7 +20,7 @@ import {
 } from './styles'
 
 export const MyCheckLists = () => {
-    const { handleSubmit } = useApiContext()
+    const { handleSubmit } = useCheckListContext()
     const { openSnackbar } = useContext(SnackbarContext)
 
     const handleCreateChecklist = async () => {
@@ -41,7 +44,7 @@ export const MyCheckLists = () => {
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { userIdCheckList } = useContext(ApiContext)
+    const { userIdCheckList } = useContext(CheckListContext)
 
     const [activeRow, setActiveRow] = useState(false)
 

@@ -1,5 +1,5 @@
-import { TaskEntity } from './TaskEntity'
-import { UserEntity } from './UserEntity'
+import { TaskEntity } from '../../../components/addtasks/context/models/TaskEntity'
+import { UserEntity } from '../../users/context/models/UserEntity'
 
 export type CheckListEntity = {
     id: string

@@ -3,11 +3,11 @@ import { arrow_back_ios } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import logo from '../../assets/images/smallLogo.png'
-import { useApiContext } from '../../pages/context/apiContextProvider'
+import { useCheckListContext } from '../../pages/context/CheckListContextProvider'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
-    const { setRefreshList } = useApiContext()
+    const { setRefreshList } = useCheckListContext()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')

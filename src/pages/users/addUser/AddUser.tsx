@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { FormProvider } from 'react-hook-form'
 
-import { UserEntity } from 'src/models/UserEntity'
+import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 
 import { useAddUser } from './hooks/useAddUser'
 import { InputField } from './inputField'

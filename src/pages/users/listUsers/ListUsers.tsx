@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 
 import { Button, Table } from '@equinor/eds-core-react'
 import { Link } from 'react-router-dom'
-import { ApiContext } from '../../context/apiContextProvider'
+
 import {
     CellSize,
     ContainerForm,
@@ -14,9 +14,10 @@ import { UserRow } from './userRow'
 
 import { Icon } from '@equinor/eds-core-react'
 import { visibility, visibility_off } from '@equinor/eds-icons'
+import { useUserContext } from '../context/userContextProvider'
 
 export const ListUsers = () => {
-    const { result: users } = useContext(ApiContext)
+    const { result: users } = useUserContext()
 
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 

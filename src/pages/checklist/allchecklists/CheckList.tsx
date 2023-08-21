@@ -1,13 +1,18 @@
 import { Table } from '@equinor/eds-core-react'
 import { useContext, useEffect, useState } from 'react'
-import { ApiContext } from '../../context/apiContextProvider'
+import {
+    UserContext,
+    useUserContext,
+} from '../../../pages/users/context/userContextProvider'
+import { CheckListContext } from '../../context/CheckListContextProvider'
 import { HeadCell } from '../checkListID/styles'
 import { CheckListUserRow } from './CheckListRowAll'
 import { ReceivedCheckLists } from './receivedCheckLists'
 import { ListWrapperCheckL, StyledTableh3, Wrap } from './styles'
 
 export const CheckList = () => {
-    const { allCheckList, currentUser } = useContext(ApiContext)
+    const { allCheckList } = useContext(CheckListContext)
+    const { currentUser } = useContext(UserContext)
 
     type IWorkFlow = {
         id: string

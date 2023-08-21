@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react'
 import CustomDialog from '@components/modal/useModalHook'
 import { MakeTitleField } from '../checkListID/styles'
 import { InfoHeader } from '../previewCheckList/styles'
-import { useEditCheckList } from './hooks/useEditCheckList'
 
 type Props = {
     dialogShowing: boolean
@@ -22,6 +21,8 @@ type Props = {
     setIsOpenn: (isOpenn: boolean) => void
     setTitle: (title: string) => void
     title: string
+    checked: any
+    setChecked: any
 }
 
 export const EditHeader = ({
@@ -32,9 +33,10 @@ export const EditHeader = ({
     handleClose,
     title,
     setTitle,
+    checked,
+    setChecked,
 }: Props) => {
     const { checkListId } = useAddTaskForm()
-    const { checked, setChecked } = useEditCheckList()
 
     const [changeTitle, setChangeTitle] = useState('')
 

@@ -2,7 +2,7 @@ import { Chip, Icon, Table } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { UserEntity } from 'src/models/UserEntity'
+import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 import { IUser } from '../../addUser/hooks/useAddUser/types'
 import { StyledTableCell, TableData } from '../styles'
 interface UserRowProps {

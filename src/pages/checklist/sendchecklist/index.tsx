@@ -4,10 +4,9 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
-import { CheckListEntity } from 'src/models/CheckListEntity'
-import { ICheckListUserID } from 'src/models/CheckListUserIdEntity'
-import { useApiContext } from '../../../pages/context/apiContextProvider'
+import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { SelectComponent } from './SelectComponent'
 import { SendBackgroundWrap } from './styles'
 
@@ -29,7 +28,7 @@ export const SendCheckList = () => {
     const { handleSubmit } = methods
     const { idToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
-    const { currentUser } = useApiContext()
+    const { currentUser } = useUserContext()
     const handleOpen = () => {
         setPositiveOpen(true)
     }

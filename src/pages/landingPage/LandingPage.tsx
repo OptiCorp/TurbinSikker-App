@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useEffect } from 'react'
-import { useApiContext } from '../context/apiContextProvider'
 import { Info } from '../profile/styles'
+import { useUserContext } from '../users/context/userContextProvider'
 import useAuth from './context/LandingPageContextProvider'
 export const LandingPage = () => {
     const {
@@ -12,7 +12,7 @@ export const LandingPage = () => {
         inProgress,
     } = useAuth()
 
-    const { currentUser } = useApiContext()
+    const { currentUser } = useUserContext()
 
     useEffect(() => {}, [accountname, accounts])
 

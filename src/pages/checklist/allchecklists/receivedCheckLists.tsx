@@ -4,7 +4,7 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
-import { CheckListEntity } from 'src/models/CheckListEntity'
+import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 
 import { StyledTableRow } from '../checkListID/styles'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
