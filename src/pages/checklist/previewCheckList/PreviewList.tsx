@@ -1,4 +1,4 @@
-import { CheckListEntity } from 'src/models/CheckListEntity'
+import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import {
     CategoryName,
     Container,

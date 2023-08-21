@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react'
-import { ICheckListUserID } from '../../context/apiContextProvider'
+import { ICheckListUserID } from '../../context/models/ICheckListUserIDEntity'
 
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'

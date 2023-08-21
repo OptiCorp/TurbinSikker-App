@@ -1,23 +1,21 @@
+import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
-import { CheckListEntity } from 'src/models/CheckListEntity'
-import { FormValuesEntity } from 'src/models/FormValuesEntity'
-import { TaskEntity } from 'src/models/TaskEntity'
-import { useApiContext } from '../../../pages/context/apiContextProvider'
+import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+import { FormValuesEntity } from '../context/models/FormValuesEntity'
 
 export const useAddTaskForm = () => {
     const { id } = useParams()
     const { idToken } = useAuth()
     const appLocation = useLocation()
-
     const methods = useForm<FormValuesEntity>()
     const { reset, watch, handleSubmit, register, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
-    const { refreshList, setRefreshList } = useApiContext()
-
+    const { refreshList, setRefreshList } = useCheckListContext()
     const [selectedOption] = useState('')
     const [selectedTask] = useState('')
     const [checkListId, setCheckListId] = useState<CheckListEntity | null>(null)
@@ -71,7 +69,6 @@ export const useAddTaskForm = () => {
         onSubmit,
         control,
         register,
-
         handleSubmit,
         watch,
         location: appLocation.pathname,

@@ -1,6 +1,6 @@
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { CheckListEntity } from '../../../models/CheckListEntity'
+import { CheckListEntity } from '../../context/models/CheckListEntity'
 
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
