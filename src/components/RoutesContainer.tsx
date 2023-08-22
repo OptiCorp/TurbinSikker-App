@@ -8,6 +8,8 @@ import { EditCheckList } from '../pages/checklist/editchecklist/editCheckList'
 import { PreviewCheckList } from '../pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from '../pages/checklist/sendchecklist'
 
+import { Children } from 'react'
+import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 import { LandingPage } from '../pages/landingPage/LandingPage'
 import useAuth from '../pages/landingPage/context/LandingPageContextProvider'
 import { Profile } from '../pages/profile'
@@ -16,19 +18,11 @@ import { useUserContext } from '../pages/users/context/userContextProvider'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
 
 export function RoutesContainer() {
-    const { result: users, currentUser } = useUserContext()
+    const { currentUser } = useUserContext()
 
-    const {
-        accounts,
+    const {} = useAuth()
 
-        accountname,
-
-        inProgress,
-    } = useAuth()
-
-    const ProtectedRoute = ({ user, children }) => {
-        const { currentUser } = useUserContext()
-
+    const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         if (currentUser?.userRole.name === 'Inspector') {
             return <Navigate to="/" replace />
         }
@@ -38,18 +32,7 @@ export function RoutesContainer() {
         <>
             <Routes>
                 <Route element={<Layout />}>
-                    <Route
-                        path="/"
-                        element={
-                            <LandingPage
-                                users={users}
-                                currentUser={currentUser}
-                                accounts={accounts}
-                                accountname={accountname}
-                                inProgress={inProgress}
-                            />
-                        }
-                    />
+                    <Route path="/" element={<LandingPage />} />
 
                     <Route path="/Profile" element={<Profile />} />
 
@@ -80,12 +63,7 @@ export function RoutesContainer() {
                     <Route
                         path="/add-user"
                         element={
-                            <ProtectedRoute
-                                user={
-                                    currentUser?.userRole.name === 'Leader' ||
-                                    currentUser?.userRole.name === 'Admin'
-                                }
-                            >
+                            <ProtectedRoute>
                                 <AddUser />
                             </ProtectedRoute>
                         }

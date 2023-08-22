@@ -1,20 +1,19 @@
 import { Typography } from '@equinor/eds-core-react'
 import { Info } from '../profile/styles'
 import { UserEntity } from '../users/context/models/UserEntity'
+import { useUserContext } from '../users/context/userContextProvider'
+import useAuth from './context/LandingPageContextProvider'
 
-export const LandingPage = ({
-    users,
-    currentUser,
-    accounts,
-    accountname,
-    inProgress,
-}: {
-    currentUser: UserEntity | null
-    users: UserEntity
-    accounts: any
-    inProgress: any
-    accountname: string
-}) => {
+export const LandingPage = () => {
+    const { currentUser, result } = useUserContext()
+
+    const {
+        accounts,
+
+        accountname,
+
+        inProgress,
+    } = useAuth()
     /* if (!users) {
     return <Navigate to="/404" replace />;
   } */

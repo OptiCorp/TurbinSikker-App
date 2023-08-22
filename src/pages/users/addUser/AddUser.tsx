@@ -11,10 +11,6 @@ import { RoleSelector } from './roleSelector'
 import { StatusSwitch } from './status/StatusSwitch'
 import { FormWrapper, UserInfoWrapper, UserTitle, Wrapper } from './styles'
 
-export interface IAddUser {
-    user: UserEntity
-}
-
 export const AddUser: FC = () => {
     const { methods, onSubmit, user } = useAddUser()
     const { handleSubmit } = methods
