@@ -23,7 +23,7 @@ export const useAddTaskForm = () => {
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(
-            `http://20.251.37.226:8080/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
+            `https://localhost:7290/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
             {
                 method: 'POST',
                 headers: {
@@ -42,7 +42,7 @@ export const useAddTaskForm = () => {
 
     const fetchAllCheckListsId = async () => {
         const res = await fetch(
-            `http://20.251.37.226:8080/api/GetChecklist?id=${id}`
+            `https://localhost:7290/api/GetChecklist?id=${id}`
         )
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()

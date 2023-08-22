@@ -1,9 +1,12 @@
 import { Typography } from '@equinor/eds-core-react'
-import { useEffect } from 'react'
 import { Info } from '../profile/styles'
+import { UserEntity } from '../users/context/models/UserEntity'
 import { useUserContext } from '../users/context/userContextProvider'
 import useAuth from './context/LandingPageContextProvider'
+
 export const LandingPage = () => {
+    const { currentUser, result } = useUserContext()
+
     const {
         accounts,
 
@@ -11,10 +14,11 @@ export const LandingPage = () => {
 
         inProgress,
     } = useAuth()
+    /* if (!users) {
+    return <Navigate to="/404" replace />;
+  } */
 
-    const { currentUser } = useUserContext()
-
-    useEffect(() => {}, [accountname, accounts])
+    //useEffect(() => {}, [accountname, accounts]);
 
     if (accounts.length > 0) {
         return (
@@ -27,7 +31,7 @@ export const LandingPage = () => {
                         </Typography>
                         <Typography variant="h5">
                             <p> {currentUser?.username}</p>
-                        </Typography>{' '}
+                        </Typography>
                     </Info>
                 </span>
             </>

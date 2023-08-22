@@ -52,7 +52,7 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch(
-                'http://20.251.37.226:8080/api/GetAllCategories'
+                'https://localhost:7290/api/GetAllCategories'
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -71,7 +71,7 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchTasks = async () => {
             const res = await fetch(
-                `http://20.251.37.226:8080/api/GetAllTasksByCategoryId?id=${selectedOption}`
+                `https://localhost:7290/api/GetAllTasksByCategoryId?id=${selectedOption}`
             )
             const data = await res.json()
 

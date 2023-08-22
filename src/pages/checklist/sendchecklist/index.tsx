@@ -39,7 +39,7 @@ export const SendCheckList = () => {
     const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
         console.log('submitting', data)
         const res = await fetch(
-            `http://20.251.37.226:8080/api/CreateChecklistWorkFlow`,
+            `https://localhost:7290/api/CreateChecklistWorkFlow`,
             {
                 method: 'POST',
                 headers: {
