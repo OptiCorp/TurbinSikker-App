@@ -1,25 +1,26 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import { BrowserRouter } from "react-router-dom";
+import { Configuration, PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
-import { Configuration,  PublicClientApplication } from "@azure/msal-browser";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.tsx";
 
 const configuration: Configuration = {
   auth: {
-      clientId: "95763e09-e04c-48a8-99a6-a878ed99d774",
-      authority: "https://login.microsoftonline.com/df4dc9e8-cc4f-4792-a55e-36f7e1d92c47"
-  }
+    clientId: "b1bc9eb7-71fc-43c4-a888-ae73c72be014",
+    authority:
+      "https://login.microsoftonline.com/2d89021a-6a8a-4063-a9fe-b4777c4088f1/",
+  },
 };
 
 const pca = new PublicClientApplication(configuration);
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <MsalProvider instance={pca}>
-      <BrowserRouter>   
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </MsalProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
