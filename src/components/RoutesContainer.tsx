@@ -10,12 +10,15 @@ import { SendCheckList } from '../pages/checklist/sendchecklist'
 
 import { Children } from 'react'
 import { UserEntity } from 'src/pages/users/context/models/UserEntity'
+import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
+import { WorkflowContextProvider } from '../pages/checklist/workflow/context/workFlowContextProvider'
 import { LandingPage } from '../pages/landingPage/LandingPage'
 import useAuth from '../pages/landingPage/context/LandingPageContextProvider'
 import { Profile } from '../pages/profile'
 import { AddUser } from '../pages/users/addUser/AddUser'
 import { useUserContext } from '../pages/users/context/userContextProvider'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
+import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
 
 export function RoutesContainer() {
     const { currentUser } = useUserContext()
@@ -37,7 +40,14 @@ export function RoutesContainer() {
                     <Route path="/Profile" element={<Profile />} />
 
                     <Route element={<IndexCheckLists />}>
-                        <Route path="/CheckList" element={<CheckList />} />
+                        <Route
+                            path="/CheckList"
+                            element={
+                                <WorkflowContextProvider>
+                                    <CheckList />
+                                </WorkflowContextProvider>
+                            }
+                        />
                         <Route
                             path="/MyChecklists"
                             element={<MyCheckLists />}
@@ -51,7 +61,13 @@ export function RoutesContainer() {
 
                     <Route
                         path="/EditCheckList/:id"
-                        element={<EditCheckList />}
+                        element={
+                            <EditCheckListContextProvider>
+                                <TaskCategoryContextProvider>
+                                    <EditCheckList />
+                                </TaskCategoryContextProvider>
+                            </EditCheckListContextProvider>
+                        }
                     />
                     <Route path="/SendCheckList" element={<SendCheckList />} />
                     <Route

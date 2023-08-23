@@ -60,72 +60,70 @@ export const EditCheckList = () => {
     }
 
     return (
-        <TaskCategoryContextProvider>
-            <div style={{ backgroundColor: '#f0f3f3' }}>
-                {checkListId && (
-                    <>
-                        <div key={checkListId.id}>
-                            <EditHeader
-                                dialogShowing={dialogShowing}
-                                setDialogShowing={setDialogShowing}
-                                isOpenn={isOpenn}
-                                setIsOpenn={setIsOpenn}
-                                handleClose={handleClose}
-                                title={title}
-                                setTitle={setTitle}
-                                checked={checked}
-                                setChecked={setChecked}
-                            />
-
-                            <Wrapper>
-                                {isOpenn && <AddTasks />}
-
-                                <EditList
-                                    key={checkListId.id}
-                                    tasks={checkListId}
-                                    sortedTasks={sortedTasks}
-                                />
-                            </Wrapper>
-                        </div>
-
-                        <CustomDialog
-                            title="Delete checklist?"
-                            negativeButtonText="Cancel"
-                            positiveButtonText="Delete"
-                            positiveButtonColor="danger"
-                            positiveButtonOnClick={handleDeleteChecklist}
-                            negativeButtonOnClick={handleCloseDelete}
-                            isOpen={dialogDelete}
-                        >
-                            <Typography
-                                variant="caption"
-                                token={{
-                                    textAlign: 'center',
-                                }}
-                            >
-                                You sure you want to delete {checkListId.title}?
-                            </Typography>
-                        </CustomDialog>
-
-                        <NavActionsComponent
-                            buttonColor="danger"
-                            secondButtonColor="primary"
-                            onClick={() => {
-                                setDialogDelete(true)
-                            }}
-                            secondOnClick={() => {
-                                handleSave({
-                                    title: title,
-                                    status: convertStatusToString(checked),
-                                })
-                            }}
-                            ButtonMessage="Delete"
-                            SecondButtonMessage="Save"
-                            isShown={true}
+        <div style={{ backgroundColor: '#f0f3f3' }}>
+            {checkListId && (
+                <>
+                    <div key={checkListId.id}>
+                        <EditHeader
+                            dialogShowing={dialogShowing}
+                            setDialogShowing={setDialogShowing}
+                            isOpenn={isOpenn}
+                            setIsOpenn={setIsOpenn}
+                            handleClose={handleClose}
+                            title={title}
+                            setTitle={setTitle}
+                            checked={checked}
+                            setChecked={setChecked}
                         />
-                    </>
-                )}
-            </div>
-        </TaskCategoryContextProvider>
+
+                        <Wrapper>
+                            {isOpenn && <AddTasks />}
+
+                            <EditList
+                                key={checkListId.id}
+                                tasks={checkListId}
+                                sortedTasks={sortedTasks}
+                            />
+                        </Wrapper>
+                    </div>
+
+                    <CustomDialog
+                        title="Delete checklist?"
+                        negativeButtonText="Cancel"
+                        positiveButtonText="Delete"
+                        positiveButtonColor="danger"
+                        positiveButtonOnClick={handleDeleteChecklist}
+                        negativeButtonOnClick={handleCloseDelete}
+                        isOpen={dialogDelete}
+                    >
+                        <Typography
+                            variant="caption"
+                            token={{
+                                textAlign: 'center',
+                            }}
+                        >
+                            You sure you want to delete {checkListId.title}?
+                        </Typography>
+                    </CustomDialog>
+
+                    <NavActionsComponent
+                        buttonColor="danger"
+                        secondButtonColor="primary"
+                        onClick={() => {
+                            setDialogDelete(true)
+                        }}
+                        secondOnClick={() => {
+                            handleSave({
+                                title: title,
+                                status: convertStatusToString(checked),
+                            })
+                        }}
+                        ButtonMessage="Delete"
+                        SecondButtonMessage="Save"
+                        isShown={true}
+                    />
+                </>
+            )}
+        </div>
     )
 }
