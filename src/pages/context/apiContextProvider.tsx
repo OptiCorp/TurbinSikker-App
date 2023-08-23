@@ -154,9 +154,10 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { openSnackbar } = useContext(SnackbarContext);
 
   const getUsers = async () => {
-    const res = await fetch("https://turbinsikker-api.azurewebsites.net/api/GetAllUsers",
+    const res = await fetch("https://turbinsikker-api.azurewebsites.net/api/GetAllUsersAdmin",
     {
       method: "GET",
+      mode: "no-cors",
       headers: {
         Authorization: `Bearer ${idToken}`,
         "Content-Type": "application/json",
