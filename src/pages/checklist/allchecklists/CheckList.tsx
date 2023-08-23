@@ -15,28 +15,24 @@ export const CheckList = () => {
     const { allCheckList } = useContext(CheckListContext)
     const { currentUser } = useUserContext()
 
-    const { WorkFlows , testData} = useWorkflowContext()
-    const [checklistWorkFlow, setChecklistWorkFlow] = useState<WorkFlow[]>([])
+    const text = () => {
+        if (currentUser?.userRole.name === 'Leader') {
+            return <>Submitted to</>
+        } else {
+            return <>Submitted by</>
+        }
+    }
 
-    // useEffect(() => {
-    //     const fetchCheckListWorkFlow = async () => {
-    //         try {
-    //             const res = await fetch(
-    //                 `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
-    //             )
-    //             if (!res.ok)
-    //                 throw new Error('Failed with HTTP code ' + res.status)
-    //                 const data = (await res.json()) as WorkFlow[]
+    const statusText = () => {
+        if (currentUser?.userRole.name === 'Leader') {
+            return <>Status</>
+        } else {
+            return <>Status</>
+        }
+    }
 
-    //             setChecklistWorkFlow(data)
-    //         } catch (error) {
-    //             console.error('Error fetching checklist workflow:', error)
-    //         }
-    //     }
-    //     fetchCheckListWorkFlow()
-    // }, [currentUser])
+    const { WorkFlows, allWorkFlows } = useWorkflowContext()
 
-    console.log(testData)
     return (
         <>
             <Wrap>
@@ -45,13 +41,15 @@ export const CheckList = () => {
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
-                                    <StyledTableh3>Title</StyledTableh3>
+                                    <StyledTableh3>Title </StyledTableh3>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledTableh3>Created by</StyledTableh3>
+                                    <StyledTableh3>{text()}</StyledTableh3>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledTableh3>Date received</StyledTableh3>
+                                    <StyledTableh3>
+                                        {statusText()}
+                                    </StyledTableh3>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
@@ -67,10 +65,10 @@ export const CheckList = () => {
                                 </>
                             ) : (
                                 <>
-                                    {allCheckList?.map((allCheckList) => (
+                                    {allWorkFlows.map((allWorkFlow) => (
                                         <CheckListUserRow
-                                            allCheckList={allCheckList}
-                                            key={allCheckList.id}
+                                            allWorkFlow={allWorkFlow}
+                                            key={allWorkFlow.id}
                                         />
                                     ))}
                                 </>

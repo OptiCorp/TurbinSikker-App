@@ -12,6 +12,7 @@ import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { ListEntity } from 'src/pages/users/context/models/ListEntity'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { ICheckListUserID } from './models/CheckListUserIdEntity'
+import { useUserContext } from '../users/context/userContextProvider'
 
 export type ContextType = {
     userIdCheckList: ICheckListUserID[]
@@ -51,7 +52,7 @@ const CheckListContextProvider = ({
     const [list, setList] = useState<ListEntity[]>([])
     const { idToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
-
+const {currentUser} =useUserContext()
     /// fetch checklist
     const fetchCheckLists = async () => {
         const res = await fetch(`https://localhost:7290/api/GetAllChecklists`)
@@ -97,7 +98,7 @@ const CheckListContextProvider = ({
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `https://localhost:7290/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
+                `https://localhost:7290/api/GetAllChecklistsByUserId?id=${currentUser?.id}`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
@@ -108,6 +109,7 @@ const CheckListContextProvider = ({
             console.error(error)
             throw error
         }
+        
     }
 
     useEffect(() => {
@@ -127,7 +129,7 @@ const CheckListContextProvider = ({
                 console.error(error)
                 console.log(setUserIdCheckList)
             })
-    }, [refreshList])
+    }, [refreshList, currentUser])
 
     useEffect(() => {
         fetchCheckListUserId()

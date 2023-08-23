@@ -44,10 +44,10 @@ export const MyCheckLists = () => {
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { userIdCheckList } = useContext(CheckListContext)
+    const { userIdCheckList } = useCheckListContext()
 
     const [activeRow, setActiveRow] = useState(false)
-
+console.log(userIdCheckList)
     return (
         <>
             <BackgroundWrap>
@@ -56,13 +56,13 @@ export const MyCheckLists = () => {
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
-                                    <Styledh3>Name</Styledh3>
+                                    <Styledh3>Title</Styledh3>
+                                </HeadCell>
+                                <HeadCell>
+                                    <Styledh3>Submitted to</Styledh3>
                                 </HeadCell>
                                 <HeadCell>
                                     <Styledh3>Status</Styledh3>
-                                </HeadCell>
-                                <HeadCell>
-                                    <Styledh3>Last Update</Styledh3>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>

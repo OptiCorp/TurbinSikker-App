@@ -32,7 +32,7 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
-
+console.log(userIdCheckList)
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(userIdCheckList.id)}>

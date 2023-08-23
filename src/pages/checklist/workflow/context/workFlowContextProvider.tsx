@@ -34,9 +34,11 @@ type CheckList = {
     id: string
     lastName: string
     status: number
+    title: string
     userRoleId: string
     username: string
-    createdByUser: CreatedByUser[]
+    createdByUser: CreatedByUser
+    createdDate: string
 }
 
 export type WorkFlow = {
@@ -45,18 +47,31 @@ export type WorkFlow = {
     userId: string
     status: number | null
     updateDate: string
-    checklists: CheckList[]
+    formattedUpdateDate: string
+    checklist: CheckList
+}
+
+export type AllWorkFlows = {
+    id: string
+    checklistId: string
+    userId: string
+    status: number | null
+    updatedDate: string
+    formattedUpdateDate: string
+    checklist: CheckList
 }
 
 type WorkflowContext = {
     WorkFlows: WorkFlow[]
     checklist?: CheckList
     testData?: string
+    allWorkFlows: AllWorkFlows[]
 }
 
 const postsContextDefaultValue: WorkflowContext = {
     WorkFlows: [],
     testData: '',
+    allWorkFlows: [],
 }
 
 const WorkflowContext = createContext<WorkflowContext>(postsContextDefaultValue)
@@ -70,9 +85,13 @@ const WorkflowContextProvider = ({
     const { openSnackbar } = useContext(SnackbarContext)
     const { currentUser } = useUserContext()
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
-    const [checklistData, setChecklistData] = useState<CheckListEntity[]>([])
+    const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [date, setDate] = useState<string>()
     const [testData, setTestData] = useState<string>()
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString)
+        return date.toLocaleDateString('en-GB')
+    }
 
     useEffect(() => {
         const fetchCheckListWorkFlow = async () => {
@@ -83,7 +102,10 @@ const WorkflowContextProvider = ({
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
                 const data = (await res.json()) as WorkFlow[]
-
+                data.map((item) => ({
+                    ...item,
+                    formattedUpdateDate: formatDate(item.updateDate),
+                }))
                 setChecklistWorkFlow(data)
             } catch (error) {
                 console.error('Error fetching checklist workflow:', error)
@@ -93,14 +115,25 @@ const WorkflowContextProvider = ({
     }, [currentUser])
 
     useEffect(() => {
-        checklistWorkFlows.forEach((workFlow) => {
-            workFlow.checklists.forEach((checklist) => {
-                const createdBy = checklist.createdBy
-                // Do something with the createdBy value
-                setTestData(createdBy)
-            })
-        })
-    }, [])
+        const fetchAllCheckListWorkFlow = async () => {
+            try {
+                const res = await fetch(
+                    `https://localhost:7290/api/GetAllChecklistWorkflows`
+                )
+                if (!res.ok)
+                    throw new Error('Failed with HTTP code ' + res.status)
+                const data = (await res.json()) as AllWorkFlows[]
+                data.map((item) => ({
+                    ...item,
+                    formattedUpdateDate: formatDate(item.updatedDate),
+                }))
+                setAllWorkFlows(data)
+            } catch (error) {
+                console.error('Error fetching checklist workflow:', error)
+            }
+        }
+        fetchAllCheckListWorkFlow()
+    }, [currentUser])
 
     return (
         // the Provider gives access to the context to its children
@@ -108,6 +141,7 @@ const WorkflowContextProvider = ({
             value={{
                 WorkFlows: checklistWorkFlows,
                 testData: testData,
+                allWorkFlows: allWorkFlows,
             }}
         >
             {children}
