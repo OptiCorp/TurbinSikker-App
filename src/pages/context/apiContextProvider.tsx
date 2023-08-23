@@ -140,8 +140,8 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedTask, setSelectedTask] = useState("");
   const [category, setCategory] = useState<Category[]>([]);
-  const { idToken } = useAuth();
-
+  const { idToken, accessToken } = useAuth();
+  console.log("idtoken: ", idToken);
   const handleCategorySelect = (selectedCategory: string) => {
     setSelectedOption(selectedCategory);
   };
@@ -154,6 +154,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { openSnackbar } = useContext(SnackbarContext);
 
   const getUsers = async () => {
+
     const res = await fetch("https://turbinsikker-api.azurewebsites.net/api/GetAllUsersAdmin",
     {
       method: "GET",
@@ -177,7 +178,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     getUsers();
-  }, [newUserFunc, refreshUsers]);
+  }, [newUserFunc, refreshUsers, idToken]);
 
   const fetchCheckLists = async () => {
     const res = await fetch(`http://20.251.37.226:8080/api/GetAllChecklists`);
@@ -192,7 +193,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [refreshCheckLists]);
 
   const handleSubmit = async (data: { title: string }) => {
-    const res = await fetch(`http://20.251.37.226:8080/api/AddChecklist`, {
+    const res = await fetch(`https://localhost:7290/api/AddChecklist`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${idToken}`,
@@ -200,7 +201,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
       },
       body: JSON.stringify({
         title: data.title,
-        CreatedBy: "66e88e41-aa49-4bd4-aec4-b08cb553ee95",
+        CreatedBy: "b2148526-26d1-4ff9-9539-f78bfd5c7720",
       }),
     });
 
