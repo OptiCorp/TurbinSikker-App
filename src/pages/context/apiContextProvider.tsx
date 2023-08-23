@@ -154,7 +154,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { openSnackbar } = useContext(SnackbarContext);
 
   const getUsers = async () => {
-    const res = await fetch("turbinsikker-app.azurewebsites.net/api/GetAllUsers");
+    const res = await fetch("turbinsikker-api.azurewebsites.net/api/GetAllUsers");
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
     const data = await res.json();
     setResult(data);
