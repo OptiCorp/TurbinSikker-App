@@ -1,62 +1,63 @@
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
-import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { SelectComponent } from './SelectComponent'
 import { SendBackgroundWrap } from './styles'
+import { useNavigate } from 'react-router'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 
-export type SendingFormValuesEntity = {
-    id: string
-    checklistId: string
-    userId: {
-        value: string
-        label: string
-    }[]
-    status: any
-    updatedDate: string
-    checklist: CheckListEntity[]
-}
+// export type SendingFormValuesEntity = {
+   
+//     checklistId: string
+//     userId: string
+  
+// }
 
 export const SendCheckList = () => {
-    const methods = useForm<SendingFormValuesEntity>()
-    const [positiveOpen, setPositiveOpen] = useState(false)
-    const { handleSubmit } = methods
-    const { idToken } = useAuth()
-    const { openSnackbar } = useContext(SnackbarContext)
-    const { currentUser } = useUserContext()
-    const handleOpen = () => {
-        setPositiveOpen(true)
-    }
-    const clearAndClose = () => {
-        setPositiveOpen(false)
-    }
+    // const methods = useForm<SendingFormValuesEntity>()
+    // const [positiveOpen, setPositiveOpen] = useState(false)
+    // const { handleSubmit } = methods
+    const navigate = useNavigate()
+    // const { idToken } = useAuth()
+   
 
-    const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
-        console.log('submitting', data)
-        const res = await fetch(
-            `https://localhost:7290/api/CreateChecklistWorkFlow`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${idToken}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    checklistId: data.checklistId,
-                    userId: data.userId.map((x) => x.value),
-                }),
-            }
-        )
+   
 
-        if (openSnackbar) {
-            openSnackbar('Checklist sendt!')
-        }
-    }
+    const {methods, onSubmit, handleOpen,clearAndClose,positiveOpen} = useAddWorkFlowForm()
+    const {handleSubmit} = methods
+    // const { refreshList, setRefreshList } = useCheckListContext()
+
+    // const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
+
+    //     const res = await fetch(
+    //         `https://localhost:7290/api/CreateChecklistWorkFlow`,
+    //         {
+    //             method: 'POST',
+    //             headers: {
+    //                 Authorization: `Bearer ${idToken}`,
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 checklistId: data.checklistId,
+    //                 userId: data.userId
+    //             }),
+    //         }
+    //     )
+    //     if (res.ok) {
+    //         setRefreshList((prev) => !prev)
+    //     }
+    //     setPositiveOpen(false)
+    //     navigate('/Checklist')
+
+
+    //     if (openSnackbar) {
+    //         openSnackbar('Checklist sendt!')
+    //     }
+    // }
     return (
         <>
             <FormProvider {...methods}>
@@ -72,6 +73,7 @@ export const SendCheckList = () => {
                         SecondButtonMessage="Send"
                         type="button"
                         secondOnClick={handleOpen}
+                    onClick={() => { navigate(-1)}}
                     />
                     <Dialog open={positiveOpen}>
                         <Dialog.Header>

@@ -1,4 +1,4 @@
-import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
+import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'

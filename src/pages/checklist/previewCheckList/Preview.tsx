@@ -1,4 +1,4 @@
-import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
+import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
 import { useNavigate } from 'react-router-dom'

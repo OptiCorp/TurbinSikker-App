@@ -33,64 +33,62 @@ export function RoutesContainer() {
     }
     return (
         <>
-            <Routes>
-                <Route element={<Layout />}>
-                    <Route path="/" element={<LandingPage />} />
+            <WorkflowContextProvider>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route path="/" element={<LandingPage />} />
 
-                    <Route path="/Profile" element={<Profile />} />
+                        <Route path="/Profile" element={<Profile />} />
 
-                    <Route element={<IndexCheckLists />}>
+                        <Route element={<IndexCheckLists />}>
+                            <Route path="/CheckList" element={<CheckList />} />
+                            <Route
+                                path="/MyChecklists"
+                                element={<MyCheckLists />}
+                            />
+                        </Route>
+
                         <Route
-                            path="/CheckList"
+                            path="/PreviewCheckList/:id"
+                            element={<PreviewCheckList />}
+                        />
+
+                        <Route
+                            path="/EditCheckList/:id"
                             element={
-                                <WorkflowContextProvider>
-                                    <CheckList />
-                                </WorkflowContextProvider>
+                                <EditCheckListContextProvider>
+                                    <TaskCategoryContextProvider>
+                                        <EditCheckList />
+                                    </TaskCategoryContextProvider>
+                                </EditCheckListContextProvider>
                             }
                         />
                         <Route
-                            path="/MyChecklists"
-                            element={<MyCheckLists />}
+                            path="/SendCheckList"
+                            element={<SendCheckList />}
                         />
+                        <Route
+                            path="/SendCheckList/:id"
+                            element={<SendCheckList />}
+                        />
+
+                        <Route path="/ListUsers" element={<ListUsers />} />
+                        <Route
+                            path="/add-user"
+                            element={
+                                <ProtectedRoute>
+                                    <AddUser />
+                                </ProtectedRoute>
+                            }
+                        />
+                        {/*   <Route path="/AddUser" element={<AddUser />} /> */}
+                        <Route path="/EditUser/:id" element={<AddUser />} />
+                        <Route path="/User/:id" element={<AddUser />} />
+                        <Route path="/404" element={<PageNotFound />} />
+                        <Route path="*" element={<Navigate to="404" />} />
                     </Route>
-
-                    <Route
-                        path="/PreviewCheckList/:id"
-                        element={<PreviewCheckList />}
-                    />
-
-                    <Route
-                        path="/EditCheckList/:id"
-                        element={
-                            <EditCheckListContextProvider>
-                                <TaskCategoryContextProvider>
-                                    <EditCheckList />
-                                </TaskCategoryContextProvider>
-                            </EditCheckListContextProvider>
-                        }
-                    />
-                    <Route path="/SendCheckList" element={<SendCheckList />} />
-                    <Route
-                        path="/SendCheckList/:id"
-                        element={<SendCheckList />}
-                    />
-
-                    <Route path="/ListUsers" element={<ListUsers />} />
-                    <Route
-                        path="/add-user"
-                        element={
-                            <ProtectedRoute>
-                                <AddUser />
-                            </ProtectedRoute>
-                        }
-                    />
-                    {/*   <Route path="/AddUser" element={<AddUser />} /> */}
-                    <Route path="/EditUser/:id" element={<AddUser />} />
-                    <Route path="/User/:id" element={<AddUser />} />
-                    <Route path="/404" element={<PageNotFound />} />
-                    <Route path="*" element={<Navigate to="404" />} />
-                </Route>
-            </Routes>
+                </Routes>
+            </WorkflowContextProvider>
         </>
     )
 }

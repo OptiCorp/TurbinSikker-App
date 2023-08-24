@@ -9,7 +9,12 @@ import {
 } from '../workflow/context/workFlowContextProvider'
 import { CheckListUserRow } from './CheckListRowAll'
 import { ReceivedCheckLists } from './receivedCheckLists'
-import { ListWrapperCheckL, StyledTableh3, Wrap } from './styles'
+import {
+    ListWrapperCheckL,
+    StyledHeadContents,
+    StyledHeadTitle,
+    Wrap,
+} from './styles'
 
 export const CheckList = () => {
     const { allCheckList } = useContext(CheckListContext)
@@ -17,7 +22,7 @@ export const CheckList = () => {
 
     const text = () => {
         if (currentUser?.userRole.name === 'Leader') {
-            return <>Submitted to</>
+            return <>Assigned</>
         } else {
             return <>Submitted by</>
         }
@@ -41,15 +46,17 @@ export const CheckList = () => {
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
-                                    <StyledTableh3>Title </StyledTableh3>
+                                    <StyledHeadTitle>Title </StyledHeadTitle>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledTableh3>{text()}</StyledTableh3>
+                                    <StyledHeadContents>
+                                        {text()}
+                                    </StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledTableh3>
+                                    <StyledHeadContents>
                                         {statusText()}
-                                    </StyledTableh3>
+                                    </StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
