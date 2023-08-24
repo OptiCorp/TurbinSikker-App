@@ -52,9 +52,11 @@ export function AuthProvider({
     if (inProgress === InteractionStatus.None) {
       const accessTokenRequest = {
         scopes: [
+          "turbinsikker-api.azurewebsites.net/user.read",
           "user.read",
           "email",
           "api://c1b6fd67-db9e-4a25-a4ad-9aec1fe3ec64/user.read",
+          "api://b1bc9eb7-71fc-43c4-a888-ae73c72be014/ReadWrite"
         ],
         account: accounts[0],
       };
