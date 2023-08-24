@@ -8,6 +8,7 @@ import { useAddTaskForm } from './useAddTaskForm'
 export const AddTasks = () => {
     const { methods, onSubmit } = useAddTaskForm()
     const { handleSubmit } = methods
+    
     return (
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>

@@ -39,7 +39,8 @@ export const useAddTaskForm = () => {
             openSnackbar('Task added!')
         }
     }
-
+    useEffect(() => {
+        if (checkListId) return 
     const fetchAllCheckListsId = async () => {
         const res = await fetch(
             `https://localhost:7290/api/GetChecklist?id=${id}`
@@ -60,7 +61,7 @@ export const useAddTaskForm = () => {
         setCheckListId(data)
     }
 
-    useEffect(() => {
+
         fetchAllCheckListsId()
     }, [refreshList])
 

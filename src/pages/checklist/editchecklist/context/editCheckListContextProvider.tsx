@@ -61,11 +61,11 @@ export const postsContextDefaultValue: ContextType = {
     setIsOpenNew: () => {},
 }
 
-const editCheckListContext = createContext<ContextType>(
+const EditCheckListContext = createContext<ContextType>(
     postsContextDefaultValue
 )
 
-const editCheckListContextProvider = ({
+const EditCheckListContextProvider = ({
     children,
 }: {
     children: React.ReactNode
@@ -215,14 +215,14 @@ const editCheckListContextProvider = ({
 
     return (
         // the Provider gives access to the context to its children
-        <editCheckListContext.Provider value={memoedValue}>
+        <EditCheckListContext.Provider value={memoedValue}>
             {children}
-        </editCheckListContext.Provider>
+        </EditCheckListContext.Provider>
     )
 }
 
 function useEditCheckListContext() {
-    const context = useContext(editCheckListContext)
+    const context = useContext(EditCheckListContext)
     if (!context) {
         throw new Error('error')
     }
@@ -230,7 +230,7 @@ function useEditCheckListContext() {
 }
 
 export {
-    editCheckListContext,
-    editCheckListContextProvider,
+    EditCheckListContext,
+    EditCheckListContextProvider,
     useEditCheckListContext,
 }

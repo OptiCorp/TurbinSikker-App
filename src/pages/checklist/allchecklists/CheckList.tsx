@@ -1,48 +1,38 @@
 import { Table } from '@equinor/eds-core-react'
-import { useContext, useEffect, useState } from 'react'
-import {
-    UserContext,
-    useUserContext,
-} from '../../../pages/users/context/userContextProvider'
+import React, { useContext, useEffect, useState } from 'react'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { CheckListContext } from '../../context/CheckListContextProvider'
 import { HeadCell } from '../checkListID/styles'
+import {
+    WorkFlow,
+    useWorkflowContext,
+} from '../workflow/context/workFlowContextProvider'
 import { CheckListUserRow } from './CheckListRowAll'
 import { ReceivedCheckLists } from './receivedCheckLists'
 import { ListWrapperCheckL, StyledTableh3, Wrap } from './styles'
 
 export const CheckList = () => {
     const { allCheckList } = useContext(CheckListContext)
-    const { currentUser } = useContext(UserContext)
+    const { currentUser } = useUserContext()
 
-    type IWorkFlow = {
-        id: string
-        checklistId: string
-        userId: string
-        status: number | null
-        updatedDate: string
+    const text = () => {
+        if (currentUser?.userRole.name === 'Leader') {
+            return <>Submitted to</>
+        } else {
+            return <>Submitted by</>
+        }
     }
 
-    const [checklistWorkFlow, setChecklistWorkFlow] = useState<IWorkFlow[]>([])
-
-    useEffect(() => {
-        const fetchCheckListWorkFlow = async () => {
-            try {
-                const res = await fetch(
-                    `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
-                )
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
-                const data = await res.json()
-
-                setChecklistWorkFlow(data)
-            } catch (error) {
-                console.error('Error fetching checklist workflow:', error)
-            }
+    const statusText = () => {
+        if (currentUser?.userRole.name === 'Leader') {
+            return <>Status</>
+        } else {
+            return <>Status</>
         }
-        fetchCheckListWorkFlow()
-    }, [currentUser])
+    }
 
-    console.log(checklistWorkFlow)
+    const { WorkFlows, allWorkFlows } = useWorkflowContext()
+
     return (
         <>
             <Wrap>
@@ -51,35 +41,34 @@ export const CheckList = () => {
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
-                                    <StyledTableh3>Title</StyledTableh3>
+                                    <StyledTableh3>Title </StyledTableh3>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledTableh3>Created by</StyledTableh3>
+                                    <StyledTableh3>{text()}</StyledTableh3>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledTableh3>Date received</StyledTableh3>
+                                    <StyledTableh3>
+                                        {statusText()}
+                                    </StyledTableh3>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
                         <Table.Body>
                             {currentUser?.userRole.name === 'Inspector' ? (
                                 <>
-                                    {checklistWorkFlow?.map(
-                                        (checklistWorkFlow) => (
-                                            <ReceivedCheckLists
-                                                checklistWorkFlow={
-                                                    checklistWorkFlow
-                                                }
-                                            />
-                                        )
-                                    )}
+                                    {WorkFlows.map((WorkFlow) => (
+                                        <ReceivedCheckLists
+                                            WorkFlow={WorkFlow}
+                                            key={WorkFlow.id}
+                                        />
+                                    ))}
                                 </>
                             ) : (
                                 <>
-                                    {allCheckList?.map((allCheckList) => (
+                                    {allWorkFlows.map((allWorkFlow) => (
                                         <CheckListUserRow
-                                            allCheckList={allCheckList}
-                                            key={allCheckList.id}
+                                            allWorkFlow={allWorkFlow}
+                                            key={allWorkFlow.id}
                                         />
                                     ))}
                                 </>

@@ -15,14 +15,16 @@ const App = () => {
         <div className="wrapper">
             {isAuthenticated && (
                 <AuthProvider>
-                    <CheckListContextProvider>
+                  
                         <UserContextProvider>
+                        <CheckListContextProvider>
                             <SnackbarContextProvider>
                                 <RoutesContainer />
                                 <SnackbarComponent />
                             </SnackbarContextProvider>
+                            </CheckListContextProvider>
                         </UserContextProvider>
-                    </CheckListContextProvider>
+                  
                 </AuthProvider>
             )}
             {!isAuthenticated && <Login />}

@@ -1,72 +1,47 @@
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
-import { FunctionComponent, useEffect, useState } from 'react'
-
 import { assignment_user } from '@equinor/eds-icons'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
-
 import { StyledTableRow } from '../checkListID/styles'
+import {
+    WorkFlow,
+    useWorkflowContext,
+} from '../workflow/context/workFlowContextProvider'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 
 interface CheckListRowProps {
-    checklistWorkFlow: IWorkFlow
+    WorkFlow: WorkFlow
 }
-type IWorkFlow = {
-    id: string
-    checklistId: string
-    userId: string
-    status: number | null
-    updatedDate: string
-}
+
 export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
-    checklistWorkFlow,
+    WorkFlow,
 }) => {
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')
     }
 
-    const formattedUpdatedDate = formatDate(checklistWorkFlow.updatedDate)
-
     const navigate = useNavigate()
 
     const clickHandler = (id: string | undefined) => {
         navigate(`/PreviewCheckList/${id}`)
     }
-    const [checklistData, setChecklistData] = useState<CheckListEntity | null>()
 
-    const [date, setDate] = useState<string>()
+    const formattedCreatedDate = formatDate(WorkFlow.checklist.createdDate)
 
-    useEffect(() => {
-        const fetchChecklistData = async () => {
-            console.log(checklistWorkFlow)
-            if (!checklistWorkFlow.checklistId) return
-            try {
-                const res = await fetch(
-                    `https://localhost:7290/api/GetChecklist?id=${checklistWorkFlow.checklistId}`
-                )
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
-                const data = await res.json()
-
-                setChecklistData(data)
-                setDate(formatDate(data.createdDate))
-            } catch (error) {
-                console.error('Error fetching checklist data:')
-            }
-        }
-
-        fetchChecklistData()
-    }, [])
-
+    const formattedUpdatedDate = WorkFlow.formattedUpdateDate
+        ? formatDate(WorkFlow.formattedUpdateDate)
+        : 'N/A'
+    console.log(WorkFlow.formattedUpdateDate)
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(checklistData?.id)}>
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.checklistId)}>
                 <StyledTableCellCheckL>
                     <CellContent>
                         <Typography variant="body_short_bold">
-                            {checklistData?.title}
+                            {WorkFlow.checklist.title}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
@@ -76,14 +51,16 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
                             style={{
                                 minWidth: '120px',
                                 display: 'flex',
-
+                                justifyContent: 'center',
                                 alignContent: 'center',
                             }}
                         >
                             <Icon
                                 data={assignment_user}
                                 color="#243746"
-                                style={{ height: '15px' }}
+                                style={{
+                                    height: '15px',
+                                }}
                             />
                             <Typography
                                 variant="caption"
@@ -92,10 +69,11 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
                                 }}
                                 style={{}}
                             >
-                                {checklistData?.user.firstName}{' '}
-                                {checklistData?.user.lastName}
+                                {WorkFlow.checklist.createdByUser.firstName}{' '}
+                                {WorkFlow.checklist.createdByUser.lastName}
                             </Typography>
                         </Chip>
+
                         <Typography
                             variant="caption"
                             token={{
@@ -104,14 +82,16 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
                             }}
                             style={{ gridRow: '3/3' }}
                         >
-                            {date}
+                            {formattedCreatedDate}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        {checklistWorkFlow.status === 0 ? (
-                            <StyledChip variant="active">Received</StyledChip>
+                        {WorkFlow.status === null ? (
+                            <StyledChip variant="active">
+                                Not yet Completed
+                            </StyledChip>
                         ) : (
                             <StyledChip variant="error">Inactive</StyledChip>
                         )}
@@ -123,7 +103,7 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
                             }}
                             style={{ gridRow: '3/3' }}
                         >
-                            {formattedUpdatedDate}
+                            {WorkFlow.formattedUpdateDate}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
