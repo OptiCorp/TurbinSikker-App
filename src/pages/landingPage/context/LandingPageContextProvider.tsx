@@ -52,7 +52,7 @@ export function AuthProvider({
     if (inProgress === InteractionStatus.None) {
       const accessTokenRequest = {
         scopes: [
-          "user.read",
+          "User.Read",
           "email",
           "api://c1b6fd67-db9e-4a25-a4ad-9aec1fe3ec64/User.Read",
         ],
