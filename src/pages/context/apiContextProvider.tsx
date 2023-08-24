@@ -158,9 +158,9 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const res = await fetch("https://turbinsikker-api.azurewebsites.net/api/GetAllUsersAdmin",
     {
       method: "GET",
-      
+      mode: "no-cors",
       headers: {
-        Authorization: `Bearer ${idToken}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       }}
     );
@@ -178,7 +178,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     getUsers();
-  }, [newUserFunc, refreshUsers, idToken]);
+  }, [newUserFunc, refreshUsers, idToken, accessToken]);
 
   const fetchCheckLists = async () => {
     const res = await fetch(`http://20.251.37.226:8080/api/GetAllChecklists`);
