@@ -162,6 +162,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
       headers: {
         Authorization: `Bearer ${idToken}`,
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": '*'
       }}
     );
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
