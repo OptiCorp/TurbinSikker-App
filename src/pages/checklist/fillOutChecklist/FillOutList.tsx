@@ -1,39 +1,36 @@
 import CustomDialog from '@components/modal/useModalHook'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import {
+
     CategoryName,
     Container,
     PreviewListPoints,
     PreviewListWrap,
-    StyledCard,
-} from '../../previewCheckList/styles'
-import { useEditCheckListContext } from '../context/editCheckListContextProvider'
-import { EditListPoints } from '../styles'
+    
+} from '../previewCheckList/styles'
 
+import { Card, Icon, Switch } from '@equinor/eds-core-react'
+import { CustomCard, CustomCategoryName, CustomTaskField, FillOutWrap, StyledCardHeader, StyledSwitch, TaskContainer } from './styles'
+import { arrow_drop_down } from '@equinor/eds-icons' 
 type Props = {
     tasks: CheckListEntity | null
     sortedTasks: CheckListEntity['tasks']
+
 }
 
-export const EditList = (props: Props) => {
+export const FillOutList = (props: Props) => {
     let lastCategoryName = ''
     const [content, setContent] = useState('')
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { task, setTask, updateCheckListTask } = useEditCheckListContext()
-
-    const handleSubmit = () => {
-        updateCheckListTask({
-            description: content,
-            categoryId: task?.categoryId ?? '',
-            taskId: task?.id ?? '',
-        })
-        setDialogShowing(false)
-    }
+  
+    const [check, setCheck] = useState(true);
+    const [isShowMore, setIsShowMore] = useState(true);
+    const toggleReadMore = () => setIsShowMore(show => !show);
 
     return (
         <>
-            <PreviewListWrap>
+            <FillOutWrap>
                 {props.sortedTasks.map((task) => {
                     const categoryName =
                         task.category.name !== lastCategoryName
@@ -44,32 +41,32 @@ export const EditList = (props: Props) => {
 
                     return (
                         <>
-                            <Container>
-                                <CategoryName>{categoryName}</CategoryName>
-                                <StyledCard
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                >
-                                    <PreviewListPoints
+                         
+                                <CustomCard>
+                                
+                                <StyledSwitch onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        setCheck(e.target.checked);
+      }} checked={check} aria-label="" style={{width:'0', height:'0', margin:'0 auto'}}  size="small"  />
+
+                             <CustomCategoryName>{categoryName}</CustomCategoryName>         
+                             <CustomTaskField
+                            
                                         label=""
                                         key={task.id}
                                         id="storybook-multi-readonly"
-                                        placeholder={task.description}
+                                        defaultValue={task.description}
                                         multiline
-                                        rows={3}
-                                        onClick={() => {
-                                            setTask(task)
-                                            setDialogShowing(true)
-                                        }}
+                                        rows={2}
+                                        readOnly
+                                        helperText={task.description.length >100 ? "see more" : '  '} helperIcon={task.description.length >100 ? <Icon data={arrow_drop_down} color='#007079' title='arrow_drop_down' onClick={toggleReadMore}/> : null}
                                     />
-                                </StyledCard>
-                            </Container>
+                                </CustomCard>
+                          
                         </>
                     )
                 })}
-            </PreviewListWrap>
-            <CustomDialog
+            </FillOutWrap>
+            {/* <CustomDialog
                 isOpen={dialogShowing}
                 negativeButtonOnClick={() => setDialogShowing(false)}
                 title="Edit task"
@@ -89,7 +86,7 @@ export const EditList = (props: Props) => {
                         setContent(event.target.value)
                     }}
                 />
-            </CustomDialog>
+            </CustomDialog> */}
         </>
     )
 }

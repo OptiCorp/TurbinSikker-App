@@ -24,7 +24,7 @@ export const CheckList = () => {
         if (currentUser?.userRole.name === 'Leader') {
             return <>Assigned</>
         } else {
-            return <>Submitted by</>
+            return <>Assigned by</>
         }
     }
 
@@ -37,7 +37,7 @@ export const CheckList = () => {
     }
 
     const { WorkFlows, allWorkFlows } = useWorkflowContext()
-
+    console.log(WorkFlows)
     return (
         <>
             <Wrap>

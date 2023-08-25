@@ -26,7 +26,7 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
     const navigate = useNavigate()
 
     const clickHandler = (id: string | undefined) => {
-        navigate(`/PreviewCheckList/${id}`)
+        navigate(`/FillOutCheckList/${id}`)
     }
 
     const formattedCreatedDate = formatDate(WorkFlow.checklist.createdDate)
@@ -34,7 +34,7 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
     const formattedUpdatedDate = WorkFlow.formattedUpdateDate
         ? formatDate(WorkFlow.formattedUpdateDate)
         : 'N/A'
-    console.log(WorkFlow.formattedUpdateDate)
+    console.log('asdsad', WorkFlow.userId)
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.checklistId)}>
@@ -52,7 +52,9 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
                                 minWidth: '120px',
                                 display: 'flex',
                                 justifyContent: 'center',
+
                                 alignContent: 'center',
+                                margin: '0 auto',
                             }}
                         >
                             <Icon
@@ -101,7 +103,6 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
                                 textAlign: 'center',
                                 fontSize: '0.8rem',
                             }}
-                            style={{ gridRow: '3/3' }}
                         >
                             {WorkFlow.formattedUpdateDate}
                         </Typography>

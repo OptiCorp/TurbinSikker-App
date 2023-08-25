@@ -11,6 +11,7 @@ import { SendCheckList } from '../pages/checklist/sendchecklist'
 import { Children } from 'react'
 import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
+import { FillOutCheckList } from '../pages/checklist/fillOutChecklist'
 import { WorkflowContextProvider } from '../pages/checklist/workflow/context/workFlowContextProvider'
 import { LandingPage } from '../pages/landingPage/LandingPage'
 import useAuth from '../pages/landingPage/context/LandingPageContextProvider'
@@ -51,6 +52,11 @@ export function RoutesContainer() {
                         <Route
                             path="/PreviewCheckList/:id"
                             element={<PreviewCheckList />}
+                        />
+
+                        <Route
+                            path="/FillOutCheckList/:id"
+                            element={<FillOutCheckList />}
                         />
 
                         <Route
