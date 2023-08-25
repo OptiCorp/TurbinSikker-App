@@ -24,16 +24,23 @@ export const HeadCell = styled(Table.Cell)`
     width: 300px;
 `
 
-export const Styledh3 = styled.h3`
+export const StyledHeadContents = styled.h3`
     height: 10px;
     display: inline;
     text-align: center;
     width: 100%;
 `
+export const StyledHeadTitle = styled.h3`
+    height: 10px;
+    display: inline;
+    text-align: left;
+    width: 100%;
+`
 
 export const MyCheckListCell = styled(Table.Cell)`
     padding-right: 0;
-    padding-bottom: 1rem;
+    
+    padding-bottom: 1.5rem;
 `
 
 export const StyledTableBody = styled(Table.Body)`
@@ -51,15 +58,15 @@ export const StyledTableRow = styled(Table.Row)`
 `
 
 export const CellContentMyList = styled.div`
-    font-weight: 600;
-    margin: 10px 0;
+     font-weight: 600;
 
-    display: grid;
-    grid-row-gap: 20px;
-    justify-items: center;
-    grid-template-rows: 1fr auto 0;
-    text-align: center;
-    grid-template-columns: minmax(100px, 1fr);
+
+     display: flex;
+    flex-direction: column;
+    align-items: left;
+    min-height: 50px;
+    justify-content: space-around;
+    margin: 10px 0;
 `
 export const ButtonWrap = styled.div`
     display: flex;

@@ -10,7 +10,7 @@ import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useLocation, useNavigate, useParams } from 'react-router'
 
 import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
-import { useAddTaskForm } from '../../../../components/addtasks/useAddTaskForm'
+import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../context/models/CheckListEntity'
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'

@@ -6,6 +6,7 @@ import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
+import { StyledChip } from '../allchecklists/styles'
 
 interface CheckListRowProps {
     userIdCheckList: ICheckListUserID
@@ -38,19 +39,17 @@ console.log(userIdCheckList)
             <StyledTableRow onClick={() => clickHandler(userIdCheckList.id)}>
                 <MyCheckListCell>
                     <CellContentMyList>
-                        <Typography variant="body_short_bold">
+                        <Typography variant="body_long_bold" >
                             {userIdCheckList.title}
                         </Typography>
 
                         <Typography
                             variant="caption"
                             token={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
-                            }}
-                            style={{
-                                gridRow: '3/3',
-                            }}
+                               
+                                fontSize: '1em',
+                            }} style={{height:'0px', minWidth:'100px'}}
+                           
                         >
                             Created {formattedCreatedDate}
                         </Typography>
@@ -58,12 +57,14 @@ console.log(userIdCheckList)
                 </MyCheckListCell>
                 <MyCheckListCell>
                     <CellContentMyList>
-                        <Chip
+                        <StyledChip
                             style={{
-                                paddingLeft: '0',
-                                lineHeight: '0',
+                                minWidth: '100px',
+                                display: 'flex',
                                 margin: '0 auto',
-                                gridRow: '1/1',
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                              
                             }}
                         >
                             <Icon
@@ -71,20 +72,17 @@ console.log(userIdCheckList)
                                 color="#243746"
                                 style={{ height: '15px' }}
                             />
-                            submitted to 0 inspectors
-                        </Chip>
-                        <Typography
+                               <Typography
                             variant="caption"
                             token={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
+                             
+                                fontSize: '1rem',
                             }}
-                            style={{
-                                gridRow: '3/3',
-                            }}
-                        >
-                            0/0 delivered
-                        </Typography>
+                           
+                        >  0 inspectors</Typography>
+                          
+                        </StyledChip>
+                    
                     </CellContentMyList>
                 </MyCheckListCell>
 
@@ -92,7 +90,7 @@ console.log(userIdCheckList)
                     <CellContentMyList>
                         <Chip
                             variant="active"
-                            style={{ margin: '0 auto', gridRow: '1/1' }}
+                            style={{ margin: '0 auto'}}
                         >
                             {userIdCheckList.status}
                         </Chip>
@@ -102,7 +100,7 @@ console.log(userIdCheckList)
                                 textAlign: 'center',
                                 fontSize: '0.8rem',
                             }}
-                            style={{ gridRow: '3/3' }}
+                           
                         >
                             {formattedUpdatedDate}
                         </Typography>

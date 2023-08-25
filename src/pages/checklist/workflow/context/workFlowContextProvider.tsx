@@ -136,7 +136,6 @@ const WorkflowContextProvider = ({
     }, [currentUser])
 
     return (
-        // the Provider gives access to the context to its children
         <WorkflowContext.Provider
             value={{
                 WorkFlows: checklistWorkFlows,

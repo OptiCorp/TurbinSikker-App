@@ -16,7 +16,9 @@ import {
     HeadCell,
     ListWrapperCheckMyList,
     MakeTitleField,
-    Styledh3,
+    StyledHeadContents,
+    StyledHeadTitle,
+  
 } from './styles'
 
 export const MyCheckLists = () => {
@@ -56,13 +58,13 @@ console.log(userIdCheckList)
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
-                                    <Styledh3>Title</Styledh3>
+                                    <StyledHeadTitle>Title</StyledHeadTitle>
                                 </HeadCell>
                                 <HeadCell>
-                                    <Styledh3>Submitted to</Styledh3>
+                                    <StyledHeadContents>Assigned</StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
-                                    <Styledh3>Status</Styledh3>
+                                    <StyledHeadContents>Status</StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
@@ -105,8 +107,7 @@ console.log(userIdCheckList)
                     }}
                     isShown={true}
                     SecondButtonMessage="Send Checklist"
-                    as="a"
-                    href="/SendCheckList/"
+                    
                 />
             )}
             <CustomDialog

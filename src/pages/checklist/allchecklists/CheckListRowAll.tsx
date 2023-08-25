@@ -2,13 +2,14 @@ import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { CheckListEntity } from '../../context/models/CheckListEntity'
 
-import { assignment_user } from '@equinor/eds-icons'
+import { assignment_user, wrap_text } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { StyledTableRow } from '../checkListID/styles'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 import { AllWorkFlows, WorkFlow } from '../workflow/context/workFlowContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { UserEntity } from 'src/pages/users/context/models/UserEntity'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 
 interface CheckListRowProps {
     allWorkFlow: AllWorkFlows
@@ -35,11 +36,11 @@ const [checklistData, setChecklistData] = useState<CheckListEntity | null>()
 const [date, setDate] = useState<string>()
 const [updateDate, setUpdateDate] = useState<string>()
 const [name, setName] = useState<string>()
-
+const { refreshList, setRefreshList } = useCheckListContext()
 useEffect(() => {
     const fetchChecklistData = async () => {
 
-
+       
         
     
         try {
@@ -63,7 +64,7 @@ useEffect(() => {
     }
   
     fetchChecklistData()
-}, [allWorkFlow, currentUser])
+}, [allWorkFlow, currentUser, refreshList])
     
 
 useEffect(() => {
@@ -89,47 +90,52 @@ const getUserName = async () => {
             <StyledTableRow onClick={() => clickHandler(allWorkFlow.checklistId)}>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography variant="body_short_bold">
+                        <Typography variant="body_long_bold">
                         {checklistData?.title}
+                        </Typography>
+                        <Typography
+                            variant="caption"
+                            token={{
+                               
+                                fontSize: '1em',
+                            }} style={{height:'0px', minWidth:'100px'}}
+                           
+                        >
+                            Created {date}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Chip
-                            style={{
-                                minWidth: '120px',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignContent: 'center',
-                            }}
-                        >
+                       <StyledChip>
+                      
                             <Icon
                                 data={assignment_user}
                                 color="#243746"
-                                style={{ height: '15px' }}
+                                style={{ height: '15px',}}
                             /> 
-                     
+                
                         <Typography
                             variant="caption"
                             token={{
                              
-                                fontSize: '0.8rem',
-                            }}
-                            style={{ gridRow: '3/3' }}
+                                fontSize: '1rem' 
+                            }} style={{  height:'1rem'}}
+                           
                         >
                              {name}
 
                              </Typography>
-                        </Chip>
+                        </StyledChip>
 
                              <Typography
                             variant="caption"
                             token={{
                                 textAlign: 'center',
-                                fontSize: '0.8rem',
+                                fontSize: '1em',
+                            
                             }}
-                            style={{ gridRow: '3/3' }}
+                        style={{height:'5px', minWidth:'100px'}}
                         >
    {formatDate(allWorkFlow.updatedDate)}</Typography>
                        
@@ -138,9 +144,9 @@ const getUserName = async () => {
                 <StyledTableCellCheckL>
                     <CellContent>
                         {allWorkFlow.status === null ? (
-                           <StyledChip variant="error">Not yet delivered</StyledChip> 
+                           <Chip style={{margin:'0 auto'}} variant="error">Waiting</Chip> 
                         ) : (
-                            <StyledChip variant="active">Ready for Review</StyledChip>
+                            <Chip variant="active">Ready for Review</Chip>
                         )}
                         <Typography
                             variant="caption"
@@ -148,7 +154,7 @@ const getUserName = async () => {
                                 textAlign: 'center',
                                 fontSize: '0.8rem',
                             }}
-                            style={{ gridRow: '3/3' }}
+                           
                         >
                  
                         </Typography>
