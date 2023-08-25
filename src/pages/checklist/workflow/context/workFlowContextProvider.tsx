@@ -97,7 +97,8 @@ const WorkflowContextProvider = ({
         const fetchCheckListWorkFlow = async () => {
             try {
                 const res = await fetch(
-                    `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
+                    'https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=634c61d6-ede8-49cf-ab70-ebc412de7499'
+                    // `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
@@ -112,7 +113,8 @@ const WorkflowContextProvider = ({
             }
         }
         fetchCheckListWorkFlow()
-    }, [currentUser])
+    }, [])
+    // }, [currentUser])
 
     useEffect(() => {
         const fetchAllCheckListWorkFlow = async () => {
@@ -133,7 +135,8 @@ const WorkflowContextProvider = ({
             }
         }
         fetchAllCheckListWorkFlow()
-    }, [currentUser])
+    }, [])
+    // }, [currentUser])
 
     return (
         <WorkflowContext.Provider

@@ -8,6 +8,7 @@ import { InfoHeader, Wrapper } from "../previewCheckList/styles"
 import { EditList } from "../editchecklist/EditList/EditList"
 import { AddPunchHeader, StyledCard, StyledCardHeader } from "./styles"
 import { FillOutList } from "./FillOutList"
+import { Form, FormProvider, useForm } from "react-hook-form"
 
 export const FillOutCheckList = () => {
     // const clickHandler = (id: string) => {
@@ -15,10 +16,11 @@ export const FillOutCheckList = () => {
     // }
     const { checkListId, sortedTasks } = useAddTaskForm()
     const navigate = useNavigate()
-    const {id} = useParams()
+    const methods = useForm()
     return (
         <>
-       
+       <FormProvider {...methods}>
+        <form>
                 <div style={{ backgroundColor: '#f0f3f3' }}>
                     {checkListId && (
                         <div key={checkListId.id}>
@@ -75,7 +77,7 @@ export const FillOutCheckList = () => {
                         />
                     )}
                 </div>
-        
+                </form></FormProvider>
         </>
     )
 }

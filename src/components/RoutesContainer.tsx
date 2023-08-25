@@ -22,16 +22,16 @@ import { ListUsers } from '../pages/users/listUsers/ListUsers'
 import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
 
 export function RoutesContainer() {
-    const { currentUser } = useUserContext()
+    // const { currentUser } = useUserContext()
 
-    const {} = useAuth()
+    // const {} = useAuth()
 
-    const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-        if (currentUser?.userRole.name === 'Inspector') {
-            return <Navigate to="/" replace />
-        }
-        return children
-    }
+    // const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    //     if (currentUser?.userRole.name === 'Inspector') {
+    //         return <Navigate to="/" replace />
+    //     }
+    //     return children
+    // }
     return (
         <>
             <WorkflowContextProvider>
@@ -82,9 +82,9 @@ export function RoutesContainer() {
                         <Route
                             path="/add-user"
                             element={
-                                <ProtectedRoute>
-                                    <AddUser />
-                                </ProtectedRoute>
+                                // <ProtectedRoute>
+                                <AddUser />
+                                // </ProtectedRoute>
                             }
                         />
                         {/*   <Route path="/AddUser" element={<AddUser />} /> */}

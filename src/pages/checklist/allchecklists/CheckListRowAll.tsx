@@ -86,7 +86,7 @@ const getUserName = async () => {
 
     return (
         <> 
-         {checklistData?.user.id === currentUser?.id && checklistData?.status === 'Active' && (
+         {/* {checklistData?.user.id === currentUser?.id && checklistData?.status === 'Active' && ( */}
             <StyledTableRow onClick={() => clickHandler(allWorkFlow.checklistId)}>
                 <StyledTableCellCheckL>
                     <CellContent>
@@ -160,7 +160,7 @@ const getUserName = async () => {
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
-            </StyledTableRow>  )}
+            </StyledTableRow>  
         </>
     )
 }

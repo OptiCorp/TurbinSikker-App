@@ -18,23 +18,23 @@ import {
 
 export const CheckList = () => {
     const { allCheckList } = useContext(CheckListContext)
-    const { currentUser } = useUserContext()
+    // const { currentUser } = useUserContext()
 
-    const text = () => {
-        if (currentUser?.userRole.name === 'Leader') {
-            return <>Assigned</>
-        } else {
-            return <>Assigned by</>
-        }
-    }
+    // const text = () => {
+    //     if (currentUser?.userRole.name === 'Leader') {
+    //         return <>Assigned</>
+    //     } else {
+    //         return <>Assigned by</>
+    //     }
+    // }
 
-    const statusText = () => {
-        if (currentUser?.userRole.name === 'Leader') {
-            return <>Status</>
-        } else {
-            return <>Status</>
-        }
-    }
+    // const statusText = () => {
+    //     if (currentUser?.userRole.name === 'Leader') {
+    //         return <>Status</>
+    //     } else {
+    //         return <>Status</>
+    //     }
+    // }
 
     const { WorkFlows, allWorkFlows } = useWorkflowContext()
     console.log(WorkFlows)
@@ -50,18 +50,27 @@ export const CheckList = () => {
                                 </HeadCell>
                                 <HeadCell>
                                     <StyledHeadContents>
-                                        {text()}
+                                        Assigned
                                     </StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
                                     <StyledHeadContents>
-                                        {statusText()}
+                                        Status
                                     </StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
                         <Table.Body>
-                            {currentUser?.userRole.name === 'Inspector' ? (
+                            <>
+                                {WorkFlows.map((WorkFlow) => (
+                                    <ReceivedCheckLists
+                                        WorkFlow={WorkFlow}
+                                        key={WorkFlow.id}
+                                    />
+                                ))}{' '}
+                            </>{' '}
+                        </Table.Body>
+                        {/* {currentUser?.userRole.name === 'Inspector' ? (
                                 <>
                                     {WorkFlows.map((WorkFlow) => (
                                         <ReceivedCheckLists
@@ -79,8 +88,7 @@ export const CheckList = () => {
                                         />
                                     ))}
                                 </>
-                            )}
-                        </Table.Body>
+                            )} */}
                     </Table>
                 </ListWrapperCheckL>
             </Wrap>

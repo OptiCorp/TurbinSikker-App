@@ -10,8 +10,8 @@ import {
     
 } from '../previewCheckList/styles'
 
-import { Card, Icon, Switch } from '@equinor/eds-core-react'
-import { CustomCard, CustomCategoryName, CustomTaskField, FillOutWrap, StyledCardHeader, StyledSwitch, TaskContainer } from './styles'
+import { Card, Checkbox, Icon, Switch } from '@equinor/eds-core-react'
+import { CustomCard, CustomCardContent, CustomCategoryName, CustomTaskField, FillOutWrap, StyledCardHeader, StyledSwitch } from './styles'
 import { arrow_drop_down } from '@equinor/eds-icons' 
 type Props = {
     tasks: CheckListEntity | null
@@ -44,11 +44,12 @@ export const FillOutList = (props: Props) => {
                          
                                 <CustomCard>
                                 
-                                <StyledSwitch onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                               
+<CustomCategoryName>{categoryName}</CustomCategoryName>      
+<CustomCardContent>
+<StyledSwitch onChange={(e: ChangeEvent<HTMLInputElement>) => {
         setCheck(e.target.checked);
-      }} checked={check} aria-label="" style={{width:'0', height:'0', margin:'0 auto'}}  size="small"  />
-
-                             <CustomCategoryName>{categoryName}</CustomCategoryName>         
+      }} checked={check} aria-label="" style={{ height:'0', margin:'0 auto'}}  size="small"  />
                              <CustomTaskField
                             
                                         label=""
@@ -56,10 +57,11 @@ export const FillOutList = (props: Props) => {
                                         id="storybook-multi-readonly"
                                         defaultValue={task.description}
                                         multiline
-                                        rows={2}
+                                        rows={3}
                                         readOnly
-                                        helperText={task.description.length >100 ? "see more" : '  '} helperIcon={task.description.length >100 ? <Icon data={arrow_drop_down} color='#007079' title='arrow_drop_down' onClick={toggleReadMore}/> : null}
+                                        helperText={task.description.length >80 ? "see more" : '  '} helperIcon={task.description.length >100 ? <Icon data={arrow_drop_down} height={30}  color='#007079' title='arrow_drop_down' onClick={toggleReadMore}/> : null}
                                     />
+                                   <Checkbox aria-label="This label is invisible, but read by screen-readers" /> </CustomCardContent>
                                 </CustomCard>
                           
                         </>

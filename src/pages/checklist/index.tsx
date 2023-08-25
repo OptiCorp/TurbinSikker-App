@@ -39,13 +39,13 @@ export const IndexCheckLists = () => {
         setActiveTab(index)
     }
 
-    const { currentUser } = useUserContext()
+    // const { currentUser } = useUserContext()
 
-    const handleLink = () => {
-        if (currentUser?.userRole.name === 'Inspector') {
-            return '/InProgress'
-        }
-    }
+    // const handleLink = () => {
+    //     if (currentUser?.userRole.name === 'Inspector') {
+    //         return '/InProgress'
+    //     }
+    // }
 
     return (
         <MainWrap>
@@ -55,9 +55,9 @@ export const IndexCheckLists = () => {
                 onChange={handleChange}
             >
                 <Tabs.List>
-                    {currentUser?.userRole.name === 'Leader' ? (
+                    {/* {currentUser?.userRole.name === 'Leader' ? (
                         <LeaderTabs />
-                    ) : (
+                    ) : ( */}
                         <>
                             <TabSubmittedWrap>
                                 <Tabs.Tab
@@ -82,7 +82,7 @@ export const IndexCheckLists = () => {
                                 </Tabs.Tab>
                             </TabWrap>
                         </>
-                    )}
+                    {/* )} */}
                 </Tabs.List>
 
                 <>
