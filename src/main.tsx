@@ -7,9 +7,9 @@ import App from "./App.tsx";
 
 const configuration: Configuration = {
   auth: {
-    clientId: "b1bc9eb7-71fc-43c4-a888-ae73c72be014",
+    clientId: "3fe72596-7439-4d86-b45e-c8ae20fd6075",
     authority:
-      "https://login.microsoftonline.com/2d89021a-6a8a-4063-a9fe-b4777c4088f1/",
+      "https://login.microsoftonline.com/1a3889b2-f76f-4dd8-831e-b2d5e716c986/",
   },
 };
 
