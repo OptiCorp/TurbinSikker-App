@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'turbinsikker-app-prod'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8CBB35DBDEAC4EBCB61428B1138B51AD }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_68DEDEFEFA164AF39AA1BA0481B8B4E7 }}
           package: .
