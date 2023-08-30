@@ -2,64 +2,15 @@ import React, {
     createContext,
     useContext,
     useEffect,
-    useMemo,
     useState,
 } from 'react'
-
-import { useLocation, useNavigate } from 'react-router'
-import { TaskEntity } from 'src/components/addtasks/context/models/TaskEntity'
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
-import { ListEntity } from 'src/pages/users/context/models/ListEntity'
 import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
-import { UserEntity } from '../../../users/context/models/UserEntity'
+
 import { useUserContext } from '../../../users/context/userContextProvider'
+import { CheckList, WorkFlow } from './models/WorkFlowEntity'
+import { AllWorkFlows } from './models/AllWorkFlowEntity'
 
-type CreatedByUser = {
-    azureAdUserId: string
-    email: string
-    firstName: string
-    id: string
-    lastName: string
-    status: number
-    userRoleId: string
-    username: string
-}
-
-type CheckList = {
-    azureAdUserId: string
-    email: string
-    createdBy: string
-    firstName: string
-    id: string
-    lastName: string
-    status: number
-    title: string
-    userRoleId: string
-    username: string
-    createdByUser: CreatedByUser
-    createdDate: string
-}
-
-export type WorkFlow = {
-    id: string
-    checklistId: string
-    userId: string
-    status: number | null
-    updateDate: string
-    formattedUpdateDate: string
-    checklist: CheckList
-}
-
-export type AllWorkFlows = {
-    id: string
-    checklistId: string
-    userId: string
-    status: number | null
-    updatedDate: string
-    formattedUpdateDate: string
-    checklist: CheckList
-}
 
 type WorkflowContext = {
     WorkFlows: WorkFlow[]

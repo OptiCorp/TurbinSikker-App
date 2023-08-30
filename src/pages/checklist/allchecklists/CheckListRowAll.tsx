@@ -6,10 +6,11 @@ import { assignment_user, wrap_text } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { StyledTableRow } from '../checkListID/styles'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
-import { AllWorkFlows, WorkFlow } from '../workflow/context/workFlowContextProvider'
+
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { AllWorkFlows } from '../workflow/context/models/AllWorkFlowEntity'
 
 interface CheckListRowProps {
     allWorkFlow: AllWorkFlows

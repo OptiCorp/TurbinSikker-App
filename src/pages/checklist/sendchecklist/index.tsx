@@ -1,63 +1,26 @@
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { FormProvider } from 'react-hook-form'
+
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
-import { useContext, useState } from 'react'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { SelectComponent } from './SelectComponent'
 import { SendBackgroundWrap } from './styles'
 import { useNavigate } from 'react-router'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 
-// export type SendingFormValuesEntity = {
-   
-//     checklistId: string
-//     userId: string
-  
-// }
+
 
 export const SendCheckList = () => {
-    // const methods = useForm<SendingFormValuesEntity>()
-    // const [positiveOpen, setPositiveOpen] = useState(false)
-    // const { handleSubmit } = methods
+  
     const navigate = useNavigate()
-    // const { idToken } = useAuth()
+  
    
 
    
 
     const {methods, onSubmit, handleOpen,clearAndClose,positiveOpen} = useAddWorkFlowForm()
     const {handleSubmit} = methods
-    // const { refreshList, setRefreshList } = useCheckListContext()
 
-    // const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
-
-    //     const res = await fetch(
-    //         `https://localhost:7290/api/CreateChecklistWorkFlow`,
-    //         {
-    //             method: 'POST',
-    //             headers: {
-    //                 Authorization: `Bearer ${idToken}`,
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 checklistId: data.checklistId,
-    //                 userId: data.userId
-    //             }),
-    //         }
-    //     )
-    //     if (res.ok) {
-    //         setRefreshList((prev) => !prev)
-    //     }
-    //     setPositiveOpen(false)
-    //     navigate('/Checklist')
-
-
-    //     if (openSnackbar) {
-    //         openSnackbar('Checklist sendt!')
-    //     }
-    // }
     return (
         <>
             <FormProvider {...methods}>

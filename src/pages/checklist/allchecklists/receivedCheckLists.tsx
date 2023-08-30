@@ -6,10 +6,11 @@ import { useNavigate } from 'react-router'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { StyledTableRow } from '../checkListID/styles'
 import {
-    WorkFlow,
+    
     useWorkflowContext,
 } from '../workflow/context/workFlowContextProvider'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
+import { WorkFlow } from '../workflow/context/models/WorkFlowEntity'
 
 interface CheckListRowProps {
     WorkFlow: WorkFlow
@@ -34,7 +35,7 @@ export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
     const formattedUpdatedDate = WorkFlow.formattedUpdateDate
         ? formatDate(WorkFlow.formattedUpdateDate)
         : 'N/A'
-    console.log('asdsad', WorkFlow.userId)
+
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.checklistId)}>

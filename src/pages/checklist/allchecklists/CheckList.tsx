@@ -4,7 +4,7 @@ import { useUserContext } from '../../../pages/users/context/userContextProvider
 import { CheckListContext } from '../../context/CheckListContextProvider'
 import { HeadCell } from '../checkListID/styles'
 import {
-    WorkFlow,
+  
     useWorkflowContext,
 } from '../workflow/context/workFlowContextProvider'
 import { CheckListUserRow } from './CheckListRowAll'
@@ -37,7 +37,7 @@ export const CheckList = () => {
     // }
 
     const { WorkFlows, allWorkFlows } = useWorkflowContext()
-    console.log(WorkFlows)
+
     return (
         <>
             <Wrap>
@@ -67,8 +67,8 @@ export const CheckList = () => {
                                         WorkFlow={WorkFlow}
                                         key={WorkFlow.id}
                                     />
-                                ))}{' '}
-                            </>{' '}
+                                ))}
+                            </>
                         </Table.Body>
                         {/* {currentUser?.userRole.name === 'Inspector' ? (
                                 <>
