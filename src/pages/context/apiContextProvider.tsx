@@ -155,7 +155,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getUsers = async () => {
 
-    const res = await fetch("https://turbinsikker-api-prod.azurewebsites.net/GetAllUsersAdmin",
+    const res = await fetch("https://turbinsikker-api-prod.azurewebsites.net/api/GetAllUsersAdmin",
     {
       method: "GET",
       mode: 'no-cors',
