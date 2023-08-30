@@ -98,7 +98,8 @@ const {currentUser} =useUserContext()
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `https://localhost:7290/api/GetAllChecklistsByUserId?id=${currentUser?.id}`
+                `https://localhost:7290/api/GetAllChecklistsByUserId?id=634c61d6-ede8-49cf-ab70-ebc412de7499`
+                // `https://localhost:7290/api/GetAllChecklistsByUserId?id=${currentUser?.id}`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)

@@ -7,7 +7,7 @@ export type AllWorkFlows = {
     id: string
     checklistId: string
     userId: string
-    status: number | null
+    status: number
     updatedDate: string
     formattedUpdateDate: string
     checklist: CheckList

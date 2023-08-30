@@ -6,17 +6,22 @@ import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { Card, Checkbox, Icon } from '@equinor/eds-core-react'
 import { CustomCard, CustomCardContent, CustomCategoryName, CustomTaskField, FillOutWrap, ImageContainer, NotApplicableWrap, StyledCardHeader, StyledHeaderCard, StyledSwitch } from './styles'
 import { arrow_drop_down } from '@equinor/eds-icons' 
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, SubmitHandler, useFormContext } from 'react-hook-form'
 import { WorkFlow } from '../workflow/context/models/WorkFlowEntity'
+import CustomDialog from '@components/modal/useModalHook'
+import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { useAddWorkFlowForm } from '../sendchecklist/hooks/useAddWorkFlowForm'
 
 type Props = {
     tasks: CheckListEntity | null
     sortedTasks: CheckListEntity['tasks']
 WorkFlow: WorkFlow
+onUpdate: (data: {id: string, checklistId: string, userId: string, status: number}) => void
 }
 
 export const FillOutList: FunctionComponent<Props> = ({
-    WorkFlow, sortedTasks, tasks
+    WorkFlow, sortedTasks, tasks, onUpdate
 }) => {
     let lastCategoryName = ''
 
@@ -24,9 +29,29 @@ export const FillOutList: FunctionComponent<Props> = ({
     const toggleReadMore = () => setIsShowMore(show => !show);
     const { control, register } = useFormContext()
     const [applicableStatuses, setApplicableStatuses] =  useState<Record<string, boolean>>({});
+    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
+
+  const methods = useFormContext()
+
+   
 
 
 
+    const handleSubmit = async () => {
+        try {
+        onUpdate({
+          id: WorkFlow.id,
+checklistId: WorkFlow.checklistId,
+userId: WorkFlow.userId,
+status: 2 
+
+        })
+       
+    } catch (error) {
+        console.error('Error creating checklist:', error)
+    }
+}
+   
     return (
         <>
             <FillOutWrap >
@@ -125,8 +150,33 @@ export const FillOutList: FunctionComponent<Props> = ({
                      
                     )
                 })}
+
+                
             </FillOutWrap>
-          
+            <CustomDialog
+                            title="Submit form?"
+                            type='submit'
+                            form='fill-out-checklist'
+                            buttonVariant="ghost"
+                            negativeButtonOnClick={()=> setSubmitDialogShowing(false)}
+                            negativeButtonText="Cancel"
+                            positiveButtonText="OK"
+                            positiveButtonOnClick={() => {
+                               handleSubmit()
+                            }}
+                            isOpen={submitDialogShowing}
+                        > </CustomDialog>
+
+                        <NavActionsComponent
+                            buttonColor="primary"
+                            secondButtonColor="primary"
+                            
+                            buttonVariant="outlined"
+                          secondOnClick={()=> setSubmitDialogShowing(true)}
+                            isShown={true}
+                            ButtonMessage="Clear"
+                            SecondButtonMessage="Submit"
+                        />
         </>
     )
 }

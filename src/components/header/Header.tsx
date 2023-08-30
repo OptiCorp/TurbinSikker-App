@@ -35,19 +35,19 @@ const { checkListId, sortedTasks } = useAddTaskForm()
 
     const [title, setTitle] = useState('')
 
-    useEffect(() => {
-        const workflow = WorkFlows.find((item) => item.checklist.id === checkListId?.id)
-        let pathTitle = ''
-        if (location.pathname.includes('FillOutCheckList') && workflow) {
-            pathTitle = workflow.checklist.title + ' ' + workflow.id.slice(0, -30) || ''
-        } else if (location.pathname === '/AddUser/') {
-            pathTitle = location.pathname.slice(1, -1)
-        } else {
-            pathTitle = basePath
-        }
-        setTitle(pathTitle)
+    // useEffect(() => {
+    //     const workflow = WorkFlows.find((item) => item.checklist.id === checkListId?.id)
+    //     let pathTitle = ''
+    //     if (location.pathname.includes('FillOutCheckList') && workflow) {
+    //         pathTitle = workflow.checklist.title + ' ' + workflow.id.slice(0, -30) || ''
+    //     } else if (location.pathname === '/AddUser/') {
+    //         pathTitle = location.pathname.slice(1, -1)
+    //     } else {
+    //         pathTitle = basePath
+    //     }
+    //     setTitle(pathTitle)
 
-    }, [location.pathname, basePath, WorkFlows, checkListId?.id])
+    // }, [location.pathname, basePath, WorkFlows, checkListId?.id])
 
       
     const onClick = () => {

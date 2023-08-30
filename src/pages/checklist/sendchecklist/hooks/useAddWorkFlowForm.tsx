@@ -1,7 +1,7 @@
 import { SnackbarContext } from "@components/snackbar/SnackBarContext"
 import { useContext, useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import { useCheckListContext } from "../../../../pages/context/CheckListContextProvider"
 import useAuth from "../../../../pages/landingPage/context/LandingPageContextProvider"
 
@@ -11,8 +11,11 @@ export type SendingFormValuesEntity = {
    
     checklistId: string
     userId: string
+status: number
   
 }
+
+
 
 export const useAddWorkFlowForm = () => {
 
@@ -24,7 +27,7 @@ export const useAddWorkFlowForm = () => {
     const { idToken } = useAuth()
     const [positiveOpen, setPositiveOpen] = useState(false)
 const { refreshList, setRefreshList } = useCheckListContext()
-
+const appLocation = useLocation()
 const handleOpen = () => {
     setPositiveOpen(true)
 }
@@ -33,7 +36,7 @@ const clearAndClose = () => {
 }
 
 const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
-
+  
     const res = await fetch(
         `https://localhost:7290/api/CreateChecklistWorkFlow`,
         {
@@ -44,7 +47,8 @@ const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
             },
             body: JSON.stringify({
                 checklistId: data.checklistId,
-                userId: data.userId
+                userId: data.userId,
+                status: 0
             }),
         }
     )
@@ -61,6 +65,11 @@ const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
 }
 
 
+
+
+
+
+
 return {
 
 methods,
@@ -70,6 +79,7 @@ handleSubmit,
 handleOpen,
 clearAndClose,
 positiveOpen,
+
 }
 
 }

@@ -7,6 +7,7 @@ import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { FormValuesEntity } from '../context/models/FormValuesEntity'
+import { checkList } from 'src/pages/context/models/checklist'
 
 export const useAddTaskForm = () => {
     const { id } = useParams()
@@ -42,6 +43,7 @@ export const useAddTaskForm = () => {
     useEffect(() => {
        
     const fetchAllCheckListsId = async () => {
+        if (!checkListId) return
         const res = await fetch(
             `https://localhost:7290/api/GetChecklist?id=${id}`
         )
@@ -61,7 +63,7 @@ export const useAddTaskForm = () => {
         setCheckListId(data)
     }
 
-
+console.log(checkListId)
         fetchAllCheckListsId()
     }, [refreshList])
 

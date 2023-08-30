@@ -29,20 +29,22 @@ const navigate  = useNavigate()
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
-const {currentUser} = useUserContext()
+// const {currentUser} = useUserContext()
 
 
-const [checklistData, setChecklistData] = useState<CheckListEntity | null>()
-
+const [checklistData, setChecklistData] = useState<CheckListEntity>()
+const [userData, setUserData] = useState<UserEntity | null>(null)
 const [date, setDate] = useState<string>()
 const [updateDate, setUpdateDate] = useState<string>()
 const [name, setName] = useState<string>()
 const { refreshList, setRefreshList } = useCheckListContext()
+
+
 useEffect(() => {
     const fetchChecklistData = async () => {
 
-       
-        
+   
+    
     
         try {
             const res = await fetch(
@@ -65,34 +67,48 @@ useEffect(() => {
     }
   
     fetchChecklistData()
-}, [allWorkFlow, currentUser, refreshList])
+}, [allWorkFlow,  refreshList])
+
+// currentUser,
     
 
+
 useEffect(() => {
-    if (!allWorkFlow.userId) return 
+
 const getUserName = async () => {
     try {
         const res = await fetch(`https://localhost:7290/api/GetUser?id=${allWorkFlow.userId}`);
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status);
-        const data = await res.json() as UserEntity;
-        setName(data.firstName +` ` + data.lastName);
+        const data = (await res.json()) as UserEntity;
+
+        setUserData(data)
+        setName(data.firstName + ` ` + data.lastName );
     } catch (error) {
         console.error('Error fetching user data:', error);
     }
-};
-
+}
     getUserName()
-}, [allWorkFlow.userId, currentUser])
 
+    
+               
 
+}, [allWorkFlow.userId])
+
+//currentUser
+
+console.log(name)
     return (
         <> 
-         {/* {checklistData?.user.id === currentUser?.id && checklistData?.status === 'Active' && ( */}
+
+{/*    
+         {checklistData?.user.id === '16a54ed5-6cc5-4fed-9dfb-43cc2ddf7abe' && checklistData?.status === 'Active' && ( */}
+         {checklistData?.user.id === '634c61d6-ede8-49cf-ab70-ebc412de7499' && checklistData?.status === "Active" && (
             <StyledTableRow onClick={() => clickHandler(allWorkFlow.checklistId)}>
+           
                 <StyledTableCellCheckL>
                     <CellContent>
                         <Typography variant="body_long_bold">
-                        {checklistData?.title}
+                        {checklistData.title}
                         </Typography>
                         <Typography
                             variant="caption"
@@ -113,20 +129,20 @@ const getUserName = async () => {
                             <Icon
                                 data={assignment_user}
                                 color="#243746"
-                                style={{ height: '15px',}}
+                                style={{ height: '15px'}}
                             /> 
-                
+               
                         <Typography
                             variant="caption"
                             token={{
                              
-                                fontSize: '1rem' 
-                            }} style={{  height:'1rem'}}
+                                fontSize: '0.8rem' 
+                            }} style={{   margin:'0'}}
                            
                         >
                              {name}
 
-                             </Typography>
+                             </Typography> 
                         </StyledChip>
 
                              <Typography
@@ -161,7 +177,8 @@ const getUserName = async () => {
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
-            </StyledTableRow>  
-        </>
+            </StyledTableRow>
+ )}
+            </>
     )
 }

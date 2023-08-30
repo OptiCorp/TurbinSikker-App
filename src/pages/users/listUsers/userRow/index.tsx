@@ -6,26 +6,30 @@ import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 import { IUser } from '../../addUser/hooks/useAddUser/types'
 import { useHasPermission } from '../../hooks/useHasPermission'
 import { StyledTableCell, TableData } from '../styles'
+
+
 interface UserRowProps {
     user: IUser
 }
 
 export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
+
+    
     const navigate = useNavigate()
-    const { hasPermission } = useHasPermission()
+    // const { hasPermission } = useHasPermission()
 
     const clickHandler = (id: string) => {
-        if (!hasPermission) {
-            navigate(`/User/${id}`)
-        } else {
+        // if (!hasPermission) {
+        //     navigate(`/User/${id}`)
+        // } else {
             navigate(`/EditUser/${id}`)
         }
-    }
+    
 
     return (
         <Table.Row onClick={() => clickHandler(user.id)}>
             <StyledTableCell>
-                <p
+                {/* <p
                     style={{
                         fontWeight: 'bold',
 
@@ -34,7 +38,7 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
                 >
                     {user.firstName} {user.lastName}
                 </p>
-                <TableData>{user.email}</TableData>
+                <TableData>{user.email}</TableData> */}
             </StyledTableCell>
 
             <StyledTableCell>{user.userRole.name}</StyledTableCell>

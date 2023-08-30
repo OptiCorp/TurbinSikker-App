@@ -61,14 +61,22 @@ export const CheckList = () => {
                             </Table.Row>
                         </Table.Head>
                         <Table.Body>
-                            <>
+                            {/* <>
                                 {WorkFlows.map((WorkFlow) => (
                                     <ReceivedCheckLists
                                         WorkFlow={WorkFlow}
                                         key={WorkFlow.id}
                                     />
                                 ))}
-                            </>
+                            </> */}
+                              <>
+                                    {allWorkFlows.map((allWorkFlow) => (
+                                        <CheckListUserRow
+                                            allWorkFlow={allWorkFlow}
+                                            key={allWorkFlow.id}
+                                        />
+                                    ))}
+                                </>
                         </Table.Body>
                         {/* {currentUser?.userRole.name === 'Inspector' ? (
                                 <>

@@ -13,10 +13,14 @@ export const StyledTableCellCheckL = styled(Table.Cell)`
 export const StyledChip = styled(Chip)`
     margin: 0 auto;
     text-align: center;
-    flex-direction: column;
+    flex-direction: row;
     display: flex;
-    justify-content: center;
-    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: left;
+   width: fit-content;
+   
+
+  
 `
 
 export const CellContent = styled.div`
