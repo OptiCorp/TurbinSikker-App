@@ -12,7 +12,7 @@ import { useEditCheckListContext } from '../context/editCheckListContextProvider
 import { EditListPoints } from '../styles'
 
 type Props = {
-    tasks: CheckListEntity
+    tasks: CheckListEntity | null
     sortedTasks: CheckListEntity['tasks']
 }
 

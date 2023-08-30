@@ -40,7 +40,7 @@ export const useAddTaskForm = () => {
         }
     }
     useEffect(() => {
-        if (checkListId) return 
+       
     const fetchAllCheckListsId = async () => {
         const res = await fetch(
             `https://localhost:7290/api/GetChecklist?id=${id}`
