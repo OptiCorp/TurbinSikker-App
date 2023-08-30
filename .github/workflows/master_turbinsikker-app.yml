@@ -50,7 +50,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'turbinsikker-app-prod'
+          app-name: 'turbinsikker-app-win-prod'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8A91383BDFF64F3F9224728D14776D2A }}
           package: .
