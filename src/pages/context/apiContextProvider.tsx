@@ -158,7 +158,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
     const res = await fetch("https://turbinsikker-api-prod.azurewebsites.net/api/GetAllUsersAdmin",
     {
       method: "GET",
-      mode: 'cors',
+      mode: 'no-cors',
       headers: {
         Authorization: `Bearer ${idToken}`,
         "Content-Type": "application/json",
