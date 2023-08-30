@@ -54,7 +54,7 @@ export function AuthProvider({
         scopes: [
           "User.Read",
           "email",
-          "api://c1b6fd67-db9e-4a25-a4ad-9aec1fe3ec64/User.Read",
+          "api://cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read",
         ],
         account: accounts[0],
       };
