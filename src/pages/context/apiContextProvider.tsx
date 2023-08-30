@@ -182,7 +182,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [newUserFunc, refreshUsers, idToken, accessToken]);
 
   const fetchCheckLists = async () => {
-    const res = await fetch(`http://20.251.37.226:8080/api/GetAllChecklists`);
+    const res = await fetch(`https://turbinsikker-api-prod.azurewebsites.net/api/GetAllChecklists`);
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
     const data = await res.json();
 
@@ -222,7 +222,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchCheckListUserId = async () => {
     try {
       const res = await fetch(
-        `http://20.251.37.226:8080/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
+        `https://turbinsikker-api-prod.azurewebsites.net/api/GetAllChecklistsByUserId?id=66e88e41-aa49-4bd4-aec4-b08cb553ee95`
       );
       if (!res.ok) {
         throw new Error("Failed with HTTP code " + res.status);
@@ -260,7 +260,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await fetch("http://20.251.37.226:8080/api/GetAllCategories");
+      const res = await fetch("https://turbinsikker-api-prod.azurewebsites.net/api/GetAllCategories");
       if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
       const data = await res.json();
 
