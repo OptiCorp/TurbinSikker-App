@@ -181,7 +181,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [newUserFunc, refreshUsers, idToken, accessToken]);
 
   const fetchCheckLists = async () => {
-    const res = await fetch(`https_//localhost:7290/api/GetAllChecklists`);
+    const res = await fetch(`https://localhost:7290/api/GetAllChecklists`);
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
     const data = await res.json();
 
