@@ -160,7 +160,7 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
       method: "GET",
       mode: 'no-cors',
       headers: {
-        Authorization: `Bearer ${idToken}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": '*'
       }}
