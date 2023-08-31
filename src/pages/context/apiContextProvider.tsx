@@ -156,13 +156,13 @@ const ApiContextProvider = ({ children }: { children: React.ReactNode }) => {
   const getUsers = async () => {
 
     const res = await fetch("https://localhost:7290/api/GetAllUsersAdmin",
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": '*'
-      }}
+    // {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Bearer ${idToken}`,
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": '*'
+    //   }}
     );
     if (!res.ok) throw new Error("Failed with HTTP code " + res.status);
     const data = await res.json();
