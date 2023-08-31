@@ -57,6 +57,7 @@ export function AuthProvider({
           "api://cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read",
         ],
         account: accounts[0],
+        client_secret: "l928Q~WiP9eE5L472DsORQ2addyDyC671VxWibGu"
       };
 
       instance
