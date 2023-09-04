@@ -4,23 +4,15 @@ import styled from 'styled-components'
 
 export const StyledTableCellCheckL = styled(Table.Cell)`
     padding-bottom: 1.5rem;
-    padding-right: 0;
-    /* line-break: strict;
-    
-    overflow-wrap: break-word; */
+padding: 0;
+   
 `
 
 export const StyledChip = styled(Chip)`
     margin: 0 auto;
     text-align: center;
-    flex-direction: row;
-    display: flex;
-    justify-content: flex-start;
-    align-items: left;
-   width: fit-content;
    
 
-  
 `
 
 export const CellContent = styled.div`
@@ -30,6 +22,7 @@ export const CellContent = styled.div`
     flex-direction: column;
     align-items: left;
     min-height: 50px;
+ 
     justify-content: space-around;
     margin: 10px 0;
 `
@@ -42,6 +35,7 @@ export const ListWrapperCheckL = styled.div`
     padding-left: 5px;
     padding-right: 5px;
     margin: 10px 0;
+    width: 100vw;
 `
 
 export const StyledHeadContents = styled.h3`

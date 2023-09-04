@@ -16,12 +16,12 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
 
     
     const navigate = useNavigate()
-    // const { hasPermission } = useHasPermission()
+    const { hasPermission } = useHasPermission()
 
     const clickHandler = (id: string) => {
-        // if (!hasPermission) {
-        //     navigate(`/User/${id}`)
-        // } else {
+        if (!hasPermission) {
+            navigate(`/User/${id}`)
+        } else {
             navigate(`/EditUser/${id}`)
         }
     
@@ -29,7 +29,7 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
     return (
         <Table.Row onClick={() => clickHandler(user.id)}>
             <StyledTableCell>
-                {/* <p
+                <p
                     style={{
                         fontWeight: 'bold',
 
@@ -38,7 +38,7 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
                 >
                     {user.firstName} {user.lastName}
                 </p>
-                <TableData>{user.email}</TableData> */}
+                <TableData>{user.email}</TableData>
             </StyledTableCell>
 
             <StyledTableCell>{user.userRole.name}</StyledTableCell>
@@ -63,4 +63,4 @@ export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
             </StyledTableCell>
         </Table.Row>
     )
-}
+}}

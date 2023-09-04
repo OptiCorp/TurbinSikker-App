@@ -7,7 +7,6 @@ import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { FormValuesEntity } from '../context/models/FormValuesEntity'
-import { checkList } from 'src/pages/context/models/checklist'
 
 export const useAddTaskForm = () => {
     const { id } = useParams()
@@ -41,29 +40,28 @@ export const useAddTaskForm = () => {
         }
     }
     useEffect(() => {
-       
-    const fetchAllCheckListsId = async () => {
-        if (!checkListId) return
-        const res = await fetch(
-            `https://localhost:7290/api/GetChecklist?id=${id}`
-        )
-        if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-        const data = await res.json()
-        const sorted = data.tasks.sort((a: any, b: any) => {
-            if (a.category.name < b.category.name) {
-                return -1
-            } else if (a.category.name > b.category.name) {
-                return 1
-            } else {
-                return 0
-            }
-        })
+        const fetchAllCheckListsId = async () => {
+            if (checkListId) return
+            const res = await fetch(
+                `https://localhost:7290/api/GetChecklist?id=${id}`
+            )
+            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+            const data = await res.json()
+            const sorted = data.tasks.sort((a: any, b: any) => {
+                if (a.category.name < b.category.name) {
+                    return -1
+                } else if (a.category.name > b.category.name) {
+                    return 1
+                } else {
+                    return 0
+                }
+            })
 
-        setSortedTasks(sorted)
-        setCheckListId(data)
-    }
+            setSortedTasks(sorted)
+            setCheckListId(data)
+        }
 
-console.log(checkListId)
+        console.log(checkListId)
         fetchAllCheckListsId()
     }, [refreshList])
 

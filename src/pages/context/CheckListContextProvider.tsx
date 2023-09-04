@@ -11,13 +11,13 @@ import { useLocation, useNavigate } from 'react-router'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { ListEntity } from 'src/pages/users/context/models/ListEntity'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
-import { ICheckListUserID } from './models/CheckListUserIdEntity'
 import { useUserContext } from '../users/context/userContextProvider'
+import { ICheckListUserID } from './models/CheckListUserIdEntity'
 
 export type ContextType = {
     userIdCheckList: ICheckListUserID[]
     allCheckList: CheckListEntity[]
-    handleSubmit: (data: { title: string }) => void
+    handleSubmit: (data: { title: string; CreatedBy: string }) => void
 
     list: ListEntity[]
     refreshList: boolean
@@ -52,7 +52,7 @@ const CheckListContextProvider = ({
     const [list, setList] = useState<ListEntity[]>([])
     const { idToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
-const {currentUser} =useUserContext()
+    const { currentUser } = useUserContext()
     /// fetch checklist
     const fetchCheckLists = async () => {
         const res = await fetch(`https://localhost:7290/api/GetAllChecklists`)
@@ -68,7 +68,7 @@ const {currentUser} =useUserContext()
 
     // submitt checklist
 
-    const handleSubmit = async (data: { title: string }) => {
+    const handleSubmit = async (data: { title: string; CreatedBy: string }) => {
         const res = await fetch(`https://localhost:7290/api/AddChecklist`, {
             method: 'POST',
             headers: {
@@ -77,15 +77,15 @@ const {currentUser} =useUserContext()
             },
             body: JSON.stringify({
                 title: data.title,
-                CreatedBy: '66e88e41-aa49-4bd4-aec4-b08cb553ee95',
+                CreatedBy: data.CreatedBy,
             }),
         })
 
         if (res.ok) {
             const responseJson = await res.json()
             if (responseJson && responseJson.id) {
-                const checklistId = responseJson.id
-                navigate(`/EditCheckList/${checklistId}`)
+                const checklistIdd = responseJson.id
+                navigate(`/EditCheckList/${checklistIdd}`)
             }
             if (openSnackbar) {
                 openSnackbar(`CheckList Created`)
@@ -98,19 +98,17 @@ const {currentUser} =useUserContext()
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `https://localhost:7290/api/GetAllChecklistsByUserId?id=634c61d6-ede8-49cf-ab70-ebc412de7499`
-                // `https://localhost:7290/api/GetAllChecklistsByUserId?id=${currentUser?.id}`
+                `https://localhost:7290/api/GetAllChecklistsByUserId?id=${currentUser?.id}`
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
             }
-            const data = await res.json()
+            const data = (await res.json()) as ICheckListUserID[]
             return data
         } catch (error) {
             console.error(error)
             throw error
         }
-        
     }
 
     useEffect(() => {

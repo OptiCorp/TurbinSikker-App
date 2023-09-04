@@ -12,12 +12,8 @@ import useAuth from '../../landingPage/context/LandingPageContextProvider'
 import { useAddUser } from '../addUser/hooks/useAddUser'
 import { Option } from '../context/models/OptionsEntity'
 import { AzureUserInfo } from './models/AzureUserEntity'
-import { ListEntity } from './models/ListEntity'
 import { UserEntity } from './models/UserEntity'
 import { UserListEntity } from './models/UserListEntity'
-
-
-
 
 export type ContextType = {
     result: UserEntity[]
@@ -123,98 +119,96 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         setRefreshUsers((prevRefresh) => !prevRefresh)
     }
 
-    // AZURE FETCH ! //
+    //azure
 
-    //
+    const fetchUserAndUpdateContext = async (token: string) => {
+        try {
+            const userInfo = getUserInfoFromIdToken(token)
+            await fetchUserByEmail(userInfo.preferredUserName, userInfo.name)
+        } catch (error) {
+            console.error('Error fetching and updating user:', error)
+        }
+    }
+    function getUserInfoFromIdToken(token: string): {
+        preferredUserName: string
+        name: string
+    } {
+        const decodedToken: AzureUserInfo = decode(token)
 
-    // const fetchUserAndUpdateContext = async (token: string) => {
-    //     try {
-    //         const userInfo = getUserInfoFromIdToken(token)
-    //         await fetchUserByEmail(userInfo.preferredUserName, userInfo.name)
-    //     } catch (error) {
-    //         console.error('Error fetching and updating user:', error)
-    //     }
-    // }
-    // function getUserInfoFromIdToken(token: string): {
-    //     preferredUserName: string
-    //     name: string
-    // } {
-    //     const decodedToken: AzureUserInfo = decode(token)
+        return {
+            preferredUserName: decodedToken?.preferred_username || '',
+            name: decodedToken.name || '',
+        }
+    }
+    async function fetchUserByEmail(userEmail: string, name: string) {
+        const response = await fetch(
+            `https://localhost:7290/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
+        )
+        if (response.ok) {
+            const user = await response.json()
+            // Use the fetched user and set the result state
+            setCurrentUser(user)
+        } else if (response.status === 404) {
+            // User not found, create user
+            const newUser = await createUser(userEmail, name)
+            // Use the newly created user and set the result state
+            if (newUser) {
+                setCurrentUser(newUser)
+            }
+        } else {
+            console.error('Error fetching user by email')
+        }
+    }
+    useEffect(() => {
+        if (idToken) {
+            fetchUserAndUpdateContext(idToken)
+        }
+    }, [idToken])
 
-    //     return {
-    //         preferredUserName: decodedToken?.preferred_username || '',
-    //         name: decodedToken.name || '',
-    //     }
-    // }
-    // async function fetchUserByEmail(userEmail: string, name: string) {
-    //     const response = await fetch(
-    //         `https://localhost:7290/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
-    //     )
-    //     if (response.ok) {
-    //         const user = await response.json()
-    //         // Use the fetched user and set the result state
-    //         setCurrentUser(user)
-    //     } else if (response.status === 404) {
-    //         // User not found, create user
-    //         const newUser = await createUser(userEmail, name)
-    //         // Use the newly created user and set the result state
-    //         if (newUser) {
-    //             setCurrentUser(newUser)
-    //         }
-    //     } else {
-    //         console.error('Error fetching user by email')
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (idToken) {
-    //         fetchUserAndUpdateContext(idToken)
-    //     }
-    // }, [idToken])
+    // azure fetch //
+    async function createUser(userEmail: string, name: string) {
+        const firstName = name.split(' ')[0]
+        const lastName = name.split(' ')[1]
+        const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
+        try {
+            const createUserResponse = await fetch(
+                'https://localhost:7290/Api/addUser',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        azureAdUserId: userEmail,
+                        firstName: firstName,
+                        lastName: lastName,
+                        userName: username,
+                        email: userEmail,
+                        // other user properties
+                    }),
+                }
+            )
+            console.log(
+                'User creation response status:',
+                createUserResponse.status
+            )
+            if (createUserResponse.status === 200) {
+                //const newUser = await createUserResponse.json();
+                await createUserResponse.json()
 
-    // // azure fetch //
-    // async function createUser(userEmail: string, name: string) {
-    //     const firstName = name.split(' ')[0]
-    //     const lastName = name.split(' ')[1]
-    //     const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
-    //     try {
-    //         const createUserResponse = await fetch(
-    //             'https://localhost:7290/Api/addUser',
-    //             {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify({
-    //                     azureAdUserId: userEmail,
-    //                     firstName: firstName,
-    //                     lastName: lastName,
-    //                     userName: username,
-    //                     email: userEmail,
-    //                     // other user properties
-    //                 }),
-    //             }
-    //         )
-    //         console.log(
-    //             'User creation response status:',
-    //             createUserResponse.status
-    //         )
-    //         if (createUserResponse.status === 200) {
-    //             //const newUser = await createUserResponse.json();
-    //             await createUserResponse.json()
-
-    //             //return newUser; // Return the newly created user
-    //         } else {
-    //             console.log(
-    //                 'Error creating user:',
-    //                 createUserResponse.statusText
-    //             )
-    //             return null // Return null if there's an error
-    //         }
-    //     } catch (error) {
-    //         console.log('Error creating user:', error)
-    //         return null // Return null if there's an error
-    //     }
-    // }
+                //return newUser; // Return the newly created user
+            } else {
+                console.log(
+                    'Error creating user:',
+                    createUserResponse.statusText
+                )
+                return null // Return null if there's an error
+            }
+        } catch (error) {
+            console.log('Error creating user:', error)
+            return null // Return null if there's an error
+        }
+    }
 
     const memoedValue = useMemo(
         () => ({
