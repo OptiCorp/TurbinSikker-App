@@ -72,7 +72,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { user } = useAddUser()
 
     const getUsers = async () => {
-        const res = await fetch('https://localhost:7290/Api/GetAllUsersAdmin')
+        const res = await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetAllUsersAdmin')
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
@@ -94,7 +94,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchUserRoles = async () => {
             const res = await fetch(
-                'https://localhost:7290/api/GetAllUserRoles'
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllUserRoles'
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -112,7 +112,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     // Delete user //
 
     const handleDeleteUser = async (id: string | undefined) => {
-        await fetch(`https://localhost:7290/api/SoftDeleteUser?id=${id}`, {
+        await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/SoftDeleteUser?id=${id}`, {
             method: 'DELETE',
         })
 
@@ -142,7 +142,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     async function fetchUserByEmail(userEmail: string, name: string) {
         const response = await fetch(
-            `https://localhost:7290/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
         )
         if (response.ok) {
             const user = await response.json()
@@ -172,7 +172,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
         try {
             const createUserResponse = await fetch(
-                'https://localhost:7290/Api/addUser',
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/Api/addUser',
                 {
                     method: 'POST',
                     headers: {

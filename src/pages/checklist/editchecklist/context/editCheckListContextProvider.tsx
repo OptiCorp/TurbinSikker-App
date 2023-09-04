@@ -116,7 +116,7 @@ const EditCheckListContextProvider = ({
         categoryId: string
     }) => {
         const res = await fetch(
-            `https://localhost:7290/api/UpdateChecklistTask?id=${data.taskId}`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklistTask?id=${data.taskId}`,
             {
                 method: 'POST',
                 headers: {
@@ -138,7 +138,7 @@ const EditCheckListContextProvider = ({
 
     const handleSave = async (data: { title: string; status: string }) => {
         const res = await fetch(
-            `https://localhost:7290/api/UpdateChecklist?id=${id}`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklist?id=${id}`,
             {
                 method: 'POST',
                 headers: {
@@ -163,7 +163,7 @@ const EditCheckListContextProvider = ({
     }
 
     const handleDelete = async (id: string | undefined) => {
-        await fetch(`https://localhost:7290/api/DeleteChecklist?id=${id}`, {
+        await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/DeleteChecklist?id=${id}`, {
             method: 'DELETE',
         })
         setRefreshList((prev) => !prev)

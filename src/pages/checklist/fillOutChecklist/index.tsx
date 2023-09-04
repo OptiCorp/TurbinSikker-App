@@ -66,7 +66,7 @@ export const FillOutCheckList = () => {
     })  => {
 
         const res = await fetch(
-            `https://localhost:7290/api/UpdateChecklistWorkflow?id=${data.id}`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklistWorkflow?id=${data.id}`,
             {
                 method: 'PUT',
                 headers: {

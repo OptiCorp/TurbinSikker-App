@@ -23,7 +23,7 @@ export const useAddTaskForm = () => {
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(
-            `https://localhost:7290/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
             {
                 method: 'POST',
                 headers: {
@@ -43,7 +43,7 @@ export const useAddTaskForm = () => {
         const fetchAllCheckListsId = async () => {
             if (checkListId) return
             const res = await fetch(
-                `https://localhost:7290/api/GetChecklist?id=${id}`
+                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetChecklist?id=${id}`
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()

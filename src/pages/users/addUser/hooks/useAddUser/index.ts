@@ -24,7 +24,7 @@ export const useAddUser = () => {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         if (appLocation.pathname === '/AddUser/') {
-            await fetch('https://localhost:7290/api/AddUser', {
+            await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddUser', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
@@ -41,7 +41,7 @@ export const useAddUser = () => {
                 openSnackbar('User added successfully!')
             }
         } else {
-            await fetch(`https://localhost:7290/api/UpdateUser?id=${id}`, {
+            await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateUser?id=${id}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
