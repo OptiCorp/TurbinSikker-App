@@ -52,7 +52,7 @@ function Punch() {
 
   async function getPunch() {
     const response = await fetch(
-      "https://localhost:7290/api/getPunch?id=708d8442-415f-4db0-8693-ec712d591cda"
+      "https://turbinsikker-api-lin-prod.azurewebsites.net/api/getPunch?id=708d8442-415f-4db0-8693-ec712d591cda"
     );
 
     const data = await response.json();
@@ -63,7 +63,7 @@ function Punch() {
     if (punchData) {
       try {
         const response = await fetch(
-          `https://localhost:7290/api/getChecklist?id=${punchData?.checklistWorkflowId}`,
+          `https://turbinsikker-api-lin-prod.azurewebsites.net/api/getChecklist?id=${punchData?.checklistWorkflowId}`,
           {
             headers: {
               "Content-Type": "application/json",
