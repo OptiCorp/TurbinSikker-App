@@ -51,11 +51,7 @@ export function AuthProvider({
   useEffect(() => {
     if (inProgress === InteractionStatus.None) {
       const accessTokenRequest = {
-        scopes: [
-          "User.Read",
-          "email",
-          "api://cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read",
-        ],
+        scopes: ["cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read"],
         account: accounts[0],
       };
 
@@ -64,7 +60,7 @@ export function AuthProvider({
         .then((tokenResponse) => {
           setAccessToken(tokenResponse.accessToken);
           setIdToken(tokenResponse.idToken);
-          console.log(tokenResponse);
+          console.log("Access token: " + tokenResponse.accessToken);
           const decodedIdToken = decode(tokenResponse.idToken) as {
             preferred_username?: string;
             email?: string;
@@ -85,7 +81,6 @@ export function AuthProvider({
               .then(function (accessTokenResponse) {
                 // Acquire token interactive success
                 const accessToken = accessTokenResponse.accessToken;
-                console.log("Accesstoken: " + accessToken);
               })
               .catch(function (error) {
                 // Acquire token interactive failure
@@ -112,8 +107,6 @@ export function AuthProvider({
     }),
     [account, inProgress, idToken, accounts, instance]
   );
-  console.log("access token: ", accessToken);
-
   if (accounts.length > 0) {
     return (
       <AuthContext.Provider value={memoedValue}>
