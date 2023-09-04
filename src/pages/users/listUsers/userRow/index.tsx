@@ -2,22 +2,27 @@ import { Chip, Icon, Table } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { UserEntity } from 'src/models/UserEntity'
 import { IUser } from '../../addUser/hooks/useAddUser/types'
+import { useHasPermission } from '../../hooks/useHasPermission'
 import { StyledTableCell, TableData } from '../styles'
-interface UserRowProps {
+
+type Props = {
     user: IUser
 }
 
-export const UserRow: FunctionComponent<UserRowProps> = ({ user }) => {
+export const UserRow: FunctionComponent<Props> = ({ user }) => {
     const navigate = useNavigate()
+    const { hasPermission } = useHasPermission()
 
     const clickHandler = (id: string) => {
-        navigate(`/EditUser/${id}`)
+        if (!hasPermission) {
+            navigate(`/User/${id}`)
+        } else {
+            navigate(`/EditUser/${id}`)
+        }
     }
-
     return (
-        <Table.Row>
+        <Table.Row onClick={() => clickHandler(user.id)}>
             <StyledTableCell>
                 <p
                     style={{

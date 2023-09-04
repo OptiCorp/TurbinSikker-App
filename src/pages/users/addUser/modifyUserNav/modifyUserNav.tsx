@@ -1,19 +1,33 @@
-import { Button, Dialog, Typography } from '@equinor/eds-core-react'
-
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { useEffect, useState } from 'react'
-
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { Button, Dialog, Typography } from '@equinor/eds-core-react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { useApiContext } from '../../../context/apiContextProvider'
+import { useUserContext } from '../../context/userContextProvider'
 import { useAddUser } from '../hooks/useAddUser'
-
 export const ModifyUserNav = () => {
     const { methods, location } = useAddUser()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [addNav, setAddNav] = useState(false)
     const [editNav, setEditNav] = useState(false)
     const [negativeOpen, setNegativeOpen] = useState(false)
+    const { handleDeleteUser } = useUserContext()
+    const { openSnackbar } = useContext(SnackbarContext)
+    const { id } = useParams()
+    const navigate = useNavigate()
+    const [updateOpen, setUpdateOpen] = useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
+
+    useEffect(() => {
+        if (location === '/AddUser/') {
+            setAddNav(true)
+            setEditNav(false)
+        } else {
+            setEditNav(true)
+            setAddNav(false)
+        }
+    })
 
     const handleOpen = () => {
         setPositiveOpen(true)
@@ -31,20 +45,7 @@ export const ModifyUserNav = () => {
 
         setPositiveOpen(false)
     }
-    useEffect(() => {
-        if (location === '/AddUser/') {
-            setAddNav(true)
-            setEditNav(false)
-        } else {
-            setEditNav(true)
-            setAddNav(false)
-        }
-    })
-    const { id } = useParams()
-    const { setRefreshUsers } = useApiContext()
-    const navigate = useNavigate()
-    const [updateOpen, setUpdateOpen] = useState(false)
-    const [deleteOpen, setDeleteOpen] = useState(false)
+
     const handleUpdate = () => {
         setUpdateOpen(true)
     }
@@ -62,16 +63,19 @@ export const ModifyUserNav = () => {
     const clearDeleteClose = () => {
         setDeleteOpen(false)
     }
+    const handleDeleteUserFunction = async () => {
+        try {
+            handleDeleteUser(id)
 
-    const handleClick = async () => {
-        await fetch(`http://20.251.37.226:8080/api/SoftDeleteUser?id=${id}`, {
-            method: 'DELETE',
-        })
-
-        setRefreshUsers((prevRefresh) => !prevRefresh)
-
-        navigate('/ListUsers')
+            if (openSnackbar) {
+                navigate('/ListUsers')
+                openSnackbar(`User deleted`)
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error)
+        }
     }
+
     return (
         <>
             <NavActionsComponent
@@ -114,7 +118,7 @@ export const ModifyUserNav = () => {
                 title="Clear form?"
                 negativeButtonOnClick={clearDeleteClose}
                 negativeButtonText="Clear"
-                negativeButtonColor="danger"
+                positiveButtonColor="danger"
                 positiveButtonVariant="ghost"
                 positiveButtonOnClick={handleCloseSecond}
                 positiveButtonText="Cancel"
@@ -165,7 +169,7 @@ export const ModifyUserNav = () => {
                 positiveButtonText="Delete user"
                 positiveButtonColor="danger"
                 buttonVariant="ghost"
-                positiveButtonOnClick={handleClick}
+                positiveButtonOnClick={handleDeleteUserFunction}
             >
                 <Typography
                     group="input"

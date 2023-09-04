@@ -1,33 +1,12 @@
 import { useContext } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-
-import { ApiContext } from '../../pages/context/apiContextProvider'
-import { ControllerWrap } from './styles'
-
-const customStyles = {
-    control: (styles: any) => ({
-        ...styles,
-        background: '#F7F7F7',
-        borderBottom: '1px solid black',
-    }),
-
-    option: (styles: any) => ({ ...styles }),
-    container: (styles: any) => ({
-        ...styles,
-        width: 250,
-        paddingBottom: '10px',
-    }),
-    menu: (styles: any) => ({
-        ...styles,
-        width: '200',
-        lineHeight: '20px',
-    }),
-}
+import { TaskCategoryContext } from './context/addTaskCategoryContextProvider'
+import { ControllerWrap, customStyles } from './styles'
 
 export const CategorySelector = () => {
     const { handleCategorySelect, category, tasks, handleTaskSelect } =
-        useContext(ApiContext)
+        useContext(TaskCategoryContext)
 
     const { control } = useFormContext()
 

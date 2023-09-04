@@ -1,15 +1,18 @@
 import { Typography } from '@equinor/eds-core-react'
-import { useContext } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-
-import { ApiContext } from '../../context/apiContextProvider'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { useCheckListContext } from '../../context/CheckListContextProvider'
 import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 
-export const SelectComponent = () => {
-    const { list, userList } = useContext(ApiContext)
 
-    const { control } = useForm()
+
+export const SelectComponent = () => {
+    const { userList } = useUserContext()
+    const { list } = useCheckListContext()
+    const { control, register } = useFormContext()
+
+    
 
     return (
         <>
@@ -29,7 +32,7 @@ export const SelectComponent = () => {
                 <FormContainer>
                     <Controller
                         control={control}
-                        name="Checklist"
+                        name="checklistId"
                         rules={{
                             required: 'Required',
                         }}
@@ -59,7 +62,7 @@ export const SelectComponent = () => {
                 <RecipientsContainer>
                     <Controller
                         control={control}
-                        name="userList"
+                        name="userId"
                         rules={{
                             required: 'Required',
                         }}
@@ -67,9 +70,9 @@ export const SelectComponent = () => {
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 options={userList}
-                                isMulti={true}
+                           
                                 value={userList.find((c) => c.value === value)}
-                                onChange={(val) => onChange(val)}
+                                onChange={(val) => onChange(val?.value)}
                             />
                         )}
                     />

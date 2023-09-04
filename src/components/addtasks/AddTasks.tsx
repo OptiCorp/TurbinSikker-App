@@ -3,11 +3,12 @@ import { FormProvider } from 'react-hook-form'
 
 import { CategorySelector } from './CategoryList'
 import { StyledCard, TitleHeader } from './styles'
-import { useAddTaskForm } from './useAddTaskForm'
+import { useAddTaskForm } from './hooks/useAddTaskForm'
 
 export const AddTasks = () => {
     const { methods, onSubmit } = useAddTaskForm()
     const { handleSubmit } = methods
+    
     return (
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>

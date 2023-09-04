@@ -1,3 +1,5 @@
+import { Option } from '../../../context/models/OptionsEntity'
+
 export type IUser = {
     status: string
     email: string
@@ -8,4 +10,14 @@ export type IUser = {
     username: string
     createdDate: string
     updatedDate: string | null
+}
+
+export type FormValues = {
+    firstName: string
+    lastName: string
+    userRole: { id: string; name: string }
+    email: string
+    options: Option
+    username: string
+    status: string
 }

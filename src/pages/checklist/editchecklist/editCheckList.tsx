@@ -1,26 +1,21 @@
-import { useAddTaskForm } from '@components/addtasks/useAddTaskForm'
-import { Typography } from '@equinor/eds-core-react'
-import { useNavigate, useParams } from 'react-router'
-
+import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
+import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { useContext, useState } from 'react'
+import { Typography } from '@equinor/eds-core-react'
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
 import { AddTasks } from '../../../components/addtasks/AddTasks'
-import { useApiContext } from '../../context/apiContextProvider'
-
 import { Wrapper } from '../previewCheckList/styles'
-import { EditList } from './EditList/EditList'
-
-import CustomDialog from '@components/modal/useModalHook'
 import { EditHeader } from './EditHeader'
-import { useEditCheckList } from './hooks/useEditCheckList'
+import { EditList } from './EditList/EditList'
+import { useEditCheckListContext } from './context/editCheckListContextProvider'
 
 export const EditCheckList = () => {
     const navigate = useNavigate()
     const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const { openSnackbar } = useContext(SnackbarContext)
-    const { handleDelete } = useApiContext()
     const { id } = useParams()
 
     const handleDeleteChecklist = async () => {
@@ -44,10 +39,24 @@ export const EditCheckList = () => {
         setDialogShowing(false)
     }
     const [title, setTitle] = useState('')
-
     const { checkListId, sortedTasks } = useAddTaskForm()
-    const { handleSave, checked, convertStatusToString, isOpenn, setIsOpenn } =
-        useEditCheckList()
+    const {
+        handleSave,
+
+        isOpenn,
+        setIsOpenn,
+        handleDelete,
+    } = useEditCheckListContext()
+
+    const [checked, setChecked] = useState(!!checkListId?.status)
+
+    useEffect(() => {
+        setChecked(checkListId?.status === 'Active')
+    }, [checkListId])
+
+    function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
+        return status ? 'Active' : 'Inactive'
+    }
 
     return (
         <div style={{ backgroundColor: '#f0f3f3' }}>
@@ -62,6 +71,8 @@ export const EditCheckList = () => {
                             handleClose={handleClose}
                             title={title}
                             setTitle={setTitle}
+                            checked={checked}
+                            setChecked={setChecked}
                         />
 
                         <Wrapper>

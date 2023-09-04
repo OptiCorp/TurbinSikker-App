@@ -1,10 +1,11 @@
 import { FunctionComponent } from 'react'
-import { ICheckListUserID } from '../../context/apiContextProvider'
+import { ICheckListUserID } from '../../context/models/ICheckListUserIDEntity'
 
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
+import { StyledChip } from '../allchecklists/styles'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
 
 interface CheckListRowProps {
@@ -35,80 +36,73 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
 
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(userIdCheckList.id)}>
-                <MyCheckListCell>
-                    <CellContentMyList>
-                        <Typography variant="body_short_bold">
-                            {userIdCheckList.title}
-                        </Typography>
+            {userIdCheckList && (
+                <StyledTableRow
+                    onClick={() => clickHandler(userIdCheckList.id)}
+                >
+                    <MyCheckListCell>
+                        <CellContentMyList>
+                            <Typography variant="body_long_bold">
+                                {userIdCheckList.title}
+                            </Typography>
 
-                        <Typography
-                            variant="caption"
-                            token={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
-                            }}
-                            style={{
-                                gridRow: '3/3',
-                            }}
-                        >
-                            Created {formattedCreatedDate}
-                        </Typography>
-                    </CellContentMyList>
-                </MyCheckListCell>
-                <MyCheckListCell>
-                    <CellContentMyList>
-                        <Chip
-                            style={{
-                                paddingLeft: '0',
-                                lineHeight: '0',
-                                margin: '0 auto',
-                                gridRow: '1/1',
-                            }}
-                        >
-                            <Icon
-                                data={assignment_user}
-                                color="#243746"
-                                style={{ height: '15px' }}
-                            />
-                            submitted to 0 inspectors
-                        </Chip>
-                        <Typography
-                            variant="caption"
-                            token={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
-                            }}
-                            style={{
-                                gridRow: '3/3',
-                            }}
-                        >
-                            0/0 delivered
-                        </Typography>
-                    </CellContentMyList>
-                </MyCheckListCell>
+                            <Typography
+                                variant="caption"
+                                token={{
+                                    fontSize: '1em',
+                                }}
+                                style={{ height: '0px', minWidth: '100px' }}
+                            >
+                                Created {formattedCreatedDate}
+                            </Typography>
+                        </CellContentMyList>
+                    </MyCheckListCell>
+                    <MyCheckListCell>
+                        <CellContentMyList>
+                            <StyledChip
+                                style={{
+                                    minWidth: '100px',
+                                    display: 'flex',
+                                    margin: '0 auto',
+                                    justifyContent: 'center',
+                                    alignContent: 'center',
+                                }}
+                            >
+                                <Icon
+                                    data={assignment_user}
+                                    color="#243746"
+                                    style={{ height: '15px' }}
+                                />
+                                <Typography
+                                    variant="caption"
+                                    token={{
+                                        fontSize: '1rem',
+                                    }}
+                                >
+                                    0 inspectors
+                                </Typography>
+                            </StyledChip>
+                        </CellContentMyList>
+                    </MyCheckListCell>
 
-                <MyCheckListCell>
-                    <CellContentMyList>
-                        <Chip
-                            variant="active"
-                            style={{ margin: '0 auto', gridRow: '1/1' }}
-                        >
-                            {userIdCheckList.status}
-                        </Chip>
-                        <Typography
-                            variant="caption"
-                            token={{
-                                textAlign: 'center',
-                                fontSize: '0.8rem',
-                            }}
-                            style={{ gridRow: '3/3' }}
-                        >
-                            {formattedUpdatedDate}
-                        </Typography>
-                    </CellContentMyList>
-                </MyCheckListCell>
-            </StyledTableRow>
+                    <MyCheckListCell>
+                        <CellContentMyList>
+                            <Chip variant="active" style={{ margin: '0 auto' }}>
+                                {userIdCheckList.status}
+                            </Chip>
+                            <Typography
+                                variant="caption"
+                                token={{
+                                    textAlign: 'center',
+                                    fontSize: '0.8rem',
+                                }}
+                            >
+                                {formattedUpdatedDate}
+                            </Typography>
+                        </CellContentMyList>
+                    </MyCheckListCell>
+                </StyledTableRow>
+            )}
         </>
     )
 }

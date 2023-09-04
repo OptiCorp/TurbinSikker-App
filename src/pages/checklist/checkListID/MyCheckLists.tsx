@@ -5,25 +5,29 @@ import { Table } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { ApiContext, useApiContext } from '../../context/apiContextProvider'
+import { useCheckListContext } from '../../context/CheckListContextProvider'
 import { CheckListUserIDRow } from './CheckListIDrow'
 
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import {
     BackgroundWrap,
     HeadCell,
     ListWrapperCheckMyList,
     MakeTitleField,
-    Styledh3,
+    StyledHeadContents,
+    StyledHeadTitle,
 } from './styles'
 
 export const MyCheckLists = () => {
-    const { handleSubmit } = useApiContext()
+    const { handleSubmit } = useCheckListContext()
     const { openSnackbar } = useContext(SnackbarContext)
+    const { currentUser } = useUserContext()
 
     const handleCreateChecklist = async () => {
         try {
             handleSubmit({
                 title,
+                CreatedBy: currentUser?.id ?? '',
             })
             setDialogShowing(false)
             if (openSnackbar) {
@@ -41,10 +45,10 @@ export const MyCheckLists = () => {
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { userIdCheckList } = useContext(ApiContext)
+    const { userIdCheckList } = useCheckListContext()
 
     const [activeRow, setActiveRow] = useState(false)
-
+    console.log(userIdCheckList)
     return (
         <>
             <BackgroundWrap>
@@ -53,13 +57,17 @@ export const MyCheckLists = () => {
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
-                                    <Styledh3>Name</Styledh3>
+                                    <StyledHeadTitle>Title</StyledHeadTitle>
                                 </HeadCell>
                                 <HeadCell>
-                                    <Styledh3>Status</Styledh3>
+                                    <StyledHeadContents>
+                                        Assigned
+                                    </StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
-                                    <Styledh3>Last Update</Styledh3>
+                                    <StyledHeadContents>
+                                        Status
+                                    </StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
@@ -102,8 +110,6 @@ export const MyCheckLists = () => {
                     }}
                     isShown={true}
                     SecondButtonMessage="Send Checklist"
-                    as="a"
-                    href="/SendCheckList/"
                 />
             )}
             <CustomDialog

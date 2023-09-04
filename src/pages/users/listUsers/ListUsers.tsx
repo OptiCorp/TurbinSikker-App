@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 
 import { Button, Table } from '@equinor/eds-core-react'
 import { Link } from 'react-router-dom'
-import { ApiContext } from '../../context/apiContextProvider'
+
 import {
     CellSize,
     ContainerForm,
@@ -14,10 +14,12 @@ import { UserRow } from './userRow'
 
 import { Icon } from '@equinor/eds-core-react'
 import { visibility, visibility_off } from '@equinor/eds-icons'
+import { useUserContext } from '../context/userContextProvider'
+import { useHasPermission } from '../hooks/useHasPermission'
 
 export const ListUsers = () => {
-    const { result: users } = useContext(ApiContext)
-
+    const { result: users } = useUserContext()
+    // const { hasPermission } = useHasPermission()
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 
     const handleClick = () => {
@@ -45,33 +47,41 @@ export const ListUsers = () => {
                             </StyledTableCell>
                             <StyledTableCell>
                                 <CellSize>
-                                    <Button
-                                        style={{
-                                            margin: '0 auto',
-                                            width: '80px',
-                                            height: '25px',
+                                    {/* {!hasPermission ? (
+                                        <p>Status</p>
+                                    ) : ( */}
+                                        <Button
+                                            style={{
+                                                margin: '0 auto',
+                                                width: '80px',
+                                                height: '25px',
 
-                                            fontSize: '0.7rem',
-                                        }}
-                                        onClick={handleClick}
-                                    >
-                                        Status
-                                        {showInactiveUsers ? (
-                                            <Icon
-                                                size={16}
-                                                data={visibility}
-                                                onClick={handleClick}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                        ) : (
-                                            <Icon
-                                                size={16}
-                                                data={visibility_off}
-                                                onClick={handleClick}
-                                                style={{ cursor: 'pointer' }}
-                                            />
-                                        )}
-                                    </Button>
+                                                fontSize: '0.7rem',
+                                            }}
+                                            onClick={handleClick}
+                                        >
+                                            Status
+                                            {showInactiveUsers ? (
+                                                <Icon
+                                                    size={16}
+                                                    data={visibility}
+                                                    onClick={handleClick}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                    }}
+                                                />
+                                            ) : (
+                                                <Icon
+                                                    size={16}
+                                                    data={visibility_off}
+                                                    onClick={handleClick}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                    }}
+                                                />
+                                            )}
+                                        </Button>
+                                    {/* )} */}
                                 </CellSize>
                             </StyledTableCell>
                             <StyledTableCell> </StyledTableCell>

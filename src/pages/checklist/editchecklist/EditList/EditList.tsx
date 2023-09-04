@@ -1,6 +1,6 @@
 import CustomDialog from '@components/modal/useModalHook'
 import { useState } from 'react'
-import { CheckListEntity } from 'src/models/CheckListEntity'
+import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import {
     CategoryName,
     Container,
@@ -8,11 +8,11 @@ import {
     PreviewListWrap,
     StyledCard,
 } from '../../previewCheckList/styles'
-import { useEditCheckList } from '../hooks/useEditCheckList'
+import { useEditCheckListContext } from '../context/editCheckListContextProvider'
 import { EditListPoints } from '../styles'
 
 type Props = {
-    tasks: CheckListEntity
+    tasks: CheckListEntity | null
     sortedTasks: CheckListEntity['tasks']
 }
 
@@ -20,7 +20,7 @@ export const EditList = (props: Props) => {
     let lastCategoryName = ''
     const [content, setContent] = useState('')
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { task, setTask, updateCheckListTask } = useEditCheckList()
+    const { task, setTask, updateCheckListTask } = useEditCheckListContext()
 
     const handleSubmit = () => {
         updateCheckListTask({

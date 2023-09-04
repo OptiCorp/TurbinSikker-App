@@ -1,6 +1,6 @@
 import { Card } from '@equinor/eds-core-react'
+import Select from 'react-select'
 import styled from 'styled-components'
-
 export const TitleHeader = styled.div`
     display: flex;
 
@@ -17,3 +17,22 @@ export const StyledCard = styled(Card)`
     width: 100%;
     padding: 1rem;
 `
+export const customStyles = {
+    control: (styles: any) => ({
+        ...styles,
+        background: '#F7F7F7',
+        borderBottom: '1px solid black',
+    }),
+
+    option: (styles: any) => ({ ...styles }),
+    container: (styles: any) => ({
+        ...styles,
+        width: 250,
+        paddingBottom: '10px',
+    }),
+    menu: (styles: any) => ({
+        ...styles,
+        width: '200',
+        lineHeight: '20px',
+    }),
+}

@@ -1,32 +1,13 @@
-import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
+import { useUserContext } from '../../context/userContextProvider'
 import { useAddUser } from '../hooks/useAddUser'
-import { Option } from '../types'
 
 export const RoleSelector = () => {
     const { control, setValue } = useFormContext()
     const { user } = useAddUser()
-    const [options, setOptions] = useState<Option[]>([])
+    const { options } = useUserContext()
 
-    useEffect(() => {
-        const fetchUserRoles = async () => {
-            const res = await fetch(
-                'http://20.251.37.226:8080/api/GetAllUserRoles'
-            )
-            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-            const data = await res.json()
-
-            const options = data.map(
-                ({ id, name }: { id: string; name: string }) => ({
-                    value: id,
-                    label: name,
-                })
-            )
-            setOptions(options)
-        }
-        fetchUserRoles()
-    }, [])
     const currentDefaultValue = options.find(
         (option) => option.label === user?.userRole.name
     )

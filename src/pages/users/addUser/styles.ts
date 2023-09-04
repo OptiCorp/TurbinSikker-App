@@ -27,3 +27,14 @@ export const BtnWrapper = styled.div`
     margin: 0 auto;
     justify-content: space-evenly;
 `
+export const UserInfoWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 52px;
+    text-align: start;
+`
+
+export const UserTitle = styled.h1`
+    margin-bottom: 20px;
+`
