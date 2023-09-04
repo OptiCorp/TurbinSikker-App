@@ -3,7 +3,8 @@ import { TopBar } from '@equinor/eds-core-react'
 
 export const NewTopBar = styled(TopBar)`
     background: #243746;
-    display: flex;
+    display: grid;
+    
    
 ;
 `

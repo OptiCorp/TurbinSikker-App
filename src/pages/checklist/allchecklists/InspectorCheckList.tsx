@@ -1,24 +1,19 @@
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { StyledTableRow } from '../checkListID/styles'
-import {
-    
-    useWorkflowContext,
-} from '../workflow/context/workFlowContextProvider'
-import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 import { WorkFlow } from '../workflow/context/models/WorkFlowEntity'
+import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
 
 interface CheckListRowProps {
     WorkFlow: WorkFlow
 }
 
-export const ReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({
-    WorkFlow,
-}) => {
+export const InspectorReceivedCheckLists: FunctionComponent<
+    CheckListRowProps
+> = ({ WorkFlow }) => {
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')

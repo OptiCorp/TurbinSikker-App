@@ -7,11 +7,11 @@ import { Configuration,  PublicClientApplication } from "@azure/msal-browser";
 
 const configuration: Configuration = {
   auth: {
-      clientId: "95763e09-e04c-48a8-99a6-a878ed99d774",
-      authority: "https://login.microsoftonline.com/df4dc9e8-cc4f-4792-a55e-36f7e1d92c47"
-  }
+    clientId: "3fe72596-7439-4d86-b45e-c8ae20fd6075",
+    authority:
+      "https://login.microsoftonline.com/1a3889b2-f76f-4dd8-831e-b2d5e716c986/",
+  },
 };
-
 const pca = new PublicClientApplication(configuration);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

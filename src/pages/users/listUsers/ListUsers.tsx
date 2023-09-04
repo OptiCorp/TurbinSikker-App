@@ -19,7 +19,7 @@ import { useHasPermission } from '../hooks/useHasPermission'
 
 export const ListUsers = () => {
     const { result: users } = useUserContext()
-    const { hasPermission } = useHasPermission()
+    // const { hasPermission } = useHasPermission()
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 
     const handleClick = () => {
@@ -47,9 +47,9 @@ export const ListUsers = () => {
                             </StyledTableCell>
                             <StyledTableCell>
                                 <CellSize>
-                                    {!hasPermission ? (
+                                    {/* {!hasPermission ? (
                                         <p>Status</p>
-                                    ) : (
+                                    ) : ( */}
                                         <Button
                                             style={{
                                                 margin: '0 auto',
@@ -81,7 +81,7 @@ export const ListUsers = () => {
                                                 />
                                             )}
                                         </Button>
-                                    )}
+                                    {/* )} */}
                                 </CellSize>
                             </StyledTableCell>
                             <StyledTableCell> </StyledTableCell>

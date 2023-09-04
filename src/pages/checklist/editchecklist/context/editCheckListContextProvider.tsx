@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
 import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
@@ -146,8 +146,8 @@ const EditCheckListContextProvider = ({
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    title: data.title || title,
-                    status: data.status,
+                    title: data.title,
+                    status: 1,
                 }),
             }
         )

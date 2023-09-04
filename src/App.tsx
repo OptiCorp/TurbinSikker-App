@@ -13,9 +13,9 @@ const App = () => {
 
     return (
         <div className="wrapper">
-            {/* {isAuthenticated && (
+            {isAuthenticated && (
                 <AuthProvider>
-                   */}
+                  
                         <UserContextProvider>
                         <CheckListContextProvider>
                             <SnackbarContextProvider>
@@ -25,9 +25,9 @@ const App = () => {
                             </CheckListContextProvider>
                         </UserContextProvider>
                   
-                {/* </AuthProvider>
+                </AuthProvider>
             )}
-            {!isAuthenticated && <Login />} */}
+            {!isAuthenticated && <Login />}
         </div>
     )
 }

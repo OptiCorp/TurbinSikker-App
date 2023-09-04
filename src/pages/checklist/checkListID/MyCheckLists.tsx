@@ -5,12 +5,10 @@ import { Table } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import {
-    CheckListContext,
-    useCheckListContext,
-} from '../../context/CheckListContextProvider'
+import { useCheckListContext } from '../../context/CheckListContextProvider'
 import { CheckListUserIDRow } from './CheckListIDrow'
 
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import {
     BackgroundWrap,
     HeadCell,
@@ -18,17 +16,18 @@ import {
     MakeTitleField,
     StyledHeadContents,
     StyledHeadTitle,
-  
 } from './styles'
 
 export const MyCheckLists = () => {
     const { handleSubmit } = useCheckListContext()
     const { openSnackbar } = useContext(SnackbarContext)
+    const { currentUser } = useUserContext()
 
     const handleCreateChecklist = async () => {
         try {
             handleSubmit({
                 title,
+                CreatedBy: currentUser?.id ?? '',
             })
             setDialogShowing(false)
             if (openSnackbar) {
@@ -49,7 +48,7 @@ export const MyCheckLists = () => {
     const { userIdCheckList } = useCheckListContext()
 
     const [activeRow, setActiveRow] = useState(false)
-console.log(userIdCheckList)
+    console.log(userIdCheckList)
     return (
         <>
             <BackgroundWrap>
@@ -61,10 +60,14 @@ console.log(userIdCheckList)
                                     <StyledHeadTitle>Title</StyledHeadTitle>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledHeadContents>Assigned</StyledHeadContents>
+                                    <StyledHeadContents>
+                                        Assigned
+                                    </StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledHeadContents>Status</StyledHeadContents>
+                                    <StyledHeadContents>
+                                        Status
+                                    </StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
@@ -107,7 +110,6 @@ console.log(userIdCheckList)
                     }}
                     isShown={true}
                     SecondButtonMessage="Send Checklist"
-                    
                 />
             )}
             <CustomDialog

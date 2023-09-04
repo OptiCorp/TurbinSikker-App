@@ -37,7 +37,7 @@ const { checkListId, sortedTasks } = useAddTaskForm()
 
     useEffect(() => {
         const workflow = WorkFlows.find((item) => item.checklist.id === checkListId?.id)
-        let pathTitle = ''
+        let pathTitle:any = ''
         if (location.pathname.includes('FillOutCheckList') && workflow) {
             pathTitle = workflow.checklist.title + ' ' + workflow.id.slice(0, -30) || ''
         } else if (location.pathname === '/AddUser/') {
