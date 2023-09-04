@@ -17,8 +17,11 @@ import { useCheckListContext } from "../../../pages/context/CheckListContextProv
 import { useWorkflowContext } from "../workflow/context/workFlowContextProvider"
 
 
+
 export type UpdatingWorkFlowEntity = {
    id: string
+status: number
+checklistId: string
 userId: string
 
   
@@ -48,17 +51,22 @@ export const FillOutCheckList = () => {
 
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const { refreshList, setRefreshList } = useCheckListContext()
-      const { handleSubmit, control } = methods
+      const { handleSubmit, control} = methods
       const { idToken } = useAuth()
       const { openSnackbar } = useContext(SnackbarContext)
 
 
       
-      const onSubmit: SubmitHandler<UpdatingWorkFlowEntity> = async (data) => {
-
+      const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
+       id: string
+       checklistId: string
+       userId: string
+       status: number
+       
+    })  => {
 
         const res = await fetch(
-            `https://localhost:7290/api/UpdateChecklistWorkflow?id=${id}`,
+            `https://localhost:7290/api/UpdateChecklistWorkflow?id=${data.id}`,
             {
                 method: 'PUT',
                 headers: {
@@ -66,76 +74,69 @@ export const FillOutCheckList = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                
-                }),
+                    id: data.id,
+                    checklistId: data.checklistId,
+                    userId: data.userId,
+                    status: data.status
+                })
             }
         )
-        if (res.ok) {
-            setRefreshList((prev) => !prev)
-        }
-        setSubmitDialogShowing(false)
-          navigate('/Checklist')
-    
+        if (res.ok) setRefreshList((prev) => !prev)
     
         if (openSnackbar) {
-            openSnackbar('Checklist sendt!')
+            openSnackbar(`Task updated`)
         }
     }
-
-
-
-
-
-
-      
+    
 
       
     return (
         <>
        <FormProvider {...methods}>
-        <form  onSubmit={handleSubmit(onSubmit)} id="fill-out-checklist">
+        <form  onSubmit={handleSubmit(onUpdate)} id="fill-out-checklist">
                 <div style={{ backgroundColor: '#f0f3f3' }}>
                     {checkListId && (
-                        <div key={checkListId.id}>
-                            <AddPunchHeader>
-                                <StyledCard>
-                                    <StyledCardHeader
-                                    > <Typography
-                                    onClick={() => setCommentDialogShowing(true)}
-                                    token={{
-                                        textAlign: 'center',  fontWeight: 600,
-                                        fontSize: '0.8rem',color:'green'
-                                    }}
-                                    link href="#"
-                                >
-                                    
-                          Add comment
-                        </Typography>
-                        <Typography
-                           onClick={()=> setPunchDialogShowing(true)}
-                            token={{
-                                textAlign: 'center',  fontWeight: 600,
-                                fontSize: '0.8rem',color:'red'
-                            }}
-                            link href="#"
-                        >
-                          Add punch
-                        </Typography>
-                                    </StyledCardHeader>
-                                </StyledCard>
-                            </AddPunchHeader>
-                          
-                        </div>
+                                            <div key={checkListId.id}>
+                                                <AddPunchHeader>
+                                                    <StyledCard>
+                                                        <StyledCardHeader
+                                                        > <Typography
+                                                        onClick={() => setCommentDialogShowing(true)}
+                                                        token={{
+                                                            textAlign: 'center',  fontWeight: 600,
+                                                            fontSize: '0.8rem',color:'green'
+                                                        }}
+                                                        link href="#"
+                                                    >
+                                                        
+                                            Add comment
+                                            </Typography>
+                                            <Typography
+                                            onClick={()=> setPunchDialogShowing(true)}
+                                                token={{
+                                                    textAlign: 'center',  fontWeight: 600,
+                                                    fontSize: '0.8rem',color:'red'
+                                                }}
+                                                link href="#"
+                                            >
+                                            Add punch
+                                            </Typography>
+                                                        </StyledCardHeader>
+                                                    </StyledCard>
+                                                </AddPunchHeader>
+                                            
+                                            </div>
                     )}
-                            <Wrapper>
-                            {WorkFlows.map((WorkFlow) => (
-                                <FillOutList
-                                key={checkList?.id}
-                                WorkFlow={WorkFlow}
-                                tasks={checkListId}
-                                sortedTasks={sortedTasks}
-                            />   ))}
-                        </Wrapper>
+                                <Wrapper>
+                                {WorkFlows.map((WorkFlow) => (
+                                    <FillOutList
+                                    key={checkList?.id}
+                                    WorkFlow={WorkFlow}
+                                    tasks={checkListId}
+                                    sortedTasks={sortedTasks}
+                                    onUpdate={onUpdate}
+                                />   ))}
+                            </Wrapper>
 
                         <CustomDialog
                 isOpen={commentDialogShowing}
@@ -145,12 +146,11 @@ export const FillOutCheckList = () => {
                 positiveButtonText="Save"
                 buttonVariant="ghost"
                 
-            >    <Typography
-            group="input"
-            variant="text"
-            token={{ textAlign: 'left' }}
-        >
-        Comment will be added to the end of the form.</Typography>
+                            >    <Typography
+                            variant="text"
+                            token={{ textAlign: 'left' }}
+                        >
+                        Comment will be added to the end of the form.</Typography>
                 <EditListPoints
                     label=""
                     key={checkList.id ?? ''}
@@ -171,12 +171,7 @@ export const FillOutCheckList = () => {
                             negativeButtonOnClick={()=> setPunchDialogShowing(false)}
                             negativeButtonText="Cancel"
                             positiveButtonText="OK"
-                            // positiveButtonOnClick={() => {
-                            //     if (changeTitle) {
-                            //         setTitle(changeTitle)
-                            //     }
-                            //     setDialogShowing(false)
-                            // }}
+                           
                             isOpen={punchDialogShowing}
                         >
        <Typography
@@ -187,7 +182,7 @@ export const FillOutCheckList = () => {
 You will be forwarded to Punch form. You will be able to continue this form where you left after.</Typography>
                         </CustomDialog>
 
-                        <CustomDialog
+                        {/* <CustomDialog
                             title="Submit form?"
                             buttonVariant="ghost"
                             negativeButtonOnClick={()=> setSubmitDialogShowing(false)}
@@ -202,7 +197,6 @@ You will be forwarded to Punch form. You will be able to continue this form wher
                             isOpen={submitDialogShowing}
                         > </CustomDialog>
 
-                    {checkListId && (
                         <NavActionsComponent
                             buttonColor="primary"
                             secondButtonColor="primary"
@@ -212,8 +206,8 @@ You will be forwarded to Punch form. You will be able to continue this form wher
                             isShown={true}
                             ButtonMessage="Clear"
                             SecondButtonMessage="Submit"
-                        />
-                    )}
+                        /> */}
+                    
                      
                 </div>
                 </form></FormProvider>

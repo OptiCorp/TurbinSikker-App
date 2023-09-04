@@ -15,11 +15,11 @@ export const AddUser: FC = () => {
     const { methods, onSubmit, user } = useAddUser()
     const { handleSubmit } = methods
 
-    // const { hasPermission } = useHasPermission()
+    const { hasPermission } = useHasPermission()
 
     return (
         <>
-            {/* {!hasPermission ? ( */}
+            {!hasPermission ? (
                 <UserInfoWrapper>
                     <div>
                         <UserTitle>
@@ -66,7 +66,7 @@ export const AddUser: FC = () => {
                     </Wrapper>
                     <ModifyUserNav />
                 </FormProvider>
-            {/* )} */}
+             )} 
         </>
     )
 }

@@ -6,6 +6,7 @@ export const NewTopBar = styled(TopBar)`
   display: grid;
 `;
 
+
 export const HeaderContents = styled.div``;
 
 export const HeaderLocation = styled.p`

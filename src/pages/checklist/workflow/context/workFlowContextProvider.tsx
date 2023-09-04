@@ -4,12 +4,11 @@ import React, {
     useEffect,
     useState,
 } from 'react'
-import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
-import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 
-import { useUserContext } from '../../../users/context/userContextProvider'
 import { CheckList, WorkFlow } from './models/WorkFlowEntity'
 import { AllWorkFlows } from './models/AllWorkFlowEntity'
+
+
 
 
 type WorkflowContext = {
@@ -32,9 +31,7 @@ const WorkflowContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
-    const { idToken } = useAuth()
-    const { openSnackbar } = useContext(SnackbarContext)
-    const { currentUser } = useUserContext()
+    
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [date, setDate] = useState<string>()
@@ -59,6 +56,7 @@ const WorkflowContextProvider = ({
                     formattedUpdateDate: formatDate(item.updateDate),
                 }))
                 setChecklistWorkFlow(data)
+       
             } catch (error) {
                 console.error('Error fetching checklist workflow:', error)
             }
@@ -89,12 +87,16 @@ const WorkflowContextProvider = ({
     }, [])
     // }, [currentUser])
 
+ 
+    
+
     return (
         <WorkflowContext.Provider
             value={{
                 WorkFlows: checklistWorkFlows,
                 testData: testData,
                 allWorkFlows: allWorkFlows,
+
             }}
         >
             {children}

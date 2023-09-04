@@ -8,51 +8,35 @@ import { EditCheckList } from "../pages/checklist/editchecklist/editCheckList";
 import { PreviewCheckList } from "../pages/checklist/previewCheckList/Preview";
 import { SendCheckList } from "../pages/checklist/sendchecklist";
 
-import { EditCheckListContextProvider } from "../pages/checklist/editchecklist/context/editCheckListContextProvider";
-import { FillOutCheckList } from "../pages/checklist/fillOutChecklist";
-import { WorkflowContextProvider } from "../pages/checklist/workflow/context/workFlowContextProvider";
-import { LandingPage } from "../pages/landingPage/LandingPage";
-import { Profile } from "../pages/profile";
-import Punch from "../pages/punch/Punch";
-import { AddPunch } from "../pages/punch/addPunch/AddPunch";
-import { AddUser } from "../pages/users/addUser/AddUser";
-import { ListUsers } from "../pages/users/listUsers/ListUsers";
-import { TaskCategoryContextProvider } from "./addtasks/context/addTaskCategoryContextProvider";
 
-// const views = {
-// separate pages
-//   admin: AdminViews,
-//   leader: LeaderView,
-//   inspector: InspectorView,
-// }
+import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
+import { FillOutCheckList } from '../pages/checklist/fillOutChecklist'
+import { WorkflowContextProvider } from '../pages/checklist/workflow/context/workFlowContextProvider'
+import { LandingPage } from '../pages/landingPage/LandingPage'
+import useAuth from '../pages/landingPage/context/LandingPageContextProvider'
+import { Profile } from '../pages/profile'
+import { AddUser } from '../pages/users/addUser/AddUser'
+import { useUserContext } from '../pages/users/context/userContextProvider'
+import { ListUsers } from '../pages/users/listUsers/ListUsers'
+import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
 
-// interface Test {
-//   user: {
-//     permission: 'admin' | 'leader' | "inspector"
-//   }
-// }
+export function RoutesContainer() {
+    const { currentUser } = useUserContext()
 
-// TODO: Try using (refactor the way permissions is setup) the views obj for checking if user has permission (https://www.youtube.com/shorts/XXI9BTWWOkE)
+    const {} = useAuth()
 
-export function RoutesContainer(/* {user}: Test */) {
-  /* const { currentUser } = useUserContext() */
-  // const CurrentView = views[user.permission]
-
-  // const {} = useAuth()
-
-  // const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  //     if (currentUser?.userRole.name === 'Inspector') {
-  //         return <Navigate to="/" replace />
-  //     }
-  //     return children
-  // }
-  return (
-    <>
-      <WorkflowContextProvider>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<LandingPage />} />
-
+    const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+        if (currentUser?.userRole.name === 'Inspector') {
+            return <Navigate to="/" replace />
+        }
+        return children
+    }
+    return (
+        <>
+            <WorkflowContextProvider>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route path="/" element={<LandingPage />} />
             <Route path="/Profile" element={<Profile />} />
 
             <Route element={<IndexCheckLists />}>
@@ -63,6 +47,7 @@ export function RoutesContainer(/* {user}: Test */) {
               path="/PreviewCheckList/:id"
               element={<PreviewCheckList />}
             />
+
 
             <Route
               path="/FillOutCheckList/:id"
@@ -104,4 +89,5 @@ export function RoutesContainer(/* {user}: Test */) {
       </WorkflowContextProvider>
     </>
   );
-}
+
+             
