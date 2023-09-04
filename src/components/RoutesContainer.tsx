@@ -19,11 +19,12 @@ import { AddUser } from '../pages/users/addUser/AddUser'
 import { useUserContext } from '../pages/users/context/userContextProvider'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
 import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
+import Punch from "src/pages/punch/Punch";
+import { AddPunch } from "src/pages/punch/addPunch/AddPunch";
 
 export function RoutesContainer() {
     const { currentUser } = useUserContext()
 
-    const {} = useAuth()
 
     const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         if (currentUser?.userRole.name === 'Inspector') {
