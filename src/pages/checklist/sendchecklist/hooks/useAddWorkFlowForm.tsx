@@ -29,7 +29,7 @@ export const useAddWorkFlowForm = () => {
 
     const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
         const res = await fetch(
-            `https://localhost:7290/api/CreateChecklistWorkFlow`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/CreateChecklistWorkFlow`,
             {
                 method: 'POST',
                 headers: {

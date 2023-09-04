@@ -45,8 +45,8 @@ const WorkflowContextProvider = ({
         const fetchCheckListWorkFlow = async () => {
             try {
                 const res = await fetch(
-                    'https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=634c61d6-ede8-49cf-ab70-ebc412de7499'
-                    // `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
+                    'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflowsByUserId?userId=634c61d6-ede8-49cf-ab70-ebc412de7499'
+                    // `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
@@ -69,7 +69,7 @@ const WorkflowContextProvider = ({
         const fetchAllCheckListWorkFlow = async () => {
             try {
                 const res = await fetch(
-                    `https://localhost:7290/api/GetAllChecklistWorkflows`
+                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflows`
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)

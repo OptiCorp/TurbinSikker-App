@@ -52,7 +52,7 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch(
-                'https://localhost:7290/api/GetAllCategories'
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllCategories'
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -71,7 +71,7 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchTasks = async () => {
             const res = await fetch(
-                `https://localhost:7290/api/GetAllTasksByCategoryId?id=${selectedOption}`
+                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllTasksByCategoryId?id=${selectedOption}`
             )
             const data = await res.json()
 
