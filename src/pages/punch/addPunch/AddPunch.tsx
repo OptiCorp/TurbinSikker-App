@@ -52,7 +52,7 @@ export const AddPunch: FunctionComponent = () => {
     });
   }
 
-  async function onSubmit(e: React.FormEvent, data) {
+  async function onSubmit(e: React.FormEvent, data: any) {
     console.log(data);
     e.preventDefault();
     if (appLocation.pathname === "/AddPunch") {
