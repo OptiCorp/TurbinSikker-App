@@ -3,6 +3,7 @@ export type WorkFlow = {
     checklistId: string
     userId: string
     status: number | null
+    createdById: string
     updateDate: string
     formattedUpdateDate: string
     checklist: CheckList

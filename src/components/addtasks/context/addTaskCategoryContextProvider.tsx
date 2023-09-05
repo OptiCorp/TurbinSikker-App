@@ -6,6 +6,9 @@ import React, {
     useState,
 } from 'react'
 
+import { useParams } from 'react-router'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { Category } from './models/CategoryEntity'
 import { TaskEntity } from './models/TaskEntity'
@@ -46,9 +49,11 @@ const TaskCategoryContextProvider = ({
     const handleTaskSelect = (selectedTask: any) => {
         setSelectedTask(selectedTask.value)
     }
-
+    const [checkListId, setCheckListId] = useState<CheckListEntity | null>(null)
+    const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
     const { openSnackbar } = useContext(SnackbarContext)
-
+    const { refreshList, setRefreshList } = useCheckListContext()
+    const { id } = useParams()
     useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch(
@@ -89,8 +94,6 @@ const TaskCategoryContextProvider = ({
         }
     }, [selectedOption])
 
-    //
-
     const memoedValue = useMemo(
         () => ({
             selectedOption,
@@ -103,6 +106,9 @@ const TaskCategoryContextProvider = ({
             selectedTask,
             setSelectedTask,
             setSelectedOption,
+
+            sortedTasks,
+            checkListId,
         }),
         [
             selectedOption,
@@ -115,6 +121,9 @@ const TaskCategoryContextProvider = ({
             selectedTask,
             setSelectedTask,
             setSelectedOption,
+
+            sortedTasks,
+            checkListId,
         ]
     )
 

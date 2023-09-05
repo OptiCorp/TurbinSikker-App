@@ -70,7 +70,7 @@ const EditCheckListContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
-    const { checkListId } = useAddTaskForm()
+    const { checkListById } = useAddTaskForm()
     const { id } = useParams()
     const navigate = useNavigate()
     const { setRefreshList } = useCheckListContext()
@@ -97,10 +97,10 @@ const EditCheckListContextProvider = ({
     }
 
     useEffect(() => {
-        if (checkListId && checkListId.tasks.length === 0) {
+        if (checkListById && checkListById.tasks.length === 0) {
             setIsOpenn(true)
         }
-    }, [checkListId])
+    }, [checkListById])
 
     const handleTitleChange = (title: string) => {
         setTitle(title)
