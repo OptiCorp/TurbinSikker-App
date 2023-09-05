@@ -41,7 +41,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
         const fetchChecklistData = async () => {
             try {
                 const res = await fetch(
-                    `https://localhost:7290/api/GetChecklist?id=${allWorkFlow.checklistId}`
+                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetChecklist?id=${allWorkFlow.checklistId}`
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
@@ -63,7 +63,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
         const getUserName = async () => {
             try {
                 const res = await fetch(
-                    `https://localhost:7290/api/GetUser?id=${allWorkFlow.userId}`
+                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetUser?id=${allWorkFlow.userId}`
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)

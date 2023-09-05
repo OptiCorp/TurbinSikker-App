@@ -50,12 +50,20 @@ const CheckListContextProvider = ({
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])
-    const { idToken } = useAuth()
+    const { idToken, accessToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
     const { currentUser } = useUserContext()
+    
     /// fetch checklist
     const fetchCheckLists = async () => {
-        const res = await fetch(`https://localhost:7290/api/GetAllChecklists`)
+        const res = await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklists`,
+        {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": '*'
+            }})
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
 
@@ -64,16 +72,17 @@ const CheckListContextProvider = ({
 
     useEffect(() => {
         fetchCheckLists()
-    }, [refreshCheckLists])
+    }, [refreshCheckLists, accessToken])
 
     // submitt checklist
 
     const handleSubmit = async (data: { title: string; CreatedBy: string }) => {
-        const res = await fetch(`https://localhost:7290/api/AddChecklist`, {
+        const res = await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddChecklist`, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${idToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": '*'
             },
             body: JSON.stringify({
                 title: data.title,
@@ -98,7 +107,14 @@ const CheckListContextProvider = ({
     const fetchCheckListUserId = async () => {
         try {
             const res = await fetch(
-                `https://localhost:7290/api/GetAllChecklistsByUserId?id=${currentUser?.id}`
+                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistsByUserId?id=${currentUser?.id}`,
+                {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": '*'
+                    }}
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
@@ -128,11 +144,11 @@ const CheckListContextProvider = ({
                 console.error(error)
                 console.log(setUserIdCheckList)
             })
-    }, [refreshList, currentUser])
+    }, [refreshList, currentUser, accessToken])
 
     useEffect(() => {
         fetchCheckListUserId()
-    }, [refreshCheckLists, refreshList])
+    }, [refreshCheckLists, refreshList, accessToken])
 
     const memoedValue = useMemo(
         () => ({

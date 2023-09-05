@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "../styles";
 
 function SeverityButton({
-  severity,
+  //severity,
   setSeverity,
 }: {
   severity: SetStateAction<string>;

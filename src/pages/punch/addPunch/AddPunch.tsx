@@ -38,7 +38,7 @@ export const AddPunch: FunctionComponent = () => {
 
   console.log("Current user: ", currentUser ? currentUser : "");
   async function postPunch() {
-    await fetch("https://localhost:7290/api/AddPunch", {
+    await fetch("https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddPunch", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,13 +52,13 @@ export const AddPunch: FunctionComponent = () => {
     });
   }
 
-  async function onSubmit(e: React.FormEvent, data) {
+  async function onSubmit(e: React.FormEvent, data: any) {
     console.log(data);
     e.preventDefault();
     if (appLocation.pathname === "/AddPunch") {
       await postPunch();
     } else {
-      await fetch(`https://localhost:7290/api/UpdatePunch?id=${id}`, {
+      await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdatePunch?id=${id}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${idToken}`,

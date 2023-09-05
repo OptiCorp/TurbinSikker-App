@@ -74,7 +74,7 @@ const EditCheckListContextProvider = ({
     const { id } = useParams()
     const navigate = useNavigate()
     const { setRefreshList } = useCheckListContext()
-    const { idToken } = useAuth()
+    const { idToken, accessToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
 
     const [task, setTask] = useState<TaskEntity | any>()
@@ -116,12 +116,13 @@ const EditCheckListContextProvider = ({
         categoryId: string
     }) => {
         const res = await fetch(
-            `https://localhost:7290/api/UpdateChecklistTask?id=${data.taskId}`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklistTask?id=${data.taskId}`,
             {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
                 body: JSON.stringify({
                     description: data.description,
@@ -138,12 +139,13 @@ const EditCheckListContextProvider = ({
 
     const handleSave = async (data: { title: string; status: string }) => {
         const res = await fetch(
-            `https://localhost:7290/api/UpdateChecklist?id=${id}`,
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklist?id=${id}`,
             {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
                 body: JSON.stringify({
                     title: data.title,
@@ -163,8 +165,13 @@ const EditCheckListContextProvider = ({
     }
 
     const handleDelete = async (id: string | undefined) => {
-        await fetch(`https://localhost:7290/api/DeleteChecklist?id=${id}`, {
+        await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/DeleteChecklist?id=${id}`, {
             method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
         })
         setRefreshList((prev) => !prev)
     }
