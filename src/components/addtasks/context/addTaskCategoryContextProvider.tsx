@@ -76,7 +76,7 @@ const TaskCategoryContextProvider = ({
             setCategory(category)
         }
         fetchCategories()
-    }, [])
+    }, [accessToken])
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -104,7 +104,7 @@ const TaskCategoryContextProvider = ({
         if (selectedOption) {
             fetchTasks()
         }
-    }, [selectedOption])
+    }, [selectedOption, accessToken])
 
     //
 
