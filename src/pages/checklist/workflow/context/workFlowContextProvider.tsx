@@ -7,6 +7,7 @@ import React, {
 
 import { CheckList, WorkFlow } from './models/WorkFlowEntity'
 import { AllWorkFlows } from './models/AllWorkFlowEntity'
+import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 
 
 
@@ -31,7 +32,7 @@ const WorkflowContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
-    
+    const { idToken, accessToken } = useAuth()
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [date, setDate] = useState<string>()
@@ -47,6 +48,14 @@ const WorkflowContextProvider = ({
                 const res = await fetch(
                     'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflowsByUserId?userId=634c61d6-ede8-49cf-ab70-ebc412de7499'
                     // `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
+                    ,
+                    {
+                        method: "GET",
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                          "Content-Type": "application/json",
+                          "Access-Control-Allow-Origin": '*'
+                        }}
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
@@ -69,7 +78,14 @@ const WorkflowContextProvider = ({
         const fetchAllCheckListWorkFlow = async () => {
             try {
                 const res = await fetch(
-                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflows`
+                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflows`,
+                    {
+                        method: "GET",
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                          "Content-Type": "application/json",
+                          "Access-Control-Allow-Origin": '*'
+                        }}
                 )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)

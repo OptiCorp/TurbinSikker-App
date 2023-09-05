@@ -9,6 +9,8 @@ import React, {
 import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { Category } from './models/CategoryEntity'
 import { TaskEntity } from './models/TaskEntity'
+import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+
 
 export type ContextType = {
     category: Category[]
@@ -35,6 +37,7 @@ const TaskCategoryContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
+    const { idToken, accessToken } = useAuth()
     const [tasks, setTasks] = useState<TaskEntity[]>([])
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
@@ -52,7 +55,14 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch(
-                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllCategories'
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllCategories',
+                {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": '*'
+                    }}
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -71,7 +81,14 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchTasks = async () => {
             const res = await fetch(
-                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllTasksByCategoryId?id=${selectedOption}`
+                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllTasksByCategoryId?id=${selectedOption}`,
+                {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": '*'
+                    }}
             )
             const data = await res.json()
 

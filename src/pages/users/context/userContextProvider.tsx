@@ -66,13 +66,20 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
     const [currentUser, setCurrentUser] = useState<UserEntity | null>(null)
     const [userList, setUserList] = useState<UserListEntity[]>([])
-    const { idToken } = useAuth()
+    const { idToken, accessToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
     const [options, setOptions] = useState<Option[]>([])
     const { user } = useAddUser()
 
     const getUsers = async () => {
-        const res = await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetAllUsersAdmin')
+        const res = await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetAllUsersAdmin',
+        {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": '*'
+            }})
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
@@ -94,7 +101,14 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchUserRoles = async () => {
             const res = await fetch(
-                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllUserRoles'
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllUserRoles',
+                {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": '*'
+                    }}
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -114,6 +128,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const handleDeleteUser = async (id: string | undefined) => {
         await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/SoftDeleteUser?id=${id}`, {
             method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": '*'
+              }
         })
 
         setRefreshUsers((prevRefresh) => !prevRefresh)
@@ -142,7 +161,14 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     async function fetchUserByEmail(userEmail: string, name: string) {
         const response = await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`,
+            {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": '*'
+                }}
         )
         if (response.ok) {
             const user = await response.json()
@@ -160,8 +186,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
     useEffect(() => {
-        if (idToken) {
-            fetchUserAndUpdateContext(idToken)
+        if (accessToken) {
+            fetchUserAndUpdateContext(accessToken)
         }
     }, [idToken])
 
@@ -177,6 +203,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`,
+                        "Access-Control-Allow-Origin": '*'
                     },
                     body: JSON.stringify({
                         azureAdUserId: userEmail,
