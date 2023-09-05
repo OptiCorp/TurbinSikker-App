@@ -76,7 +76,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${idToken}`,
+              Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": '*'
             }})
