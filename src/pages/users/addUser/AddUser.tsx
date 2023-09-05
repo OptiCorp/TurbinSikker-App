@@ -1,8 +1,6 @@
 import { FC } from 'react'
 import { FormProvider } from 'react-hook-form'
 
-import { UserEntity } from 'src/pages/users/context/models/UserEntity'
-
 import { useHasPermission } from '../hooks/useHasPermission'
 import { useAddUser } from './hooks/useAddUser'
 import { InputField } from './inputField'
@@ -66,7 +64,7 @@ export const AddUser: FC = () => {
                     </Wrapper>
                     <ModifyUserNav />
                 </FormProvider>
-             )} 
+            )}
         </>
     )
 }

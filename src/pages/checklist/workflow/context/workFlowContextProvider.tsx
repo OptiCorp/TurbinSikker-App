@@ -1,12 +1,10 @@
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-} from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+
+import { useUserContext } from '../../../../pages/users/context/userContextProvider'
+import { AllWorkFlows } from './models/AllWorkFlowEntity'
 
 import { CheckList, WorkFlow } from './models/WorkFlowEntity'
-import { AllWorkFlows } from './models/AllWorkFlowEntity'
+
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 
 
@@ -32,10 +30,15 @@ const WorkflowContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
+
+
     const { idToken, accessToken } = useAuth()
+
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [date, setDate] = useState<string>()
+    const { currentUser } = useUserContext()
+    const [checkId, setCheckId] = useState<string>('')
     const [testData, setTestData] = useState<string>()
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
@@ -45,18 +48,7 @@ const WorkflowContextProvider = ({
     useEffect(() => {
         const fetchCheckListWorkFlow = async () => {
             try {
-                const res = await fetch(
-                    'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflowsByUserId?userId=634c61d6-ede8-49cf-ab70-ebc412de7499'
-                    // `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}`
-                    ,
-                    {
-                        method: "GET",
-                        headers: {
-                          Authorization: `Bearer ${accessToken}`,
-                          "Content-Type": "application/json",
-                          "Access-Control-Allow-Origin": '*'
-                        }}
-                )
+                const res = await fetch( `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}` )
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
                 const data = (await res.json()) as WorkFlow[]
@@ -65,14 +57,16 @@ const WorkflowContextProvider = ({
                     formattedUpdateDate: formatDate(item.updateDate),
                 }))
                 setChecklistWorkFlow(data)
-       
+                const id = data.map((item) => item.checklistId)
+                setCheckId(id[0])
             } catch (error) {
                 console.error('Error fetching checklist workflow:', error)
             }
         }
         fetchCheckListWorkFlow()
-    }, [accessToken])
-    // }, [currentUser])
+
+    }, [currentUser])
+
 
     useEffect(() => {
         const fetchAllCheckListWorkFlow = async () => {
@@ -100,11 +94,11 @@ const WorkflowContextProvider = ({
             }
         }
         fetchAllCheckListWorkFlow()
-    }, [accessToken])
-    // }, [currentUser])
+
+    }, [currentUser])
+
 
  
-    
 
     return (
         <WorkflowContext.Provider
@@ -112,7 +106,6 @@ const WorkflowContextProvider = ({
                 WorkFlows: checklistWorkFlows,
                 testData: testData,
                 allWorkFlows: allWorkFlows,
-
             }}
         >
             {children}

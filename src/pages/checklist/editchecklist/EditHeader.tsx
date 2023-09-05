@@ -36,7 +36,7 @@ export const EditHeader = ({
     checked,
     setChecked,
 }: Props) => {
-    const { checkListId } = useAddTaskForm()
+    const { checkListById } = useAddTaskForm()
 
     const [changeTitle, setChangeTitle] = useState('')
 
@@ -46,7 +46,7 @@ export const EditHeader = ({
 
     return (
         <>
-            {checkListId && (
+            {checkListById && (
                 <>
                     <InfoHeader>
                         <Card style={{ background: 'white' }}>
@@ -66,7 +66,7 @@ export const EditHeader = ({
 
                                         top: '0',
                                     }}
-                                    value={checkListId.status}
+                                    value={checkListById.status}
                                     onChange={(e) => {
                                         setChecked(e.target.checked)
 
@@ -79,8 +79,8 @@ export const EditHeader = ({
 
                                 <TextField
                                     id="storybook-readonly"
-                                    value={title || checkListId.title}
-                                    key={checkListId.id}
+                                    value={title || checkListById.title}
+                                    key={checkListById.id}
                                     label=""
                                     readOnly
                                     style={{
@@ -126,7 +126,9 @@ export const EditHeader = ({
                             <MakeTitleField
                                 id="storybook-readonly"
                                 placeholder="name"
-                                defaultValue={changeTitle || checkListId.title}
+                                defaultValue={
+                                    changeTitle || checkListById.title
+                                }
                                 label=""
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
