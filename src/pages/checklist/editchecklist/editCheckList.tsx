@@ -39,7 +39,7 @@ export const EditCheckList = () => {
         setDialogShowing(false)
     }
     const [title, setTitle] = useState('')
-    const { checkListId, sortedTasks } = useAddTaskForm()
+    const { checkListById, sortedTasks } = useAddTaskForm()
     const {
         handleSave,
 
@@ -48,11 +48,11 @@ export const EditCheckList = () => {
         handleDelete,
     } = useEditCheckListContext()
 
-    const [checked, setChecked] = useState(!!checkListId?.status)
+    const [checked, setChecked] = useState(!!checkListById?.status)
 
     useEffect(() => {
-        setChecked(checkListId?.status === 'Active')
-    }, [checkListId])
+        setChecked(checkListById?.status === 'Active')
+    }, [checkListById])
 
     function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
         return status ? 'Active' : 'Inactive'
@@ -60,9 +60,9 @@ export const EditCheckList = () => {
 
     return (
         <div style={{ backgroundColor: '#f0f3f3' }}>
-            {checkListId && (
+            {checkListById && (
                 <>
-                    <div key={checkListId.id}>
+                    <div key={checkListById.id}>
                         <EditHeader
                             dialogShowing={dialogShowing}
                             setDialogShowing={setDialogShowing}
@@ -79,8 +79,8 @@ export const EditCheckList = () => {
                             {isOpenn && <AddTasks />}
 
                             <EditList
-                                key={checkListId.id}
-                                tasks={checkListId}
+                                key={checkListById.id}
+                                tasks={checkListById}
                                 sortedTasks={sortedTasks}
                             />
                         </Wrapper>
@@ -101,7 +101,7 @@ export const EditCheckList = () => {
                                 textAlign: 'center',
                             }}
                         >
-                            You sure you want to delete {checkListId.title}?
+                            You sure you want to delete {checkListById.title}?
                         </Typography>
                     </CustomDialog>
 

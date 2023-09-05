@@ -6,9 +6,14 @@ import React, {
     useState,
 } from 'react'
 
+import { useParams } from 'react-router'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { Category } from './models/CategoryEntity'
 import { TaskEntity } from './models/TaskEntity'
+import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+
 
 export type ContextType = {
     category: Category[]
@@ -35,6 +40,7 @@ const TaskCategoryContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
+    const { idToken, accessToken } = useAuth()
     const [tasks, setTasks] = useState<TaskEntity[]>([])
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
@@ -46,13 +52,22 @@ const TaskCategoryContextProvider = ({
     const handleTaskSelect = (selectedTask: any) => {
         setSelectedTask(selectedTask.value)
     }
-
+    const [checkListId, setCheckListId] = useState<CheckListEntity | null>(null)
+    const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
     const { openSnackbar } = useContext(SnackbarContext)
-
+    const { refreshList, setRefreshList } = useCheckListContext()
+    const { id } = useParams()
     useEffect(() => {
         const fetchCategories = async () => {
             const res = await fetch(
-                'https://localhost:7290/api/GetAllCategories'
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllCategories',
+                {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": '*'
+                    }}
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -66,12 +81,19 @@ const TaskCategoryContextProvider = ({
             setCategory(category)
         }
         fetchCategories()
-    }, [])
+    }, [accessToken])
 
     useEffect(() => {
         const fetchTasks = async () => {
             const res = await fetch(
-                `https://localhost:7290/api/GetAllTasksByCategoryId?id=${selectedOption}`
+                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllTasksByCategoryId?id=${selectedOption}`,
+                {
+                    method: "GET",
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": '*'
+                    }}
             )
             const data = await res.json()
 
@@ -87,9 +109,7 @@ const TaskCategoryContextProvider = ({
         if (selectedOption) {
             fetchTasks()
         }
-    }, [selectedOption])
-
-    //
+    }, [selectedOption, accessToken])
 
     const memoedValue = useMemo(
         () => ({
@@ -103,6 +123,9 @@ const TaskCategoryContextProvider = ({
             selectedTask,
             setSelectedTask,
             setSelectedOption,
+
+            sortedTasks,
+            checkListId,
         }),
         [
             selectedOption,
@@ -115,6 +138,9 @@ const TaskCategoryContextProvider = ({
             selectedTask,
             setSelectedTask,
             setSelectedOption,
+
+            sortedTasks,
+            checkListId,
         ]
     )
 

@@ -1,8 +1,10 @@
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { StyledTableRow } from '../checkListID/styles'
 import { WorkFlow } from '../workflow/context/models/WorkFlowEntity'
 import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
@@ -14,31 +16,55 @@ interface CheckListRowProps {
 export const InspectorReceivedCheckLists: FunctionComponent<
     CheckListRowProps
 > = ({ WorkFlow }) => {
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString)
-        return date.toLocaleDateString('en-GB')
-    }
+    // const formatDate = (dateString: string) => {
+    //     const date = new Date(dateString)
+    //     return date.toLocaleDateString('en-GB')
+    // }
 
     const navigate = useNavigate()
 
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutCheckList/${id}`)
     }
+    const { currentUser } = useUserContext()
+    const [checklistData, setChecklistData] = useState<CheckListEntity>()
 
-    const formattedCreatedDate = formatDate(WorkFlow.checklist.createdDate)
+    // const formattedCreatedDate = formatDate(WorkFlow.checklist.createdDate)
 
-    const formattedUpdatedDate = WorkFlow.formattedUpdateDate
-        ? formatDate(WorkFlow.formattedUpdateDate)
-        : 'N/A'
+    // const formattedUpdatedDate = WorkFlow.formattedUpdateDate
+    //     ? formatDate(WorkFlow.formattedUpdateDate)
+    //     : 'N/A'
+
+    useEffect(() => {
+        const fetchChecklistData = async () => {
+            try {
+                const res = await fetch(
+                    `https://localhost:7290/api/GetChecklist?id=${WorkFlow.checklistId}`
+                )
+                if (!res.ok)
+                    throw new Error('Failed with HTTP code ' + res.status)
+                const data = (await res.json()) as CheckListEntity
+
+                setChecklistData(data)
+            } catch (error) {
+                console.error('Error fetching checklist data:')
+            }
+        }
+
+        fetchChecklistData()
+        console.log(WorkFlow.checklistId)
+    }, [WorkFlow, currentUser])
 
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.checklistId)}>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography variant="body_short_bold">
-                            {WorkFlow.checklist.title}
-                        </Typography>
+                        {checklistData && (
+                            <Typography variant="body_short_bold">
+                                {checklistData.title}
+                            </Typography>
+                        )}
                     </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
@@ -67,8 +93,7 @@ export const InspectorReceivedCheckLists: FunctionComponent<
                                 }}
                                 style={{}}
                             >
-                                {WorkFlow.checklist.createdByUser.firstName}{' '}
-                                {WorkFlow.checklist.createdByUser.lastName}
+                                {WorkFlow?.createdById}
                             </Typography>
                         </Chip>
 
@@ -80,7 +105,7 @@ export const InspectorReceivedCheckLists: FunctionComponent<
                             }}
                             style={{ gridRow: '3/3' }}
                         >
-                            {formattedCreatedDate}
+                            {/* {formattedCreatedDate} */}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>

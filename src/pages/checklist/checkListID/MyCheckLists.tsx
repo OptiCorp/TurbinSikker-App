@@ -48,7 +48,7 @@ export const MyCheckLists = () => {
     const { userIdCheckList } = useCheckListContext()
 
     const [activeRow, setActiveRow] = useState(false)
-    console.log(userIdCheckList)
+
     return (
         <>
             <BackgroundWrap>

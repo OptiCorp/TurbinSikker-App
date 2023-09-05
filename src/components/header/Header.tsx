@@ -1,21 +1,21 @@
+import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 import { Icon, TopBar } from '@equinor/eds-core-react'
 import { arrow_back_ios } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import logo from '../../assets/images/smallLogo.png'
+import { useWorkflowContext } from '../../pages/checklist/workflow/context/workFlowContextProvider'
 import { useCheckListContext } from '../../pages/context/CheckListContextProvider'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
-import { useWorkflowContext } from '../../pages/checklist/workflow/context/workFlowContextProvider'
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 
 export const Header = () => {
     const { setRefreshList } = useCheckListContext()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')
-const {WorkFlows} = useWorkflowContext()
-const { checkListId, sortedTasks } = useAddTaskForm()
+    const { WorkFlows } = useWorkflowContext()
 
+    const { checkListById, sortedTasks } = useAddTaskForm()
 
     useEffect(() => {
         setActiveUrl(window.location.pathname)
@@ -32,24 +32,24 @@ const { checkListId, sortedTasks } = useAddTaskForm()
     }
     const basePath = useBasePath()
 
-
     const [title, setTitle] = useState('')
 
     useEffect(() => {
-        const workflow = WorkFlows.find((item) => item.checklist.id === checkListId?.id)
-        let pathTitle:any = ''
+        const workflow = WorkFlows.find(
+            (item) => item.checklistId === checkListById?.id
+        )
+        let pathTitle = ''
         if (location.pathname.includes('FillOutCheckList') && workflow) {
-            pathTitle = workflow.checklist.title + ' ' + workflow.id.slice(0, -30) || ''
+            pathTitle =
+                checkListById?.title + ' ' + workflow.id.slice(10, -18) || ''
         } else if (location.pathname === '/AddUser/') {
             pathTitle = location.pathname.slice(1, -1)
         } else {
-            pathTitle = basePath
+            pathTitle = basePath || ''
         }
         setTitle(pathTitle)
+    }, [location.pathname, basePath, WorkFlows, checkListById?.id])
 
-    }, [location.pathname, basePath, WorkFlows, checkListId?.id])
-
-      
     const onClick = () => {
         setRefreshList((prev) => !prev)
 
@@ -74,11 +74,7 @@ const { checkListId, sortedTasks } = useAddTaskForm()
                 )}
             </TopBar.Header>
             <TopBar.CustomContent>
-             
-                <HeaderLocation>
-                  {title}
-
-                </HeaderLocation>
+                <HeaderLocation>{title}</HeaderLocation>
             </TopBar.CustomContent>
             <TopBar.Actions>
                 <img src={logo} onClick={homeClick} />

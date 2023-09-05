@@ -10,14 +10,14 @@ export const PreviewCheckList = () => {
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
-    const { checkListId, sortedTasks } = useAddTaskForm()
+    const { checkListById, sortedTasks } = useAddTaskForm()
     const navigate = useNavigate()
     return (
         <>
             <TaskCategoryContextProvider>
                 <div style={{ backgroundColor: '#f0f3f3' }}>
-                    {checkListId && (
-                        <div key={checkListId.id}>
+                    {checkListById && (
+                        <div key={checkListById.id}>
                             <InfoHeader>
                                 <Card style={{ background: 'white' }}>
                                     <Card.Header
@@ -29,7 +29,7 @@ export const PreviewCheckList = () => {
                                     >
                                         <TextField
                                             id="storybook-readonly"
-                                            placeholder={checkListId.title}
+                                            placeholder={checkListById.title}
                                             label=""
                                             readOnly
                                             style={{
@@ -42,7 +42,7 @@ export const PreviewCheckList = () => {
                                 </Card>
                             </InfoHeader>
                             <Wrapper>
-                                {checkListId?.tasks.length === 0 ? (
+                                {checkListById?.tasks.length === 0 ? (
                                     <>
                                         <Typography variant="body_short_bold">
                                             No tasks added yet!
@@ -51,7 +51,7 @@ export const PreviewCheckList = () => {
                                             variant="outlined"
                                             onClick={() => {
                                                 navigate(
-                                                    `/EditCheckList/${checkListId.id}`
+                                                    `/EditCheckList/${checkListById.id}`
                                                 )
                                             }}
                                         >
@@ -60,20 +60,20 @@ export const PreviewCheckList = () => {
                                     </>
                                 ) : (
                                     <PreviewList
-                                        key={checkListId.id}
-                                        tasks={checkListId}
+                                        key={checkListById.id}
+                                        tasks={checkListById}
                                         sortedTasks={sortedTasks}
                                     />
                                 )}
                             </Wrapper>
                         </div>
                     )}
-                    {checkListId && (
+                    {checkListById && (
                         <NavActionsComponent
                             buttonColor="primary"
                             secondButtonColor="primary"
                             buttonVariant="outlined"
-                            onClick={() => clickHandler(checkListId.id)}
+                            onClick={() => clickHandler(checkListById.id)}
                             isShown={true}
                             ButtonMessage="Edit Checklist"
                             SecondButtonMessage="Send"

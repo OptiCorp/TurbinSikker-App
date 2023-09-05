@@ -20,7 +20,6 @@ import {
 } from './styles'
 
 type Props = {
-    tasks: CheckListEntity | null
     sortedTasks: CheckListEntity['tasks']
     WorkFlow: WorkFlow
     onUpdate: (data: {
@@ -34,6 +33,7 @@ type Props = {
 export const FillOutList: FunctionComponent<Props> = ({
     WorkFlow,
     sortedTasks,
+
     onUpdate,
 }) => {
     let lastCategoryName = ''
@@ -71,7 +71,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                             : ''
 
                     lastCategoryName = task.category.name
-
+                    console.log(categoryName)
                     return (
                         <div key={task?.id}>
                             <CustomCard>
@@ -196,9 +196,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                     handleSubmit()
                 }}
                 isOpen={submitDialogShowing}
-            >
-                {' '}
-            </CustomDialog>
+            ></CustomDialog>
 
             <NavActionsComponent
                 buttonColor="primary"
