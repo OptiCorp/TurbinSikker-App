@@ -60,7 +60,7 @@ export function AuthProvider({
         .then((tokenResponse) => {
           setAccessToken(tokenResponse.accessToken);
           setIdToken(tokenResponse.idToken);
-          console.log("Access token: " + tokenResponse.accessToken);
+          // console.log("Access token: " + tokenResponse.accessToken);
           const decodedIdToken = decode(tokenResponse.idToken) as {
             preferred_username?: string;
             email?: string;
