@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../../pages/landingPage/context/LandingPageContextProvider'
+import { useUserContext } from '../../../../pages/users/context/userContextProvider'
 
 export type SendingFormValuesEntity = {
     checklistId: string
@@ -20,6 +21,7 @@ export const useAddWorkFlowForm = () => {
     const [positiveOpen, setPositiveOpen] = useState(false)
     const { refreshList, setRefreshList } = useCheckListContext()
     const appLocation = useLocation()
+    const { currentUser } = useUserContext()
     const handleOpen = () => {
         setPositiveOpen(true)
     }
@@ -40,6 +42,7 @@ export const useAddWorkFlowForm = () => {
                     checklistId: data.checklistId,
                     userId: data.userId,
                     status: 0,
+                    createdById: currentUser?.id,
                 }),
             }
         )
