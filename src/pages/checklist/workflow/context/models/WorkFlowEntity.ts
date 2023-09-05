@@ -7,6 +7,7 @@ export type WorkFlow = {
     updateDate: string
     formattedUpdateDate: string
     checklist: CheckList
+    createdById: string
 }
 
 export type CheckList = {
