@@ -71,7 +71,7 @@ const WorkflowContextProvider = ({
             }
         }
         fetchCheckListWorkFlow()
-    }, [])
+    }, [accessToken])
     // }, [currentUser])
 
     useEffect(() => {
@@ -100,7 +100,7 @@ const WorkflowContextProvider = ({
             }
         }
         fetchAllCheckListWorkFlow()
-    }, [])
+    }, [accessToken])
     // }, [currentUser])
 
  
