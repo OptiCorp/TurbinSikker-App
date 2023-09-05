@@ -72,7 +72,7 @@ const CheckListContextProvider = ({
 
     useEffect(() => {
         fetchCheckLists()
-    }, [refreshCheckLists])
+    }, [refreshCheckLists, accessToken])
 
     // submitt checklist
 
@@ -144,11 +144,11 @@ const CheckListContextProvider = ({
                 console.error(error)
                 console.log(setUserIdCheckList)
             })
-    }, [refreshList, currentUser])
+    }, [refreshList, currentUser, accessToken])
 
     useEffect(() => {
         fetchCheckListUserId()
-    }, [refreshCheckLists, refreshList])
+    }, [refreshCheckLists, refreshList, accessToken])
 
     const memoedValue = useMemo(
         () => ({

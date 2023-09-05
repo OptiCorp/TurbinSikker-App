@@ -94,7 +94,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         getUsers()
-    }, [newUserFunc, refreshUsers])
+    }, [newUserFunc, refreshUsers, accessToken])
 
     // UserRoles
 
@@ -122,7 +122,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             setOptions(options)
         }
         fetchUserRoles()
-    }, [])
+    }, [accessToken])
     // Delete user //
 
     const handleDeleteUser = async (id: string | undefined) => {
