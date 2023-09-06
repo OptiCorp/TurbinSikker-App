@@ -1,7 +1,5 @@
 import { Table } from '@equinor/eds-core-react'
-import { useContext } from 'react'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
-import { CheckListContext } from '../../context/CheckListContextProvider'
+import { useUserContext } from '../../users/context/userContextProvider'
 import { HeadCell } from '../checkListID/styles'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
@@ -14,25 +12,7 @@ import {
 } from './styles'
 
 export const CheckList = () => {
-    const { allCheckList } = useContext(CheckListContext)
     const { currentUser } = useUserContext()
-
-    const text = () => {
-        if (currentUser?.userRole.name === 'Leader') {
-            return <>Assigned</>
-        } else {
-            return <>Assigned by</>
-        }
-    }
-
-    const statusText = () => {
-        if (currentUser?.userRole.name === 'Leader') {
-            return <>Status</>
-        } else {
-            return <>Status</>
-        }
-    }
-
     const { WorkFlows, allWorkFlows } = useWorkflowContext()
 
     return (
@@ -47,7 +27,12 @@ export const CheckList = () => {
                                 </HeadCell>
                                 <HeadCell>
                                     <StyledHeadContents>
-                                        Assigned
+                                        {currentUser?.userRole.name ===
+                                        'Inspector' ? (
+                                            <>Assigned by</>
+                                        ) : (
+                                            <>Assigned</>
+                                        )}
                                     </StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
@@ -72,7 +57,7 @@ export const CheckList = () => {
                                     <>
                                         {allWorkFlows.map((allWorkFlow) => (
                                             <LeaderCheckListSend
-                                                allWorkFlow={allWorkFlow}
+                                                workflow={allWorkFlow}
                                                 key={allWorkFlow.id}
                                             />
                                         ))}

@@ -6,9 +6,11 @@ import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useCheckListContext } from '../../context/CheckListContextProvider'
-import { CheckListUserIDRow } from './CheckListIDrow'
+import { LeaderMyChecklists } from './LeaderMyChecklists'
 
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { useUserContext } from '../../users/context/userContextProvider'
+import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+import { InspectorPendingRow } from './InspectorPendingRow'
 import {
     BackgroundWrap,
     HeadCell,
@@ -46,7 +48,7 @@ export const MyCheckLists = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const { userIdCheckList } = useCheckListContext()
-
+    const { WorkFlows, allWorkFlows } = useWorkflowContext()
     const [activeRow, setActiveRow] = useState(false)
 
     return (
@@ -73,14 +75,32 @@ export const MyCheckLists = () => {
                         </Table.Head>
 
                         <Table.Body>
-                            {userIdCheckList?.map((userIdCheckList) => (
-                                <CheckListUserIDRow
-                                    userIdCheckList={userIdCheckList}
-                                    key={userIdCheckList.id}
-                                    setActiveRow={setActiveRow}
-                                    activeRow={activeRow}
-                                />
-                            ))}
+                            <>
+                                {currentUser?.userRole.name === 'Inspector' ? (
+                                    <>
+                                        {WorkFlows.map((WorkFlow) => (
+                                            <InspectorPendingRow
+                                                WorkFlow={WorkFlow}
+                                            />
+                                        ))}
+                                    </>
+                                ) : (
+                                    <>
+                                        {userIdCheckList?.map(
+                                            (userIdCheckList) => (
+                                                <LeaderMyChecklists
+                                                    userIdCheckList={
+                                                        userIdCheckList
+                                                    }
+                                                    key={userIdCheckList.id}
+                                                    setActiveRow={setActiveRow}
+                                                    activeRow={activeRow}
+                                                />
+                                            )
+                                        )}
+                                    </>
+                                )}
+                            </>
                         </Table.Body>
                     </Table>
                 </ListWrapperCheckMyList>

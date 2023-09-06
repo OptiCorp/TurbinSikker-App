@@ -7,13 +7,13 @@ import React, {
 } from 'react'
 
 import { useParams } from 'react-router'
+import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
+import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { Category } from './models/CategoryEntity'
 import { TaskEntity } from './models/TaskEntity'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
-
 
 export type ContextType = {
     category: Category[]
@@ -59,16 +59,14 @@ const TaskCategoryContextProvider = ({
     const { id } = useParams()
     useEffect(() => {
         const fetchCategories = async () => {
-            const res = await fetch(
-                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllCategories',
-                {
-                    method: "GET",
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                      "Content-Type": "application/json",
-                      "Access-Control-Allow-Origin": '*'
-                    }}
-            )
+            const res = await fetch(`${API_URL}/GetAllCategories`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
 
@@ -86,14 +84,15 @@ const TaskCategoryContextProvider = ({
     useEffect(() => {
         const fetchTasks = async () => {
             const res = await fetch(
-                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllTasksByCategoryId?id=${selectedOption}`,
+                `${API_URL}/GetAllTasksByCategoryId?id=${selectedOption}`,
                 {
-                    method: "GET",
+                    method: 'GET',
                     headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                      "Content-Type": "application/json",
-                      "Access-Control-Allow-Origin": '*'
-                    }}
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                }
             )
             const data = await res.json()
 

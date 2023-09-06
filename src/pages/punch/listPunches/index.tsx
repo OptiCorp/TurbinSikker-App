@@ -2,14 +2,12 @@ import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import {
     arrow_forward_ios,
     assignment_user,
-    error_filled,
     file_description,
     image,
-    info_circle,
-    warning_filled,
 } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { formatDate } from '../../../Helpers'
+import { API_URL } from '../../../config'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import { punchSeverity } from '../Punch'
 import {
@@ -23,7 +21,6 @@ import {
     TicketSeverityContainer,
 } from '../styles'
 import { PunchEntity } from '../types'
-
 function ListPunches() {
     const [punch, setPunch] = useState<PunchEntity>()
     const createdDate = punch && formatDate(punch?.createdDate)
@@ -31,7 +28,7 @@ function ListPunches() {
 
     async function getPunch() {
         const response = await fetch(
-            'https://localhost:7290/api/GetPunch?id=708d8442-415f-4db0-8693-ec712d591cda'
+            `${API_URL}/GetPunch?id=708d8442-415f-4db0-8693-ec712d591cda `
         )
         const data = await response.json()
         setPunch(data)

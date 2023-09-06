@@ -8,10 +8,7 @@ import React, {
     useState,
 } from 'react'
 import { useLocation, useParams } from 'react-router'
-import {
-    InfoHeader,
-    StyledCard,
-} from '../../../pages/checklist/previewCheckList/styles'
+import { API_URL } from '../../../config'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import SeverityButton from '../severityButton/SeverityButton'
@@ -19,13 +16,11 @@ import {
     PunchAddContainer,
     PunchAddUploadContainer,
     PunchForm,
-    PunchListItem,
     PunchUploadButtonContainer,
     PunchUploadFileContainer,
     PunchUploadFilesContainer,
     SeverityButtonWrapper,
 } from '../styles'
-
 export const AddPunch: FunctionComponent = () => {
     const [severity, setSeverity] = useState<SetStateAction<string>>('Minor')
     const [formValue, setFormValue] = useState({
@@ -40,7 +35,7 @@ export const AddPunch: FunctionComponent = () => {
 
     console.log('Current user: ', currentUser ? currentUser : '')
     async function postPunch() {
-        await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddPunch', {
+        await fetch(`${API_URL}/AddPunch`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +55,7 @@ export const AddPunch: FunctionComponent = () => {
         if (appLocation.pathname === '/AddPunch') {
             await postPunch()
         } else {
-            await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdatePunch?id=${id}`, {
+            await fetch(`${API_URL}/UpdatePunch?id=${id}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,

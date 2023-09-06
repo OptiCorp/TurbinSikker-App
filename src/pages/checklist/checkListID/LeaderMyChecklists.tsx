@@ -14,7 +14,7 @@ interface CheckListRowProps {
     setActiveRow: (open: boolean) => void
 }
 
-export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
+export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
     userIdCheckList,
 }) => {
     const formatDate = (dateString: string | null) => {
