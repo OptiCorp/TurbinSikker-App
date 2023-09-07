@@ -1,86 +1,64 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
+import { API_URL } from '../../../../config'
 import { useUserContext } from '../../../../pages/users/context/userContextProvider'
-import { AllWorkFlows } from './models/AllWorkFlowEntity'
-
-import { CheckList, WorkFlow } from './models/WorkFlowEntity'
-
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
+import { AllWorkFlows, WorkFlow } from '../types'
+import { getChecklistWorkflowById } from './api'
 
+import { TWorkflowContext } from './types'
+///
 
-
-
-type WorkflowContext = {
-    WorkFlows: WorkFlow[]
-    checklist?: CheckList
-    testData?: string
-    allWorkFlows: AllWorkFlows[]
-}
-
-const postsContextDefaultValue: WorkflowContext = {
+const postsContextDefaultValue: TWorkflowContext = {
     WorkFlows: [],
     testData: '',
     allWorkFlows: [],
 }
 
-const WorkflowContext = createContext<WorkflowContext>(postsContextDefaultValue)
+const WorkflowContext = createContext<TWorkflowContext>(
+    postsContextDefaultValue
+)
 
 const WorkflowContextProvider = ({
     children,
 }: {
     children: React.ReactNode
 }) => {
-
-
-    const { idToken, accessToken } = useAuth()
+    const { accessToken } = useAuth()
 
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
-    const [date, setDate] = useState<string>()
+
     const { currentUser } = useUserContext()
-    const [checkId, setCheckId] = useState<string>('')
-    const [testData, setTestData] = useState<string>()
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')
     }
 
     useEffect(() => {
-        const fetchCheckListWorkFlow = async () => {
-            try {
-                const res = await fetch( `https://localhost:7290/api/GetAllChecklistWorkflowsByUserId?userId=${currentUser?.id}` )
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
-                const data = (await res.json()) as WorkFlow[]
-                data.map((item) => ({
-                    ...item,
-                    formattedUpdateDate: formatDate(item.updateDate),
-                }))
-                setChecklistWorkFlow(data)
-                const id = data.map((item) => item.checklistId)
-                setCheckId(id[0])
-            } catch (error) {
-                console.error('Error fetching checklist workflow:', error)
-            }
-        }
-        fetchCheckListWorkFlow()
+        ;(async function () {
+            if (!currentUser?.id || !accessToken) return
+            const workFlows = await getChecklistWorkflowById(
+                currentUser.id,
+                accessToken
+            )
 
-    }, [currentUser])
-
+            setChecklistWorkFlow(workFlows)
+        })()
+    }, [currentUser, accessToken])
 
     useEffect(() => {
         const fetchAllCheckListWorkFlow = async () => {
+            if (!accessToken) return
             try {
-                const res = await fetch(
-                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistWorkflows`,
-                    {
-                        method: "GET",
-                        headers: {
-                          Authorization: `Bearer ${accessToken}`,
-                          "Content-Type": "application/json",
-                          "Access-Control-Allow-Origin": '*'
-                        }}
-                )
+                const res = await fetch(`${API_URL}/GetAllChecklistWorkflows`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                })
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
                 const data = (await res.json()) as AllWorkFlows[]
@@ -94,17 +72,13 @@ const WorkflowContextProvider = ({
             }
         }
         fetchAllCheckListWorkFlow()
-
-    }, [currentUser])
-
-
- 
+    }, [currentUser, accessToken])
 
     return (
         <WorkflowContext.Provider
             value={{
                 WorkFlows: checklistWorkFlows,
-                testData: testData,
+
                 allWorkFlows: allWorkFlows,
             }}
         >

@@ -3,6 +3,7 @@ import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
+import { API_URL } from '../../config'
 import { CheckListEntity } from '../context/models/CheckListEntity'
 import {
     PunchButton,
@@ -14,7 +15,6 @@ import {
     SeverityIconContainer,
 } from './styles'
 import { PunchEntity, PunchSeverity } from './types'
-
 export const punchSeverity: PunchSeverity[] = [
     {
         severity: 'Minor',
@@ -53,7 +53,7 @@ function Punch() {
 
     async function getPunch() {
         const response = await fetch(
-            'https://turbinsikker-api-lin-prod.azurewebsites.net/api/getPunch?id=708d8442-415f-4db0-8693-ec712d591cda'
+            `${API_URL}/getPunch?id=708d8442-415f-4db0-8693-ec712d591cda`
         )
 
         const data = await response.json()
@@ -64,7 +64,7 @@ function Punch() {
         if (punchData) {
             try {
                 const response = await fetch(
-                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/getChecklist?id=${punchData?.checklistWorkflowId}`,
+                    `${API_URL}/getChecklist?id=${punchData?.checklistWorkflowId}`,
                     {
                         headers: {
                             'Content-Type': 'application/json',

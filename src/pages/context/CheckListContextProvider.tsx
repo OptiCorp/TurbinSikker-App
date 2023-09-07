@@ -1,3 +1,4 @@
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import React, {
     createContext,
     useContext,
@@ -5,11 +6,10 @@ import React, {
     useMemo,
     useState,
 } from 'react'
-
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useLocation, useNavigate } from 'react-router'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { ListEntity } from 'src/pages/users/context/models/ListEntity'
+import { API_URL } from '../../config'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../users/context/userContextProvider'
 import { ICheckListUserID } from './models/CheckListUserIdEntity'
@@ -50,20 +50,21 @@ const CheckListContextProvider = ({
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])
-    const { idToken, accessToken } = useAuth()
+    const { accessToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
     const { currentUser } = useUserContext()
-    
+
     /// fetch checklist
     const fetchCheckLists = async () => {
-        const res = await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklists`,
-        {
-            method: "GET",
+        if (!accessToken) return
+        const res = await fetch(`${API_URL}/GetAllChecklists`, {
+            method: 'GET',
             headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": '*'
-            }})
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
 
@@ -77,12 +78,13 @@ const CheckListContextProvider = ({
     // submitt checklist
 
     const handleSubmit = async (data: { title: string; CreatedBy: string }) => {
-        const res = await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddChecklist`, {
+        if (!accessToken) return
+        const res = await fetch(`${API_URL}/AddChecklist`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
-                "Access-Control-Allow-Origin": '*'
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
                 title: data.title,
@@ -105,22 +107,31 @@ const CheckListContextProvider = ({
 
     // userIdchecklist
     const fetchCheckListUserId = async () => {
+        if (!accessToken) return
         try {
             const res = await fetch(
-                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllChecklistsByUserId?id=${currentUser?.id}`,
+                `${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`,
                 {
-                    method: "GET",
+                    method: 'GET',
                     headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                      "Content-Type": "application/json",
-                      "Access-Control-Allow-Origin": '*'
-                    }}
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                }
             )
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
             }
             const data = (await res.json()) as ICheckListUserID[]
-            return data
+            setUserIdCheckList(data)
+            const list = data.map(
+                ({ id, title }: { id: string; title: string }) => ({
+                    value: id,
+                    label: title,
+                })
+            )
+            setList(list)
         } catch (error) {
             console.error(error)
             throw error
@@ -129,21 +140,6 @@ const CheckListContextProvider = ({
 
     useEffect(() => {
         fetchCheckListUserId()
-            .then((data) => {
-                setUserIdCheckList(data)
-
-                const list = data.map(
-                    ({ id, title }: { id: string; title: string }) => ({
-                        value: id,
-                        label: title,
-                    })
-                )
-                setList(list)
-            })
-            .catch((error) => {
-                console.error(error)
-                console.log(setUserIdCheckList)
-            })
     }, [refreshList, currentUser, accessToken])
 
     useEffect(() => {
