@@ -53,6 +53,7 @@ export const useGetCheckListInfo = (checklistId: string, userId: string) => {
                 const res = await fetch(`${API_URL}/GetUser?id=${userId}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*',
                     },
                 })

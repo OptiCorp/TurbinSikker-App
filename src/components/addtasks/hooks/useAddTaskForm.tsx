@@ -50,6 +50,7 @@ export const useAddTaskForm = () => {
                 const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin': '*',
                     },
                 })
