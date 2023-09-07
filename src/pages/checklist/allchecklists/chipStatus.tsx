@@ -27,7 +27,7 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                     </Typography>
                 </>
             )
-        case 'Commited':
+        case 'Committed':
             return (
                 <Chip style={{ margin: '0 auto' }} variant="active">
                     Ready for review
