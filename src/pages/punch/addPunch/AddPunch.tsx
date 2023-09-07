@@ -33,41 +33,47 @@ export const AddPunch: FunctionComponent = () => {
         Description: '',
     })
     const [uploads, setUploads] = useState(false)
-    const { idToken } = useAuth()
+    const { accessToken } = useAuth()
     const { id } = useParams()
     const { currentUser } = useUserContext()
     const appLocation = useLocation()
 
-    console.log('Current user: ', currentUser ? currentUser : '')
     async function postPunch() {
-        await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddPunch', {
+        if (!accessToken) return
+        await fetch('https://localhost:7290/api/AddPunch', {
             method: 'POST',
             headers: {
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 createdBy: currentUser?.id,
                 punchDescription: formValue.Description,
                 severity: severity,
-                checklistId: '6dc7a320-6dad-4d38-9984-bcd2a90d8bd6',
+                checklistTaskId: '482f2505-c02d-47a0-8c00-e9b757662d0d',
+                checklistWorkFlowId: '4c782512-b9ed-4e4c-b5f2-8f0411a30340',
             }),
         })
     }
 
     async function onSubmit(e: React.FormEvent, data) {
-        console.log(data)
         e.preventDefault()
-        if (appLocation.pathname === '/AddPunch') {
+
+        if (appLocation.pathname === '/addPunch') {
+            setFormValue({ ...formValue, Description: '', reportName: '' })
             await postPunch()
         } else {
-            await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdatePunch?id=${id}`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${idToken}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
+            await fetch(
+                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdatePunch?id=${id}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                }
+            )
         }
     }
 
@@ -162,6 +168,7 @@ export const AddPunch: FunctionComponent = () => {
                 <TextField
                     id=""
                     label="Description"
+                    value={formValue.Description}
                     multiline
                     required
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -193,123 +200,6 @@ export const AddPunch: FunctionComponent = () => {
                 </PunchForm>
             </PunchAddContainer>
 
-            {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <PunchAddUploadContainer>
-                    <PunchUploadButtonContainer>
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                border: '.7px dotted #73B1B5',
-                                borderRadius: '4px',
-                            }}
-                        >
-                            <Icon data={upload} size={48} />
-                        </div>
-                        <Button>Upload</Button>
-                    </PunchUploadButtonContainer>
-
-                    {!uploads ? (
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                width: '100%',
-                                alignItems: 'center',
-                                color: '#243746',
-                            }}
-                            onClick={() => setUploads((prev) => !prev)}
-                        >
-                            <span>No Uploads</span>
-                        </div>
-                    ) : (
-                        <PunchUploadFilesContainer>
-                            <Typography variant="h5">Upload Files</Typography>
-                            <PunchUploadFileContainer
-                                onClick={() => setUploads((prev) => !prev)}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Icon
-                                        color="#73B1B5"
-                                        data={file_description}
-                                    />
-                                    <Typography variant="caption">
-                                        file-name.txt
-                                    </Typography>
-                                </div>
-                                <Icon data={close} color="#243746" size={16} />
-                            </PunchUploadFileContainer>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    borderBottom: '1px solid #DEEDEE',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Icon color="#73B1B5" data={image} />
-                                    <Typography variant="caption">
-                                        image-name.jpg
-                                    </Typography>
-                                </div>
-                                <Icon data={close} color="#243746" size={16} />
-                            </div>
-                        </PunchUploadFilesContainer>
-                    )}
-                </PunchAddUploadContainer>
-                <InfoHeader>
-                    <StyledCard
-                        style={{
-                            width: '100%',
-                        }}
-                    >
-                        <TextField
-                            id=""
-                            label="Description"
-                            multiline
-                            required
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setFormValue({
-                                    ...formValue,
-                                    Description: e.target.value,
-                                })
-                            }
-                        />
-                    </StyledCard>
-                </InfoHeader>
-                <PunchForm
-                    onSubmit={(e) =>
-                        onSubmit(e, {
-                            checklistWorkflowId:
-                                '652a4343-8c1b-4dbc-93a0-ca5a990b81ca',
-                            punchDescription: formValue.Description,
-                            severity: severity,
-                            status: 'Pending',
-                        })
-                    }
-                >
-                    <Typography variant="h6">Severity</Typography>
-                    <SeverityButtonWrapper>
-                        <SeverityButton
-                            severity={severity}
-                            setSeverity={setSeverity}
-                        />
-                    </SeverityButtonWrapper>
-                    <button type="submit">submit</button>
-                </PunchForm>
-            </div> */}
             <NavActionsComponent
                 ButtonMessage="Cancel"
                 SecondButtonMessage="Submit"

@@ -72,14 +72,18 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { user } = useAddUser()
 
     const getUsers = async () => {
-        const res = await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetAllUsersAdmin',
-        {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": '*'
-            }})
+        if (!accessToken) return
+        const res = await fetch(
+            'https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetAllUsersAdmin',
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
+        )
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
@@ -100,15 +104,17 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const fetchUserRoles = async () => {
+            if (!accessToken) return
             const res = await fetch(
                 'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllUserRoles',
                 {
-                    method: "GET",
+                    method: 'GET',
                     headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                      "Content-Type": "application/json",
-                      "Access-Control-Allow-Origin": '*'
-                    }}
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                }
             )
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
@@ -126,14 +132,17 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     // Delete user //
 
     const handleDeleteUser = async (id: string | undefined) => {
-        await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/SoftDeleteUser?id=${id}`, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": '*'
-              }
-        })
+        await fetch(
+            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/SoftDeleteUser?id=${id}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
+        )
 
         setRefreshUsers((prevRefresh) => !prevRefresh)
     }
@@ -163,12 +172,13 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         const response = await fetch(
             `https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`,
             {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": '*'
-                }}
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
         )
         if (response.ok) {
             const user = await response.json()
@@ -204,7 +214,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${accessToken}`,
-                        "Access-Control-Allow-Origin": '*'
+                        'Access-Control-Allow-Origin': '*',
                     },
                     body: JSON.stringify({
                         azureAdUserId: userEmail,

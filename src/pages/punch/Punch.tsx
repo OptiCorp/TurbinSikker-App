@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
 import { CheckListEntity } from '../context/models/CheckListEntity'
+import useAuth from '../landingPage/context/LandingPageContextProvider'
+import { usePunchContext } from './context/PunchContextProvider'
 import {
     PunchButton,
     PunchDateContainer,
@@ -17,17 +19,20 @@ import { PunchEntity, PunchSeverity } from './types'
 
 export const punchSeverity: PunchSeverity[] = [
     {
-        severity: 'Minor',
+        /* severity: 'Minor', */
+        severity: 0,
         color: '#fbca36',
         icon: info_circle,
     },
     {
-        severity: 'Major',
+        /* severity: 'Major', */
+        severity: 1,
         color: '#ed8936',
         icon: warning_filled,
     },
     {
-        severity: 'Critical',
+        /* severity: 'Critical', */
+        severity: 2,
         color: '#eb0000',
         icon: error_filled,
     },
@@ -35,13 +40,15 @@ export const punchSeverity: PunchSeverity[] = [
 
 function Punch() {
     const navigate = useNavigate()
+    const { accessToken } = useAuth()
+    const { Punches } = usePunchContext()
     const [punchData, setPunchData] = useState<PunchEntity>()
     const [currentChecklistData, setCurrentChecklistData] =
         useState<CheckListEntity>()
     const createdDate = punchData && formatDate(punchData.createdDate)
     const updatedDate =
         punchData?.updatedDate && formatDate(punchData.updatedDate)
-    console.log('update', updatedDate)
+    // console.log('Punches: ', Punches)
     const img = false //temporary, remove when we have an image (upload)
 
     useEffect(() => {
@@ -49,15 +56,26 @@ function Punch() {
     }, [])
     useEffect(() => {
         getChecklist()
-    }, [punchData])
+    }, [])
 
     async function getPunch() {
-        const response = await fetch(
-            'https://turbinsikker-api-lin-prod.azurewebsites.net/api/getPunch?id=708d8442-415f-4db0-8693-ec712d591cda'
-        )
-
-        const data = await response.json()
-        setPunchData(data)
+        if (!accessToken) return
+        try {
+            const response = await fetch(
+                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/getPunch?id=57fbf976-bce4-44cc-9da0-53789d6eaf0c',
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            const data = await response.json()
+            setPunchData(data)
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     async function getChecklist() {
@@ -67,6 +85,7 @@ function Punch() {
                     `https://turbinsikker-api-lin-prod.azurewebsites.net/api/getChecklist?id=${punchData?.checklistWorkflowId}`,
                     {
                         headers: {
+                            Authorization: `Bearer ${accessToken}`,
                             'Content-Type': 'application/json',
                         },
                     }
@@ -78,7 +97,7 @@ function Punch() {
             }
         }
     }
-
+    // console.log(punchData?.checklistWorkflowId)
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }

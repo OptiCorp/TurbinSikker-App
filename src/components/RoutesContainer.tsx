@@ -18,11 +18,11 @@ import { AddPunch } from '../pages/punch/addPunch/AddPunch'
 
 import ListPunches from '../pages/punch/listPunches/index'
 
+import { PunchContextProvider } from '../pages/punch/context/PunchContextProvider'
 import { AddUser } from '../pages/users/addUser/AddUser'
 import { useUserContext } from '../pages/users/context/userContextProvider'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
 import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
-
 
 export function RoutesContainer() {
     const { currentUser } = useUserContext()
@@ -88,8 +88,24 @@ export function RoutesContainer() {
                         />
                         {/*   <Route path="/AddUser" element={<AddUser />} /> */}
 
-                        <Route path="ListPunches" element={<ListPunches />} />
-                        <Route path="/punch" element={<Punch />} />
+                        {/* <Route path="ListPunches" element={<ListPunches />} /> */}
+
+                        <Route
+                            path="/ListPunches"
+                            element={
+                                <PunchContextProvider>
+                                    <ListPunches />
+                                </PunchContextProvider>
+                            }
+                        />
+                        <Route
+                            path="/punch"
+                            element={
+                                <PunchContextProvider>
+                                    <Punch />
+                                </PunchContextProvider>
+                            }
+                        />
                         <Route path="/AddPunch/" element={<AddPunch />} />
                         <Route path="/EditPunch/:id" element={<AddPunch />} />
                         <Route path="/EditUser/:id" element={<AddUser />} />
