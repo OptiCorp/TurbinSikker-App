@@ -1,5 +1,4 @@
 import { Button, Dialog } from '@equinor/eds-core-react'
-import { DialogContent } from '@equinor/eds-core-react/dist/types/components/Dialog/DialogContent'
 import { BtnWrap, StyledContent } from './styles'
 
 interface DialogProps {

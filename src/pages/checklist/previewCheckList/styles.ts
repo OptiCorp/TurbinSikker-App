@@ -29,7 +29,7 @@ export const PreviewListWrap = styled.ul`
 `
 export const PreviewListPoints = styled(TextField)`
     text-align: center;
-    
+
     padding: 0;
 `
 

@@ -1,6 +1,6 @@
 import CustomDialog from '@components/modal/useModalHook'
 import { useState } from 'react'
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import { CheckListEntity } from '../../../../pages/context/models/CheckListEntity'
 import {
     CategoryName,
     Container,

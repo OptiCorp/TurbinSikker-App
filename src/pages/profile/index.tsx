@@ -14,7 +14,6 @@ import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../users/context/userContextProvider'
 
 export const Profile: FunctionComponent = () => {
@@ -30,7 +29,6 @@ export const Profile: FunctionComponent = () => {
         }
     }
     const { currentUser } = useUserContext()
-    const { account } = useAuth()
 
     return (
         <>

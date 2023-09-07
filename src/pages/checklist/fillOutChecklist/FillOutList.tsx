@@ -6,7 +6,8 @@ import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBt
 import { Card, Checkbox, Icon } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
-import { WorkFlow } from '../workflow/context/models/WorkFlowEntity'
+
+import { WorkFlow } from '../workflow/types'
 import {
     CustomCard,
     CustomCardContent,
@@ -20,7 +21,6 @@ import {
 } from './styles'
 
 type Props = {
-    tasks: CheckListEntity | null
     sortedTasks: CheckListEntity['tasks']
     WorkFlow: WorkFlow
     onUpdate: (data: {
@@ -34,6 +34,7 @@ type Props = {
 export const FillOutList: FunctionComponent<Props> = ({
     WorkFlow,
     sortedTasks,
+
     onUpdate,
 }) => {
     let lastCategoryName = ''
@@ -71,7 +72,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                             : ''
 
                     lastCategoryName = task.category.name
-
+                    console.log(categoryName)
                     return (
                         <div key={task?.id}>
                             <CustomCard>
@@ -196,9 +197,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                     handleSubmit()
                 }}
                 isOpen={submitDialogShowing}
-            >
-                {' '}
-            </CustomDialog>
+            ></CustomDialog>
 
             <NavActionsComponent
                 buttonColor="primary"
