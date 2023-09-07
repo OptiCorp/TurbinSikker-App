@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router'
 import { useUserContext } from '../../users/context/userContextProvider'
 import { StyledTableRow } from '../checkListID/styles'
 
+import { formatDate } from '../../../Helpers'
 import { AllWorkFlows } from '../workflow/types'
-import { ChipStatus } from './chipStatus'
-import { useGetCheckListInfo } from './hooks/UseGetCheckListInfo'
-import { CellContent, StyledTableCellCheckL } from './styles'
 import { UserChip } from './UserChip'
+import { ChipStatus } from './chipStatus'
+import { CellContent, StyledTableCellCheckL } from './styles'
 
 interface CheckListRowProps {
     workflow: AllWorkFlows
@@ -17,28 +17,12 @@ interface CheckListRowProps {
 export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     workflow,
 }) => {
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString)
-        return date.toLocaleDateString('en-GB')
-    }
-
     const navigate = useNavigate()
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
     const { currentUser } = useUserContext()
 
-    const { checklistData, userData, name, date } = useGetCheckListInfo(
-        workflow.checklistId,
-        workflow.userId
-    )
-
-    // const { refreshList, setRefreshList } = useCheckListContext()
-
-    //     fetchChecklistData()
-    // }, [allWorkFlow, refreshList, currentUser, accessToken])
-
-    // }, [allWorkFlow.userId, accessToken])
     if (currentUser?.id !== workflow.createdById || workflow.status !== 1)
         return null
     return (
@@ -46,14 +30,13 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
             <StyledTableRow onClick={() => clickHandler(workflow.checklistId)}>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        {checklistData && (
-                            <Typography
-                                variant="body_long_bold"
-                                token={{ fontSize: '0.9rem' }}
-                            >
-                                {checklistData.title}
-                            </Typography>
-                        )}
+                        <Typography
+                            variant="body_long_bold"
+                            token={{ fontSize: '0.9rem' }}
+                        >
+                            {workflow.checklist.title}
+                        </Typography>
+
                         <Typography
                             variant="caption"
                             token={{
@@ -61,7 +44,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                             }}
                             style={{ height: '5px', minWidth: '100px' }}
                         >
-                            Created {date}
+                            Created {formatDate(workflow.checklist.createdDate)}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>
@@ -80,7 +63,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                                 fontSize: '0.7rem',
                             }}
                         >
-                            {formatDate(workflow.updatedDate)}
+                            {formatDate(workflow.createdDate)}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>

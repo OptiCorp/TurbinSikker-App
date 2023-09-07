@@ -145,7 +145,7 @@ const EditCheckListContextProvider = ({
                 'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
-                title: data?.title ?? checkListById?.title,
+                title: data.title || title,
                 status: data.status,
             }),
         })

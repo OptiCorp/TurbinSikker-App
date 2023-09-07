@@ -87,12 +87,12 @@ export const StyledSwitch = styled(Switch)`
 
 export const FillOutWrap = styled.ul`
     margin: 0 auto;
-    margin-bottom: 5rem;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin-top: 1rem;
-    height: 600px;
+
     padding: 0;
     gap: 1rem;
     width: 40%;

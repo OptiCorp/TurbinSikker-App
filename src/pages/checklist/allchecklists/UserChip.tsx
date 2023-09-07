@@ -1,7 +1,6 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { FC } from 'react'
-import { formatDate } from '../../../Helpers'
 import { AllWorkFlows } from '../workflow/types'
 import { useUserContext } from './../../../pages/users/context/userContextProvider'
 import { StyledChip } from './styles'
@@ -12,7 +11,16 @@ type UserChip = {
 
 export const UserChip: FC<UserChip> = ({ workflow }) => {
     const { currentUser } = useUserContext()
-    const formattedDate = formatDate(workflow?.createdDate ?? '')
+
+    const formattDate = (dateString: string | null) => {
+        if (!dateString) {
+            return 'No updates'
+        }
+        const date = new Date(dateString)
+
+        return date.toLocaleDateString('en-GB')
+    }
+
     switch (currentUser?.userRole.name) {
         case 'Inspector':
             return (
@@ -36,7 +44,7 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
                             fontSize: '0.7rem',
                         }}
                     >
-                        {formattedDate}
+                        {formattDate(workflow.createdDate)}
                     </Typography>
                 </>
             )
@@ -61,7 +69,7 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
                             fontSize: '0.7rem',
                         }}
                     >
-                        {formattedDate}
+                        {formattDate(workflow.updatedDate)}
                     </Typography>
                 </>
             )
