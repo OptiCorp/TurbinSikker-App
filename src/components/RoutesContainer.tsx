@@ -80,12 +80,12 @@ export function RoutesContainer() {
                         <Route
                             path="/add-user"
                             element={
-                                // <ProtectedRoute>
-                                <AddUser />
-                                // </ProtectedRoute>
+                                <ProtectedRoute>
+                                    <AddUser />
+                                </ProtectedRoute>
                             }
                         />
-                        {/*   <Route path="/AddUser" element={<AddUser />} /> */}
+                        <Route path="/AddUser" element={<AddUser />} />
 
                         <Route path="ListPunches" element={<ListPunches />} />
                         <Route path="/punch" element={<Punch />} />

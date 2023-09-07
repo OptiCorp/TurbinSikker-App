@@ -9,15 +9,18 @@ import { useUserContext } from '../../../../pages/users/context/userContextProvi
 
 export type SendingFormValuesEntity = {
     checklistId: string
-    userId: string
-    status: number
+    userIds: {
+        value: string
+        label: string
+    }[]
+    status: string
 }
 export const useAddWorkFlowForm = () => {
     const methods = useForm<SendingFormValuesEntity>()
     const { openSnackbar } = useContext(SnackbarContext)
     const { handleSubmit, control } = methods
     const navigate = useNavigate()
-    const { idToken } = useAuth()
+    const { accessToken } = useAuth()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const { setRefreshList } = useCheckListContext()
     const { currentUser } = useUserContext()
@@ -32,13 +35,13 @@ export const useAddWorkFlowForm = () => {
         const res = await fetch(`${API_URL}/CreateChecklistWorkFlow`, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${idToken}`,
+                Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 checklistId: data.checklistId,
-                userId: data.userId,
-                status: 0,
+                userIds: data.userIds,
+
                 createdById: currentUser?.id,
             }),
         })
