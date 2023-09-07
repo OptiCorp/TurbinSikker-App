@@ -20,7 +20,8 @@ export const InspectorPendingRow: FunctionComponent<
     }
 
     const formattedDate = formatDate(WorkFlow?.updatedDate ?? '')
-    if (WorkFlow.status !== 1) return null
+
+    if (WorkFlow.status !== 'Commited') return null
     return (
         <>
             {WorkFlow && (

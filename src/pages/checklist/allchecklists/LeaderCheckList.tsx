@@ -23,7 +23,10 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     }
     const { currentUser } = useUserContext()
 
-    if (currentUser?.id !== workflow.createdById || workflow.status !== 1)
+    if (
+        currentUser?.id !== workflow.createdById ||
+        workflow.status !== 'Commited'
+    )
         return null
     return (
         <>

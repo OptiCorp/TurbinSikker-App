@@ -20,7 +20,7 @@ export const InspectorReceivedCheckLists: FunctionComponent<
         navigate(`/FillOutCheckList/${id}`)
     }
 
-    if (WorkFlow.status !== 0) return null
+    if (WorkFlow.status !== 'Sent') return null
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.checklistId)}>

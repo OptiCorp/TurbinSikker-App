@@ -5,7 +5,7 @@ export type WorkFlow = {
     id: string
     checklistId: string
     userId: string
-    status: number | null
+    status: string
     createdById: string
     createdDate: string
     updatedDate: string
@@ -20,7 +20,7 @@ export type AllWorkFlows = {
     checklistId: string
     userId: string
     createdById: string
-    status: number | null
+    status: string
     createdDate: string
     updatedDate: string
     formattedUpdateDate: string
@@ -36,7 +36,7 @@ export type CheckList = {
     firstName: string
     id: string
     lastName: string
-    status: number
+    status: string
     title: string
     userRoleId: string
     username: string
@@ -52,7 +52,7 @@ export type CreatedByUser = {
     firstName: string
 
     lastName: string
-    status: number
+    status: string
     userRoleId: string
     userRole: { id: string; name: string }
     username: string
@@ -68,7 +68,7 @@ export type Creator = {
     email: string
     firstName: string
     lastName: string
-    status: number
+    status: string
     createdDate: string
     updatedDate: string
 }
