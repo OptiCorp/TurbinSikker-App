@@ -30,6 +30,7 @@ export const useAddUser = () => {
                 headers: {
                     Authorization: `Bearer ${idToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({ ...data, azureAdUserId: data.email }),
             })
@@ -47,6 +48,7 @@ export const useAddUser = () => {
                 headers: {
                     Authorization: `Bearer ${idToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify(data),
             })
