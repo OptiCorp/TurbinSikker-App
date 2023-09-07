@@ -1,4 +1,4 @@
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import type { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import {
     CategoryName,
     Container,
@@ -16,7 +16,6 @@ export const PreviewList = ({ sortedTasks }: Props) => {
     let lastCategoryName = ''
 
     return (
-        <>
             <PreviewListWrap>
                 {sortedTasks.map((task) => {
                     const categoryName =
@@ -27,7 +26,6 @@ export const PreviewList = ({ sortedTasks }: Props) => {
                     lastCategoryName = task.category.name
 
                     return (
-                        <>
                             <Container key={task.id}>
                                 <CategoryName>{categoryName}</CategoryName>
                                 <StyledCard
@@ -46,10 +44,8 @@ export const PreviewList = ({ sortedTasks }: Props) => {
                                     />
                                 </StyledCard>
                             </Container>
-                        </>
                     )
                 })}
             </PreviewListWrap>
-        </>
     )
 }

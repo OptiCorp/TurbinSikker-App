@@ -40,7 +40,7 @@ export const StyledHeadTitle = styled.h3`
 `
 
 export const MyCheckListCell = styled(Table.Cell)`
-    padding: 0;
+    padding-inline: 8px;
 `
 
 export const StyledTableBody = styled(Table.Body)`
@@ -48,7 +48,7 @@ export const StyledTableBody = styled(Table.Body)`
 `
 
 export const StyledTableRow = styled(Table.Row)`
-    cursor: pointer;
+
     &:hover {
         box-shadow: 1px 2px 2px 0px rgba(0, 100, 121);
     }
