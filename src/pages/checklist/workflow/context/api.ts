@@ -10,6 +10,8 @@ export const getChecklistWorkflowById = async (
         {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
         }
     )

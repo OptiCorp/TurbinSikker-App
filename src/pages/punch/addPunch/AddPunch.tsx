@@ -39,6 +39,7 @@ export const AddPunch: FunctionComponent = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
                 createdBy: currentUser?.id,
@@ -68,6 +69,7 @@ export const AddPunch: FunctionComponent = () => {
                 headers: {
                     Authorization: `Bearer ${idToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify(data),
             })

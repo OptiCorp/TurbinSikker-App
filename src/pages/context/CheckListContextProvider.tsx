@@ -41,8 +41,10 @@ const CheckListContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
-    const { state } = useLocation()
-    const refreshCheckLists = state ? state?.refreshCheckLists : null
+    const Location = useLocation()
+    const refreshCheckLists = Location.state
+        ? Location.state?.refreshCheckLists
+        : null
     const [allCheckList, setAllCheckList] = useState<CheckListEntity[]>([])
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []

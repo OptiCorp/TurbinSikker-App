@@ -3,7 +3,7 @@ import { Chip, Table } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
 export const StyledTableCellCheckL = styled(Table.Cell)`
-    padding: 0;
+    padding-inline: 8px;
 `
 
 export const StyledChip = styled(Chip)`
