@@ -40,7 +40,7 @@ export const StyledHeadTitle = styled.h3`
 `
 
 export const MyCheckListCell = styled(Table.Cell)`
-    padding: 0;
+    padding-inline: 8px;
 `
 
 export const StyledTableBody = styled(Table.Body)`
