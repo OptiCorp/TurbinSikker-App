@@ -10,7 +10,7 @@ type ChipStatusProps = {
 export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
     const formattedUpdateDate = formatDate(workflow?.updatedDate ?? '')
     switch (workflow.status) {
-        case 0:
+        case 'Sent':
             return (
                 <>
                     <Chip style={{ margin: '0 auto' }} variant="default">
@@ -27,14 +27,14 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                     </Typography>
                 </>
             )
-        case 1:
+        case 'Committed':
             return (
                 <Chip style={{ margin: '0 auto' }} variant="active">
                     Ready for review
                 </Chip>
             )
 
-        case 2:
+        case 'Done':
             return (
                 <>
                     <Chip style={{ margin: '0 auto' }} disabled>
