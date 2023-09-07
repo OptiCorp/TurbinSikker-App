@@ -105,7 +105,7 @@ export const MyCheckLists = () => {
                     </Table>
                 </ListWrapperCheckMyList>
             </BackgroundWrap>
-            {activeRow === true ? (
+            {activeRow === true || currentUser?.userRole.name === 'Leader' ? (
                 <NavActionsComponent
                     buttonColor="danger"
                     onClick={() => {
