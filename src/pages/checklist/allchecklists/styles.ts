@@ -7,7 +7,11 @@ export const StyledTableCellCheckL = styled(Table.Cell)`
 `
 
 export const StyledChip = styled(Chip)`
+    min-width: 120px;
     display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 0 auto;
 `
 
 export const CellContent = styled.div`

@@ -25,14 +25,12 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
                 >
                     {currentUser?.userRole.name === 'Inspector' ? (
                         <>
-                            {workflow?.user?.firstName}{' '}
-                            {workflow?.user?.lastName}{' '}
+                            {workflow.creator.firstName}{' '}
+                            {workflow.creator.lastName}
                         </>
                     ) : (
                         <>
-                            {' '}
-                            {workflow.creator.firstName}{' '}
-                            {workflow.creator.lastName}
+                            {workflow.user.firstName} {workflow.user.lastName}
                         </>
                     )}
                 </Typography>
@@ -40,7 +38,7 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
             <Typography
                 variant="caption"
                 token={{
-                    textAlign: 'center',
+                    textAlign: 'left',
                     fontSize: '0.7rem',
                 }}
             >
