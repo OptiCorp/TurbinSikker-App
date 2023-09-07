@@ -80,7 +80,7 @@ const EditCheckListContextProvider = ({
     const [taskId, setTaskId] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
-    const [title, setTitle] = useState<CheckListEntity | any>()
+    const [title, setTitle] = useState<CheckListEntity | string>()
 
     const [isOpenn, setIsOpenn] = useState(false)
     const [isOpenNew, setIsOpenNew] = useState(false)
@@ -145,8 +145,8 @@ const EditCheckListContextProvider = ({
                 'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
-                title: data.title,
-                status: 1,
+                title: data?.title ?? checkListById?.title,
+                status: data.status,
             }),
         })
         if (res.ok) {

@@ -5,14 +5,10 @@ import { useUserContext } from '../../../pages/users/context/userContextProvider
 import { useCheckListContext } from '../../context/CheckListContextProvider'
 import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 
-
-
 export const SelectComponent = () => {
     const { userList } = useUserContext()
     const { list } = useCheckListContext()
     const { control, register } = useFormContext()
-
-    
 
     return (
         <>
@@ -62,7 +58,7 @@ export const SelectComponent = () => {
                 <RecipientsContainer>
                     <Controller
                         control={control}
-                        name="userId"
+                        name="userIds"
                         rules={{
                             required: 'Required',
                         }}
@@ -70,9 +66,11 @@ export const SelectComponent = () => {
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 options={userList}
-                           
+                                isMulti={true}
                                 value={userList.find((c) => c.value === value)}
-                                onChange={(val) => onChange(val?.value)}
+                                onChange={(val) =>
+                                    onChange(val.map((x) => x.value))
+                                }
                             />
                         )}
                     />

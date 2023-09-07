@@ -1,5 +1,4 @@
-import { Icon, Typography } from '@equinor/eds-core-react'
-import { assignment_user } from '@equinor/eds-icons'
+import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 import { useUserContext } from '../../users/context/userContextProvider'
@@ -8,7 +7,8 @@ import { StyledTableRow } from '../checkListID/styles'
 import { AllWorkFlows } from '../workflow/types'
 import { ChipStatus } from './chipStatus'
 import { useGetCheckListInfo } from './hooks/UseGetCheckListInfo'
-import { CellContent, StyledChip, StyledTableCellCheckL } from './styles'
+import { CellContent, StyledTableCellCheckL } from './styles'
+import { UserChip } from './UserChip'
 
 interface CheckListRowProps {
     workflow: AllWorkFlows
@@ -67,23 +67,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <StyledChip>
-                            <Icon
-                                data={assignment_user}
-                                color="#243746"
-                                style={{ height: '15px' }}
-                            />
-
-                            <Typography
-                                variant="caption"
-                                token={{
-                                    fontSize: '0.8rem',
-                                }}
-                                style={{ margin: '0' }}
-                            >
-                                {name}
-                            </Typography>
-                        </StyledChip>
+                        <UserChip workflow={workflow} />
                     </CellContent>
                 </StyledTableCellCheckL>
                 <StyledTableCellCheckL>

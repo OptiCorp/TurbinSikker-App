@@ -76,7 +76,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                 <Typography
                                     variant="caption"
                                     token={{
-                                        fontSize: '1rem',
+                                        fontSize: '0.8rem',
                                     }}
                                 >
                                     0 inspectors

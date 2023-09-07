@@ -42,16 +42,28 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
             )
         case 'Leader':
             return (
-                <StyledChip variant="default">
+                <>
+                    <StyledChip variant="default">
+                        <Icon data={assignment_user} color="#243746" />
+                        <Typography
+                            variant="caption"
+                            token={{
+                                fontSize: '0.8rem',
+                            }}
+                        >
+                            {workflow.user.firstName} {workflow.user.lastName}
+                        </Typography>
+                    </StyledChip>{' '}
                     <Typography
                         variant="caption"
                         token={{
-                            fontSize: '0.8rem',
+                            textAlign: 'center',
+                            fontSize: '0.7rem',
                         }}
                     >
-                        {workflow.user.firstName} {workflow.user.lastName}
-                    </Typography>{' '}
-                </StyledChip>
+                        {formattedDate}
+                    </Typography>
+                </>
             )
     }
 }
