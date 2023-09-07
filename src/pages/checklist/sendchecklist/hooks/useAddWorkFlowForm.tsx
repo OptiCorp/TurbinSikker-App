@@ -37,6 +37,7 @@ export const useAddWorkFlowForm = () => {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
                 checklistId: data.checklistId,

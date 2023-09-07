@@ -48,6 +48,7 @@ export const FillOutCheckList = () => {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
                     id: data.id,

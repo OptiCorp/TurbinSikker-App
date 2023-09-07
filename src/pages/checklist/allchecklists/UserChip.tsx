@@ -25,7 +25,8 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
                 >
                     {currentUser?.userRole.name === 'Inspector' ? (
                         <>
-                            {workflow.user.firstName} {workflow.user.lastName}{' '}
+                            {workflow?.user?.firstName}{' '}
+                            {workflow?.user?.lastName}{' '}
                         </>
                     ) : (
                         <>
