@@ -6,7 +6,8 @@ import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBt
 import { Card, Checkbox, Icon } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
-import { WorkFlow } from '../workflow/context/models/WorkFlowEntity'
+
+import { WorkFlow } from '../workflow/types'
 import {
     CustomCard,
     CustomCardContent,

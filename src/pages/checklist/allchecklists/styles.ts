@@ -3,16 +3,15 @@ import { Chip, Table } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
 export const StyledTableCellCheckL = styled(Table.Cell)`
-    padding-bottom: 1.5rem;
-padding: 0;
-   
+    padding-inline: 8px;
 `
 
 export const StyledChip = styled(Chip)`
+    min-width: 120px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
     margin: 0 auto;
-    text-align: center;
-   
-
 `
 
 export const CellContent = styled.div`
@@ -20,11 +19,18 @@ export const CellContent = styled.div`
 
     display: flex;
     flex-direction: column;
-    align-items: left;
+    align-items: center;
     min-height: 50px;
- 
+
     justify-content: space-around;
     margin: 10px 0;
+`
+
+export const StyledBodyTitle = styled.div`
+    height: 10px;
+    display: inline;
+    text-align: left;
+    width: 100%;
 `
 
 export const ListWrapperCheckL = styled.div`
@@ -55,7 +61,9 @@ export const StyledHeadTitle = styled.h3`
 export const Wrap = styled.div`
     display: flex;
 
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    box-shadow:
+        rgba(0, 0, 0, 0.12) 0px 1px 3px,
+        rgba(0, 0, 0, 0.24) 0px 1px 2px;
     background: #f5f5f5;
     align-items: left;
     flex-direction: column;

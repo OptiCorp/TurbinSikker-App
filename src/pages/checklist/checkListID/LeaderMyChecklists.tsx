@@ -14,7 +14,7 @@ interface CheckListRowProps {
     setActiveRow: (open: boolean) => void
 }
 
-export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
+export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
     userIdCheckList,
 }) => {
     const formatDate = (dateString: string | null) => {
@@ -76,7 +76,7 @@ export const CheckListUserIDRow: FunctionComponent<CheckListRowProps> = ({
                                 <Typography
                                     variant="caption"
                                     token={{
-                                        fontSize: '1rem',
+                                        fontSize: '0.8rem',
                                     }}
                                 >
                                     0 inspectors

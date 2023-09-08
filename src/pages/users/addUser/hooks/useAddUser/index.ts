@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { SnackbarContext } from '../../../../../components/snackbar/SnackBarContext'
+import { API_URL } from '../../../../../config'
 import useAuth from '../../../../landingPage/context/LandingPageContextProvider'
 import { UserContext } from '../../../context/userContextProvider'
 import { FormValues } from './types'
@@ -24,11 +25,12 @@ export const useAddUser = () => {
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         if (appLocation.pathname === '/AddUser/') {
-            await fetch('https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddUser', {
+            await fetch(`${API_URL}/AddUser`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({ ...data, azureAdUserId: data.email }),
             })
@@ -41,11 +43,12 @@ export const useAddUser = () => {
                 openSnackbar('User added successfully!')
             }
         } else {
-            await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateUser?id=${id}`, {
+            await fetch(`${API_URL}/UpdateUser?id=${id}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${idToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify(data),
             })

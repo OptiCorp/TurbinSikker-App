@@ -17,7 +17,9 @@ export const BackgroundWrap = styled.div`
     display: flex;
 
     align-items: left;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    box-shadow:
+        rgba(0, 0, 0, 0.12) 0px 1px 3px,
+        rgba(0, 0, 0, 0.24) 0px 1px 2px;
     flex-direction: column;
 `
 export const HeadCell = styled(Table.Cell)`
@@ -38,9 +40,7 @@ export const StyledHeadTitle = styled.h3`
 `
 
 export const MyCheckListCell = styled(Table.Cell)`
-    padding-right: 0;
-    
-    padding-bottom: 1.5rem;
+    padding-inline: 8px;
 `
 
 export const StyledTableBody = styled(Table.Body)`
@@ -58,12 +58,11 @@ export const StyledTableRow = styled(Table.Row)`
 `
 
 export const CellContentMyList = styled.div`
-     font-weight: 600;
+    font-weight: 600;
 
-
-     display: flex;
+    display: flex;
     flex-direction: column;
-    align-items: left;
+    align-items: center;
     min-height: 50px;
     justify-content: space-around;
     margin: 10px 0;

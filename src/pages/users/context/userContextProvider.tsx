@@ -8,13 +8,13 @@ import React, {
     useState,
 } from 'react'
 import { useLocation } from 'react-router'
+import { API_URL } from '../../../config'
 import useAuth from '../../landingPage/context/LandingPageContextProvider'
 import { useAddUser } from '../addUser/hooks/useAddUser'
 import { Option } from '../context/models/OptionsEntity'
 import { AzureUserInfo } from './models/AzureUserEntity'
 import { UserEntity } from './models/UserEntity'
 import { UserListEntity } from './models/UserListEntity'
-
 export type ContextType = {
     result: UserEntity[]
     userList: UserListEntity[]
@@ -73,17 +73,15 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const getUsers = async () => {
         if (!accessToken) return
-        const res = await fetch(
-            'https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetAllUsersAdmin',
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-            }
-        )
+
+        const res = await fetch(`${API_URL}/GetAllUsersAdmin `, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
@@ -105,17 +103,14 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const fetchUserRoles = async () => {
             if (!accessToken) return
-            const res = await fetch(
-                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/GetAllUserRoles',
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            const res = await fetch(`${API_URL}/GetAllUserRoles  `, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
 
@@ -132,17 +127,15 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     // Delete user //
 
     const handleDeleteUser = async (id: string | undefined) => {
-        await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/SoftDeleteUser?id=${id}`,
-            {
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-            }
-        )
+        if (!accessToken) return
+        await fetch(`${API_URL}/SoftDeleteUser?id=${id}  `, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
 
         setRefreshUsers((prevRefresh) => !prevRefresh)
     }
@@ -170,7 +163,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     async function fetchUserByEmail(userEmail: string, name: string) {
         const response = await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/Api/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`,
+            `${API_URL}/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`,
             {
                 method: 'GET',
                 headers: {
@@ -207,25 +200,22 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         const lastName = name.split(' ')[1]
         const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
         try {
-            const createUserResponse = await fetch(
-                'https://turbinsikker-api-lin-prod.azurewebsites.net/Api/addUser',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                    body: JSON.stringify({
-                        azureAdUserId: userEmail,
-                        firstName: firstName,
-                        lastName: lastName,
-                        userName: username,
-                        email: userEmail,
-                        // other user properties
-                    }),
-                }
-            )
+            const createUserResponse = await fetch(`${API_URL}/addUser`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({
+                    azureAdUserId: userEmail,
+                    firstName: firstName,
+                    lastName: lastName,
+                    userName: username,
+                    email: userEmail,
+                    // other user properties
+                }),
+            })
             console.log(
                 'User creation response status:',
                 createUserResponse.status

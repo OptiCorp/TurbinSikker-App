@@ -2,8 +2,8 @@ import { Navigate, Route, Routes } from 'react-router'
 import Layout from '../pages/Layout'
 import PageNotFound from '../pages/PageNotFound'
 import { IndexCheckLists } from '../pages/checklist'
-import { CheckList } from '../pages/checklist/allchecklists/CheckList'
-import { MyCheckLists } from '../pages/checklist/checkListID/MyCheckLists'
+import { CheckList } from '../pages/checklist/allchecklists/Index'
+import { MyCheckLists } from '../pages/checklist/checkListID/Index'
 import { EditCheckList } from '../pages/checklist/editchecklist/editCheckList'
 import { PreviewCheckList } from '../pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from '../pages/checklist/sendchecklist'
@@ -27,12 +27,12 @@ import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryC
 export function RoutesContainer() {
     const { currentUser } = useUserContext()
 
-    const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-        if (currentUser?.userRole.name === 'Inspector') {
-            return <Navigate to="/" replace />
-        }
-        return children
-    }
+    // const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    //     if (currentUser?.userRole.name === 'Inspector') {
+    //         return <Navigate to="/" replace />
+    //     }
+    //     return children
+    // }
     return (
         <>
             <WorkflowContextProvider>
@@ -86,7 +86,7 @@ export function RoutesContainer() {
                                 // </ProtectedRoute>
                             }
                         />
-                        {/*   <Route path="/AddUser" element={<AddUser />} /> */}
+                        <Route path="/AddUser" element={<AddUser />} />
 
                         <Route
                             path="/ListPunches"

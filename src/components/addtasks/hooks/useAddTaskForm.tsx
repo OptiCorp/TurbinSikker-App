@@ -3,14 +3,14 @@ import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
+import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { FormValuesEntity } from '../context/models/FormValuesEntity'
-
 export const useAddTaskForm = () => {
     const { id } = useParams() as { id: string }
-    const { idToken } = useAuth()
+
     const appLocation = useLocation()
     const methods = useForm<FormValuesEntity>()
     const { reset, watch, handleSubmit, register, control } = methods
@@ -21,17 +21,18 @@ export const useAddTaskForm = () => {
     const [checkListById, setCheckListById] = useState<CheckListEntity | null>(
         null
     )
-
+    const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
+            `${API_URL}/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
             {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify(data.task),
             }
@@ -44,12 +45,16 @@ export const useAddTaskForm = () => {
     }
     useEffect(() => {
         const fetchAllCheckListsId = async () => {
-
-            if (!id) return
+            if (!id || !accessToken) return
             try {
-                const res = await fetch(
-                    `https://localhost:7290/api/GetChecklist?id=${id}`
-                )
+                const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                })
+
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
 
@@ -72,7 +77,7 @@ export const useAddTaskForm = () => {
         }
         console.log(sortedTasks)
         fetchAllCheckListsId()
-    }, [refreshList])
+    }, [refreshList, accessToken])
 
     return {
         methods,

@@ -4,8 +4,7 @@ import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Typography } from '@equinor/eds-core-react'
 import { useContext, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router'
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { checkList } from '../../../pages/context/models/checklist'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
@@ -14,7 +13,6 @@ import { Wrapper } from '../previewCheckList/styles'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { FillOutList } from './FillOutList'
 import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
-
 export type UpdatingWorkFlowEntity = {
     id: string
     status: number
@@ -23,24 +21,20 @@ export type UpdatingWorkFlowEntity = {
 }
 
 export const FillOutCheckList = () => {
-    const { checkListById, sortedTasks } = useAddTaskForm()
-    const navigate = useNavigate()
+    const { sortedTasks } = useAddTaskForm()
+
     const methods = useForm<UpdatingWorkFlowEntity>()
-    const { WorkFlows, allWorkFlows } = useWorkflowContext()
+    const { WorkFlows } = useWorkflowContext()
 
     const [content, setContent] = useState('')
     const [commentDialogShowing, setCommentDialogShowing] = useState(false)
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
 
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const { refreshList, setRefreshList } = useCheckListContext()
-    const { handleSubmit, control } = methods
-    const { idToken } = useAuth()
+    const { setRefreshList } = useCheckListContext()
+    const { handleSubmit } = methods
+    const { accessToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
-    const [checklistFetch, setChecklistFetch] =
-        useState<CheckListEntity | null>(null)
 
-    const { id } = useParams()
     const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
         id: string
         checklistId: string
@@ -48,12 +42,13 @@ export const FillOutCheckList = () => {
         status: number
     }) => {
         const res = await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklistWorkflow?id=${data.id}`,
+            `${API_URL}/UpdateChecklistWorkflow?id=${data.id}`,
             {
                 method: 'PUT',
                 headers: {
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
                     id: data.id,

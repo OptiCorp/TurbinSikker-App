@@ -1,3 +1,4 @@
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import React, {
     createContext,
     useContext,
@@ -5,12 +6,10 @@ import React, {
     useMemo,
     useState,
 } from 'react'
-
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useNavigate, useParams } from 'react-router'
-
 import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
 import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
+import { API_URL } from '../../../../config'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../context/models/CheckListEntity'
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
@@ -74,14 +73,14 @@ const EditCheckListContextProvider = ({
     const { id } = useParams()
     const navigate = useNavigate()
     const { setRefreshList } = useCheckListContext()
-    const { idToken, accessToken } = useAuth()
+    const { accessToken } = useAuth()
     const { openSnackbar } = useContext(SnackbarContext)
 
     const [task, setTask] = useState<TaskEntity | any>()
     const [taskId, setTaskId] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
-    const [title, setTitle] = useState<CheckListEntity | any>()
+    const [title, setTitle] = useState<CheckListEntity | string>()
 
     const [isOpenn, setIsOpenn] = useState(false)
     const [isOpenNew, setIsOpenNew] = useState(false)
@@ -116,13 +115,13 @@ const EditCheckListContextProvider = ({
         categoryId: string
     }) => {
         const res = await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklistTask?id=${data.taskId}`,
+            `${API_URL}/UpdateChecklistTask?id=${data.taskId}  `,
             {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
                     description: data.description,
@@ -138,21 +137,18 @@ const EditCheckListContextProvider = ({
     }
 
     const handleSave = async (data: { title: string; status: string }) => {
-        const res = await fetch(
-            `https://turbinsikker-api-lin-prod.azurewebsites.net/api/UpdateChecklist?id=${id}`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                body: JSON.stringify({
-                    title: data.title,
-                    status: 1,
-                }),
-            }
-        )
+        const res = await fetch(`${API_URL}/UpdateChecklist?id=${id}`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+                title: data.title || title,
+                status: data.status,
+            }),
+        })
         if (res.ok) {
             setRefreshList((prev) => !prev)
         }
@@ -165,12 +161,12 @@ const EditCheckListContextProvider = ({
     }
 
     const handleDelete = async (id: string | undefined) => {
-        await fetch(`https://turbinsikker-api-lin-prod.azurewebsites.net/api/DeleteChecklist?id=${id}`, {
+        await fetch(`${API_URL}/DeleteChecklist?id=${id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
             },
         })
         setRefreshList((prev) => !prev)
