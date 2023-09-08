@@ -1,9 +1,10 @@
-import { Chip, Icon, Typography } from '@equinor/eds-core-react'
-import { assignment_user } from '@equinor/eds-icons'
+import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { formatDate } from '../../../Helpers'
+
+import { UserChip } from '../allchecklists/UserChip'
 import { ChipStatus } from '../allchecklists/chipStatus'
+import { StyledBodyTitle } from '../allchecklists/styles'
 import { WorkFlow } from '../workflow/types'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
 
@@ -19,49 +20,23 @@ export const InspectorPendingRow: FunctionComponent<
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    const formattedDate = formatDate(WorkFlow?.updatedDate ?? '')
-
-    if (WorkFlow.status !== 'Committed') return null
+    if (WorkFlow.status === 'Sent') return null
     return (
         <>
             {WorkFlow && (
                 <StyledTableRow
-                    onClick={() => clickHandler(WorkFlow.checklistId)}
+                    onClick={() => clickHandler(WorkFlow.checklist.id)}
                 >
                     <MyCheckListCell>
-                        <CellContentMyList>
+                        <StyledBodyTitle>
                             <Typography variant="body_long_bold">
                                 {WorkFlow.checklist.title}
                             </Typography>
-                        </CellContentMyList>
+                        </StyledBodyTitle>
                     </MyCheckListCell>
                     <MyCheckListCell>
                         <CellContentMyList>
-                            <Chip
-                                style={{
-                                    minWidth: '120px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-
-                                    alignContent: 'center',
-                                    margin: '0 auto',
-                                }}
-                            >
-                                <Icon
-                                    data={assignment_user}
-                                    color="#243746"
-                                    style={{ height: '15px' }}
-                                />
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '0.8rem',
-                                    }}
-                                >
-                                    {WorkFlow.creator.firstName}{' '}
-                                    {WorkFlow.creator.lastName}
-                                </Typography>
-                            </Chip>
+                            <UserChip workflow={WorkFlow} />
                         </CellContentMyList>
                     </MyCheckListCell>
 

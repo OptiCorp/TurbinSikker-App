@@ -2,6 +2,7 @@ import { Icon, Tabs } from '@equinor/eds-core-react'
 import { assignment, menu } from '@equinor/eds-icons'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { useUserContext } from '../../pages/users/context/userContextProvider'
 import Sidebar from '../sidebar/Sidebar'
 import { FooterContainer, ImageContainer, ImageContainerActive } from './styles'
 
@@ -13,17 +14,17 @@ export const Navigation: React.FC = () => {
     }
     const [open, setOpen] = useState(false)
     const appLocation = useLocation()
-
+    const { currentUser } = useUserContext()
     const items = [
         {
             name: 'Tab 1',
             value: (index?: number) =>
                 activeTab === index ? (
                     <ImageContainerActive
-                        onClick={() => navigate('/AddPunch')}
+                        onClick={() => navigate('/ListPunches')}
                     />
                 ) : (
-                    <ImageContainer onClick={() => navigate('/AddPunch')} />
+                    <ImageContainer onClick={() => navigate('/ListPunches')} />
                 ),
         },
         {
@@ -56,17 +57,32 @@ export const Navigation: React.FC = () => {
         },
     ]
 
+    const hideFooter = () => {
+        const hideList = [
+            'AddUser',
+            'EditUser',
+            'EditCheckList',
+            'PreviewCheckList',
+            'FillOutCheckList',
+            'AddPunch',
+            'SendCheckList',
+            'MyCheckLists',
+        ]
+
+        if (hideList.find((x) => appLocation.pathname.includes(x))) {
+            return true
+        }
+
+        if (currentUser?.userRole.name === 'Inspector') {
+            return false
+        }
+        return false
+    }
+
     return (
         <>
             <Sidebar open={open} setOpen={setOpen} />
-            {appLocation.pathname === '/AddUser/' ||
-            appLocation.pathname.includes('EditUser') ||
-            appLocation.pathname.includes('MyCheckLists') ||
-            appLocation.pathname.includes('EditCheckList') ||
-            appLocation.pathname.includes('/PreviewCheckList/') ||
-            appLocation.pathname.includes('/FillOutCheckList/') ||
-            appLocation.pathname.includes('AddPunch') ||
-            appLocation.pathname.includes('SendCheckList') ? null : (
+            {hideFooter() ? null : (
                 <FooterContainer>
                     <Tabs activeTab={activeTab} onChange={handleChange}>
                         <Tabs.List

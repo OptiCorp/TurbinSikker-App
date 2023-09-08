@@ -59,6 +59,7 @@ const CheckListContextProvider = ({
     /// fetch checklist
     const fetchCheckLists = async () => {
         if (!accessToken) return
+
         const res = await fetch(`${API_URL}/GetAllChecklists`, {
             method: 'GET',
             headers: {
@@ -109,7 +110,7 @@ const CheckListContextProvider = ({
 
     // userIdchecklist
     const fetchCheckListUserId = async () => {
-        if (!accessToken) return
+        if (!currentUser?.id || !accessToken) return
         try {
             const res = await fetch(
                 `${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`,

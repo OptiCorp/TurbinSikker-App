@@ -5,11 +5,11 @@ import {
     file_description,
     image,
 } from '@equinor/eds-icons'
-import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { formatDate } from '../../../Helpers'
-import { API_URL } from '../../../config'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import { punchSeverity } from '../Punch'
+import { usePunchContext } from '../context/PunchContextProvider'
 import {
     PunchListBoxContainer,
     PunchListItem,
@@ -20,31 +20,33 @@ import {
     TicketInfo,
     TicketSeverityContainer,
 } from '../styles'
-import { PunchEntity } from '../types'
+
 function ListPunches() {
-    const [punch, setPunch] = useState<PunchEntity>()
-    const createdDate = punch && formatDate(punch?.createdDate)
     const { hasPermission } = useHasPermission()
+    const { punches } = usePunchContext()
+    const navigate = useNavigate()
 
-    async function getPunch() {
-        const response = await fetch(
-            `${API_URL}/GetPunch?id=708d8442-415f-4db0-8693-ec712d591cda `
-        )
-        const data = await response.json()
-        setPunch(data)
+    punches?.sort((a, b) => {
+        const dateA = new Date(a.createdDate)
+        const dateB = new Date(b.createdDate)
+
+        return dateB.valueOf() - dateA.valueOf()
+    })
+
+    function clickHandler(id: string) {
+        navigate(`/punch/${id}`)
     }
-
-    const allPunches = new Array(20).fill(punch)
-
-    useEffect(() => {
-        getPunch()
-    }, [])
 
     return (
         <PunchListItem>
-            {punch &&
-                allPunches.map((punch, idx) => (
-                    <PunchListBoxContainer key={idx}>
+            {punches.length < 1 ? (
+                <p>Punches are displayed here..</p>
+            ) : (
+                punches?.map((punch, idx) => (
+                    <PunchListBoxContainer
+                        onClick={() => clickHandler(punch.id)}
+                        key={idx}
+                    >
                         <TicketInfo>
                             <TicketSeverityContainer>
                                 {punchSeverity.map((severityItem, idx) => {
@@ -63,30 +65,39 @@ function ListPunches() {
                                         )
                                     }
                                 })}
-                                <Typography>{punch?.severity}</Typography>
+                                <Typography>{punch.severity}</Typography>
                             </TicketSeverityContainer>
                             <TicketDetails>
                                 <Typography>
                                     Ticket-{punch?.id.split('-')[0]}
                                 </Typography>
+
                                 <Typography color="disabled">
-                                    Fire rf33122
+                                    {punch.checklistTask.description}
                                 </Typography>
-                                <Typography>Created By:</Typography>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '5px',
-                                        background: '#C5C5C594',
-                                        color: '#000',
-                                        boxShadow:
-                                            '1px 1px 0px 0px #9d9d9d inset',
-                                    }}
-                                >
-                                    <Icon size={18} data={assignment_user} />
-                                    {hasPermission && punch.user.firstName}
-                                </div>
+
+                                {hasPermission && (
+                                    <>
+                                        <Typography>Created By:</Typography>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '5px',
+                                                background: '#C5C5C594',
+                                                color: '#000',
+                                                boxShadow:
+                                                    '1px 1px 0px 0px #9d9d9d inset',
+                                            }}
+                                        >
+                                            <Icon
+                                                size={18}
+                                                data={assignment_user}
+                                            />
+                                            {punch.createdByUser.firstName}
+                                        </div>
+                                    </>
+                                )}
                             </TicketDetails>
                         </TicketInfo>
 
@@ -95,7 +106,7 @@ function ListPunches() {
                                 style={{ textAlign: 'right' }}
                                 color="disabled"
                             >
-                                {createdDate}
+                                {formatDate(punch.createdDate)}
                             </Typography>
                             <TicketIcons>
                                 <Icon data={image} />
@@ -113,42 +124,9 @@ function ListPunches() {
                             </TicketButtonContainer>
                         </TicketActions>
                     </PunchListBoxContainer>
-                ))}
+                ))
+            )}
         </PunchListItem>
-
-        /* 
-        <PunchListItem>
-            <PunchListBoxContainer>
-                <TicketInfo>
-                    <TicketSeverityContainer>
-                        <Icon size={40} data={warning_filled} />
-                        <Typography>{punch?.severity}</Typography>
-                    </TicketSeverityContainer>
-                    <TicketDetails>
-                        <Typography>
-                            Ticket-{punch?.id.split('-')[0]}
-                        </Typography>
-                        <Typography color="disabled">Fire rf33122</Typography>
-                    </TicketDetails>
-                </TicketInfo>
-
-                <TicketActions>
-                    <Typography style={{ textAlign: 'right' }} color="disabled">
-                        {createdDate}
-                    </Typography>
-                    <TicketIcons>
-                        <Icon data={image} />
-                        <Icon data={file_description} />
-                    </TicketIcons>
-                    <TicketButtonContainer>
-                        <Button variant="ghost" color="primary">
-                            See Details
-                        </Button>
-                        <Icon size={16} data={arrow_forward_ios} />
-                    </TicketButtonContainer>
-                </TicketActions>
-            </PunchListBoxContainer>
-        </PunchListItem> */
     )
 }
 

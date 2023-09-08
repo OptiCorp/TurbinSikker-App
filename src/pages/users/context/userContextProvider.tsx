@@ -1,4 +1,3 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import decode from 'jwt-decode'
 import React, {
     createContext,
@@ -10,7 +9,6 @@ import React, {
 import { useLocation } from 'react-router'
 import { API_URL } from '../../../config'
 import useAuth from '../../landingPage/context/LandingPageContextProvider'
-import { useAddUser } from '../addUser/hooks/useAddUser'
 import { Option } from '../context/models/OptionsEntity'
 import { AzureUserInfo } from './models/AzureUserEntity'
 import { UserEntity } from './models/UserEntity'
@@ -67,12 +65,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [currentUser, setCurrentUser] = useState<UserEntity | null>(null)
     const [userList, setUserList] = useState<UserListEntity[]>([])
     const { idToken, accessToken } = useAuth()
-    const { openSnackbar } = useContext(SnackbarContext)
+
     const [options, setOptions] = useState<Option[]>([])
-    const { user } = useAddUser()
 
     const getUsers = async () => {
         if (!accessToken) return
+
         const res = await fetch(`${API_URL}/GetAllUsersAdmin `, {
             method: 'GET',
             headers: {

@@ -48,7 +48,7 @@ export const MyCheckLists = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const { userIdCheckList } = useCheckListContext()
-    const { WorkFlows, allWorkFlows } = useWorkflowContext()
+    const { WorkFlows } = useWorkflowContext()
     const [activeRow, setActiveRow] = useState(false)
 
     return (
@@ -81,6 +81,7 @@ export const MyCheckLists = () => {
                                         {WorkFlows.map((WorkFlow) => (
                                             <InspectorPendingRow
                                                 WorkFlow={WorkFlow}
+                                                key={WorkFlow.id}
                                             />
                                         ))}
                                     </>
@@ -105,6 +106,7 @@ export const MyCheckLists = () => {
                     </Table>
                 </ListWrapperCheckMyList>
             </BackgroundWrap>
+
             {activeRow === true ? (
                 <NavActionsComponent
                     buttonColor="danger"

@@ -1,10 +1,8 @@
 import { Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
-import { API_URL } from '../../config'
-import { CheckListEntity } from '../context/models/CheckListEntity'
+import { usePunchContext } from './context/PunchContextProvider'
 import {
     PunchButton,
     PunchDateContainer,
@@ -14,7 +12,8 @@ import {
     PunchWrapper,
     SeverityIconContainer,
 } from './styles'
-import { PunchEntity, PunchSeverity } from './types'
+import { PunchSeverity } from './types'
+
 export const punchSeverity: PunchSeverity[] = [
     {
         severity: 'Minor',
@@ -35,50 +34,11 @@ export const punchSeverity: PunchSeverity[] = [
 
 function Punch() {
     const navigate = useNavigate()
-    const [punchData, setPunchData] = useState<PunchEntity>()
-    const [currentChecklistData, setCurrentChecklistData] =
-        useState<CheckListEntity>()
-    const createdDate = punchData && formatDate(punchData.createdDate)
-    const updatedDate =
-        punchData?.updatedDate && formatDate(punchData.updatedDate)
-    console.log('update', updatedDate)
+    const { punch } = usePunchContext()
+    const createdDate = punch && formatDate(punch.createdDate)
+    const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
+
     const img = false //temporary, remove when we have an image (upload)
-
-    useEffect(() => {
-        getPunch()
-    }, [])
-    useEffect(() => {
-        getChecklist()
-    }, [punchData])
-
-    async function getPunch() {
-        const response = await fetch(
-            `${API_URL}/getPunch?id=708d8442-415f-4db0-8693-ec712d591cda`
-        )
-
-        const data = await response.json()
-        setPunchData(data)
-    }
-
-    async function getChecklist() {
-        if (punchData) {
-            try {
-                const response = await fetch(
-                    `${API_URL}/getChecklist?id=${punchData?.checklistWorkflowId}`,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*',
-                        },
-                    }
-                )
-                const data = await response.json()
-                setCurrentChecklistData(data)
-            } catch (err) {
-                console.error((err as Error).message)
-            }
-        }
-    }
 
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
@@ -89,7 +49,7 @@ function Punch() {
             <PunchHeader>
                 <SeverityIconContainer>
                     {punchSeverity.map((severityItem, idx) => {
-                        if (punchData?.severity === severityItem.severity) {
+                        if (punch?.severity === severityItem.severity) {
                             return (
                                 <Icon
                                     key={idx}
@@ -100,14 +60,14 @@ function Punch() {
                         }
                     })}
 
-                    <h4>Ticket-{punchData?.id.split('-')[0]}</h4>
+                    <h4>Ticket-{punch?.id.split('-')[0]}</h4>
                 </SeverityIconContainer>
                 <PunchDateContainer>
                     <p>{createdDate}</p>
                     {createdDate == updatedDate && (
                         <p style={{ fontSize: '10px' }}>
                             <span style={{ fontWeight: 'bold' }}>
-                                modified:{' '}
+                                modified:
                             </span>
                             {updatedDate}
                         </p>
@@ -124,25 +84,18 @@ function Punch() {
             </PunchUploadContainer>
             <PunchDescriptionContainer>
                 <h4>Report name</h4>
-                {!currentChecklistData ? (
+                {!punch?.checklistTask ? (
                     <p>loading ...</p>
                 ) : (
                     <div style={{ display: 'flex', gap: 4 }}>
-                        <p>{currentChecklistData?.tasks[0].category.name}</p>
-                        <p>
-                            {
-                                currentChecklistData?.tasks[0].category.id.split(
-                                    '-'
-                                )[0]
-                            }
-                        </p>
+                        <p>{punch?.checklistTask.description}</p>
                     </div>
                 )}
                 <h4>Description</h4>
-                <p>{punchData?.punchDescription}</p>
+                <p>{punch?.punchDescription}</p>
             </PunchDescriptionContainer>
-            {punchData && (
-                <PunchButton onClick={() => clickHandler(punchData.id)}>
+            {punch && (
+                <PunchButton onClick={() => clickHandler(punch.id)}>
                     Edit Punch
                 </PunchButton>
             )}
