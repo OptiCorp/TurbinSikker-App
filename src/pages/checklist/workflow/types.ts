@@ -3,7 +3,7 @@ import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 
 export type WorkFlow = {
     id: string
-    checklistId: string
+
     userId: string
     status: string
     createdById: string
@@ -17,7 +17,7 @@ export type WorkFlow = {
 
 export type AllWorkFlows = {
     id: string
-    checklistId: string
+
     userId: string
     createdById: string
     status: string

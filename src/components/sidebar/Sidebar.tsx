@@ -1,11 +1,11 @@
 import { Button, Icon, Scrim, SideSheet } from '@equinor/eds-core-react'
 import { menu } from '@equinor/eds-icons'
 import { FunctionComponent } from 'react'
-import { Container, LinkContainer, RouteName } from './styles'
 import Logosidebar from '../../assets/images/bigLogo.png'
+import { Container, LinkContainer, RouteName } from './styles'
 
-import { Link } from 'react-router-dom'
 import { useMsal } from '@azure/msal-react'
+import { Link } from 'react-router-dom'
 
 export type Props = {
     open: boolean
@@ -17,7 +17,6 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
     const handleSubmit = () => {
         instance.logoutPopup()
     }
-
     return (
         <>
             {' '}

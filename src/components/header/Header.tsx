@@ -15,7 +15,7 @@ export const Header = () => {
     const [activeUrl, setActiveUrl] = useState<string>('')
     const { WorkFlows } = useWorkflowContext()
 
-    const { checkListById, sortedTasks } = useAddTaskForm()
+    const { checkListById } = useAddTaskForm()
 
     useEffect(() => {
         setActiveUrl(window.location.pathname)
@@ -36,7 +36,7 @@ export const Header = () => {
 
     useEffect(() => {
         const workflow = WorkFlows.find(
-            (item) => item.checklistId === checkListById?.id
+            (item) => item.checklist.id === checkListById?.id
         )
         let pathTitle = ''
         if (location.pathname.includes('FillOutCheckList') && workflow) {
