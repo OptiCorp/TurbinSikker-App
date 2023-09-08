@@ -8,10 +8,7 @@ import React, {
     useState,
 } from 'react'
 import { useLocation, useParams } from 'react-router'
-import {
-    InfoHeader,
-    StyledCard,
-} from '../../../pages/checklist/previewCheckList/styles'
+
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import SeverityButton from '../severityButton/SeverityButton'
@@ -19,7 +16,6 @@ import {
     PunchAddContainer,
     PunchAddUploadContainer,
     PunchForm,
-    PunchListItem,
     PunchUploadButtonContainer,
     PunchUploadFileContainer,
     PunchUploadFilesContainer,
@@ -56,7 +52,15 @@ export const AddPunch: FunctionComponent = () => {
         })
     }
 
-    async function onSubmit(e: React.FormEvent, data) {
+    async function onSubmit(
+        e: React.FormEvent,
+        data: {
+            checklistWorkflowId: string
+            punchDescription: string
+            severity: React.SetStateAction<string>
+            status: string
+        }
+    ) {
         e.preventDefault()
 
         if (appLocation.pathname === '/addPunch') {
