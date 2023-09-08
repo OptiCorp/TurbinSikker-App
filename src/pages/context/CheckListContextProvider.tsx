@@ -59,6 +59,7 @@ const CheckListContextProvider = ({
     /// fetch checklist
     const fetchCheckLists = async () => {
         if (!accessToken) return
+
         const res = await fetch(`${API_URL}/GetAllChecklists`, {
             method: 'GET',
             headers: {

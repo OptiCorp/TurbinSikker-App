@@ -73,6 +73,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const getUsers = async () => {
         if (!accessToken) return
+
         const res = await fetch(`${API_URL}/GetAllUsersAdmin `, {
             method: 'GET',
             headers: {

@@ -20,10 +20,10 @@ export const Navigation: React.FC = () => {
             value: (index?: number) =>
                 activeTab === index ? (
                     <ImageContainerActive
-                        onClick={() => navigate('/AddPunch')}
+                        onClick={() => navigate('/ListPunches')}
                     />
                 ) : (
-                    <ImageContainer onClick={() => navigate('/AddPunch')} />
+                    <ImageContainer onClick={() => navigate('/ListPunches')} />
                 ),
         },
         {
