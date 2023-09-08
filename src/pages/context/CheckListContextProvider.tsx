@@ -109,7 +109,7 @@ const CheckListContextProvider = ({
 
     // userIdchecklist
     const fetchCheckListUserId = async () => {
-        if (!accessToken) return
+        if (!currentUser?.id || !accessToken) return
         try {
             const res = await fetch(
                 `${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`,

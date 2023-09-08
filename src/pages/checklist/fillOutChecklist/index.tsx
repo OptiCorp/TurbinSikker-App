@@ -13,12 +13,7 @@ import { Wrapper } from '../previewCheckList/styles'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { FillOutList } from './FillOutList'
 import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
-export type UpdatingWorkFlowEntity = {
-    id: string
-    status: number
-    checklistId: string
-    userId: string
-}
+import { UpdatingWorkFlowEntity } from './types'
 
 export const FillOutCheckList = () => {
     const { sortedTasks } = useAddTaskForm()
@@ -37,9 +32,8 @@ export const FillOutCheckList = () => {
 
     const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
         id: string
-        checklistId: string
         userId: string
-        status: number
+        status: string
     }) => {
         const res = await fetch(
             `${API_URL}/UpdateChecklistWorkflow?id=${data.id}`,
@@ -51,8 +45,6 @@ export const FillOutCheckList = () => {
                     'Access-Control-Allow-Origin': '*',
                 },
                 body: JSON.stringify({
-                    id: data.id,
-                    checklistId: data.checklistId,
                     userId: data.userId,
                     status: data.status,
                 }),
@@ -64,7 +56,7 @@ export const FillOutCheckList = () => {
             openSnackbar(`Task updated`)
         }
     }
-    console.log(sortedTasks, 'workflow')
+
     return (
         <>
             <FormProvider {...methods}>
@@ -115,7 +107,7 @@ export const FillOutCheckList = () => {
                         <Wrapper>
                             {WorkFlows.map((WorkFlow) => (
                                 <FillOutList
-                                    key={WorkFlow.checklistId}
+                                    key={WorkFlow.checklist.id}
                                     WorkFlow={WorkFlow}
                                     sortedTasks={sortedTasks}
                                     onUpdate={onUpdate}
@@ -171,32 +163,6 @@ export const FillOutCheckList = () => {
                                 able to continue this form where you left after.
                             </Typography>
                         </CustomDialog>
-
-                        {/* <CustomDialog
-                            title="Submit form?"
-                            buttonVariant="ghost"
-                            negativeButtonOnClick={()=> setSubmitDialogShowing(false)}
-                            negativeButtonText="Cancel"
-                            positiveButtonText="OK"
-                            // positiveButtonOnClick={() => {
-                            //     if (changeTitle) {
-                            //         setTitle(changeTitle)
-                            //     }
-                            //     setDialogShowing(false)
-                            // }}
-                            isOpen={submitDialogShowing}
-                        > </CustomDialog>
-
-                        <NavActionsComponent
-                            buttonColor="primary"
-                            secondButtonColor="primary"
-                            
-                            buttonVariant="outlined"
-                          secondOnClick={()=> setSubmitDialogShowing(true)}
-                            isShown={true}
-                            ButtonMessage="Clear"
-                            SecondButtonMessage="Submit"
-                        /> */}
                     </div>
                 </form>
             </FormProvider>

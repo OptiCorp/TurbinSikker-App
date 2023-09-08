@@ -8,7 +8,7 @@ import { UserContext } from '../../../context/userContextProvider'
 import { FormValues } from './types'
 
 export const useAddUser = () => {
-    const { idToken } = useAuth()
+    const { accessToken } = useAuth()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const methods = useForm<FormValues>()
@@ -28,7 +28,7 @@ export const useAddUser = () => {
             await fetch(`${API_URL}/AddUser`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
                 },
@@ -46,7 +46,7 @@ export const useAddUser = () => {
             await fetch(`${API_URL}/UpdateUser?id=${id}`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
                 },

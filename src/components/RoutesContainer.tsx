@@ -19,19 +19,11 @@ import { AddPunch } from '../pages/punch/addPunch/AddPunch'
 import ListPunches from '../pages/punch/listPunches/index'
 
 import { AddUser } from '../pages/users/addUser/AddUser'
-import { useUserContext } from '../pages/users/context/userContextProvider'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
+import { ProtectedRoute } from './ProtectedRoute'
 import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
 
 export function RoutesContainer() {
-    const { currentUser } = useUserContext()
-
-    // const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    //     if (currentUser?.userRole.name === 'Inspector') {
-    //         return <Navigate to="/" replace />
-    //     }
-    //     return children
-    // }
     return (
         <>
             <WorkflowContextProvider>
@@ -80,9 +72,9 @@ export function RoutesContainer() {
                         <Route
                             path="/add-user"
                             element={
-                                // <ProtectedRoute>
-                                <AddUser />
-                                // </ProtectedRoute>
+                                <ProtectedRoute>
+                                    <AddUser />
+                                </ProtectedRoute>
                             }
                         />
                         <Route path="/AddUser" element={<AddUser />} />

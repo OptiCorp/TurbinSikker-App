@@ -27,7 +27,7 @@ type Props = {
         id: string
         checklistId: string
         userId: string
-        status: number
+        status: string
     }) => void
 }
 
@@ -46,16 +46,13 @@ export const FillOutList: FunctionComponent<Props> = ({
         Record<string, boolean>
     >({})
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-
-    const methods = useFormContext()
-
     const handleSubmit = async () => {
         try {
             onUpdate({
                 id: WorkFlow.id,
-                checklistId: WorkFlow.checklistId,
+                checklistId: WorkFlow.checklist.id,
                 userId: WorkFlow.userId,
-                status: 2,
+                status: 'Committed',
             })
         } catch (error) {
             console.error('Error creating checklist:', error)
@@ -72,7 +69,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                             : ''
 
                     lastCategoryName = task.category.name
-                    console.log(categoryName)
+
                     return (
                         <div key={task?.id}>
                             <CustomCard>

@@ -75,7 +75,7 @@ export const useAddTaskForm = () => {
                 console.error('Error fetching user data:', error)
             }
         }
-        console.log(sortedTasks)
+        console.log(id)
         fetchAllCheckListsId()
     }, [refreshList, accessToken])
 
