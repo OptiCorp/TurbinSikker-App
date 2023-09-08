@@ -1,60 +1,89 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import { useParams } from 'react-router'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { PunchEntity } from '../types'
 
 type PunchContext = {
-    Punches: PunchEntity[]
-    checklist?: CheckListEntity[]
+    punches: PunchEntity[]
+    punch: PunchEntity
 }
 
 const postsContextDefaultValue: PunchContext = {
-    Punches: [],
-    checklist: [],
+    punches: [],
+    punch: {
+        id: '',
+        active: 0,
+        checklistWorkflowId: '',
+        createdBy: '',
+        createdDate: '',
+        punchDescription: '',
+        severity: '',
+        status: '',
+        updatedDate: null,
+        checklistTask: {
+            checklistTaskId: '',
+            checklistWorkflowId: '',
+            description: '',
+            category: {
+                id: '',
+                name: '',
+            },
+        },
+        createdByUser: {
+            firstName: '',
+            lastName: '',
+        },
+    },
 }
 
 const PunchContext = createContext(postsContextDefaultValue)
 
 function PunchContextProvider({ children }: { children: React.ReactNode }) {
+    const { id } = useParams()
     const { accessToken } = useAuth()
     const { currentUser } = useUserContext()
     const [punchData, setPunchData] = useState<PunchEntity[]>([])
-    const [currentChecklistData, setCurrentChecklistData] = useState<
-        CheckListEntity[]
-    >([])
-
-    /* const checklistWorkfklowId = punchData.map(
-        (punch) => punch.checklistWorkflowId
-    ) */
-    async function fetchChecklist() {
+    const [punchById, setPunchById] = useState<PunchEntity>()
+    const inspector = `https://localhost:7290/api/getPunchesByInspectorId?id=${currentUser?.id}`
+    const leader = `https://localhost:7290/api/getPunchesByLeaderId?id=${currentUser?.id}`
+    async function fetchPunchById() {
         if (!accessToken) return
+        if (!id) return
         try {
             const response = await fetch(
-                `https://turbinsikker-api-lin-prod.azurewebsites.net/api/getChecklist?id=${checklistWorkfklowId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-            const data = await response.json()
-            setCurrentChecklistData(data)
-        } catch (err) {
-            console.error((err as Error).message)
-        }
-    }
-    async function fetchPunchesForCurrentUser() {
-        if (!accessToken) return
-        try {
-            const response = await fetch(
-                `https://localhost:7290/api/getPunchesByInspectorId?id=${currentUser?.id}`,
+                `https://localhost:7290/api/getPunch?id=${id}`,
                 {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                         'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                }
+            )
+            if (!response.ok)
+                throw new Error('Failed with HTTP code ' + response.status)
+            const data = await response.json()
+            setPunchById(data)
+        } catch (error) {
+            console.error('Error fetching punch data:', error)
+        }
+    }
+    async function fetchPunchesForCurrentUser() {
+        if (!accessToken) return
+
+        try {
+            const response = await fetch(
+                `${
+                    currentUser?.userRole.name === 'Leader' ? leader : inspector
+                }`,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
                     },
                 }
             )
@@ -69,19 +98,18 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
     }
 
     useEffect(() => {
-        fetchChecklist()
-    }, [])
+        fetchPunchById()
+    }, [id])
+
     useEffect(() => {
         fetchPunchesForCurrentUser()
     }, [currentUser])
 
-    console.log('punchData: ', punchData)
-
     return (
         <PunchContext.Provider
             value={{
-                Punches: punchData,
-                checklist: currentChecklistData,
+                punches: punchData,
+                punch: punchById as PunchEntity,
             }}
         >
             {children}
