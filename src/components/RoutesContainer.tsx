@@ -88,8 +88,6 @@ export function RoutesContainer() {
                         />
                         {/*   <Route path="/AddUser" element={<AddUser />} /> */}
 
-                        {/* <Route path="ListPunches" element={<ListPunches />} /> */}
-
                         <Route
                             path="/ListPunches"
                             element={
@@ -100,6 +98,14 @@ export function RoutesContainer() {
                         />
                         <Route
                             path="/punch"
+                            element={
+                                <PunchContextProvider>
+                                    <Punch />
+                                </PunchContextProvider>
+                            }
+                        />
+                        <Route
+                            path="/punch/:id"
                             element={
                                 <PunchContextProvider>
                                     <Punch />
