@@ -7,12 +7,13 @@ export type PunchEntity = {
     createdBy: string
     createdDate: string
     punchDescription: string
-    severity: number
+    severity: string
     status: string
     updatedDate: string | null
     checklistTask: {
         checklistTaskId: string
         checklistWorkflowId: string
+        description: string
         category: {
             id: string
             name: string
@@ -25,7 +26,7 @@ export type PunchEntity = {
 }
 
 export type PunchSeverity = {
-    severity: number
+    severity: string
     color: string
     icon: IconData
 }

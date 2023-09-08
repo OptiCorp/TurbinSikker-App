@@ -1,10 +1,7 @@
 import { Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
-import { CheckListEntity } from '../context/models/CheckListEntity'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { usePunchContext } from './context/PunchContextProvider'
 import {
     PunchButton,
@@ -15,24 +12,21 @@ import {
     PunchWrapper,
     SeverityIconContainer,
 } from './styles'
-import { PunchEntity, PunchSeverity } from './types'
+import { PunchSeverity } from './types'
 
 export const punchSeverity: PunchSeverity[] = [
     {
-        /* severity: 'Minor', */
-        severity: 0,
+        severity: 'Minor',
         color: '#fbca36',
         icon: info_circle,
     },
     {
-        /* severity: 'Major', */
-        severity: 1,
+        severity: 'Major',
         color: '#ed8936',
         icon: warning_filled,
     },
     {
-        /* severity: 'Critical', */
-        severity: 2,
+        severity: 'Critical',
         color: '#eb0000',
         icon: error_filled,
     },
@@ -40,64 +34,12 @@ export const punchSeverity: PunchSeverity[] = [
 
 function Punch() {
     const navigate = useNavigate()
-    const { accessToken } = useAuth()
-    const { Punches } = usePunchContext()
-    const [punchData, setPunchData] = useState<PunchEntity>()
-    const [currentChecklistData, setCurrentChecklistData] =
-        useState<CheckListEntity>()
-    const createdDate = punchData && formatDate(punchData.createdDate)
-    const updatedDate =
-        punchData?.updatedDate && formatDate(punchData.updatedDate)
-    // console.log('Punches: ', Punches)
+    const { punch } = usePunchContext()
+    const createdDate = punch && formatDate(punch.createdDate)
+    const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
+
     const img = false //temporary, remove when we have an image (upload)
 
-    useEffect(() => {
-        getPunch()
-    }, [])
-    useEffect(() => {
-        getChecklist()
-    }, [])
-
-    async function getPunch() {
-        if (!accessToken) return
-        try {
-            const response = await fetch(
-                'https://turbinsikker-api-lin-prod.azurewebsites.net/api/getPunch?id=57fbf976-bce4-44cc-9da0-53789d6eaf0c',
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-            const data = await response.json()
-            setPunchData(data)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async function getChecklist() {
-        if (punchData) {
-            try {
-                const response = await fetch(
-                    `https://turbinsikker-api-lin-prod.azurewebsites.net/api/getChecklist?id=${punchData?.checklistWorkflowId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json',
-                        },
-                    }
-                )
-                const data = await response.json()
-                setCurrentChecklistData(data)
-            } catch (err) {
-                console.error((err as Error).message)
-            }
-        }
-    }
-    // console.log(punchData?.checklistWorkflowId)
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
@@ -107,7 +49,7 @@ function Punch() {
             <PunchHeader>
                 <SeverityIconContainer>
                     {punchSeverity.map((severityItem, idx) => {
-                        if (punchData?.severity === severityItem.severity) {
+                        if (punch?.severity === severityItem.severity) {
                             return (
                                 <Icon
                                     key={idx}
@@ -118,14 +60,14 @@ function Punch() {
                         }
                     })}
 
-                    <h4>Ticket-{punchData?.id.split('-')[0]}</h4>
+                    <h4>Ticket-{punch?.id.split('-')[0]}</h4>
                 </SeverityIconContainer>
                 <PunchDateContainer>
                     <p>{createdDate}</p>
                     {createdDate == updatedDate && (
                         <p style={{ fontSize: '10px' }}>
                             <span style={{ fontWeight: 'bold' }}>
-                                modified:{' '}
+                                modified:
                             </span>
                             {updatedDate}
                         </p>
@@ -142,25 +84,18 @@ function Punch() {
             </PunchUploadContainer>
             <PunchDescriptionContainer>
                 <h4>Report name</h4>
-                {!currentChecklistData ? (
+                {!punch?.checklistTask ? (
                     <p>loading ...</p>
                 ) : (
                     <div style={{ display: 'flex', gap: 4 }}>
-                        <p>{currentChecklistData?.tasks[0].category.name}</p>
-                        <p>
-                            {
-                                currentChecklistData?.tasks[0].category.id.split(
-                                    '-'
-                                )[0]
-                            }
-                        </p>
+                        <p>{punch?.checklistTask.description}</p>
                     </div>
                 )}
                 <h4>Description</h4>
-                <p>{punchData?.punchDescription}</p>
+                <p>{punch?.punchDescription}</p>
             </PunchDescriptionContainer>
-            {punchData && (
-                <PunchButton onClick={() => clickHandler(punchData.id)}>
+            {punch && (
+                <PunchButton onClick={() => clickHandler(punch.id)}>
                     Edit Punch
                 </PunchButton>
             )}
