@@ -11,7 +11,6 @@ import { SendCheckList } from '../pages/checklist/sendchecklist'
 import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
 import { FillOutCheckList } from '../pages/checklist/fillOutChecklist'
 import { WorkflowContextProvider } from '../pages/checklist/workflow/context/workFlowContextProvider'
-import { LandingPage } from '../pages/landingPage/LandingPage'
 import { Profile } from '../pages/profile'
 import Punch from '../pages/punch/Punch'
 import { AddPunch } from '../pages/punch/addPunch/AddPunch'
@@ -30,10 +29,10 @@ export function RoutesContainer() {
             <WorkflowContextProvider>
                 <Routes>
                     <Route element={<Layout />}>
-                        <Route path="/" element={<LandingPage />} />
                         <Route path="/Profile" element={<Profile />} />
 
                         <Route element={<IndexCheckLists />}>
+                            <Route path="/" element={<CheckList />} />
                             <Route path="/CheckList" element={<CheckList />} />
                             <Route
                                 path="/MyChecklists"

@@ -36,7 +36,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
 
     return (
         <>
-            {userIdCheckList && (
+            {userIdCheckList?.id && (
                 <StyledTableRow
                     onClick={() => clickHandler(userIdCheckList.id)}
                 >

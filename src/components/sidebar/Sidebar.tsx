@@ -1,8 +1,7 @@
-import { Button, Icon, Scrim, SideSheet } from '@equinor/eds-core-react'
-import { menu } from '@equinor/eds-icons'
+import { Button, Scrim, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import Logosidebar from '../../assets/images/bigLogo.png'
-import { Container, LinkContainer, RouteName } from './styles'
+import { Container, LinkContainer, RouteName, StyledSheet } from './styles'
 
 import { useMsal } from '@azure/msal-react'
 import { Link } from 'react-router-dom'
@@ -19,7 +18,6 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
     }
     return (
         <>
-            {' '}
             <Scrim
                 open={open}
                 onClose={() => setOpen(!open)}
@@ -28,32 +26,30 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                     overflow: 'hidden',
                 }}
             >
-                <SideSheet
-                    open={open}
-                    onClose={() => setOpen(!open)}
-                    style={{
-                        height: '100%',
-
-                        width: '40%',
-                        top: '63px',
-                        display: 'grid',
-                        gridTemplateRows: 'repeat(7,1fr)',
-                        gridTemplateColumns: '1fr',
-                        background: '#243746',
-                    }}
-                >
+                {' '}
+                <StyledSheet open={open} onClose={() => setOpen(!open)}>
+                    {' '}
                     <Container>
-                        <img src={Logosidebar} />
+                        <img style={{ width: '100%' }} src={Logosidebar} />
                     </Container>
                     <LinkContainer>
-                        {' '}
                         <Button
                             as={Link}
                             to="/profile"
                             fullWidth
                             variant="ghost"
                         >
-                            <RouteName>Profile</RouteName>
+                            <RouteName>
+                                {' '}
+                                <Typography
+                                    variant="body_long_bold"
+                                    color="white"
+                                    style={{ minWidth: '100px' }}
+                                    token={{ fontSize: '1.6em' }}
+                                >
+                                    Profile{' '}
+                                </Typography>
+                            </RouteName>
                         </Button>
                         <Button
                             as={Link}
@@ -61,25 +57,37 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                             fullWidth
                             variant="ghost"
                         >
-                            <RouteName>Users</RouteName>
+                            <RouteName>
+                                {' '}
+                                <Typography
+                                    variant="body_long_bold"
+                                    color="white"
+                                    style={{ minWidth: '100px' }}
+                                    token={{ fontSize: '1.6em' }}
+                                >
+                                    Users{' '}
+                                </Typography>
+                            </RouteName>
                         </Button>
                         <Button
                             fullWidth
                             variant="ghost"
                             onClick={handleSubmit}
                         >
-                            <RouteName>Sign Out</RouteName>
+                            <RouteName>
+                                {' '}
+                                <Typography
+                                    variant="body_long_bold"
+                                    color="white"
+                                    token={{ fontSize: '1.6em' }}
+                                    style={{ minWidth: '100px' }}
+                                >
+                                    Sign Out
+                                </Typography>
+                            </RouteName>
                         </Button>
                     </LinkContainer>
-
-                    <Icon
-                        data={menu}
-                        size={40}
-                        color="#73B1B5"
-                        onClick={() => setOpen(!open)}
-                        style={{ gridRow: '7/7' }}
-                    />
-                </SideSheet>
+                </StyledSheet>
             </Scrim>
         </>
     )

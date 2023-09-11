@@ -1,61 +1,38 @@
-import { Icon, Tabs } from '@equinor/eds-core-react'
-import { assignment, menu } from '@equinor/eds-icons'
+import { Icon, Typography } from '@equinor/eds-core-react'
+import { assignment, checkbox, lock } from '@equinor/eds-icons'
+import { action } from '@storybook/addon-actions'
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation } from 'react-router'
+import { Link } from 'react-router-dom'
 import { useUserContext } from '../../pages/users/context/userContextProvider'
-import Sidebar from '../sidebar/Sidebar'
-import { FooterContainer, ImageContainer, ImageContainerActive } from './styles'
+import {
+    ActiveChecklistContainer,
+    ChecklistContainer,
+    FooterContainer,
+    ImageContainer,
+    ImageContainerActive,
+    StyledList,
+    StyledTab,
+    StyledTabs,
+    Test,
+} from './styles'
 
 export const Navigation: React.FC = () => {
     const [activeTab, setActiveTab] = useState(1)
-    const navigate = useNavigate()
+
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-    const [open, setOpen] = useState(false)
+
+    const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+        action('handleFocus')(e.target.textContent)
+    }
+    const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+        action('handleBlur')(e.target.textContent)
+    }
+
     const appLocation = useLocation()
     const { currentUser } = useUserContext()
-    const items = [
-        {
-            name: 'Tab 1',
-            value: (index?: number) =>
-                activeTab === index ? (
-                    <ImageContainerActive
-                        onClick={() => navigate('/ListPunches')}
-                    />
-                ) : (
-                    <ImageContainer onClick={() => navigate('/ListPunches')} />
-                ),
-        },
-        {
-            name: 'Tab 2',
-            value: (index?: number) => (
-                <Icon
-                    data={assignment}
-                    size={40}
-                    style={{
-                        color: activeTab === index ? '#73B1B5' : 'white',
-                        width: 'min(500px)',
-                    }}
-                    onClick={() => navigate('/CheckList')}
-                />
-            ),
-        },
-        {
-            name: 'Tab 3',
-            value: (index?: number) => (
-                <Icon
-                    data={menu}
-                    size={40}
-                    style={{
-                        color: activeTab === index ? '#73B1B5' : 'white',
-                        width: 'min(500px)',
-                    }}
-                    onClick={() => setOpen(!open)}
-                />
-            ),
-        },
-    ]
 
     const hideFooter = () => {
         const hideList = [
@@ -79,24 +56,86 @@ export const Navigation: React.FC = () => {
         return false
     }
 
+    const items = [
+        {
+            name: 'Tab 1',
+            value: (index?: number) =>
+                activeTab === index ? (
+                    <ImageContainerActive>
+                        <Icon data={checkbox} size={24} />
+                        <Typography variant="caption" color={'#73b1b5'}>
+                            Punches
+                        </Typography>{' '}
+                    </ImageContainerActive>
+                ) : (
+                    <ImageContainer>
+                        <Icon data={checkbox} size={24} />
+                        <Typography variant="caption" color={'white'}>
+                            Punches
+                        </Typography>{' '}
+                    </ImageContainer>
+                ),
+        },
+        {
+            name: 'Tab 2',
+            value: (index?: number) =>
+                activeTab === index ? (
+                    <ActiveChecklistContainer>
+                        <Icon data={assignment} size={24} />
+                        <Typography variant="caption" color={'#73b1b5'}>
+                            Checklists
+                        </Typography>
+                    </ActiveChecklistContainer>
+                ) : (
+                    <ChecklistContainer>
+                        <Icon data={assignment} size={24} />
+                        <Typography variant="caption" color={'white'}>
+                            Checklists
+                        </Typography>
+                    </ChecklistContainer>
+                ),
+        },
+        {
+            name: 'Tab 3',
+            value: () => (
+                <Test>
+                    {' '}
+                    <Icon data={lock} size={24} />{' '}
+                    <Typography variant="caption" color={'white'}>
+                        ---
+                    </Typography>
+                </Test>
+            ),
+        },
+    ]
+
     return (
         <>
-            <Sidebar open={open} setOpen={setOpen} />
             {hideFooter() ? null : (
                 <FooterContainer>
-                    <Tabs activeTab={activeTab} onChange={handleChange}>
-                        <Tabs.List
-                            style={{
-                                display: 'grid',
-                                gridTemplateColumns: '1fr 1fr 1fr',
-                                gap: '70px',
-                            }}
-                        >
+                    <StyledTabs
+                        activeTab={activeTab}
+                        onChange={handleChange}
+                        variant="fullWidth"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                    >
+                        <StyledList>
                             {items.map(({ name, value }, index) => (
-                                <Tabs.Tab key={name}>{value(index)}</Tabs.Tab>
+                                <StyledTab
+                                    as={Link}
+                                    to={
+                                        name === 'Tab 1'
+                                            ? '/ListPunches'
+                                            : '/CheckList'
+                                    }
+                                    key={name}
+                                >
+                                    {value(index)}
+                                </StyledTab>
                             ))}
-                        </Tabs.List>
-                    </Tabs>
+                        </StyledList>
+                    </StyledTabs>
                 </FooterContainer>
             )}
         </>
