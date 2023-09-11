@@ -7,6 +7,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
     if (currentUser?.userRole.name === 'Inspector') {
         return <Navigate to="/" replace />
+    } else {
+        return <div>{children}</div>
     }
-    return children
 }
