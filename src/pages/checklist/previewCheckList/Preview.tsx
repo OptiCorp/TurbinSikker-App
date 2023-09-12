@@ -1,8 +1,10 @@
 import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { TaskCategoryContextProvider } from '../../../components/addtasks/context/addTaskCategoryContextProvider'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { PreviewList } from './PreviewList'
 import { InfoHeader, Wrapper } from './styles'
 
@@ -10,8 +12,12 @@ export const PreviewCheckList = () => {
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
+    const location = useLocation()
+    const state = location.state
     const { checkListById, sortedTasks } = useAddTaskForm()
+
     const navigate = useNavigate()
+    const { currentUser } = useUserContext()
     return (
         <>
             <TaskCategoryContextProvider>
@@ -68,17 +74,32 @@ export const PreviewCheckList = () => {
                             </Wrapper>
                         </div>
                     )}
-                    {checkListById && (
-                        <NavActionsComponent
-                            buttonColor="primary"
-                            secondButtonColor="primary"
-                            buttonVariant="outlined"
-                            onClick={() => clickHandler(checkListById.id)}
-                            isShown={true}
-                            ButtonMessage="Edit Checklist"
-                            SecondButtonMessage="Send"
-                        />
-                    )}
+                    <>
+                        {currentUser?.userRole.name === 'Inspector' ? (
+                            <DefaultNavigation hideNavbar={false} />
+                        ) : (
+                            <>
+                                {checkListById && (
+                                    <NavActionsComponent
+                                        disabled={
+                                            state?.isFromCompletedList
+                                                ? true
+                                                : false
+                                        }
+                                        buttonColor="primary"
+                                        secondButtonColor="primary"
+                                        buttonVariant="outlined"
+                                        onClick={() =>
+                                            clickHandler(checkListById.id)
+                                        }
+                                        isShown={true}
+                                        ButtonMessage="Edit Checklist"
+                                        SecondButtonMessage="Send"
+                                    />
+                                )}
+                            </>
+                        )}
+                    </>
                 </div>
             </TaskCategoryContextProvider>
         </>
