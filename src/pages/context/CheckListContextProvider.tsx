@@ -145,10 +145,6 @@ const CheckListContextProvider = ({
         fetchCheckListUserId()
     }, [refreshList, currentUser, accessToken])
 
-    useEffect(() => {
-        fetchCheckListUserId()
-    }, [refreshCheckLists, refreshList, accessToken])
-
     const memoedValue = useMemo(
         () => ({
             setAllCheckList,

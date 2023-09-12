@@ -2,7 +2,7 @@ import { Button, Typography } from '@equinor/eds-core-react'
 
 import { ElementType, FunctionComponent } from 'react'
 import { BtnWrapper } from '../../../pages/users/addUser/styles'
-import { FooterContainer } from '../styles'
+import { FooterContainerHook } from '../styles'
 
 interface NavProps {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -38,7 +38,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
     return (
         <>
             {isShown ? (
-                <FooterContainer>
+                <FooterContainerHook>
                     <BtnWrapper>
                         <Button
                             variant={buttonVariant}
@@ -65,7 +65,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                             </Button>
                         </div>
                     </BtnWrapper>
-                </FooterContainer>
+                </FooterContainerHook>
             ) : null}
         </>
     )

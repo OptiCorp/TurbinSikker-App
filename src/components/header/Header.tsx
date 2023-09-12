@@ -1,9 +1,9 @@
 import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
+import Sidebar from '@components/sidebar/Sidebar'
 import { Icon, TopBar } from '@equinor/eds-core-react'
-import { arrow_back_ios } from '@equinor/eds-icons'
+import { arrow_back_ios, menu } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import logo from '../../assets/images/smallLogo.png'
 import { useWorkflowContext } from '../../pages/checklist/workflow/context/workFlowContextProvider'
 import { useCheckListContext } from '../../pages/context/CheckListContextProvider'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
@@ -14,7 +14,7 @@ export const Header = () => {
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')
     const { WorkFlows } = useWorkflowContext()
-
+    const [open, setOpen] = useState(false)
     const { checkListById } = useAddTaskForm()
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export const Header = () => {
         } else if (location.pathname === '/AddUser/') {
             pathTitle = location.pathname.slice(1, -1)
         } else {
-            pathTitle = basePath || ''
+            pathTitle = basePath || 'Checklists'
         }
         setTitle(pathTitle)
     }, [location.pathname, basePath, WorkFlows, checkListById?.id])
@@ -56,29 +56,36 @@ export const Header = () => {
         navigate(-1)
     }
 
-    const homeClick = () => {
-        navigate('/')
-    }
-
     return (
-        <NewTopBar>
-            <TopBar.Header>
-                {activeUrl === '/' ? null : (
-                    <HeaderContents>
-                        <Icon
-                            data={arrow_back_ios}
-                            color="white"
-                            onClick={onClick}
-                        />
-                    </HeaderContents>
-                )}
-            </TopBar.Header>
-            <TopBar.CustomContent>
-                <HeaderLocation>{title}</HeaderLocation>
-            </TopBar.CustomContent>
-            <TopBar.Actions>
-                <img src={logo} onClick={homeClick} />
-            </TopBar.Actions>
-        </NewTopBar>
+        <>
+            {' '}
+            <Sidebar open={open} setOpen={setOpen} />
+            <NewTopBar>
+                <TopBar.Header>
+                    {activeUrl === '/' ? null : (
+                        <HeaderContents>
+                            <Icon
+                                data={arrow_back_ios}
+                                color="white"
+                                onClick={onClick}
+                            />
+                        </HeaderContents>
+                    )}
+                </TopBar.Header>
+                <TopBar.CustomContent>
+                    <HeaderLocation>{title}</HeaderLocation>
+                </TopBar.CustomContent>
+                <TopBar.Actions>
+                    <Icon
+                        data={menu}
+                        size={40}
+                        style={{
+                            color: 'white',
+                        }}
+                        onClick={() => setOpen(!open)}
+                    />
+                </TopBar.Actions>
+            </NewTopBar>
+        </>
     )
 }
