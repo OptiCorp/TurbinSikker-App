@@ -20,7 +20,7 @@ export const InspectorPendingRow: FunctionComponent<
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    if (WorkFlow.status === 'Sent') return null
+    if (WorkFlow.status !== 'Commited') return null
     return (
         <>
             {WorkFlow && (

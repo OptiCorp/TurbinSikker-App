@@ -4,20 +4,18 @@ import PageNotFound from '../pages/PageNotFound'
 import { IndexCheckLists } from '../pages/checklist'
 import { CheckList } from '../pages/checklist/allchecklists/Index'
 import { MyCheckLists } from '../pages/checklist/checkListID/Index'
+import { CompletedChecklists } from '../pages/checklist/completedChecklists/CompletedChecklist'
+import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
 import { EditCheckList } from '../pages/checklist/editchecklist/editCheckList'
+import { FillOutCheckList } from '../pages/checklist/fillOutChecklist'
 import { PreviewCheckList } from '../pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from '../pages/checklist/sendchecklist'
-
-import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
-import { FillOutCheckList } from '../pages/checklist/fillOutChecklist'
 import { WorkflowContextProvider } from '../pages/checklist/workflow/context/workFlowContextProvider'
 import { Profile } from '../pages/profile'
 import Punch from '../pages/punch/Punch'
 import { AddPunch } from '../pages/punch/addPunch/AddPunch'
-
-import ListPunches from '../pages/punch/listPunches/index'
-
 import { PunchContextProvider } from '../pages/punch/context/PunchContextProvider'
+import ListPunches from '../pages/punch/listPunches/index'
 import { AddUser } from '../pages/users/addUser/AddUser'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
 import { ProtectedRoute } from './ProtectedRoute'
@@ -34,6 +32,10 @@ export function RoutesContainer() {
                         <Route element={<IndexCheckLists />}>
                             <Route path="/" element={<CheckList />} />
                             <Route path="/CheckList" element={<CheckList />} />
+                            <Route
+                                path="/CompletedCheckList"
+                                element={<CompletedChecklists />}
+                            />
                             <Route
                                 path="/MyChecklists"
                                 element={<MyCheckLists />}

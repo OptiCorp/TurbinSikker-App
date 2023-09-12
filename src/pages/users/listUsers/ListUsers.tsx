@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 
 import { Button, Table } from '@equinor/eds-core-react'
 import { Link } from 'react-router-dom'
@@ -12,6 +12,7 @@ import {
 } from './styles'
 import { UserRow } from './userRow'
 
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Icon } from '@equinor/eds-core-react'
 import { visibility, visibility_off } from '@equinor/eds-icons'
 import { useUserContext } from '../context/userContextProvider'
@@ -19,7 +20,7 @@ import { useHasPermission } from '../hooks/useHasPermission'
 
 export const ListUsers = () => {
     const { result: users } = useUserContext()
-    // const { hasPermission } = useHasPermission()
+
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 
     const handleClick = () => {
@@ -29,6 +30,7 @@ export const ListUsers = () => {
     const filteredUsers = showInactiveUsers
         ? users
         : users.filter((user) => user.status === 'Active')
+    const { hasPermission } = useHasPermission()
 
     return (
         <ListWrapper>
@@ -47,9 +49,9 @@ export const ListUsers = () => {
                             </StyledTableCell>
                             <StyledTableCell>
                                 <CellSize>
-                                    {/* {!hasPermission ? (
+                                    {!hasPermission ? (
                                         <p>Status</p>
-                                    ) : ( */}
+                                    ) : (
                                         <Button
                                             style={{
                                                 margin: '0 auto',
@@ -81,7 +83,7 @@ export const ListUsers = () => {
                                                 />
                                             )}
                                         </Button>
-                                    {/* )} */}
+                                    )}
                                 </CellSize>
                             </StyledTableCell>
                             <StyledTableCell> </StyledTableCell>
@@ -95,17 +97,20 @@ export const ListUsers = () => {
                     </Table.Body>
                 </StyledTable>{' '}
             </ContainerForm>
-            <Button
-                style={{
-                    maxHeight: '30px',
-                    width: '30%',
-                    marginTop: '2rem',
-                }}
-                as={Link}
-                to="/AddUser/"
-            >
-                AddUser
-            </Button>
+            {!hasPermission ? null : (
+                <Button
+                    style={{
+                        maxHeight: '30px',
+                        width: '30%',
+                        marginTop: '2rem',
+                    }}
+                    as={Link}
+                    to="/AddUser/"
+                >
+                    AddUser
+                </Button>
+            )}
+            <DefaultNavigation hideNavbar={false} />
         </ListWrapper>
     )
 }

@@ -10,6 +10,7 @@ interface NavProps {
     children?: React.ReactNode
     buttonColor?: 'primary' | 'secondary' | 'danger'
     isShown: boolean
+    disabled?: boolean
     secondButtonColor?: 'primary' | 'secondary' | 'danger'
     buttonVariant?: 'contained' | 'outlined' | 'ghost'
     secondButtonVariant?: 'contained' | 'outlined' | 'ghost'
@@ -30,6 +31,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
     href,
     type,
     secondButtonColor,
+    disabled,
     buttonVariant,
     secondButtonVariant,
     ButtonMessage,
@@ -41,6 +43,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                 <FooterContainerHook>
                     <BtnWrapper>
                         <Button
+                            disabled={disabled}
                             variant={buttonVariant}
                             color={buttonColor}
                             onClick={onClick}
@@ -52,6 +55,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                         </Button>
                         <div>
                             <Button
+                                disabled={disabled}
                                 variant={secondButtonVariant}
                                 color={secondButtonColor}
                                 onClick={secondOnClick}

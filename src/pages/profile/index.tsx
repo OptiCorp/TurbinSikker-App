@@ -14,6 +14,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { useUserContext } from '../users/context/userContextProvider'
 
 export const Profile: FunctionComponent = () => {
@@ -87,6 +88,7 @@ export const Profile: FunctionComponent = () => {
                     Sign Out
                 </Button>
             </Wrapper>
+            <DefaultNavigation hideNavbar={false} />
         </>
     )
 }
