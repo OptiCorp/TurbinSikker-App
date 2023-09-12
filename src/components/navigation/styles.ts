@@ -6,6 +6,7 @@ export const FooterContainer = styled.div`
     position: fixed;
     align-items: center;
     display: flex;
+    z-index: 0;
     bottom: 0;
     justify-content: space-evenly;
     box-sizing: border-box;
@@ -43,6 +44,19 @@ export const ImageContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 3px;
+
+    align-items: center;
+`
+export const ThirdTab = styled.div`
+    border-bottom: none;
+    color: white;
+
+    margin: 1rem 0;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
     align-items: center;
 `
 
@@ -90,7 +104,7 @@ export const StyledTab = styled(Tabs.Tab)`
 
     border-bottom: none;
 `
-export const Test = styled.div`
+export const NavigationMainWrap = styled.div`
     border-bottom: none;
     color: white;
 
@@ -105,6 +119,7 @@ export const StyledList = styled(Tabs.List)`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     width: 100vw;
+    height: 100%;
 
     && :active {
         background-color: none;

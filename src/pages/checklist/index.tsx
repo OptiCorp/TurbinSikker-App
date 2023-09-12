@@ -2,59 +2,81 @@ import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { useUserContext } from '../users/context/userContextProvider'
-import { LeaderTabs } from './LeaderTabs'
-import { MainWrap, StyledTabh3, TabSubmittedWrap, TabWrap } from './styles'
+import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
     const [activeTab, setActiveTab] = useState(1)
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-
     const { currentUser } = useUserContext()
 
     return (
         <MainWrap>
-            <Tabs
-                variant="minWidth"
-                activeTab={activeTab}
-                onChange={handleChange}
-            >
-                <Tabs.List>
-                    {currentUser?.userRole.name === 'Leader' ? (
-                        <LeaderTabs />
-                    ) : (
-                        <>
-                            <TabSubmittedWrap>
-                                <Tabs.Tab
-                                    as={Link}
-                                    to="/CheckList"
-                                    style={{
-                                        borderBottom: 'none',
-                                    }}
-                                >
-                                    In progress
-                                </Tabs.Tab>
-                            </TabSubmittedWrap>
-                            <TabWrap>
-                                <Tabs.Tab
-                                    as={Link}
-                                    to="/MyCheckLists"
-                                    style={{
-                                        borderBottom: 'none',
-                                    }}
-                                >
-                                    <StyledTabh3> Pending</StyledTabh3>
-                                </Tabs.Tab>
-                            </TabWrap>
-                        </>
-                    )}
-                </Tabs.List>
+            <>
+                <Tabs
+                    variant="minWidth"
+                    onChange={handleChange}
+                    activeTab={activeTab}
+                >
+                    <Tabs.List>
+                        <Tabs.Tab
+                            as={Link}
+                            to="/CheckList"
+                            style={{
+                                borderBottom: 'none',
+                                borderTopRightRadius: '10px',
+                                borderTopLeftRadius: '10px',
+                                color: 'black',
+                                backgroundColor:
+                                    activeTab === 0 ? '#007079' : '#f5f5f5',
+                            }}
+                        >
+                            {currentUser?.userRole.name === 'Leader' ? (
+                                <> Submitted CheckLists</>
+                            ) : (
+                                <>In progress</>
+                            )}
+                        </Tabs.Tab>
+                        <Tabs.Tab
+                            as={Link}
+                            to="/MyCheckLists"
+                            style={{
+                                borderBottom: 'none',
+                                borderTopRightRadius: '10px',
+                                borderTopLeftRadius: '10px',
+                                color: 'black',
+                                backgroundColor:
+                                    activeTab === 1 ? '#007079' : '#f5f5f5',
+                            }}
+                        >
+                            {currentUser?.userRole.name === 'Leader' ? (
+                                <> My checklists</>
+                            ) : (
+                                <>Pending</>
+                            )}
+                        </Tabs.Tab>
+                        <Tabs.Tab
+                            as={Link}
+                            to="/CompletedCheckList"
+                            style={{
+                                borderBottom: 'none',
+                                borderTopRightRadius: '10px',
+                                borderTopLeftRadius: '10px',
+                                color: 'black',
+                                backgroundColor:
+                                    activeTab === 2 ? '#007079' : '#f5f5f5',
+                            }}
+                        >
+                            Completed
+                        </Tabs.Tab>
+                    </Tabs.List>
 
-                <>
-                    <Outlet />
-                </>
-            </Tabs>
+                    <>
+                        <Outlet />
+                    </>
+                </Tabs>
+            </>
         </MainWrap>
     )
 }

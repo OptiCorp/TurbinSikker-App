@@ -1,3 +1,4 @@
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../users/context/userContextProvider'
@@ -73,6 +74,7 @@ export const CheckList = () => {
                         </Table>
                     </ListWrapperCheckL>
                 </Wrap>
+                <DefaultNavigation hideNavbar={false} />
             </>
         )
     } else if (inProgress === 'login') {
