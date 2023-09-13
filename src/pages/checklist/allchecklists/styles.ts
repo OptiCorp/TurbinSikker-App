@@ -10,7 +10,7 @@ export const StyledChip = styled(Chip)`
     min-width: 120px;
 
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-content: center;
     margin: 0 auto;
 `
@@ -20,7 +20,7 @@ export const CellContent = styled.div`
 
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     min-height: 50px;
 
     justify-content: space-around;

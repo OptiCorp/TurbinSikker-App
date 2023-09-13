@@ -47,6 +47,18 @@ export const ImageContainer = styled.div`
 
     align-items: center;
 `
+export const ActiveThirdTab = styled.div`
+    border-bottom: none;
+    color: #73b1b5;
+
+    margin: 1rem 0;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+`
+
 export const ThirdTab = styled.div`
     border-bottom: none;
     color: white;
@@ -55,8 +67,7 @@ export const ThirdTab = styled.div`
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-
+    gap: 0.5rem;
     align-items: center;
 `
 

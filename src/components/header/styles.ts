@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export const NewTopBar = styled(TopBar)`
     background: #243746;
     display: grid;
-    width: 100%;
+    width: max(100vw vw);
     justify-items: center;
 
     grid-template-columns: auto 1fr auto;

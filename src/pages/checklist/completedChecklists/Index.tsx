@@ -1,7 +1,7 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
 import { useLocation } from 'react-router'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { useUserContext } from '../../users/context/userContextProvider'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { CompletedList } from './CompletedList'
 import {

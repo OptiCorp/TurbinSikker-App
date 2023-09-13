@@ -31,10 +31,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
             <StyledTableRow onClick={() => clickHandler(workflow.checklist.id)}>
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography
-                            variant="body_long_bold"
-                            token={{ fontSize: '0.9rem' }}
-                        >
+                        <Typography variant="body_long_bold">
                             {workflow.checklist.title}
                         </Typography>
 
@@ -43,7 +40,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                             token={{
                                 fontSize: '0.8rem',
                             }}
-                            style={{ height: '4px', minWidth: '100px' }}
+                            style={{ height: '0px', minWidth: '100px' }}
                         >
                             Created {formatDate(workflow.checklist.createdDate)}
                         </Typography>

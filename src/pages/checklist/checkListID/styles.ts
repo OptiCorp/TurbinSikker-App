@@ -62,7 +62,7 @@ export const CellContentMyList = styled.div`
 
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     min-height: 50px;
     justify-content: space-around;
     margin: 10px 0;
