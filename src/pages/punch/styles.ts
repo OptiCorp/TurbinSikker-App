@@ -93,8 +93,8 @@ export const PunchForm = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    margin: 20px;
+    align-items: start;
+    margin-top: 20px;
 `
 
 export const SeverityButtonWrapper = styled.div`
@@ -103,6 +103,8 @@ export const SeverityButtonWrapper = styled.div`
     border-radius: 4px;
     padding: 5px;
     justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
 `
 export const Button = styled.button`
     background-color: #fff;
@@ -112,7 +114,7 @@ export const Button = styled.button`
     justify-content: center;
     gap: 4px;
     border-radius: 4px;
-    width: 93px;
+    width: 100%;
     border: none;
     box-shadow: 0px 4px 4px 0px #bebebe;
     min-height: 70px;
