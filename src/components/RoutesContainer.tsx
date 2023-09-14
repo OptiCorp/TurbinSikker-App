@@ -105,8 +105,16 @@ export function RoutesContainer() {
                                 </PunchContextProvider>
                             }
                         />
+                        <Route
+                            path="/EditPunch/:id/"
+                            element={
+                                <PunchContextProvider>
+                                    <AddPunch />
+                                </PunchContextProvider>
+                            }
+                        />
                         <Route path="/AddPunch/" element={<AddPunch />} />
-                        <Route path="/EditPunch/:id" element={<AddPunch />} />
+                        {/* <Route path="/EditPunch/:id" element={<AddPunch />} /> */}
                         <Route path="/EditUser/:id" element={<AddUser />} />
                         <Route path="/User/:id" element={<AddUser />} />
                         <Route path="/404" element={<PageNotFound />} />
