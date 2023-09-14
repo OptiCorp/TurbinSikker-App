@@ -7,10 +7,12 @@ import React, {
     SetStateAction,
     useState,
 } from 'react'
-import { useLocation, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
+
 import { API_URL } from '../../../config'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { usePunchContext } from '../context/PunchContextProvider'
 import SeverityButton from '../severityButton/SeverityButton'
 import {
     PunchAddContainer,
@@ -30,13 +32,14 @@ export const AddPunch: FunctionComponent = () => {
     const [uploads, setUploads] = useState(false)
     const { accessToken } = useAuth()
     const { id } = useParams()
+    const { punch } = usePunchContext()
+    const navigate = useNavigate()
     const { currentUser } = useUserContext()
     const appLocation = useLocation()
 
     async function postPunch() {
         if (!accessToken) return
         await fetch(`${API_URL}/AddPunch`, {
-
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -77,6 +80,8 @@ export const AddPunch: FunctionComponent = () => {
                 },
                 body: JSON.stringify(data),
             })
+            navigate(-1)
+            //TODO Make it navigate back to punch page with updated punch
         }
     }
 
@@ -168,24 +173,44 @@ export const AddPunch: FunctionComponent = () => {
                         </PunchUploadFilesContainer>
                     )}
                 </PunchAddUploadContainer>
-                <TextField
-                    id=""
-                    label="Description"
-                    value={formValue.Description}
-                    multiline
-                    required
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setFormValue({
-                            ...formValue,
-                            Description: e.target.value,
-                        })
-                    }
-                />
+                {appLocation.pathname === '/AddPunch' ? (
+                    <TextField
+                        id=""
+                        label="Description"
+                        value={
+                            !punch?.punchDescription
+                                ? formValue.Description
+                                : undefined
+                        }
+                        multiline
+                        required
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            setFormValue({
+                                ...formValue,
+                                Description: e.target.value,
+                            })
+                        }
+                    />
+                ) : (
+                    <TextField
+                        id=""
+                        label="Description"
+                        multiline
+                        required
+                        defaultValue={punch?.punchDescription}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            setFormValue({
+                                ...formValue,
+                                Description: e.target.value,
+                            })
+                        }
+                    />
+                )}
                 <PunchForm
                     onSubmit={(e) =>
                         onSubmit(e, {
                             checklistWorkflowId:
-                                '652a4343-8c1b-4dbc-93a0-ca5a990b81ca',
+                                '287f5297-bfa5-49be-8c56-3bfe9ec98227',
                             punchDescription: formValue.Description,
                             severity: severity,
                             status: 'Pending',
@@ -195,6 +220,7 @@ export const AddPunch: FunctionComponent = () => {
                     <Typography variant="h6">Severity</Typography>
                     <SeverityButtonWrapper>
                         <SeverityButton
+                            defaultValue={punch?.severity}
                             severity={severity}
                             setSeverity={setSeverity}
                         />

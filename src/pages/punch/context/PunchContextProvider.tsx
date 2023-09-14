@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { API_URL } from '../../../config'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { PunchEntity } from '../types'
@@ -45,23 +46,20 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
     const { currentUser } = useUserContext()
     const [punchData, setPunchData] = useState<PunchEntity[]>([])
     const [punchById, setPunchById] = useState<PunchEntity>()
-    const inspector = `https://localhost:7290/api/getPunchesByInspectorId?id=${currentUser?.id}`
-    const leader = `https://localhost:7290/api/getPunchesByLeaderId?id=${currentUser?.id}`
+    const inspector = `${API_URL}/getPunchesByInspectorId?id=${currentUser?.id}`
+    const leader = `${API_URL}/getPunchesByLeaderId?id=${currentUser?.id}`
     async function fetchPunchById() {
         if (!accessToken) return
         if (!id) return
         try {
-            const response = await fetch(
-                `https://localhost:7290/api/getPunch?id=${id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            const response = await fetch(`${API_URL}/getPunch?id=${id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!response.ok)
                 throw new Error('Failed with HTTP code ' + response.status)
             const data = await response.json()
@@ -99,7 +97,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         fetchPunchById()
-    }, [id])
+    }, [id, accessToken])
 
     useEffect(() => {
         fetchPunchesForCurrentUser()
