@@ -1,4 +1,4 @@
-import { Tabs } from '@equinor/eds-core-react'
+import { Chip, Tabs } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 export const FooterContainer = styled.div`
     min-height: 64px;
@@ -39,35 +39,12 @@ export const ImageContainer = styled.div`
     border-bottom: none;
     color: white;
 
-    margin: 1rem 0;
+    margin: 0 auto;
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 5px;
 
-    align-items: center;
-`
-export const ActiveThirdTab = styled.div`
-    border-bottom: none;
-    color: #73b1b5;
-
-    margin: 1rem 0;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-`
-
-export const ThirdTab = styled.div`
-    border-bottom: none;
-    color: white;
-
-    margin: 1rem 0;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
     align-items: center;
 `
 
@@ -75,36 +52,14 @@ export const ImageContainerActive = styled.div`
     border-bottom: none;
     color: #73b1b5;
 
-    margin: 1rem 0;
+    margin: 0 auto;
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    align-items: center;
-`
-export const ChecklistContainer = styled.div`
-    border-bottom: none;
-    color: white;
-
-    margin: 1rem 0;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    gap: 5px;
     align-items: center;
 `
 
-export const ActiveChecklistContainer = styled.div`
-    border-bottom: none;
-    color: #73b1b5;
-
-    margin: 1rem 0;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-`
 export const StyledTab = styled(Tabs.Tab)`
     display: flex;
     color: white;
@@ -129,16 +84,27 @@ export const NavigationMainWrap = styled.div`
 export const StyledList = styled(Tabs.List)`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+
     width: 100vw;
     height: 100%;
-
-    && :active {
-        background-color: none;
-    }
 `
 
-export const StyledTabs = styled(Tabs)`
-    && :active {
-        background-color: none;
-    }
+export const StyledTabs = styled(Tabs)``
+
+export const StyledChip = styled(Chip)`
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 18px;
+    margin-left: 0.2rem;
+    position: fixed;
+
+    background-color: #e60323;
+    color: #fff;
+`
+export const Count = styled.div``
+
+export const Test = styled.div`
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
 `

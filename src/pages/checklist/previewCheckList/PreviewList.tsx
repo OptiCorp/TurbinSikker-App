@@ -16,36 +16,36 @@ export const PreviewList = ({ sortedTasks }: Props) => {
     let lastCategoryName = ''
 
     return (
-            <PreviewListWrap>
-                {sortedTasks.map((task) => {
-                    const categoryName =
-                        task.category.name !== lastCategoryName
-                            ? task.category.name
-                            : ''
+        <PreviewListWrap>
+            {sortedTasks.map((task) => {
+                const categoryName =
+                    task.category.name !== lastCategoryName
+                        ? task.category.name
+                        : ''
 
-                    lastCategoryName = task.category.name
+                lastCategoryName = task.category.name
 
-                    return (
-                            <Container key={task.id}>
-                                <CategoryName>{categoryName}</CategoryName>
-                                <StyledCard
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                >
-                                    <PreviewListPoints
-                                        label=""
-                                        key={task.id}
-                                        id="storybook-multi-readonly"
-                                        defaultValue={task.description}
-                                        multiline
-                                        readOnly
-                                        rows={3}
-                                    />
-                                </StyledCard>
-                            </Container>
-                    )
-                })}
-            </PreviewListWrap>
+                return (
+                    <Container key={task.id}>
+                        <CategoryName>{categoryName}</CategoryName>
+                        <StyledCard
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            <PreviewListPoints
+                                label=""
+                                key={task.id}
+                                id="storybook-multi-readonly"
+                                defaultValue={task.description}
+                                multiline
+                                readOnly
+                                rows={3}
+                            />
+                        </StyledCard>
+                    </Container>
+                )
+            })}
+        </PreviewListWrap>
     )
 }

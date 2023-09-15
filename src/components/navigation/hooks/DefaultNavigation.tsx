@@ -1,23 +1,23 @@
-import { action } from '@storybook/addon-actions'
+import { assignment, checkbox, lock } from '@equinor/eds-icons'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { FooterContainer, StyledList, StyledTab, StyledTabs } from '../styles'
-import { Items } from './NavItems'
+import { Item } from './NavItems'
 
-export const DefaultNavigation: React.FC<{ hideNavbar: boolean }> = ({
-    hideNavbar,
-}) => {
-    const [activeTab, setActiveTab] = useState(1)
+export const DefaultNavigation: React.FC<{
+    hideNavbar: boolean | undefined
+}> = ({ hideNavbar }) => {
+    const path = useLocation()
+    const [activeTab, setActiveTab] = useState(
+        path.pathname.includes('ListPunches')
+            ? 0
+            : path.pathname.includes('checklist')
+            ? 1
+            : 2
+    )
 
     const handleChange = (index: number) => {
         setActiveTab(index)
-    }
-
-    const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
-        action('handleFocus')(e.target.textContent)
-    }
-    const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-        action('handleBlur')(e.target.textContent)
     }
 
     return (
@@ -27,27 +27,29 @@ export const DefaultNavigation: React.FC<{ hideNavbar: boolean }> = ({
                     activeTab={activeTab}
                     onChange={handleChange}
                     variant="fullWidth"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
                 >
                     <StyledList>
-                        {Items({ activeTab }).map(({ name, value }, index) => (
-                            <StyledTab
-                                as={Link}
-                                to={
-                                    name === 'Tab 1'
-                                        ? '/ListPunches'
-                                        : name === 'Tab 2'
-                                        ? '/CheckList'
-                                        : name === 'Tab 3'
-                                        ? '/404'
-                                        : ''
-                                }
-                                key={name}
-                            >
-                                {value(index)}
-                            </StyledTab>
-                        ))}
+                        <StyledTab as={Link} to="/ListPunches">
+                            <Item
+                                icon={checkbox}
+                                name="Punches"
+                                isActive={activeTab === 0}
+                            />
+                        </StyledTab>
+                        <StyledTab as={Link} to="/checklist">
+                            <Item
+                                icon={assignment}
+                                name="Checklists"
+                                isActive={activeTab === 1}
+                            ></Item>{' '}
+                        </StyledTab>
+                        <StyledTab as={Link} to="/404">
+                            <Item
+                                icon={lock}
+                                name="placeholder"
+                                isActive={activeTab === 2}
+                            />
+                        </StyledTab>
                     </StyledList>
                 </StyledTabs>
             )}
