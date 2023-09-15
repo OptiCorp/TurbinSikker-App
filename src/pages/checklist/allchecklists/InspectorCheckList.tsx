@@ -18,7 +18,6 @@ export const InspectorReceivedCheckLists: FunctionComponent<
     const navigate = useNavigate()
 
     const clickHandler = (id: string | undefined) => {
-        console.log(WorkFlow)
         navigate(`/FillOutCheckList/${id}`)
     }
 

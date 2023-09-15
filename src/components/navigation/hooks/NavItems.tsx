@@ -1,72 +1,40 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
-import { assignment, checkbox, lock } from '@equinor/eds-icons'
-import {
-    ActiveChecklistContainer,
-    ActiveThirdTab,
-    ChecklistContainer,
-    ImageContainer,
-    ImageContainerActive,
-    ThirdTab,
-} from '../styles'
+import { IconData } from '@equinor/eds-icons'
+import { ImageContainer, ImageContainerActive, Test } from '../styles'
+import { NotificationBadge } from './NotificationChip'
 
-export const Items = ({ activeTab }: { activeTab: number }) => [
-    {
-        name: 'Tab 1',
-        value: (index?: number) =>
-            activeTab === index ? (
+export const Item = ({
+    isActive,
+    name,
+    icon,
+}: {
+    isActive: boolean
+    name: string
+    icon: IconData
+}) => {
+    return (
+        <>
+            {isActive ? (
                 <ImageContainerActive>
-                    <Icon data={checkbox} size={24} />
+                    <Test>
+                        <NotificationBadge name={name} />{' '}
+                    </Test>
+                    <Icon data={icon} size={24} color="#73b1b5" />
                     <Typography variant="caption" color={'#73b1b5'}>
-                        Punches
+                        {name}
                     </Typography>{' '}
                 </ImageContainerActive>
             ) : (
                 <ImageContainer>
-                    <Icon data={checkbox} size={24} />
+                    <Test>
+                        <NotificationBadge name={name} />
+                    </Test>
+                    <Icon data={icon} size={24} color="white" />
                     <Typography variant="caption" color={'white'}>
-                        Punches
+                        {name}
                     </Typography>{' '}
                 </ImageContainer>
-            ),
-    },
-    {
-        name: 'Tab 2',
-        value: (index?: number) =>
-            activeTab === index ? (
-                <ActiveChecklistContainer>
-                    <Icon data={assignment} size={24} />
-                    <Typography variant="caption" color={'#73b1b5'}>
-                        Checklists
-                    </Typography>
-                </ActiveChecklistContainer>
-            ) : (
-                <ChecklistContainer>
-                    <Icon data={assignment} size={24} />
-                    <Typography variant="caption" color={'white'}>
-                        Checklists
-                    </Typography>
-                </ChecklistContainer>
-            ),
-    },
-    {
-        name: 'Tab 3',
-        value: (index?: number) =>
-            activeTab === index ? (
-                <ActiveThirdTab>
-                    {' '}
-                    <Icon data={lock} size={24} color="#73b1b5" />{' '}
-                    <Typography variant="caption" color={'#73b1b5'}>
-                        ---
-                    </Typography>
-                </ActiveThirdTab>
-            ) : (
-                <ThirdTab>
-                    {' '}
-                    <Icon data={lock} size={24} />{' '}
-                    <Typography variant="caption" color={'white'}>
-                        ---
-                    </Typography>
-                </ThirdTab>
-            ),
-    },
-]
+            )}
+        </>
+    )
+}

@@ -90,7 +90,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                             <Chip variant="active" style={{ margin: '0 auto' }}>
                                 {userIdCheckList.status}
                             </Chip>
-                            <Typography
+                            {/* <Typography
                                 variant="caption"
                                 token={{
                                     textAlign: 'center',
@@ -98,7 +98,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                 }}
                             >
                                 {formattedUpdatedDate}
-                            </Typography>
+                            </Typography> */}
                         </CellContentMyList>
                     </MyCheckListCell>
                 </StyledTableRow>

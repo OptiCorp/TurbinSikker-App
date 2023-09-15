@@ -18,12 +18,13 @@ export type SendingFormValuesEntity = {
 export const useAddWorkFlowForm = () => {
     const methods = useForm<SendingFormValuesEntity>()
     const { openSnackbar } = useContext(SnackbarContext)
-    const { handleSubmit, control } = methods
+    const { handleSubmit, control, getValues } = methods
     const navigate = useNavigate()
     const { accessToken } = useAuth()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const { setRefreshList } = useCheckListContext()
     const { currentUser } = useUserContext()
+
     const handleOpen = () => {
         setPositiveOpen(true)
     }

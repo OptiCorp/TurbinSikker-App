@@ -26,9 +26,19 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     if (workflow.creator.id !== currentUser?.id) {
         return null
     }
+
+    //   if
+    //    (workflow?.status === 'Committed') ret
+
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(workflow.checklist.id)}>
+            <StyledTableRow
+                onClick={() => clickHandler(workflow.checklist.id)}
+                style={{
+                    backgroundColor:
+                        workflow.status === 'Committed' ? 'lightGrey' : 'none',
+                }}
+            >
                 <StyledTableCellCheckL>
                     <CellContent>
                         <Typography variant="body_long_bold">
