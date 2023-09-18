@@ -1,4 +1,7 @@
-import { FunctionComponent, useState } from 'react'
+
+import { FunctionComponent, useEffect, useState } from 'react'
+import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+
 
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
@@ -20,9 +23,15 @@ import {
     StyledSwitch,
 } from './styles'
 
+import { useParams } from 'react-router'
+import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+
 type Props = {
     sortedTasks: TaskEntity[]
     WorkFlow: WorkFlow
+
     onUpdate: (data: {
         id: string
         checklistId: string
@@ -31,11 +40,28 @@ type Props = {
     }) => void
 }
 
-export const FillOutList: FunctionComponent<Props> = ({
-    WorkFlow,
-    sortedTasks,
+type Checklist = {
+    id: string
+    createdDate: string
+    status: string
+    title: string
+    updateDate: string
+    checklistTasks: [{
+        description: string
+        categoryId: string
+        id: string
+        category: {
+            id: string
+            name: string
+        }
+    }]
+}
 
-    onUpdate,
+export const FillOutList: FunctionComponent<Props> = ({
+     WorkFlow,
+    /*sortedTasks, */
+
+   
 }) => {
     let lastCategoryName = ''
 
@@ -46,23 +72,22 @@ export const FillOutList: FunctionComponent<Props> = ({
         Record<string, boolean>
     >({})
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const handleSubmit = async () => {
-        try {
-            onUpdate({
-                id: WorkFlow.id,
-                checklistId: WorkFlow.checklist.id,
-                userId: WorkFlow.userId,
-                status: 'Committed',
-            })
-        } catch (error) {
-            console.error('Error creating checklist:', error)
-        }
-    }
+    
+    const { checklistById } = useCheckListContext()
+    
+    
+    
+    
+   
+    
+ 
 
     return (
         <>
+        
+        
             <FillOutWrap>
-                {sortedTasks.map((task) => {
+                {checklistById?.checklistTasks.map((task) => {
                     const categoryName =
                         task.category.name !== lastCategoryName
                             ? task.category.name
@@ -130,6 +155,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                                                                 ? 'Active'
                                                                 : 'Disabled'
                                                         )
+                                                        
                                                     }}
                                                 />
                                             )}
@@ -174,6 +200,9 @@ export const FillOutList: FunctionComponent<Props> = ({
                                         <Checkbox
                                             aria-label=""
                                             type="checkbox"
+                                            onChange={(e) => {
+                                                if (e.target.checked) console.log(task.id + ", is checked")
+                                            }}
                                         />
                                     )}
                                 </Card.Actions>
@@ -190,12 +219,12 @@ export const FillOutList: FunctionComponent<Props> = ({
                 negativeButtonOnClick={() => setSubmitDialogShowing(false)}
                 negativeButtonText="Cancel"
                 positiveButtonText="OK"
-                positiveButtonOnClick={() => {
-                    handleSubmit()
-                }}
+                // positiveButtonOnClick={() => {
+                //     handleSubmit()
+                // }}
                 isOpen={submitDialogShowing}
             ></CustomDialog>
-
+ 
             <NavActionsComponent
                 buttonColor="primary"
                 secondButtonColor="primary"
