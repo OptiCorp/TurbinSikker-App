@@ -44,7 +44,10 @@ export const CompletedChecklists = () => {
 
                         <Table.Body>
                             {WorkFlows.map((WorkFlow) => (
-                                <CompletedList WorkFlow={WorkFlow} />
+                                <CompletedList
+                                    WorkFlow={WorkFlow}
+                                    key={WorkFlow.id}
+                                />
                             ))}
                         </Table.Body>
                     </Table>

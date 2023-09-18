@@ -3,5 +3,6 @@
     "tabWidth": 4,
     "semi": false,
     "singleQuote": true,
-    "organizeImportsSkipDestructiveCodeActions": true
+    "organizeImportsSkipDestructiveCodeActions": true,
+    "printWidth": 100
 }

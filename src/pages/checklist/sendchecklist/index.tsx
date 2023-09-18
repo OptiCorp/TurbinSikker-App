@@ -10,7 +10,7 @@ export const SendCheckList = () => {
     const navigate = useNavigate()
     const { methods, onSubmit, handleOpen, clearAndClose, positiveOpen } =
         useAddWorkFlowForm()
-    const { handleSubmit } = methods
+    const { handleSubmit, getValues } = methods
 
     return (
         <>

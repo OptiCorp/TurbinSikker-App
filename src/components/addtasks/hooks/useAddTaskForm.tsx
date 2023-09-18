@@ -61,7 +61,7 @@ export const useAddTaskForm = () => {
 
                 const data = (await res.json()) as CheckListEntity
                 setCheckListById(data)
-                const sorted = data.tasks.sort((a: any, b: any) => {
+                const sorted = data.checklistTasks.sort((a: any, b: any) => {
                     if (a.category.name < b.category.name) {
                         return -1
                     } else if (a.category.name > b.category.name) {
@@ -70,12 +70,12 @@ export const useAddTaskForm = () => {
                         return 0
                     }
                 })
-                console.log(data, 'data')
+
                 setSortedTasks(sorted)
             } catch (error) {
                 console.error('Error fetching user data:', error)            }
         }
-        console.log(id)
+
         fetchAllCheckListsId()
     }, [refreshList, accessToken])
 

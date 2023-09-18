@@ -16,7 +16,19 @@ import {
 export const CheckList = () => {
     const { accounts, inProgress } = useAuth()
     const { currentUser } = useUserContext()
+
     const { WorkFlows, allWorkFlows } = useWorkflowContext()
+
+    const sortedWorkFlows = allWorkFlows.sort((a, b) => {
+        if (a.status === 'Committed' && b.status !== 'Committed') {
+            return -1
+        } else if (a.status !== 'Committed' && b.status === 'Committed') {
+            return 1
+        } else {
+            return 0
+        }
+    })
+
     if (accounts.length > 0) {
         return (
             <>
@@ -61,12 +73,16 @@ export const CheckList = () => {
                                         </>
                                     ) : (
                                         <>
-                                            {allWorkFlows.map((allWorkFlow) => (
-                                                <LeaderCheckListSend
-                                                    workflow={allWorkFlow}
-                                                    key={allWorkFlow.id}
-                                                />
-                                            ))}
+                                            {sortedWorkFlows.map(
+                                                (sortedWorkFlow) => (
+                                                    <LeaderCheckListSend
+                                                        workflow={
+                                                            sortedWorkFlow
+                                                        }
+                                                        key={sortedWorkFlow.id}
+                                                    />
+                                                )
+                                            )}
                                         </>
                                     )}
                                 </>

@@ -80,7 +80,7 @@ export const EditCheckList = () => {
 
                             <EditList
                                 key={checkListById.id}
-                                tasks={checkListById}
+                                tasks={checkListById.checklistTasks}
                                 sortedTasks={sortedTasks}
                             />
                         </Wrapper>
