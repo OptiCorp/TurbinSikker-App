@@ -8,7 +8,7 @@ export type CheckListEntity = {
     createdDate: string
     updatedDate: string
     user: UserEntity
-    tasks: TaskEntity[]
+    checklistTasks: TaskEntity[]
 }
 
 // export type CheckListEntity = {

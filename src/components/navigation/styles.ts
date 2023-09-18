@@ -69,7 +69,7 @@ export const StyledTab = styled(Tabs.Tab)`
     width: 100%;
 
     border-bottom: none;
-`
+` as typeof Tabs.Tab
 export const NavigationMainWrap = styled.div`
     border-bottom: none;
     color: white;
