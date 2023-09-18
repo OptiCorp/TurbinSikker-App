@@ -2,10 +2,10 @@ import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 import CustomDialog from '@components/modal/useModalHook'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Typography } from '@equinor/eds-core-react'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { API_URL } from '../../../config'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { CheckListContextProvider, useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { checkList } from '../../../pages/context/models/checklist'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { EditListPoints } from '../editchecklist/styles'
@@ -56,13 +56,14 @@ export const FillOutCheckList = () => {
             openSnackbar(`Task updated`)
         }
     }
+  
 
     return (
         <>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onUpdate)} id="fill-out-checklist">
                     <div style={{ backgroundColor: '#f0f3f3' }}>
-                        {WorkFlows && (
+                        {(
                             <div>
                                 <AddPunchHeader>
                                     <StyledCard>
@@ -105,14 +106,9 @@ export const FillOutCheckList = () => {
                             </div>
                         )}
                         <Wrapper>
-                            {WorkFlows.map((WorkFlow) => (
-                                <FillOutList
-                                    key={WorkFlow.checklist.id}
-                                    WorkFlow={WorkFlow}
-                                    sortedTasks={sortedTasks}
-                                    onUpdate={onUpdate}
-                                />
-                            ))}
+                            <CheckListContextProvider>
+                                <FillOutList WorkFlow={WorkFlows} onUpdate={onUpdate} />
+                            </CheckListContextProvider>
                         </Wrapper>
                         <CustomDialog
                             isOpen={commentDialogShowing}

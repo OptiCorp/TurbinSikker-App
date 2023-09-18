@@ -23,6 +23,7 @@ export const useAddTaskForm = () => {
     )
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
+    
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(
@@ -72,8 +73,7 @@ export const useAddTaskForm = () => {
                 console.log(data, 'data')
                 setSortedTasks(sorted)
             } catch (error) {
-                console.error('Error fetching user data:', error)
-            }
+                console.error('Error fetching user data:', error)            }
         }
         console.log(id)
         fetchAllCheckListsId()
