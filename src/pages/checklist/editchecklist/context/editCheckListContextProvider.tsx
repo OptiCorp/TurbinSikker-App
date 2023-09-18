@@ -96,7 +96,7 @@ const EditCheckListContextProvider = ({
     }
 
     useEffect(() => {
-        if (checkListById && checkListById.tasks.length === 0) {
+        if (checkListById && checkListById.checklistTasks.length === 0) {
             setIsOpenn(true)
         }
     }, [checkListById])

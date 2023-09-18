@@ -1,5 +1,4 @@
 import { FunctionComponent, useState } from 'react'
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
@@ -7,6 +6,7 @@ import { Card, Checkbox, Icon } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
 import { WorkFlow } from '../workflow/types'
 import {
     CustomCard,
@@ -21,7 +21,7 @@ import {
 } from './styles'
 
 type Props = {
-    sortedTasks: CheckListEntity['tasks']
+    sortedTasks: TaskEntity[]
     WorkFlow: WorkFlow
     onUpdate: (data: {
         id: string

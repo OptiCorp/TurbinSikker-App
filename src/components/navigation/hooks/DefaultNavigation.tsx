@@ -1,14 +1,14 @@
 import { assignment, checkbox, lock } from '@equinor/eds-icons'
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { FooterContainer, StyledList, StyledTab, StyledTabs } from '../styles'
-import { Item } from './NavItems'
+import { NavItem } from './NavItem'
 
 export const DefaultNavigation: React.FC<{
-    hideNavbar: boolean | undefined
+    hideNavbar: boolean
 }> = ({ hideNavbar }) => {
     const path = useLocation()
-    const [activeTab, setActiveTab] = useState(
+    const [activeTab, setActiveTab] = useState<number | undefined>(
         path.pathname.includes('ListPunches')
             ? 0
             : path.pathname.includes('checklist')
@@ -19,7 +19,6 @@ export const DefaultNavigation: React.FC<{
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-
     return (
         <FooterContainer>
             {!hideNavbar && (
@@ -29,25 +28,28 @@ export const DefaultNavigation: React.FC<{
                     variant="fullWidth"
                 >
                     <StyledList>
-                        <StyledTab as={Link} to="/ListPunches">
-                            <Item
+                        <StyledTab>
+                            <NavItem
                                 icon={checkbox}
                                 name="Punches"
                                 isActive={activeTab === 0}
+                                to="/ListPunches"
                             />
                         </StyledTab>
-                        <StyledTab as={Link} to="/checklist">
-                            <Item
+                        <StyledTab>
+                            <NavItem
                                 icon={assignment}
                                 name="Checklists"
                                 isActive={activeTab === 1}
-                            ></Item>{' '}
+                                to="/checklist"
+                            />
                         </StyledTab>
-                        <StyledTab as={Link} to="/404">
-                            <Item
+                        <StyledTab>
+                            <NavItem
                                 icon={lock}
                                 name="placeholder"
                                 isActive={activeTab === 2}
+                                to="/404"
                             />
                         </StyledTab>
                     </StyledList>
