@@ -28,6 +28,6 @@ export const checkList: CheckListEntity = {
         username: '',
         AzureAdUser: '',
     },
-    tasks: [],
+    checklistTasks: [],
     updatedDate: '',
 }

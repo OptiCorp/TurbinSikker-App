@@ -1,3 +1,4 @@
+import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
 import type { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import {
     CategoryName,
@@ -9,7 +10,7 @@ import {
 
 type Props = {
     tasks: CheckListEntity
-    sortedTasks: CheckListEntity['tasks']
+    sortedTasks: TaskEntity[]
 }
 
 export const PreviewList = ({ sortedTasks }: Props) => {
