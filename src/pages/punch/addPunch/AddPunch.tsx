@@ -1,107 +1,66 @@
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { Button, Icon, TextField, Typography } from '@equinor/eds-core-react'
+import { Button, Dialog, Icon, Input, TextField, Typography } from '@equinor/eds-core-react'
 import { close, file_description, image, upload } from '@equinor/eds-icons'
-import React, {
-    ChangeEvent,
-    FunctionComponent,
-    SetStateAction,
-    useState,
-} from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import React, { FunctionComponent, SetStateAction, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 
-import { API_URL } from '../../../config'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
-import { usePunchContext } from '../context/PunchContextProvider'
-import SeverityButton from '../severityButton/SeverityButton'
 import {
     PunchAddContainer,
     PunchAddUploadContainer,
-    PunchForm,
     PunchUploadButtonContainer,
+    PunchUploadButtonIconContainer,
+    PunchUploadButtonLabel,
     PunchUploadFileContainer,
     PunchUploadFilesContainer,
     SeverityButtonWrapper,
-} from '../styles'
+    SeverityContainer,
+} from './styles'
+import SeverityButton from '../severityButton/SeverityButton'
+import { useAddPunch } from './AddPunchHook'
+import { usePunchContext } from '../context/PunchContextProvider'
 export const AddPunch: FunctionComponent = () => {
     const [severity, setSeverity] = useState<SetStateAction<string>>('Minor')
-    const [formValue, setFormValue] = useState({
-        reportName: '',
-        Description: '',
-    })
-    const [uploads, setUploads] = useState(false)
-    const { accessToken } = useAuth()
-    const { id } = useParams()
-    const { punch } = usePunchContext()
     const navigate = useNavigate()
-    const { currentUser } = useUserContext()
+    const [uploads, setUploads] = useState(false)
+    const {
+        onSubmit,
+        description,
+        positiveOpen,
+        handleOpen,
+        handleSubmit,
+        clearAndClose,
+        setDescription,
+    } = useAddPunch()
     const appLocation = useLocation()
+    const { punch } = usePunchContext()
 
-    async function postPunch() {
-        if (!accessToken) return
-        await fetch(`${API_URL}/AddPunch`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                createdBy: currentUser?.id,
-                punchDescription: formValue.Description,
-                severity: severity,
-                checklistTaskId: '482f2505-c02d-47a0-8c00-e9b757662d0d',
-                checklistWorkFlowId: '4c782512-b9ed-4e4c-b5f2-8f0411a30340',
-            }),
-        })
-    }
+    const [state, setstate] = useState('')
 
-    async function onSubmit(
-        e: React.FormEvent,
-        data: {
-            checklistWorkflowId: string
-            punchDescription: string
-            severity: React.SetStateAction<string>
-            status: string
-        }
-    ) {
-        e.preventDefault()
-
-        if (appLocation.pathname === '/addPunch') {
-            setFormValue({ ...formValue, Description: '', reportName: '' })
-            await postPunch()
-        } else {
-            await fetch(`${API_URL}/UpdatePunch?id=${id}`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify(data),
-            })
-            navigate(-1)
-            //TODO Make it navigate back to punch page with updated punch
+    function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.files) {
+            setstate(URL.createObjectURL(e.target.files[0]))
         }
     }
 
     return (
-        <>
+        <form id="punchForm" onSubmit={handleSubmit(onSubmit)}>
             <PunchAddContainer>
                 <PunchAddUploadContainer>
                     <PunchUploadButtonContainer>
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                border: '.7px dotted #73B1B5',
-                                borderRadius: '4px',
-                            }}
-                        >
+                        <PunchUploadButtonIconContainer>
                             <Icon data={upload} size={48} />
-                        </div>
-                        <Button>Upload</Button>
+                        </PunchUploadButtonIconContainer>
+
+                        <PunchUploadButtonLabel htmlFor="file">Upload</PunchUploadButtonLabel>
+
+                        <input
+                            id="file"
+                            type="file"
+                            accept="image/*"
+                            name="image"
+                            onChange={loadFile}
+                            style={{ display: 'none' }}
+                        />
                     </PunchUploadButtonContainer>
 
                     {!uploads ? (
@@ -120,9 +79,7 @@ export const AddPunch: FunctionComponent = () => {
                     ) : (
                         <PunchUploadFilesContainer>
                             <Typography variant="h5">Upload Files</Typography>
-                            <PunchUploadFileContainer
-                                onClick={() => setUploads((prev) => !prev)}
-                            >
+                            <PunchUploadFileContainer onClick={() => setUploads((prev) => !prev)}>
                                 <div
                                     style={{
                                         display: 'flex',
@@ -135,21 +92,14 @@ export const AddPunch: FunctionComponent = () => {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        <Icon
-                                            color="#73B1B5"
-                                            data={file_description}
-                                        />
-                                        <Typography variant="caption">
-                                            file-name.txt
-                                        </Typography>
+                                        <Icon color="#73B1B5" data={file_description} />
+                                        <Typography variant="caption">file-name.txt</Typography>
                                     </div>
                                 </div>
                                 <Icon data={close} color="#243746" size={16} />
                             </PunchUploadFileContainer>
 
-                            <PunchUploadFileContainer
-                                onClick={() => setUploads((prev) => !prev)}
-                            >
+                            <PunchUploadFileContainer onClick={() => setUploads((prev) => !prev)}>
                                 <div
                                     style={{
                                         display: 'flex',
@@ -163,9 +113,7 @@ export const AddPunch: FunctionComponent = () => {
                                         }}
                                     >
                                         <Icon color="#73B1B5" data={image} />
-                                        <Typography variant="caption">
-                                            image-name.jpg
-                                        </Typography>
+                                        <Typography variant="caption">image-name.jpg</Typography>
                                     </div>
                                 </div>
                                 <Icon data={close} color="#243746" size={16} />
@@ -177,46 +125,27 @@ export const AddPunch: FunctionComponent = () => {
                     <TextField
                         id=""
                         label="Description"
-                        value={
-                            !punch?.punchDescription
-                                ? formValue.Description
-                                : undefined
-                        }
+                        value={!punch?.punchDescription ? description : undefined}
                         multiline
                         required
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            setFormValue({
-                                ...formValue,
-                                Description: e.target.value,
-                            })
-                        }
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            setDescription(event.target.value)
+                        }}
                     />
                 ) : (
                     <TextField
                         id=""
                         label="Description"
                         multiline
+                        key={punch?.id}
                         required
                         defaultValue={punch?.punchDescription}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            setFormValue({
-                                ...formValue,
-                                Description: e.target.value,
-                            })
-                        }
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            setDescription(event.target.value)
+                        }}
                     />
                 )}
-                <PunchForm
-                    onSubmit={(e) =>
-                        onSubmit(e, {
-                            checklistWorkflowId:
-                                '287f5297-bfa5-49be-8c56-3bfe9ec98227',
-                            punchDescription: formValue.Description,
-                            severity: severity,
-                            status: 'Pending',
-                        })
-                    }
-                >
+                <SeverityContainer>
                     <Typography variant="h6">Severity</Typography>
                     <SeverityButtonWrapper>
                         <SeverityButton
@@ -225,17 +154,40 @@ export const AddPunch: FunctionComponent = () => {
                             setSeverity={setSeverity}
                         />
                     </SeverityButtonWrapper>
-                    <button type="submit">submit</button>
-                </PunchForm>
+                </SeverityContainer>
             </PunchAddContainer>
-
+            <Dialog open={positiveOpen}>
+                <Dialog.Header>
+                    <Dialog.Title>Send punch?</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.CustomContent>
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        Send punch? Request will be sent for further approval and management
+                    </Typography>
+                </Dialog.CustomContent>
+                <Dialog.Actions>
+                    <div>
+                        <Button variant="ghost" onClick={clearAndClose}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" form="punchForm">
+                            Send Punch
+                        </Button>
+                    </div>
+                </Dialog.Actions>
+            </Dialog>
             <NavActionsComponent
                 ButtonMessage="Cancel"
-                SecondButtonMessage="Submit"
+                SecondButtonMessage="Submit punch"
                 secondButtonColor="primary"
                 buttonVariant="outlined"
+                secondOnClick={handleOpen}
+                onClick={() => {
+                    navigate(-1)
+                }}
+                type="button"
                 isShown={true}
             />
-        </>
+        </form>
     )
 }
