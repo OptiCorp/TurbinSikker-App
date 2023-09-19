@@ -13,6 +13,7 @@ import {
     SeverityIconContainer,
 } from './styles'
 import { PunchSeverity } from './types'
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -45,61 +46,58 @@ function Punch() {
     }
 
     return (
-        <PunchWrapper>
-            <PunchHeader>
-                <SeverityIconContainer>
-                    {punchSeverity.map((severityItem, idx) => {
-                        if (punch?.severity === severityItem.severity) {
-                            return (
-                                <Icon
-                                    key={idx}
-                                    data={severityItem.icon}
-                                    style={{ color: severityItem.color }}
-                                />
-                            )
-                        }
-                    })}
+        <>
+            <PunchWrapper>
+                <PunchHeader>
+                    <SeverityIconContainer>
+                        {punchSeverity.map((severityItem, idx) => {
+                            if (punch?.severity === severityItem.severity) {
+                                return (
+                                    <Icon
+                                        key={idx}
+                                        data={severityItem.icon}
+                                        style={{ color: severityItem.color }}
+                                    />
+                                )
+                            }
+                        })}
 
-                    <h4>Ticket-{punch?.id.split('-')[0]}</h4>
-                </SeverityIconContainer>
-                <PunchDateContainer>
-                    <p>{createdDate}</p>
-                    {createdDate == updatedDate && (
-                        <p style={{ fontSize: '10px' }}>
-                            <span style={{ fontWeight: 'bold' }}>
-                                modified:
-                            </span>
-                            {updatedDate}
-                        </p>
+                        <h4>Ticket-{punch?.id.split('-')[0]}</h4>
+                    </SeverityIconContainer>
+                    <PunchDateContainer>
+                        <p>{createdDate}</p>
+                        {createdDate == updatedDate && (
+                            <p style={{ fontSize: '10px' }}>
+                                <span style={{ fontWeight: 'bold' }}>modified:</span>
+                                {updatedDate}
+                            </p>
+                        )}
+                    </PunchDateContainer>
+                </PunchHeader>
+                <PunchUploadContainer>
+                    {!img ? <span>No Uploads</span> : <img src={img} alt="Punch image" />}
+                    {/*//TODO Change img src w actual img */}
+                </PunchUploadContainer>
+                <PunchDescriptionContainer>
+                    <h4>Report name</h4>
+                    {!punch?.checklistTask ? (
+                        <p>loading ...</p>
+                    ) : (
+                        <div style={{ display: 'flex', gap: 4 }}>
+                            <p>{punch?.checklistTask.description}</p>
+                        </div>
                     )}
-                </PunchDateContainer>
-            </PunchHeader>
-            <PunchUploadContainer>
-                {!img ? (
-                    <span>No Uploads</span>
-                ) : (
-                    <img src={img} alt="Punch image" />
+                    <h4>Description</h4>
+                    <p>{punch?.punchDescription}</p>
+                </PunchDescriptionContainer>
+                {punch && (
+                    <PunchButton onClick={() => clickHandler(punch.id)}>Edit Punch</PunchButton>
                 )}
-                {/*//TODO Change img src w actual img */}
-            </PunchUploadContainer>
-            <PunchDescriptionContainer>
-                <h4>Report name</h4>
-                {!punch?.checklistTask ? (
-                    <p>loading ...</p>
-                ) : (
-                    <div style={{ display: 'flex', gap: 4 }}>
-                        <p>{punch?.checklistTask.description}</p>
-                    </div>
-                )}
-                <h4>Description</h4>
-                <p>{punch?.punchDescription}</p>
-            </PunchDescriptionContainer>
-            {punch && (
-                <PunchButton onClick={() => clickHandler(punch.id)}>
-                    Edit Punch
-                </PunchButton>
-            )}
-        </PunchWrapper>
+            </PunchWrapper>
+            <>
+                <DefaultNavigation hideNavbar={false} />
+            </>
+        </>
     )
 }
 

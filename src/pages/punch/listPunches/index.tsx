@@ -1,11 +1,6 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
-import {
-    arrow_forward_ios,
-    assignment_user,
-    file_description,
-    image,
-} from '@equinor/eds-icons'
+import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../../Helpers'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
@@ -20,7 +15,7 @@ import {
     TicketIcons,
     TicketInfo,
     TicketSeverityContainer,
-} from '../styles'
+} from './styles'
 
 function ListPunches() {
     const { hasPermission } = useHasPermission()
@@ -45,17 +40,11 @@ function ListPunches() {
                     <p>Punches are displayed here..</p>
                 ) : (
                     punches?.map((punch, idx) => (
-                        <PunchListBoxContainer
-                            onClick={() => clickHandler(punch.id)}
-                            key={idx}
-                        >
+                        <PunchListBoxContainer onClick={() => clickHandler(punch.id)} key={idx}>
                             <TicketInfo>
                                 <TicketSeverityContainer>
                                     {punchSeverity.map((severityItem, idx) => {
-                                        if (
-                                            punch.severity ===
-                                            severityItem.severity
-                                        ) {
+                                        if (punch.severity === severityItem.severity) {
                                             return (
                                                 <Icon
                                                     key={idx}
@@ -71,9 +60,7 @@ function ListPunches() {
                                     <Typography>{punch.severity}</Typography>
                                 </TicketSeverityContainer>
                                 <TicketDetails>
-                                    <Typography>
-                                        Ticket-{punch?.id.split('-')[0]}
-                                    </Typography>
+                                    <Typography>Ticket-{punch?.id.split('-')[0]}</Typography>
 
                                     <Typography color="disabled">
                                         {punch.checklistTask.description}
@@ -89,14 +76,10 @@ function ListPunches() {
                                                     gap: '5px',
                                                     background: '#C5C5C594',
                                                     color: '#000',
-                                                    boxShadow:
-                                                        '1px 1px 0px 0px #9d9d9d inset',
+                                                    boxShadow: '1px 1px 0px 0px #9d9d9d inset',
                                                 }}
                                             >
-                                                <Icon
-                                                    size={18}
-                                                    data={assignment_user}
-                                                />
+                                                <Icon size={18} data={assignment_user} />
                                                 {punch.createdByUser.firstName}
                                             </div>
                                         </>
@@ -105,10 +88,7 @@ function ListPunches() {
                             </TicketInfo>
 
                             <TicketActions>
-                                <Typography
-                                    style={{ textAlign: 'right' }}
-                                    color="disabled"
-                                >
+                                <Typography style={{ textAlign: 'right' }} color="disabled">
                                     {formatDate(punch.createdDate)}
                                 </Typography>
                                 <TicketIcons>
