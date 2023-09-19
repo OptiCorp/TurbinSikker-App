@@ -5,6 +5,7 @@ import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
 import { getChecklistWorkflowById } from './api'
 
+import { useParams } from 'react-router'
 import { TWorkflowContext } from './types'
 ///
 
@@ -12,6 +13,95 @@ const postsContextDefaultValue: TWorkflowContext = {
     WorkFlows: [],
     testData: '',
     allWorkFlows: [],
+    workFlowById: {
+        id: '',
+        userId: '',
+        status: '',
+        createdById: '',
+        createdDate: '',
+        updatedDate: '',
+        formattedUpdateDate: '',
+        checklist: {
+            azureAdUserId: '',
+            email: '',
+            createdBy: '',
+            firstName: '',
+            id: '',
+            lastName: '',
+            status: '',
+            title: '',
+            userRoleId: '',
+            username: '',
+            createdByUser: {
+                id: '',
+                azureAdUserId: '',
+                email: '',
+                firstName: '',
+                lastName: '',
+                status: '',
+                userRoleId: '',
+                userRole: {
+                    id: '',
+                    name: '',
+                },
+                username: '',
+                createdDate: '',
+                updatedDate: '',
+            },
+            checklistTasks: [
+                {
+                    id: '',
+                    tasks: [],
+                    value: '',
+                    categoryId: '',
+                    description: '',
+                    category: {
+                        id: '',
+                        name: '',
+                    },
+                },
+            ],
+            createdDate: '',
+        },
+        user: {
+            checklistWorkFlow: {
+                id: '',
+                checklistId: '',
+                status: '',
+                updatedDate: '',
+                userId: '',
+            },
+            createdDate: '',
+            email: '',
+            firstName: '',
+            id: '',
+            lastName: '',
+            status: '',
+            updatedDate: '',
+            userRole: {
+                id: '',
+                name: '',
+            },
+            userRoleId: '',
+            AzureAdUser: '',
+            username: '',
+        },
+        creator: {
+            id: '',
+            azureAdUserId: '',
+            userRoleId: '',
+            userRole: {
+                id: '',
+                name: '',
+            },
+            email: '',
+            firstName: '',
+            lastName: '',
+            status: '',
+            createdDate: '',
+            updatedDate: '',
+        },
+    },
 }
 
 const WorkflowContext = createContext<TWorkflowContext>(
@@ -27,7 +117,9 @@ const WorkflowContextProvider = ({
 
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
-
+    const [workFlowById, setWorkFlowById] = useState<WorkFlow>()
+    const { id } = useParams()
+    console.log('from params', id)
     const { currentUser } = useUserContext()
 
     const formatDate = (dateString: string) => {
@@ -74,11 +166,33 @@ const WorkflowContextProvider = ({
         fetchAllCheckListWorkFlow()
     }, [currentUser, accessToken])
 
+    useEffect(() => {
+        const fetchWorkFlowId = async () => {
+            if (!accessToken || !id) return
+            const res = await fetch(
+                `${API_URL}/GetChecklistWorkflow?id=${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                }
+            )
+            if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+            const data = await res.json()
+
+            setWorkFlowById(data)
+        }
+
+        fetchWorkFlowId()
+    }, [currentUser, accessToken, id])
+
     return (
         <WorkflowContext.Provider
             value={{
                 WorkFlows: checklistWorkFlows,
-
+                workFlowById: workFlowById as WorkFlow,
                 allWorkFlows: allWorkFlows,
             }}
         >

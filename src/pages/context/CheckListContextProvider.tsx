@@ -22,24 +22,7 @@ export type ContextType = {
     list: ListEntity[]
     refreshList: boolean
     setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
-    checklistById: Checklist
-}
-
-type Checklist = {
-    id: string
-    createdDate: string
-    status: string
-    title: string
-    updateDate: string
-    checklistTasks: [{
-        description: string
-        categoryId: string
-        id: string
-        category: {
-            id: string
-            name: string
-        }
-    }]
+    checklistById: ICheckListUserID[]
 }
 
 export const postsContextDefaultValue: ContextType = {
@@ -47,22 +30,7 @@ export const postsContextDefaultValue: ContextType = {
     allCheckList: [],
     handleSubmit: () => {},
 
-    checklistById: {
-        id: '',
-        createdDate: '',
-        status: '',
-        title: '',
-        updateDate: '',
-        checklistTasks: [{
-            category: {
-                id: '',
-                name: ''
-            },
-            categoryId: '',
-            description: '',
-            id: ''
-        }]
-    },
+    checklistById: [],
     list: [],
     refreshList: false,
     setRefreshList: () => {},
@@ -83,20 +51,20 @@ const CheckListContextProvider = ({
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
-    const [checklistById, setChecklistById] = useState<Checklist>()
+    const [checklistById, setChecklistById] = useState<ICheckListUserID[]>([])
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])
     const { accessToken } = useAuth()
-    const { id } = useParams() 
+    const { id } = useParams()
     const { openSnackbar } = useContext(SnackbarContext)
     const { currentUser } = useUserContext()
-    
-    const getChecklistById =  async () => {
+
+    const getChecklistById = async () => {
         if (!id) return
         if (!accessToken) return
         const response = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
-            method: "GET",
+            method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -104,7 +72,7 @@ const CheckListContextProvider = ({
             },
         })
         const data = await response.json()
-        
+
         setChecklistById(data)
     }
 
@@ -214,7 +182,7 @@ const CheckListContextProvider = ({
             list,
             setList,
             handleSubmit,
-            checklistById
+            checklistById,
         }),
         [
             setAllCheckList,
@@ -228,7 +196,7 @@ const CheckListContextProvider = ({
             list,
             setList,
             handleSubmit,
-            checklistById
+            checklistById,
         ]
     )
 
