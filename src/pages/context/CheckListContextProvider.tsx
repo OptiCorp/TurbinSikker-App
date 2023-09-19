@@ -1,11 +1,5 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { ListEntity } from 'src/pages/users/context/models/ListEntity'
@@ -31,15 +25,17 @@ type Checklist = {
     status: string
     title: string
     updateDate: string
-    checklistTasks: [{
-        description: string
-        categoryId: string
-        id: string
-        category: {
+    checklistTasks: [
+        {
+            description: string
+            categoryId: string
             id: string
-            name: string
-        }
-    }]
+            category: {
+                id: string
+                name: string
+            }
+        },
+    ]
 }
 
 export const postsContextDefaultValue: ContextType = {
@@ -53,15 +49,17 @@ export const postsContextDefaultValue: ContextType = {
         status: '',
         title: '',
         updateDate: '',
-        checklistTasks: [{
-            category: {
+        checklistTasks: [
+            {
+                category: {
+                    id: '',
+                    name: '',
+                },
+                categoryId: '',
+                description: '',
                 id: '',
-                name: ''
             },
-            categoryId: '',
-            description: '',
-            id: ''
-        }]
+        ],
     },
     list: [],
     refreshList: false,
@@ -70,33 +68,25 @@ export const postsContextDefaultValue: ContextType = {
 
 const CheckListContext = createContext<ContextType>(postsContextDefaultValue)
 
-const CheckListContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode
-}) => {
+const CheckListContextProvider = ({ children }: { children: React.ReactNode }) => {
     const Location = useLocation()
-    const refreshCheckLists = Location.state
-        ? Location.state?.refreshCheckLists
-        : null
+    const refreshCheckLists = Location.state ? Location.state?.refreshCheckLists : null
     const [allCheckList, setAllCheckList] = useState<CheckListEntity[]>([])
-    const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
-        []
-    )
+    const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>([])
     const [checklistById, setChecklistById] = useState<Checklist>()
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])
     const { accessToken } = useAuth()
-    const { id } = useParams() 
+    const { id } = useParams()
     const { openSnackbar } = useContext(SnackbarContext)
     const { currentUser } = useUserContext()
-    
-    const getChecklistById =  async () => {
+
+    const getChecklistById = async () => {
         if (!id) return
         if (!accessToken) return
         const response = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
-            method: "GET",
+            method: 'GET',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -104,7 +94,7 @@ const CheckListContextProvider = ({
             },
         })
         const data = await response.json()
-        
+
         setChecklistById(data)
     }
 
@@ -164,28 +154,23 @@ const CheckListContextProvider = ({
     const fetchCheckListUserId = async () => {
         if (!currentUser?.id || !accessToken) return
         try {
-            const res = await fetch(
-                `${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            const res = await fetch(`${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
             }
             const data = (await res.json()) as ICheckListUserID[]
             setUserIdCheckList(data)
-            const list = data.map(
-                ({ id, title }: { id: string; title: string }) => ({
-                    value: id,
-                    label: title,
-                })
-            )
+            const list = data.map(({ id, title }: { id: string; title: string }) => ({
+                value: id,
+                label: title,
+            }))
             setList(list)
         } catch (error) {
             console.error(error)
@@ -214,7 +199,7 @@ const CheckListContextProvider = ({
             list,
             setList,
             handleSubmit,
-            checklistById
+            checklistById,
         }),
         [
             setAllCheckList,
@@ -228,15 +213,13 @@ const CheckListContextProvider = ({
             list,
             setList,
             handleSubmit,
-            checklistById
+            checklistById,
         ]
     )
 
     return (
         // the Provider gives access to the context to its children
-        <CheckListContext.Provider value={memoedValue}>
-            {children}
-        </CheckListContext.Provider>
+        <CheckListContext.Provider value={memoedValue}>{children}</CheckListContext.Provider>
     )
 }
 
