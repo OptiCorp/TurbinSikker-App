@@ -33,30 +33,6 @@ export const PunchHeader = styled.div`
     }
 `
 
-export const PunchUploadFileContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #deedee;
-`
-export const PunchAddUploadContainer = styled.div`
-    display: flex;
-    padding: 25px;
-`
-
-export const PunchUploadFilesContainer = styled.div`
-    margin-left: 8px;
-`
-
-export const PunchUploadButtonContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-right: #deedee solid 0.7px;
-    padding-right: 20px;
-    gap: 8px;
-`
-
 export const PunchUploadContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -89,23 +65,6 @@ export const PunchButton = styled.button`
     line-height: 150%;
 `
 
-export const PunchForm = styled.form`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
-    margin-top: 20px;
-`
-
-export const SeverityButtonWrapper = styled.div`
-    background-color: #eaeaea;
-    display: flex;
-    border-radius: 4px;
-    padding: 5px;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
-`
 export const Button = styled.button`
     background-color: #fff;
     display: flex;
@@ -131,67 +90,4 @@ export const PunchDateContainer = styled.div`
     p {
         margin: 0;
     }
-`
-
-export const PunchAddContainer = styled.div`
-    padding: 20px;
-`
-
-/* listPunches */
-
-export const PunchListItem = styled.div`
-    background-color: #f0f3f3;
-    padding: 20px;
-    padding-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    margin-bottom: 80px;
-`
-
-export const PunchListBoxContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-radius: 4px;
-    box-shadow: 0px 4px 4px 2px #bebebe;
-    font-size: 12px;
-    color: #007079;
-    background-color: #fff;
-`
-export const TicketInfo = styled.div`
-    display: flex;
-    align-items: center;
-`
-
-export const TicketSeverityContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-right: 0.7px solid #dcdcdc;
-    padding-right: 18px;
-`
-
-export const TicketDetails = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 7px;
-`
-
-export const TicketActions = styled.div`
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-`
-
-export const TicketIcons = styled.div`
-    display: flex;
-    justify-content: right;
-`
-
-export const TicketButtonContainer = styled.div`
-    display: flex;
-    align-items: center;
 `
