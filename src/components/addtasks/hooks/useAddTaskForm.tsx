@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
 import { API_URL } from '../../../config'
+import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
@@ -21,6 +22,8 @@ export const useAddTaskForm = () => {
     const [checkListById, setCheckListById] = useState<CheckListEntity | null>(null)
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
+
+    const { allWorkFlows, workFlowById, WorkFlows } = useWorkflowContext()
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
@@ -43,7 +46,7 @@ export const useAddTaskForm = () => {
     }
     useEffect(() => {
         const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken) return
+            if (!id || !accessToken || workFlowById) return
             try {
                 const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
                     headers: {
@@ -74,7 +77,7 @@ export const useAddTaskForm = () => {
         }
 
         fetchAllCheckListsId()
-    }, [refreshList, accessToken])
+    }, [refreshList, accessToken, id])
 
     return {
         methods,

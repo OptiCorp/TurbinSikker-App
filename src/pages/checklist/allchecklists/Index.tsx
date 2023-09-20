@@ -17,7 +17,7 @@ export const CheckList = () => {
     const { accounts, inProgress } = useAuth()
     const { currentUser } = useUserContext()
 
-    const { WorkFlows, allWorkFlows } = useWorkflowContext()
+    const { WorkFlows, allWorkFlows, workFlowById } = useWorkflowContext()
 
     const sortedWorkFlows = allWorkFlows.sort((a, b) => {
         if (a.status === 'Committed' && b.status !== 'Committed') {

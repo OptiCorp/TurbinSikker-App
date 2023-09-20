@@ -53,7 +53,7 @@ export const IndexCheckLists = () => {
                             {currentUser?.userRole.name === 'Leader' ? (
                                 <> My checklists</>
                             ) : (
-                                <>Pending</>
+                                <>Submitted</>
                             )}
                         </Tabs.Tab>
                         <Tabs.Tab
