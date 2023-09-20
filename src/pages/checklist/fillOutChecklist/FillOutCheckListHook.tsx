@@ -1,84 +1,67 @@
-// import { useState } from "react"
-// import { useForm, SubmitHandler } from "react-hook-form"
-// import { useNavigate } from "react-router"
-// import { API_URL } from "src/config"
-// import { useCheckListContext } from "src/pages/context/CheckListContextProvider"
-// import useAuth from "src/pages/landingPage/context/LandingPageContextProvider"
-// import { useUserContext } from "src/pages/users/context/userContextProvider"
-// import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useContext, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { API_URL } from '../../../config'
+import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+import { UpdatingWorkFlowEntity } from './types'
 
+export type FillOutForm = {
+    checklistId: string
+    userIds: {
+        value: string
+        label: string
+    }[]
+    status: string
+}
+export const useFillOutCheckList = () => {
+    const { setRefreshList } = useCheckListContext()
 
+    const { accessToken } = useAuth()
+    const { openSnackbar } = useContext(SnackbarContext)
 
-// export type FillOutForm = {
-//     checklistId: string
-//     userIds: {
-//         value: string
-//         label: string
-//     }[]
-//     status: string
-// }
-// export const useAddWorkFlowForm = () => {
-//     const methods = useForm<FillOutForm>()
+    const [positiveOpen, setPositiveOpen] = useState(false)
 
-//     const { handleSubmit, control } = methods
-//     const { WorkFlows } = useWorkflowContext()
-//     const { accessToken } = useAuth()
-//     const [positiveOpen, setPositiveOpen] = useState(false)
-//     const { setRefreshList } = useCheckListContext()
-//     const { currentUser } = useUserContext()
-//     const handleOpen = () => {
-//         setPositiveOpen(true)
-//     }
-//     const clearAndClose = () => {
-//         setPositiveOpen(false)
-//     }
+    const handleOpen = () => {
+        setPositiveOpen(true)
+    }
+    const clearAndClose = () => {
+        setPositiveOpen(false)
+    }
+    const methods = useForm<UpdatingWorkFlowEntity>()
+    const {
+        handleSubmit,
+        control,
+        getValues,
+        formState: { errors },
+    } = methods
 
-//     const onSubmit: SubmitHandler<FillOutForm> = async (data) => {
-//         const res = await fetch(`${API_URL}/CreateChecklistWorkFlow`, {
-//             method: 'POST',
-//             headers: {
-//                 Authorization: `Bearer ${accessToken}`,
-//                 'Content-Type': 'application/json',
-//                 'Access-Control-Allow-Origin': '*',
-//             },
-//             body: JSON.stringify({
-//                 id: WorkFlow.id,
-//             checklistId: WorkFlow.checklist.id,
-//             userId: WorkFlow.userId,
-//             status: 'Committed',
-//             }),
-//         })
-//         if (res.ok) setRefreshList((prev) => !prev)
-      
-     
-        
-//     }
+    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data) => {
+        const res = await fetch(`${API_URL}/UpdateChecklistWorkflow`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify(data),
+        })
+        if (res.ok) setRefreshList((prev) => !prev)
 
-//     return {
-//         methods,
-//         onSubmit,
-//         control,
-//         handleSubmit,
-//         handleOpen,
-//         clearAndClose,
-//         positiveOpen,
-//     }
-// }
+        if (openSnackbar) {
+            openSnackbar(`Checklist sent`)
+        }
+    }
 
-
-
-
-
-// const handleSubmit = async () => {
-        
-//     try {
-//         onUpdate({
-//             id: WorkFlow.id,
-//             checklistId: WorkFlow.checklist.id,
-//             userId: WorkFlow.userId,
-//             status: 'Committed',
-//         }) 
-//     } catch (error) {
-//         console.error('Error creating checklist:', error)
-//     } 
-// } 
+    return {
+        methods,
+        onUpdate,
+        control,
+        handleSubmit,
+        handleOpen,
+        getValues,
+        clearAndClose,
+        positiveOpen,
+        formState: { errors },
+    }
+}

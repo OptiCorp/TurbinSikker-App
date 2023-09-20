@@ -16,7 +16,7 @@ export const NavItem = ({
     to: string
 }) => {
     return (
-        <Link to={to}>
+        <Link to={to} style={{ textDecoration: 'none' }}>
             {isActive ? (
                 <ImageContainerActive>
                     <Test>

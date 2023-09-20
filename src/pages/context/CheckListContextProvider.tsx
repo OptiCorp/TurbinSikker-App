@@ -16,7 +16,10 @@ export type ContextType = {
     list: ListEntity[]
     refreshList: boolean
     setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
-    checklistById: Checklist
+
+    checklistById: ICheckListUserID[]
+
+   
 }
 
 type Checklist = {
@@ -36,6 +39,7 @@ type Checklist = {
             }
         },
     ]
+
 }
 
 export const postsContextDefaultValue: ContextType = {
@@ -43,24 +47,10 @@ export const postsContextDefaultValue: ContextType = {
     allCheckList: [],
     handleSubmit: () => {},
 
-    checklistById: {
-        id: '',
-        createdDate: '',
-        status: '',
-        title: '',
-        updateDate: '',
-        checklistTasks: [
-            {
-                category: {
-                    id: '',
-                    name: '',
-                },
-                categoryId: '',
-                description: '',
-                id: '',
-            },
-        ],
-    },
+
+
+
+    checklistById: [],
     list: [],
     refreshList: false,
     setRefreshList: () => {},
@@ -72,8 +62,14 @@ const CheckListContextProvider = ({ children }: { children: React.ReactNode }) =
     const Location = useLocation()
     const refreshCheckLists = Location.state ? Location.state?.refreshCheckLists : null
     const [allCheckList, setAllCheckList] = useState<CheckListEntity[]>([])
-    const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>([])
-    const [checklistById, setChecklistById] = useState<Checklist>()
+
+    const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
+        []
+    )
+    const [checklistById, setChecklistById] = useState<ICheckListUserID[]>([])
+
+
+
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])

@@ -20,33 +20,29 @@ export const InspectorPendingRow: FunctionComponent<
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    if (WorkFlow.status !== 'Commited') return null
+    if (WorkFlow.status !== 'Committed') return null
     return (
         <>
-            {WorkFlow && (
-                <StyledTableRow
-                    onClick={() => clickHandler(WorkFlow.checklist.id)}
-                >
-                    <MyCheckListCell>
-                        <StyledBodyTitle>
-                            <Typography variant="body_long_bold">
-                                {WorkFlow.checklist.title}
-                            </Typography>
-                        </StyledBodyTitle>
-                    </MyCheckListCell>
-                    <MyCheckListCell>
-                        <CellContentMyList>
-                            <UserChip workflow={WorkFlow} />
-                        </CellContentMyList>
-                    </MyCheckListCell>
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.checklist.id)}>
+                <MyCheckListCell>
+                    <StyledBodyTitle>
+                        <Typography variant="body_long_bold">
+                            {WorkFlow.checklist.title}
+                        </Typography>
+                    </StyledBodyTitle>
+                </MyCheckListCell>
+                <MyCheckListCell>
+                    <CellContentMyList>
+                        <UserChip workflow={WorkFlow} />
+                    </CellContentMyList>
+                </MyCheckListCell>
 
-                    <MyCheckListCell>
-                        <CellContentMyList>
-                            <ChipStatus workflow={WorkFlow} />
-                        </CellContentMyList>
-                    </MyCheckListCell>
-                </StyledTableRow>
-            )}
+                <MyCheckListCell>
+                    <CellContentMyList>
+                        <ChipStatus workflow={WorkFlow} />
+                    </CellContentMyList>
+                </MyCheckListCell>
+            </StyledTableRow>
         </>
     )
 }

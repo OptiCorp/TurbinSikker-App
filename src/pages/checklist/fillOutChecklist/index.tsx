@@ -1,114 +1,82 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 import CustomDialog from '@components/modal/useModalHook'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Typography } from '@equinor/eds-core-react'
-import { useContext, useEffect, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { API_URL } from '../../../config'
-import { CheckListContextProvider, useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import { useState } from 'react'
+import { FormProvider } from 'react-hook-form'
 import { checkList } from '../../../pages/context/models/checklist'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { EditListPoints } from '../editchecklist/styles'
 import { Wrapper } from '../previewCheckList/styles'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+import { useFillOutCheckList } from './FillOutCheckListHook'
 import { FillOutList } from './FillOutList'
 import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
-import { UpdatingWorkFlowEntity } from './types'
 
 export const FillOutCheckList = () => {
-    const { sortedTasks } = useAddTaskForm()
-
-    const methods = useForm<UpdatingWorkFlowEntity>()
-    const { WorkFlows } = useWorkflowContext()
+    const { workFlowById } = useWorkflowContext()
 
     const [content, setContent] = useState('')
     const [commentDialogShowing, setCommentDialogShowing] = useState(false)
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
 
-    const { setRefreshList } = useCheckListContext()
+    const { methods, onUpdate } = useFillOutCheckList()
     const { handleSubmit } = methods
-    const { accessToken } = useAuth()
-    const { openSnackbar } = useContext(SnackbarContext)
-
-    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
-        id: string
-        userId: string
-        status: string
-    }) => {
-        const res = await fetch(
-            `${API_URL}/UpdateChecklistWorkflow?id=${data.id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    userId: data.userId,
-                    status: data.status,
-                }),
-            }
-        )
-        if (res.ok) setRefreshList((prev) => !prev)
-
-        if (openSnackbar) {
-            openSnackbar(`Task updated`)
-        }
-    }
-  
 
     return (
         <>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onUpdate)} id="fill-out-checklist">
                     <div style={{ backgroundColor: '#f0f3f3' }}>
-                        {(
-                            <div>
-                                <AddPunchHeader>
-                                    <StyledCard>
-                                        <StyledCardHeader>
-                                            <Typography
-                                                onClick={() =>
-                                                    setCommentDialogShowing(
-                                                        true
-                                                    )
-                                                }
-                                                token={{
-                                                    textAlign: 'center',
-                                                    fontWeight: 600,
-                                                    fontSize: '0.8rem',
-                                                    color: 'green',
-                                                }}
-                                                link
-                                                href="#"
-                                            >
-                                                Add comment
-                                            </Typography>
-                                            <Typography
-                                                onClick={() =>
-                                                    setPunchDialogShowing(true)
-                                                }
-                                                token={{
-                                                    textAlign: 'center',
-                                                    fontWeight: 600,
-                                                    fontSize: '0.8rem',
-                                                    color: 'red',
-                                                }}
-                                                link
-                                                href="#"
-                                            >
-                                                Add punch
-                                            </Typography>
-                                        </StyledCardHeader>
-                                    </StyledCard>
-                                </AddPunchHeader>
-                            </div>
-                        )}
+                        <div>
+                            <AddPunchHeader>
+                                <StyledCard>
+                                    <StyledCardHeader>
+                                        <Typography
+                                            onClick={() =>
+                                                setCommentDialogShowing(true)
+                                            }
+                                            token={{
+                                                textAlign: 'center',
+                                                fontWeight: 600,
+                                                fontSize: '0.8rem',
+                                                color: 'green',
+                                            }}
+                                            link
+                                            href="#"
+                                        >
+                                            Add comment
+                                        </Typography>
+                                        <Typography
+                                            onClick={() =>
+                                                setPunchDialogShowing(true)
+                                            }
+                                            token={{
+                                                textAlign: 'center',
+                                                fontWeight: 600,
+                                                fontSize: '0.8rem',
+                                                color: 'red',
+                                            }}
+                                            link
+                                            href="#"
+                                        >
+                                            Add punch
+                                        </Typography>
+                                    </StyledCardHeader>
+                                </StyledCard>
+                            </AddPunchHeader>
+                        </div>
+
                         <Wrapper>
-                            <CheckListContextProvider>
-                                <FillOutList WorkFlow={WorkFlows} onUpdate={onUpdate} />
-                            </CheckListContextProvider>
+                            {workFlowById?.checklist?.checklistTasks.map(
+                                (task) => (
+                                    <>
+                                        <FillOutList
+                                            key={task.id}
+                                            workFlowById={workFlowById}
+                                            onUpdate={onUpdate}
+                                            task={task} // tasks={workFlowById.checklist.checklistTasks}
+                                        />
+                                    </>
+                                )
+                            )}
                         </Wrapper>
                         <CustomDialog
                             isOpen={commentDialogShowing}
