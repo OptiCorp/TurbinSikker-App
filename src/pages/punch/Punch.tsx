@@ -17,7 +17,7 @@ import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigatio
 import { useEffect, useState } from 'react'
 import { getUploadById, getUploadByPunchId } from '../../Upload'
 import useAuth from '../landingPage/context/LandingPageContextProvider'
-import { Upload } from '../../types/upload'
+import { Upload } from '../../types/Upload'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -55,7 +55,7 @@ function Punch() {
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
-    function nextImage(index: string) {
+    function nextImage(index: number) {
         console.log(index)
     }
 
@@ -121,7 +121,7 @@ function Punch() {
             </PunchUploadContainer> */}
             <PunchUploadContainer>
                 <div style={{ display: 'flex', overflowX: 'auto' }}>
-                    {uploads?.map((upload, idx) => (
+                    {uploads?.map((upload: Upload, idx) => (
                         <img
                             onClick={() => nextImage(idx)}
                             src={`data:image/png;base64, ${upload.bytes}`}
