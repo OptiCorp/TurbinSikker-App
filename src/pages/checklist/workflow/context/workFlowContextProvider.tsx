@@ -143,7 +143,7 @@ const WorkflowContextProvider = ({
         const fetchAllCheckListWorkFlow = async () => {
             if (!accessToken) return
             try {
-                const res = await fetch(`${API_URL}/GetAllChecklistWorkflows`, {
+                const res = await fetch(`${API_URL}/GetAllWorkflows`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -169,16 +169,13 @@ const WorkflowContextProvider = ({
     useEffect(() => {
         const fetchWorkFlowId = async () => {
             if (!accessToken || !id) return
-            const res = await fetch(
-                `${API_URL}/GetChecklistWorkflow?id=${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            const res = await fetch(`${API_URL}/GetWorkflow?id=${id}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
 

@@ -44,7 +44,8 @@ export const FillOutList: FunctionComponent<Props> = ({
     >({})
     const {
         control,
-
+        register,
+        setValue,
         formState: { errors },
     } = useFormContext()
 
@@ -153,11 +154,17 @@ export const FillOutList: FunctionComponent<Props> = ({
                             ) : (
                                 <Controller
                                     control={control}
-                                    defaultValue={false}
-                                    rules={{ required: true }}
+                                    rules={{
+                                        required: 'Required',
+                                    }}
                                     name={`task.${task.id}`}
                                     render={({ field }) => (
                                         <Checkbox
+                                            id="checkbox"
+                                            aria-invalid={
+                                                errors.agree ? 'true' : 'false'
+                                            }
+                                            aria-required
                                             checked={checkboxChecked}
                                             onChange={(e) => {
                                                 setCheckboxChecked(
@@ -169,10 +176,6 @@ export const FillOutList: FunctionComponent<Props> = ({
                                                         : 'Disabled'
                                                 )
                                             }}
-                                            id="checkbox"
-                                            aria-invalid={
-                                                errors.agree ? 'true' : 'false'
-                                            }
                                         />
                                     )}
                                 />

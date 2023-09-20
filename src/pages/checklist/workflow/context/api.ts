@@ -6,7 +6,7 @@ export const getChecklistWorkflowById = async (
     accessToken: string
 ) => {
     const res = await fetch(
-        `${API_URL}/GetAllChecklistWorkflowsByUserId?userId=${currentUserId}`,
+        `${API_URL}/GetAllWorkflowsByUserId?userId=${currentUserId}`,
         {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
