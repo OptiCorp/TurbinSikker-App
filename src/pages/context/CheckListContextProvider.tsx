@@ -50,25 +50,7 @@ export const postsContextDefaultValue: ContextType = {
 
 
 
-    checklistById: {
-        id: '',
-        createdDate: '',
-        status: '',
-        title: '',
-        updateDate: '',
-        checklistTasks: [
-            {
-                category: {
-                    id: '',
-                    name: '',
-                },
-                categoryId: '',
-                description: '',
-                id: '',
-            },
-        ],
-    },
-
+    checklistById: [],
     list: [],
     refreshList: false,
     setRefreshList: () => {},
