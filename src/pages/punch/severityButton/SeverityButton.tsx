@@ -37,9 +37,7 @@ function SeverityButton({
     }
 
     useEffect(() => {
-        const index = SeverityButtons.findIndex(
-            (button) => button.name === defaultValue
-        )
+        const index = SeverityButtons.findIndex((button) => button.name === defaultValue)
         if (index !== -1) {
             setActiveButtonIndex(index)
         }
@@ -49,10 +47,8 @@ function SeverityButton({
         <>
             {SeverityButtons.map((button, index) => {
                 const isActive = index === activeButtonIndex
-                const isMiddleButton =
-                    activeButtonIndex === Math.floor(SeverityButtons.length / 2)
-                const isFurthestButton =
-                    index === 0 || index === SeverityButtons.length - 1
+                const isMiddleButton = activeButtonIndex === Math.floor(SeverityButtons.length / 2)
+                const isFurthestButton = index === 0 || index === SeverityButtons.length - 1
 
                 const buttonStyle: React.CSSProperties = {
                     backgroundColor: isActive ? '#fff' : 'transparent',
@@ -64,17 +60,11 @@ function SeverityButton({
                 const dividerStyle = {
                     width: '100%',
                     borderLeft:
-                        isFurthestButton &&
-                        !isActive &&
-                        !isMiddleButton &&
-                        activeButtonIndex === 0
+                        isFurthestButton && !isActive && !isMiddleButton && activeButtonIndex === 0
                             ? '1px solid #dcdcdc'
                             : 'none',
                     borderRight:
-                        isFurthestButton &&
-                        !isActive &&
-                        !isMiddleButton &&
-                        activeButtonIndex !== 0
+                        isFurthestButton && !isActive && !isMiddleButton && activeButtonIndex !== 0
                             ? '1px solid #dcdcdc'
                             : 'none',
                 }

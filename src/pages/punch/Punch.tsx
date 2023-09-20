@@ -14,6 +14,10 @@ import {
 } from './styles'
 import { PunchSeverity } from './types'
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
+import { useEffect, useState } from 'react'
+import { getUploadById, getUploadByPunchId } from '../../Upload'
+import useAuth from '../landingPage/context/LandingPageContextProvider'
+import { Upload } from '../../types/upload'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -36,14 +40,45 @@ export const punchSeverity: PunchSeverity[] = [
 function Punch() {
     const navigate = useNavigate()
     const { punch } = usePunchContext()
+    const { accessToken } = useAuth()
     const createdDate = punch && formatDate(punch.createdDate)
     const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
-
-    const img = false //temporary, remove when we have an image (upload)
+    const [uploadData, setUploadData] = useState({
+        blobRef: '',
+        bytes: '',
+        id: '',
+        punchId: '',
+    })
+    const [uploads, setUploads] = useState([])
+    const [loading, setLoading] = useState(false)
 
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
+    function nextImage(index: string) {
+        console.log(index)
+    }
+
+    useEffect(() => {
+        console.log('here', punch?.id)
+        const uploads = getUploadByPunchId(punch?.id, accessToken)
+        uploads.then((data) => setUploads(data))
+    }, [accessToken, punch?.id])
+    useEffect(() => {
+        setLoading(true)
+        const uploadResult = getUploadById('666f2475-189d-418d-a94e-b9eae5893009', accessToken)
+        uploadResult.then((data: Upload) => {
+            setUploadData({
+                blobRef: data.blobRef,
+                bytes: data.bytes,
+                id: data.id,
+                punchId: '',
+            })
+        })
+        setLoading(false)
+    }, [accessToken])
+
+    console.log(uploads)
 
     return (
         <>
@@ -74,21 +109,38 @@ function Punch() {
                         )}
                     </PunchDateContainer>
                 </PunchHeader>
-                <PunchUploadContainer>
-                    {!img ? <span>No Uploads</span> : <img src={img} alt="Punch image" />}
-                    {/*//TODO Change img src w actual img */}
-                </PunchUploadContainer>
+            </PunchWrapper>
+            {/* <PunchUploadContainer>
+                {!loading && uploadData.bytes === '' ? (
+                    <span>No uploads</span>
+                ) : !loading && uploadData.bytes.length ? (
+                    <img src={`data:image/png;base64, ${uploadData.bytes}`} alt="Punch image" />
+                ) : (
+                    <span>Loading..</span>
+                )}
+            </PunchUploadContainer> */}
+            <PunchUploadContainer>
+                <div style={{ display: 'flex', overflowX: 'auto' }}>
+                    {uploads?.map((upload, idx) => (
+                        <img
+                            onClick={() => nextImage(idx)}
+                            src={`data:image/png;base64, ${upload.bytes}`}
+                        />
+                    ))}
+                </div>
+            </PunchUploadContainer>
+            <PunchWrapper style={{ marginBottom: '48px' }}>
                 <PunchDescriptionContainer>
                     <h4>Report name</h4>
                     {!punch?.checklistTask ? (
                         <p>loading ...</p>
                     ) : (
-                        <div style={{ display: 'flex', gap: 4 }}>
+                        <div>
                             <p>{punch?.checklistTask.description}</p>
                         </div>
                     )}
                     <h4>Description</h4>
-                    <p>{punch?.punchDescription}</p>
+                    <p>{punch?.description}</p>
                 </PunchDescriptionContainer>
                 {punch && (
                     <PunchButton onClick={() => clickHandler(punch.id)}>Edit Punch</PunchButton>
