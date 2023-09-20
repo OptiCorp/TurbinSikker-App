@@ -20,6 +20,7 @@ import { AddUser } from '../pages/users/addUser/AddUser'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
 import { ProtectedRoute } from './ProtectedRoute'
 import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
+import { CheckListContextProvider } from '../pages/context/CheckListContextProvider'
 
 export function RoutesContainer() {
     return (
@@ -32,24 +33,12 @@ export function RoutesContainer() {
                         <Route element={<IndexCheckLists />}>
                             <Route path="/" element={<CheckList />} />
                             <Route path="/CheckList" element={<CheckList />} />
-                            <Route
-                                path="/CompletedCheckList"
-                                element={<CompletedChecklists />}
-                            />
-                            <Route
-                                path="/MyChecklists"
-                                element={<MyCheckLists />}
-                            />
+                            <Route path="/CompletedCheckList" element={<CompletedChecklists />} />
+                            <Route path="/MyChecklists" element={<MyCheckLists />} />
                         </Route>
-                        <Route
-                            path="/PreviewCheckList/:id"
-                            element={<PreviewCheckList />}
-                        />
+                        <Route path="/PreviewCheckList/:id" element={<PreviewCheckList />} />
 
-                        <Route
-                            path="/FillOutCheckList/:id"
-                            element={<FillOutCheckList />}
-                        />
+                        <Route path="/FillOutCheckList/:id" element={<FillOutCheckList />} />
 
                         <Route
                             path="/EditCheckList/:id"
@@ -61,14 +50,8 @@ export function RoutesContainer() {
                                 </EditCheckListContextProvider>
                             }
                         />
-                        <Route
-                            path="/SendCheckList"
-                            element={<SendCheckList />}
-                        />
-                        <Route
-                            path="/SendCheckList/:id"
-                            element={<SendCheckList />}
-                        />
+                        <Route path="/SendCheckList" element={<SendCheckList />} />
+                        <Route path="/SendCheckList/:id" element={<SendCheckList />} />
 
                         <Route path="/ListUsers" element={<ListUsers />} />
                         <Route
@@ -108,9 +91,11 @@ export function RoutesContainer() {
                         <Route
                             path="/EditPunch/:id/"
                             element={
-                                <PunchContextProvider>
-                                    <AddPunch />
-                                </PunchContextProvider>
+                                <CheckListContextProvider>
+                                    <PunchContextProvider>
+                                        <AddPunch />
+                                    </PunchContextProvider>
+                                </CheckListContextProvider>
                             }
                         />
                         <Route path="/AddPunch/" element={<AddPunch />} />

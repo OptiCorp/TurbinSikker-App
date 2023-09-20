@@ -5,7 +5,10 @@ import { Typography } from '@equinor/eds-core-react'
 import { useContext, useEffect, useState } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { API_URL } from '../../../config'
-import { CheckListContextProvider, useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+import {
+    CheckListContextProvider,
+    useCheckListContext,
+} from '../../../pages/context/CheckListContextProvider'
 import { checkList } from '../../../pages/context/models/checklist'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { EditListPoints } from '../editchecklist/styles'
@@ -35,45 +38,37 @@ export const FillOutCheckList = () => {
         userId: string
         status: string
     }) => {
-        const res = await fetch(
-            `${API_URL}/UpdateChecklistWorkflow?id=${data.id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    userId: data.userId,
-                    status: data.status,
-                }),
-            }
-        )
+        const res = await fetch(`${API_URL}/UpdateWorkflow?id=${data.id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+                userId: data.userId,
+                status: data.status,
+            }),
+        })
         if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
             openSnackbar(`Task updated`)
         }
     }
-  
 
     return (
         <>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onUpdate)} id="fill-out-checklist">
                     <div style={{ backgroundColor: '#f0f3f3' }}>
-                        {(
+                        {
                             <div>
                                 <AddPunchHeader>
                                     <StyledCard>
                                         <StyledCardHeader>
                                             <Typography
-                                                onClick={() =>
-                                                    setCommentDialogShowing(
-                                                        true
-                                                    )
-                                                }
+                                                onClick={() => setCommentDialogShowing(true)}
                                                 token={{
                                                     textAlign: 'center',
                                                     fontWeight: 600,
@@ -86,9 +81,7 @@ export const FillOutCheckList = () => {
                                                 Add comment
                                             </Typography>
                                             <Typography
-                                                onClick={() =>
-                                                    setPunchDialogShowing(true)
-                                                }
+                                                onClick={() => setPunchDialogShowing(true)}
                                                 token={{
                                                     textAlign: 'center',
                                                     fontWeight: 600,
@@ -104,7 +97,7 @@ export const FillOutCheckList = () => {
                                     </StyledCard>
                                 </AddPunchHeader>
                             </div>
-                        )}
+                        }
                         <Wrapper>
                             <CheckListContextProvider>
                                 <FillOutList WorkFlow={WorkFlows} onUpdate={onUpdate} />
@@ -112,18 +105,13 @@ export const FillOutCheckList = () => {
                         </Wrapper>
                         <CustomDialog
                             isOpen={commentDialogShowing}
-                            negativeButtonOnClick={() =>
-                                setCommentDialogShowing(false)
-                            }
+                            negativeButtonOnClick={() => setCommentDialogShowing(false)}
                             title="Add comment?"
                             negativeButtonText="Cancel"
                             positiveButtonText="Save"
                             buttonVariant="ghost"
                         >
-                            <Typography
-                                variant="text"
-                                token={{ textAlign: 'left' }}
-                            >
+                            <Typography variant="text" token={{ textAlign: 'left' }}>
                                 Comment will be added to the end of the form.
                             </Typography>
                             <EditListPoints
@@ -132,9 +120,7 @@ export const FillOutCheckList = () => {
                                 id="storybook-multi-readonly"
                                 multiline
                                 rows={5}
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                     setContent(event.target.value)
                                 }}
                             />
@@ -143,20 +129,14 @@ export const FillOutCheckList = () => {
                         <CustomDialog
                             title="Make Punch?"
                             buttonVariant="ghost"
-                            negativeButtonOnClick={() =>
-                                setPunchDialogShowing(false)
-                            }
+                            negativeButtonOnClick={() => setPunchDialogShowing(false)}
                             negativeButtonText="Cancel"
                             positiveButtonText="OK"
                             isOpen={punchDialogShowing}
                         >
-                            <Typography
-                                group="input"
-                                variant="text"
-                                token={{ textAlign: 'left' }}
-                            >
-                                You will be forwarded to Punch form. You will be
-                                able to continue this form where you left after.
+                            <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                                You will be forwarded to Punch form. You will be able to continue
+                                this form where you left after.
                             </Typography>
                         </CustomDialog>
                     </div>

@@ -18,26 +18,23 @@ export const useAddTaskForm = () => {
     const { refreshList, setRefreshList } = useCheckListContext()
     const [selectedOption] = useState('')
     const [selectedTask] = useState('')
-    const [checkListById, setCheckListById] = useState<CheckListEntity | null>(
-        null
-    )
+    const [checkListById, setCheckListById] = useState<CheckListEntity | null>(null)
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
-    
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        const res = await fetch(
-            `${API_URL}/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify(data.task),
-            }
-        )
+        const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+                checklistId: id,
+                id: data.task,
+            }),
+        })
         if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
@@ -56,8 +53,7 @@ export const useAddTaskForm = () => {
                     },
                 })
 
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
+                if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
 
                 const data = (await res.json()) as CheckListEntity
                 setCheckListById(data)
@@ -73,7 +69,8 @@ export const useAddTaskForm = () => {
 
                 setSortedTasks(sorted)
             } catch (error) {
-                console.error('Error fetching user data:', error)            }
+                console.error('Error fetching user data:', error)
+            }
         }
 
         fetchAllCheckListsId()

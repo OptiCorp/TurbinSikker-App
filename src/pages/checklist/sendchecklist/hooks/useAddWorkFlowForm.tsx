@@ -33,7 +33,7 @@ export const useAddWorkFlowForm = () => {
     }
 
     const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
-        const res = await fetch(`${API_URL}/CreateChecklistWorkFlow`, {
+        const res = await fetch(`${API_URL}/CreateWorkFlow`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -44,7 +44,7 @@ export const useAddWorkFlowForm = () => {
                 checklistId: data.checklistId,
                 userIds: data.userIds,
 
-                createdById: currentUser?.id,
+                creatorId: currentUser?.id,
             }),
         })
         if (res.ok) setRefreshList((prev) => !prev)

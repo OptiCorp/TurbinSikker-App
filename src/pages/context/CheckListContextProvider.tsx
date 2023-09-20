@@ -11,7 +11,7 @@ import { ICheckListUserID } from './models/CheckListUserIdEntity'
 export type ContextType = {
     userIdCheckList: ICheckListUserID[]
     allCheckList: CheckListEntity[]
-    handleSubmit: (data: { title: string; CreatedBy: string }) => void
+    handleSubmit: (data: { title: string; creatorId: string }) => void
 
     list: ListEntity[]
     refreshList: boolean
@@ -122,7 +122,7 @@ const CheckListContextProvider = ({ children }: { children: React.ReactNode }) =
 
     // submitt checklist
 
-    const handleSubmit = async (data: { title: string; CreatedBy: string }) => {
+    const handleSubmit = async (data: { title: string; creatorId: string }) => {
         if (!accessToken) return
         const res = await fetch(`${API_URL}/AddChecklist`, {
             method: 'POST',
@@ -133,7 +133,7 @@ const CheckListContextProvider = ({ children }: { children: React.ReactNode }) =
             },
             body: JSON.stringify({
                 title: data.title,
-                CreatedBy: data.CreatedBy,
+                creatorId: data.creatorId,
             }),
         })
 
