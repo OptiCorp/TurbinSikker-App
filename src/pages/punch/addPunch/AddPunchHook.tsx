@@ -1,15 +1,18 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { SetStateAction, useContext, useEffect, useState } from 'react'
+import { SetStateAction, useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { AddUpload } from '../../../Upload'
+import { usePunchContext } from '../context/PunchContextProvider'
 
 export const useAddPunch = () => {
     const { currentUser } = useUserContext()
     const { id } = useParams()
+    const { punch } = usePunchContext()
     const appLocation = useLocation()
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
@@ -20,20 +23,22 @@ export const useAddPunch = () => {
     const [positiveOpen, setPositiveOpen] = useState(false)
 
     type FormValuesPunchEntity = {
-        createdBy: string
-        punchDescription: string
+        creatorId: string
+        description: string
         severity: string
         checklistTaskId: string
-        checklistWorkFlowId: string
+        workflowId: string
     }
 
     const [description, setDescription] = useState('')
-    const [severity, setSeverity] = useState<SetStateAction<string>>('Minor')
+    const [severity, setSeverity] = useState<SetStateAction<string>>(punch?.severity || 'Minor')
+    const [file, setFile] = useState<File | undefined>()
 
-    const onSubmit: SubmitHandler<FormValuesPunchEntity> = async (data) => {
+    const onSubmit: SubmitHandler<FormValuesPunchEntity> = async () => {
         if (appLocation.pathname === '/addPunch') {
             setDescription('')
             await postPunch()
+            await AddUpload(accessToken, punch.id, file)
         } else {
             const res = await fetch(`${API_URL}/UpdatePunch?id=${id}`, {
                 method: 'POST',
@@ -42,11 +47,16 @@ export const useAddPunch = () => {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                    id: id,
+                    workflowId: '287f5297-bfa5-49be-8c56-3bfe9ec98227',
+                    description: description,
+                    severity: severity,
+                }),
             })
             if (res.ok) setRefreshList((prev) => !prev)
             setPositiveOpen(false)
-            navigate('/Checklist')
+            navigate(`/punch/${id}`)
             if (openSnackbar) openSnackbar('Punch updated!')
         }
     }
@@ -61,11 +71,11 @@ export const useAddPunch = () => {
                 'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
-                createdBy: currentUser?.id,
-                punchDescription: description,
+                creatorId: currentUser?.id,
+                description: description,
                 severity: severity,
                 checklistTaskId: '482f2505-c02d-47a0-8c00-e9b757662d0d',
-                checklistWorkFlowId: '4c782512-b9ed-4e4c-b5f2-8f0411a30340',
+                workflowId: '95b927b4-1e8d-48c3-a254-7ca1b8f501c2',
             }),
         })
         if (res.ok) {
@@ -88,6 +98,8 @@ export const useAddPunch = () => {
     }
 
     return {
+        setFile,
+        file,
         methods,
         onSubmit,
         control,

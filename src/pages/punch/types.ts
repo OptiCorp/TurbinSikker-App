@@ -3,23 +3,23 @@ import { IconData } from '@equinor/eds-icons'
 export type PunchEntity = {
     id: string
     active: number
-    checklistWorkflowId: string
-    createdBy: string
+    workflowId: string
+    creatorId: string
     createdDate: string
-    punchDescription: string
+    description: string
     severity: string
     status: string
     updatedDate: string | null
     checklistTask: {
         checklistTaskId: string
-        checklistWorkflowId: string
+        workflowId: string
         description: string
         category: {
             id: string
             name: string
         }
     }
-    createdByUser: {
+    user: {
         firstName: string
         lastName: string
     }

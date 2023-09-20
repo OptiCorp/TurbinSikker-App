@@ -15,23 +15,23 @@ const postsContextDefaultValue: PunchContext = {
     punch: {
         id: '',
         active: 0,
-        checklistWorkflowId: '',
-        createdBy: '',
+        workflowId: '',
+        creatorId: '',
         createdDate: '',
-        punchDescription: '',
+        description: '',
         severity: '',
         status: '',
         updatedDate: null,
         checklistTask: {
             checklistTaskId: '',
-            checklistWorkflowId: '',
+            workflowId: '',
             description: '',
             category: {
                 id: '',
                 name: '',
             },
         },
-        createdByUser: {
+        user: {
             firstName: '',
             lastName: '',
         },
@@ -60,8 +60,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
                     'Access-Control-Allow-Origin': '*',
                 },
             })
-            if (!response.ok)
-                throw new Error('Failed with HTTP code ' + response.status)
+            if (!response.ok) throw new Error('Failed with HTTP code ' + response.status)
             const data = await response.json()
             setPunchById(data)
         } catch (error) {
@@ -73,9 +72,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
 
         try {
             const response = await fetch(
-                `${
-                    currentUser?.userRole.name === 'Leader' ? leader : inspector
-                }`,
+                `${currentUser?.userRole.name === 'Leader' ? leader : inspector}`,
                 {
                     method: 'GET',
                     headers: {
@@ -85,8 +82,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
                     },
                 }
             )
-            if (!response.ok)
-                throw new Error('Failed with HTTP code ' + response.status)
+            if (!response.ok) throw new Error('Failed with HTTP code ' + response.status)
 
             const data = await response.json()
             setPunchData(data)

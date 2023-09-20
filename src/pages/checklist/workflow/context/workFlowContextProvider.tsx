@@ -3,7 +3,7 @@ import { API_URL } from '../../../../config'
 import { useUserContext } from '../../../../pages/users/context/userContextProvider'
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
-import { getChecklistWorkflowById } from './api'
+import { getWorkflowById } from './api'
 
 import { useParams } from 'react-router'
 import { TWorkflowContext } from './types'
@@ -104,15 +104,9 @@ const postsContextDefaultValue: TWorkflowContext = {
     },
 }
 
-const WorkflowContext = createContext<TWorkflowContext>(
-    postsContextDefaultValue
-)
+const WorkflowContext = createContext<TWorkflowContext>(postsContextDefaultValue)
 
-const WorkflowContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode
-}) => {
+const WorkflowContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { accessToken } = useAuth()
 
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
@@ -130,10 +124,7 @@ const WorkflowContextProvider = ({
     useEffect(() => {
         ;(async function () {
             if (!currentUser?.id || !accessToken) return
-            const workFlows = await getChecklistWorkflowById(
-                currentUser.id,
-                accessToken
-            )
+            const workFlows = await getWorkflowById(currentUser.id, accessToken)
 
             setChecklistWorkFlow(workFlows)
         })()
@@ -143,7 +134,7 @@ const WorkflowContextProvider = ({
         const fetchAllCheckListWorkFlow = async () => {
             if (!accessToken) return
             try {
-                const res = await fetch(`${API_URL}/GetAllChecklistWorkflows`, {
+                const res = await fetch(`${API_URL}/GetAllWorkflows`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -151,8 +142,7 @@ const WorkflowContextProvider = ({
                         'Access-Control-Allow-Origin': '*',
                     },
                 })
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
+                if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
                 const data = (await res.json()) as AllWorkFlows[]
                 data.map((item) => ({
                     ...item,
