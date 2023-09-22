@@ -21,7 +21,7 @@ name: "Build frontend"
 
 on:
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "master" ]
   workflow_dispatch:
 
 env:
