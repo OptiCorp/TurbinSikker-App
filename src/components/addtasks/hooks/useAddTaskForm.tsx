@@ -24,7 +24,7 @@ export const useAddTaskForm = () => {
     )
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
-    const { allWorkFlows, workFlowById, WorkFlows } = useWorkflowContext()
+    const { workFlowById } = useWorkflowContext()
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(
             `${API_URL}/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
@@ -46,7 +46,7 @@ export const useAddTaskForm = () => {
     }
     useEffect(() => {
         const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken || workFlowById) return
+            if (!id || !accessToken || !workFlowById) return
             try {
                 const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
                     headers: {

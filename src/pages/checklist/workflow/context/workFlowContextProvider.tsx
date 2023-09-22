@@ -5,7 +5,8 @@ import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
 import { getChecklistWorkflowById } from './api'
 
-import { useParams } from 'react-router'
+import { useLocation, useParams } from 'react-router'
+import { usePunchContext } from '../../../../pages/punch/context/PunchContextProvider'
 import { TWorkflowContext } from './types'
 ///
 
@@ -119,9 +120,10 @@ const WorkflowContextProvider = ({
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [workFlowById, setWorkFlowById] = useState<WorkFlow>()
     const { id } = useParams()
-    console.log('from params', id)
-    const { currentUser } = useUserContext()
 
+    const { punch, taskId, workFlow } = usePunchContext()
+    const { currentUser } = useUserContext()
+    const appLocation = useLocation()
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')
@@ -169,6 +171,7 @@ const WorkflowContextProvider = ({
     useEffect(() => {
         const fetchWorkFlowId = async () => {
             if (!accessToken || !id) return
+
             const res = await fetch(`${API_URL}/GetWorkflow?id=${id}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -177,11 +180,11 @@ const WorkflowContextProvider = ({
                 },
             })
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-            const data = await res.json()
+            const data = (await res.json()) as WorkFlow
 
             setWorkFlowById(data)
         }
-
+        console.log(workFlowById)
         fetchWorkFlowId()
     }, [currentUser, accessToken, id])
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { API_URL } from '../../../config'
+import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { PunchEntity } from '../types'
@@ -8,6 +9,11 @@ import { PunchEntity } from '../types'
 type PunchContext = {
     punches: PunchEntity[]
     punch: PunchEntity
+    taskId: string
+    workFlow: string
+    workflowData: string | undefined
+    setTaskId: (taskId: string) => void
+    setWorkFlow: (workflow: string) => void
 }
 
 const postsContextDefaultValue: PunchContext = {
@@ -15,10 +21,10 @@ const postsContextDefaultValue: PunchContext = {
     punch: {
         id: '',
         active: 0,
-        checklistWorkflowId: '',
-        createdBy: '',
+        workflowId: '',
+        creatorId: '',
         createdDate: '',
-        punchDescription: '',
+        description: '',
         severity: '',
         status: '',
         updatedDate: null,
@@ -36,21 +42,28 @@ const postsContextDefaultValue: PunchContext = {
             lastName: '',
         },
     },
+    taskId: '',
+    workFlow: '',
+    setTaskId: () => {},
+    setWorkFlow: () => {},
+    workflowData: '',
 }
 
 const PunchContext = createContext(postsContextDefaultValue)
 
 function PunchContextProvider({ children }: { children: React.ReactNode }) {
     const { id } = useParams()
+    const { workFlowById } = useWorkflowContext()
     const { accessToken } = useAuth()
     const { currentUser } = useUserContext()
     const [punchData, setPunchData] = useState<PunchEntity[]>([])
     const [punchById, setPunchById] = useState<PunchEntity>()
+    const [workflowData, setWorkFlowData] = useState<string | undefined>()
     const inspector = `${API_URL}/getPunchesByInspectorId?id=${currentUser?.id}`
     const leader = `${API_URL}/getPunchesByLeaderId?id=${currentUser?.id}`
+
     async function fetchPunchById() {
-        if (!accessToken) return
-        if (!id) return
+        if (!accessToken || !id) return
         try {
             const response = await fetch(`${API_URL}/getPunch?id=${id}`, {
                 method: 'GET',
@@ -62,8 +75,9 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
             })
             if (!response.ok)
                 throw new Error('Failed with HTTP code ' + response.status)
-            const data = await response.json()
+            const data = (await response.json()) as PunchEntity
             setPunchById(data)
+            setWorkFlowData(data.workflowId)
         } catch (error) {
             console.error('Error fetching punch data:', error)
         }
@@ -95,6 +109,9 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
+    const [workflow, setWorkFlow] = useState('')
+    const [taskId, setTaskId] = useState('')
+
     useEffect(() => {
         fetchPunchById()
     }, [id, accessToken])
@@ -108,6 +125,11 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
             value={{
                 punches: punchData,
                 punch: punchById as PunchEntity,
+                taskId: taskId,
+                setTaskId: setTaskId,
+                workFlow: workflow,
+                setWorkFlow: setWorkFlow,
+                workflowData: workflowData,
             }}
         >
             {children}

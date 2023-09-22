@@ -2,10 +2,12 @@ import styled from 'styled-components'
 
 export const PunchAddContainer = styled.div`
     padding: 20px;
+    width: 90%;
 `
 
 export const PunchAddUploadContainer = styled.div`
     display: flex;
+    width: 100%;
     padding: 25px;
 `
 

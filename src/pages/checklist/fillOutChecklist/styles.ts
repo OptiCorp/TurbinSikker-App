@@ -55,7 +55,7 @@ export const CustomCardContent = styled(Card.Content)`
 `
 
 export const StyledHeaderCard = styled(Card.Header)`
-    width: 100%;
+    width: min(2s00px);
 `
 
 export const StyledCardHeader = styled(Card.Header)`
