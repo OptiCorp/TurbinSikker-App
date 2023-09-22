@@ -8,7 +8,7 @@ export const NotificationBadge: React.FC<{ name: string }> = ({ name }) => {
     )
 
     const count = committedWorkflows.length
-    if (name === 'Checklists')
+    if (name! === 'Checklists')
         return (
             <>
                 {count > 0 && (
