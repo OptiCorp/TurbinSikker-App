@@ -1,12 +1,13 @@
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 
 import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
 import { Card, Checkbox, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useAddPunch } from '../../../pages/punch/addPunch/AddPunchHook'
+import { useNavigate, useParams } from 'react-router'
+import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { WorkFlow } from '../workflow/types'
 import {
     CustomCard,
@@ -32,70 +33,34 @@ type Props = {
     }) => void
 }
 
-export const FillOutList: FunctionComponent<Props> = ({
-    workFlowById,
-    task,
-
-    onUpdate,
-}) => {
+export const FillOutList: FunctionComponent<Props> = ({ task }) => {
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const [applicableStatuses, setApplicableStatuses] = useState<
         Record<string, boolean>
     >({})
+    const { workFlowById: workFlow } = useWorkflowContext()
     const {
         control,
-        register,
-        setValue,
         formState: { errors },
     } = useFormContext()
-
-    const handleSubmit = async () => {
-        try {
-            onUpdate({
-                id: workFlowById.id,
-
-                userId: workFlowById.userId,
-                status: '',
-            })
-        } catch (error) {
-            console.error('Error creating checklist:', error)
-        }
-    }
-    const { postPunch } = useAddPunch()
+    const { workflowId } = useParams() as { workflowId: string }
 
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
 
     const [checkboxChecked, setCheckboxChecked] = useState(false)
+
+    const navigate = useNavigate()
+
     const [taskId, setTaskId] = useState('')
 
-    const [workflow, setWorkFlow] = useState('')
-
     const createPunch = () => {
-        setWorkFlow(workFlowById.id)
-        setTaskId(chosentask)
-        console.log(workflow)
-        try {
-            postPunch({
-                taskId: taskId,
-                workFlowId: workflow,
-            })
-            setPunchDialogShowing(false)
-        } catch (error) {
-            console.error('Error creating checklist:', error)
-        }
-        console.log(workFlowById.id)
+        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
-
-    const [chosentask, setChosenTask] = useState('')
-
-    useEffect(() => {
-        setTaskId(chosentask)
-    })
 
     return (
         <>
             <FillOutWrap>
-                <div key={workFlowById?.id}>
+                <div>
                     <CustomCard>
                         <StyledHeaderCard
                             style={{
@@ -109,8 +74,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                             </CustomCategoryName>
                             <Typography
                                 onClick={() => {
-                                    setWorkFlow(workFlowById.id)
-                                    setChosenTask(task.id)
+                                    setTaskId(task.id)
                                     setPunchDialogShowing(true)
                                 }}
                                 token={{
@@ -257,9 +221,8 @@ export const FillOutList: FunctionComponent<Props> = ({
                 buttonVariant="ghost"
                 negativeButtonOnClick={() => setSubmitDialogShowing(false)}
                 negativeButtonText="Cancel"
-                positiveButtonText="dsdsd"
+                positiveButtonText="Submit"
                 positiveButtonOnClick={() => {
-                    handleSubmit()
                     setSubmitDialogShowing(false)
                 }}
                 isOpen={submitDialogShowing}

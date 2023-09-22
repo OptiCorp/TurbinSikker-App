@@ -34,8 +34,8 @@ function ListPunches() {
         return dateB.valueOf() - dateA.valueOf()
     })
 
-    function clickHandler(id: string) {
-        navigate(`/punch/${id}`)
+    function clickHandler(punchId: string, workFlowId: string) {
+        navigate(`/workflow/${workFlowId}/punch/${punchId}`)
     }
 
     return (
@@ -46,7 +46,9 @@ function ListPunches() {
                 ) : (
                     punches?.map((punch, idx) => (
                         <PunchListBoxContainer
-                            onClick={() => clickHandler(punch.id)}
+                            onClick={() =>
+                                clickHandler(punch.id, punch.workflowId)
+                            }
                             key={idx}
                         >
                             <TicketInfo>
@@ -97,7 +99,7 @@ function ListPunches() {
                                                     size={18}
                                                     data={assignment_user}
                                                 />
-                                                {punch.createdByUser.firstName}
+                                                {punch.user.firstName}
                                             </div>
                                         </>
                                     )}

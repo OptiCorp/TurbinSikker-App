@@ -2,9 +2,7 @@ import { Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
-import { useWorkflowContext } from '../checklist/workflow/context/workFlowContextProvider'
 import { AddPunch } from './addPunch/AddPunch'
-import { useAddPunch } from './addPunch/AddPunchHook'
 import { usePunchContext } from './context/PunchContextProvider'
 import {
     Container,
@@ -35,20 +33,12 @@ export const punchSeverity: PunchSeverity[] = [
 ]
 
 function Punch() {
-    const { workFlowById } = useWorkflowContext()
     const navigate = useNavigate()
     const { punch } = usePunchContext()
+    console.log(punch)
     const createdDate = punch && formatDate(punch.createdDate)
     const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
-    const {
-        onSubmit,
-        description,
-        positiveOpen,
-        handleOpen,
-        handleSubmit,
-        clearAndClose,
-        setDescription,
-    } = useAddPunch()
+
     const img = false //temporary, remove when we have an image (upload)
 
     function clickHandler(id: string) {

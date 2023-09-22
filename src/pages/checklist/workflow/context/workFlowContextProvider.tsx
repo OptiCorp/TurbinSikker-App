@@ -119,7 +119,7 @@ const WorkflowContextProvider = ({
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [workFlowById, setWorkFlowById] = useState<WorkFlow>()
-    const { id } = useParams()
+    const { workflowId } = useParams()
 
     const { punch, taskId, workFlow } = usePunchContext()
     const { currentUser } = useUserContext()
@@ -170,9 +170,9 @@ const WorkflowContextProvider = ({
 
     useEffect(() => {
         const fetchWorkFlowId = async () => {
-            if (!accessToken || !id) return
+            if (!accessToken || !workflowId) return
 
-            const res = await fetch(`${API_URL}/GetWorkflow?id=${id}`, {
+            const res = await fetch(`${API_URL}/GetWorkflow?id=${workflowId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     'Content-Type': 'application/json',
@@ -184,9 +184,8 @@ const WorkflowContextProvider = ({
 
             setWorkFlowById(data)
         }
-        console.log(workFlowById)
         fetchWorkFlowId()
-    }, [currentUser, accessToken, id])
+    }, [currentUser, accessToken, workflowId])
 
     return (
         <WorkflowContext.Provider

@@ -10,7 +10,6 @@ import React, { FunctionComponent, SetStateAction, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
 import { usePunchContext } from '../context/PunchContextProvider'
 import SeverityButton from '../severityButton/SeverityButton'
 import { useAddPunch } from './AddPunchHook'
@@ -28,7 +27,6 @@ import {
 export const AddPunch: FunctionComponent = () => {
     const [severity, setSeverity] = useState<SetStateAction<string>>('Minor')
     const navigate = useNavigate()
-    const { workFlowById } = useWorkflowContext()
     const [uploads, setUploads] = useState(false)
     const {
         onSubmit,
@@ -175,7 +173,7 @@ export const AddPunch: FunctionComponent = () => {
                     <Typography variant="h6">Severity</Typography>
                     <SeverityButtonWrapper>
                         <SeverityButton
-                            defaultValue={punch?.severity}
+                            defaultValue={punch?.severity ?? ''}
                             severity={severity}
                             setSeverity={setSeverity}
                         />

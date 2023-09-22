@@ -79,14 +79,13 @@ export function RoutesContainer() {
                     />
 
                     <Route
-                        path="/FillOutCheckList/:id"
+                        path="/FillOutCheckList/:workflowId"
                         element={
                             <WorkflowContextProvider>
                                 <FillOutCheckList />
                             </WorkflowContextProvider>
                         }
                     />
-
                     <Route
                         path="/EditCheckList/:id"
                         element={
@@ -132,7 +131,7 @@ export function RoutesContainer() {
                         }
                     />
                     <Route
-                        path="/punch"
+                        path="/workflow/:workflowId/punch"
                         element={
                             <WorkflowContextProvider>
                                 <PunchContextProvider>
@@ -142,7 +141,7 @@ export function RoutesContainer() {
                         }
                     />
                     <Route
-                        path="/punch/:id"
+                        path="/workflow/:workflowId/punch/:punchId"
                         element={
                             <WorkflowContextProvider>
                                 <PunchContextProvider>
@@ -152,7 +151,7 @@ export function RoutesContainer() {
                         }
                     />
                     <Route
-                        path="/EditPunch/:id/"
+                        path="/workflow/:workflowId/EditPunch/:punchId/"
                         element={
                             <WorkflowContextProvider>
                                 <PunchContextProvider>
@@ -162,7 +161,7 @@ export function RoutesContainer() {
                         }
                     />
                     <Route
-                        path="/AddPunch/"
+                        path="/workflow/:workflowId/:taskId/AddPunch/"
                         element={
                             <WorkflowContextProvider>
                                 <PunchContextProvider>
