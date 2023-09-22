@@ -1,33 +1,34 @@
 import styled from 'styled-components'
 
 export const PunchWrapper = styled.div`
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 0;
     position: relative;
     display: flex;
+
     flex-direction: column;
-    align-items: center;
     max-width: 768px;
+    padding: 20px;
+
     h4 {
         font-weight: normal;
         margin: 0;
-    }
-
-    p {
-        color: #656565;
     }
 
     span {
         color: #243746;
     }
 `
+
+export const Container = styled.div``
+
 export const PunchHeader = styled.div`
     min-width: 320px;
-    width: 100%;
+    width: 90%;
     display: flex;
     justify-content: space-between;
     margin-top: 16px;
     text-align: right;
+
     p {
         margin: 0;
     }
@@ -37,17 +38,37 @@ export const PunchUploadContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 175px;
+    overflow: hidden;
+    min-height: 100px;
+    position: relative;
+
+    button {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        opacity: 50%;
+        /* filter: blur(1px); */
+        background-color: transparent;
+        border: none;
+    }
+
+    img {
+        width: 100%;
+        margin: auto;
+    }
 `
 
 export const SeverityIconContainer = styled.div`
     display: flex;
     align-items: center;
+    padding-left: 2rem;
     gap: 4;
 `
 
 export const PunchDescriptionContainer = styled.div`
     width: 100%;
+    margin: 0 auto;
+    padding-left: 2rem;
     margin-top: 15px;
     p {
         margin-bottom: 48px;
@@ -56,9 +77,6 @@ export const PunchDescriptionContainer = styled.div`
 
 export const PunchButton = styled.button`
     color: #007079;
-    position: absolute;
-    right: 0;
-    bottom: 100px;
     border: none;
     background-color: transparent;
     font-size: 12px;

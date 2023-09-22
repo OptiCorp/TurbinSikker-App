@@ -19,6 +19,7 @@ interface NavProps {
     as?: ElementType
     href?: string
     type?: 'submit' | 'reset' | 'button' | undefined
+    primaryType?: 'submit' | 'reset' | 'button' | undefined
 }
 
 export const NavActionsComponent: FunctionComponent<NavProps> = ({
@@ -36,6 +37,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
     secondButtonVariant,
     ButtonMessage,
     SecondButtonMessage,
+    primaryType,
 }) => {
     return (
         <>
@@ -47,6 +49,7 @@ export const NavActionsComponent: FunctionComponent<NavProps> = ({
                             variant={buttonVariant}
                             color={buttonColor}
                             onClick={onClick}
+                            type={primaryType}
                         >
                             {children}
                             <Typography variant="caption" color="white">

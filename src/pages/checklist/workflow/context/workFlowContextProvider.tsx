@@ -3,9 +3,10 @@ import { API_URL } from '../../../../config'
 import { useUserContext } from '../../../../pages/users/context/userContextProvider'
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
-import { getChecklistWorkflowById } from './api'
+import { getWorkflowById } from './api'
 
-import { useParams } from 'react-router'
+import { useLocation, useParams } from 'react-router'
+import { usePunchContext } from '../../../../pages/punch/context/PunchContextProvider'
 import { TWorkflowContext } from './types'
 ///
 
@@ -118,10 +119,11 @@ const WorkflowContextProvider = ({
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [workFlowById, setWorkFlowById] = useState<WorkFlow>()
-    const { id } = useParams()
-    console.log('from params', id)
-    const { currentUser } = useUserContext()
+    const { workflowId } = useParams()
 
+    const { punch, taskId, workFlow } = usePunchContext()
+    const { currentUser } = useUserContext()
+    const appLocation = useLocation()
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')
@@ -130,10 +132,7 @@ const WorkflowContextProvider = ({
     useEffect(() => {
         ;(async function () {
             if (!currentUser?.id || !accessToken) return
-            const workFlows = await getChecklistWorkflowById(
-                currentUser.id,
-                accessToken
-            )
+            const workFlows = await getWorkflowById(currentUser.id, accessToken)
 
             setChecklistWorkFlow(workFlows)
         })()
@@ -143,7 +142,7 @@ const WorkflowContextProvider = ({
         const fetchAllCheckListWorkFlow = async () => {
             if (!accessToken) return
             try {
-                const res = await fetch(`${API_URL}/GetAllChecklistWorkflows`, {
+                const res = await fetch(`${API_URL}/GetAllWorkflows`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
@@ -168,25 +167,22 @@ const WorkflowContextProvider = ({
 
     useEffect(() => {
         const fetchWorkFlowId = async () => {
-            if (!accessToken || !id) return
-            const res = await fetch(
-                `${API_URL}/GetChecklistWorkflow?id=${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            if (!accessToken || !workflowId) return
+
+            const res = await fetch(`${API_URL}/GetWorkflow?id=${workflowId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-            const data = await res.json()
+            const data = (await res.json()) as WorkFlow
 
             setWorkFlowById(data)
         }
-
         fetchWorkFlowId()
-    }, [currentUser, accessToken, id])
+    }, [currentUser, accessToken, workflowId])
 
     return (
         <WorkflowContext.Provider

@@ -29,7 +29,7 @@ export const MyCheckLists = () => {
         try {
             handleSubmit({
                 title,
-                CreatedBy: currentUser?.id ?? '',
+                creatorId: currentUser?.id ?? '',
             })
             setDialogShowing(false)
             if (openSnackbar) {
@@ -62,14 +62,10 @@ export const MyCheckLists = () => {
                                     <StyledHeadTitle>Title</StyledHeadTitle>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledHeadContents>
-                                        Assigned
-                                    </StyledHeadContents>
+                                    <StyledHeadContents>Assigned</StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledHeadContents>
-                                        Status
-                                    </StyledHeadContents>
+                                    <StyledHeadContents>Status</StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
@@ -87,18 +83,14 @@ export const MyCheckLists = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {userIdCheckList?.map(
-                                            (userIdCheckList) => (
-                                                <LeaderMyChecklists
-                                                    userIdCheckList={
-                                                        userIdCheckList
-                                                    }
-                                                    key={userIdCheckList.id}
-                                                    setActiveRow={setActiveRow}
-                                                    activeRow={activeRow}
-                                                />
-                                            )
-                                        )}
+                                        {userIdCheckList?.map((userIdCheckList) => (
+                                            <LeaderMyChecklists
+                                                userIdCheckList={userIdCheckList}
+                                                key={userIdCheckList.id}
+                                                setActiveRow={setActiveRow}
+                                                activeRow={activeRow}
+                                            />
+                                        ))}
                                     </>
                                 )}
                             </>

@@ -13,7 +13,7 @@ import { SendCheckList } from '../pages/checklist/sendchecklist'
 import { WorkflowContextProvider } from '../pages/checklist/workflow/context/workFlowContextProvider'
 import { CheckListContextProvider } from '../pages/context/CheckListContextProvider'
 import { Profile } from '../pages/profile'
-import Punch from '../pages/punch/Punch'
+import Punch from '../pages/punch/Index'
 import { AddPunch } from '../pages/punch/addPunch/AddPunch'
 import { PunchContextProvider } from '../pages/punch/context/PunchContextProvider'
 import ListPunches from '../pages/punch/listPunches/index'
@@ -26,7 +26,13 @@ export function RoutesContainer() {
     return (
         <>
             <Routes>
-                <Route element={<Layout />}>
+                <Route
+                    element={
+                        <WorkflowContextProvider>
+                            <Layout />
+                        </WorkflowContextProvider>
+                    }
+                >
                     <Route path="/Profile" element={<Profile />} />
 
                     <Route
@@ -47,9 +53,11 @@ export function RoutesContainer() {
                         <Route
                             path="/CheckList"
                             element={
-                                <CheckListContextProvider>
-                                    <CheckList />
-                                </CheckListContextProvider>
+                                <WorkflowContextProvider>
+                                    <CheckListContextProvider>
+                                        <CheckList />
+                                    </CheckListContextProvider>
+                                </WorkflowContextProvider>
                             }
                         />
                         <Route
@@ -58,7 +66,11 @@ export function RoutesContainer() {
                         />
                         <Route
                             path="/MyChecklists"
-                            element={<MyCheckLists />}
+                            element={
+                                <WorkflowContextProvider>
+                                    <MyCheckLists />
+                                </WorkflowContextProvider>
+                            }
                         />
                     </Route>
                     <Route
@@ -67,14 +79,13 @@ export function RoutesContainer() {
                     />
 
                     <Route
-                        path="/FillOutCheckList/:id"
+                        path="/FillOutCheckList/:workflowId"
                         element={
                             <WorkflowContextProvider>
-                                <FillOutCheckList />{' '}
+                                <FillOutCheckList />
                             </WorkflowContextProvider>
                         }
                     />
-
                     <Route
                         path="/EditCheckList/:id"
                         element={
@@ -87,7 +98,14 @@ export function RoutesContainer() {
                             </CheckListContextProvider>
                         }
                     />
-                    <Route path="/SendCheckList" element={<SendCheckList />} />
+                    <Route
+                        path="/SendCheckList"
+                        element={
+                            <WorkflowContextProvider>
+                                <SendCheckList />
+                            </WorkflowContextProvider>
+                        }
+                    />
                     <Route
                         path="/SendCheckList/:id"
                         element={<SendCheckList />}
@@ -113,31 +131,46 @@ export function RoutesContainer() {
                         }
                     />
                     <Route
-                        path="/punch"
+                        path="/workflow/:workflowId/punch"
                         element={
-                            <PunchContextProvider>
-                                <Punch />
-                            </PunchContextProvider>
+                            <WorkflowContextProvider>
+                                <PunchContextProvider>
+                                    <Punch />
+                                </PunchContextProvider>
+                            </WorkflowContextProvider>
                         }
                     />
                     <Route
-                        path="/punch/:id"
+                        path="/workflow/:workflowId/punch/:punchId"
                         element={
-                            <PunchContextProvider>
-                                <Punch />
-                            </PunchContextProvider>
+                            <WorkflowContextProvider>
+                                <PunchContextProvider>
+                                    <Punch />
+                                </PunchContextProvider>
+                            </WorkflowContextProvider>
                         }
                     />
                     <Route
-                        path="/EditPunch/:id/"
+                        path="/workflow/:workflowId/EditPunch/:punchId/"
                         element={
-                            <PunchContextProvider>
-                                <AddPunch />
-                            </PunchContextProvider>
+                            <WorkflowContextProvider>
+                                <PunchContextProvider>
+                                    <AddPunch />
+                                </PunchContextProvider>
+                            </WorkflowContextProvider>
                         }
                     />
-                    <Route path="/AddPunch/" element={<AddPunch />} />
-                    {/* <Route path="/EditPunch/:id" element={<AddPunch />} /> */}
+                    <Route
+                        path="/workflow/:workflowId/:taskId/AddPunch/"
+                        element={
+                            <WorkflowContextProvider>
+                                <PunchContextProvider>
+                                    <AddPunch />
+                                </PunchContextProvider>
+                            </WorkflowContextProvider>
+                        }
+                    />
+
                     <Route path="/EditUser/:id" element={<AddUser />} />
                     <Route path="/User/:id" element={<AddUser />} />
                     <Route path="/404" element={<PageNotFound />} />
