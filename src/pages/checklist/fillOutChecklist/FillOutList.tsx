@@ -1,12 +1,13 @@
-import { FunctionComponent, useState } from 'react'
-import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
-
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { Card, Checkbox, Icon } from '@equinor/eds-core-react'
+import { FunctionComponent, useState } from 'react'
+
+import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
+import { Card, Checkbox, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
-
+import { useNavigate, useParams } from 'react-router'
+import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { WorkFlow } from '../workflow/types'
 import {
     CustomCard,
@@ -21,167 +22,198 @@ import {
 } from './styles'
 
 type Props = {
-    sortedTasks: CheckListEntity['tasks']
-    WorkFlow: WorkFlow
+    workFlowById: WorkFlow
+    task: TaskEntity
+
     onUpdate: (data: {
         id: string
-        checklistId: string
+
         userId: string
         status: string
     }) => void
 }
 
-export const FillOutList: FunctionComponent<Props> = ({
-    WorkFlow,
-    sortedTasks,
-
-    onUpdate,
-}) => {
-    let lastCategoryName = ''
-
-    const [isShowMore, setIsShowMore] = useState(true)
-    const toggleReadMore = () => setIsShowMore((show) => !show)
-    const { control, register } = useFormContext()
+export const FillOutList: FunctionComponent<Props> = ({ task }) => {
+    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const [applicableStatuses, setApplicableStatuses] = useState<
         Record<string, boolean>
     >({})
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const handleSubmit = async () => {
-        try {
-            onUpdate({
-                id: WorkFlow.id,
-                checklistId: WorkFlow.checklist.id,
-                userId: WorkFlow.userId,
-                status: 'Committed',
-            })
-        } catch (error) {
-            console.error('Error creating checklist:', error)
-        }
+    const { workFlowById: workFlow } = useWorkflowContext()
+    const {
+        control,
+        formState: { errors },
+    } = useFormContext()
+    const { workflowId } = useParams() as { workflowId: string }
+
+    const [punchDialogShowing, setPunchDialogShowing] = useState(false)
+
+    const [checkboxChecked, setCheckboxChecked] = useState(false)
+
+    const navigate = useNavigate()
+
+    const [taskId, setTaskId] = useState('')
+
+    const createPunch = () => {
+        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
 
     return (
         <>
             <FillOutWrap>
-                {sortedTasks.map((task) => {
-                    const categoryName =
-                        task.category.name !== lastCategoryName
-                            ? task.category.name
-                            : ''
-
-                    lastCategoryName = task.category.name
-
-                    return (
-                        <div key={task?.id}>
-                            <CustomCard>
-                                <StyledHeaderCard
-                                    style={{
-                                        filter: applicableStatuses[task.id]
-                                            ? 'blur(3px)'
-                                            : 'none',
+                <div>
+                    <CustomCard>
+                        <StyledHeaderCard
+                            style={{
+                                filter: applicableStatuses[task.id]
+                                    ? 'blur(3px)'
+                                    : 'none',
+                            }}
+                        >
+                            <CustomCategoryName>
+                                {task.category.name}
+                            </CustomCategoryName>
+                            <Typography
+                                onClick={() => {
+                                    setTaskId(task.id)
+                                    setPunchDialogShowing(true)
+                                }}
+                                token={{
+                                    textAlign: 'center',
+                                    fontWeight: 600,
+                                    fontSize: '0.8rem',
+                                    color: 'red',
+                                }}
+                                link
+                                href="#"
+                            >
+                                Add punch
+                            </Typography>
+                        </StyledHeaderCard>
+                        <CustomCardContent>
+                            <NotApplicableWrap>
+                                <Controller
+                                    control={control}
+                                    name="N/A"
+                                    rules={{
+                                        required: 'Required',
                                     }}
-                                >
-                                    <CustomCategoryName>
-                                        {categoryName}
-                                    </CustomCategoryName>
-                                </StyledHeaderCard>
-                                <CustomCardContent>
-                                    <NotApplicableWrap>
-                                        <Controller
-                                            control={control}
-                                            name="N/A"
-                                            rules={{
-                                                required: 'Required',
-                                            }}
-                                            defaultValue={false}
-                                            render={({
-                                                field: { onChange },
-                                            }) => (
-                                                <StyledSwitch
-                                                    size="small"
-                                                    label="N/A?"
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection:
-                                                            'column-reverse',
-                                                        margin: '0 auto',
-                                                        alignItems: 'baseline',
-                                                    }}
-                                                    type="checkbox"
-                                                    value={[task.id] || false}
-                                                    {...register(
-                                                        String(task?.id)
-                                                    )}
-                                                    checked={
-                                                        applicableStatuses[
-                                                            task.id
-                                                        ] || false
-                                                    }
-                                                    onChange={(e) => {
-                                                        setApplicableStatuses(
-                                                            (prev) => ({
-                                                                ...prev,
-                                                                [task.id]:
-                                                                    e.target
-                                                                        .checked,
-                                                            })
-                                                        )
-                                                        onChange(
-                                                            e.target.checked
-                                                                ? 'Active'
-                                                                : 'Disabled'
-                                                        )
-                                                    }}
-                                                />
-                                            )}
-                                        />
-                                    </NotApplicableWrap>
-                                    <CustomTaskField
-                                        style={{
-                                            filter: applicableStatuses[task.id]
-                                                ? 'blur(3px)'
-                                                : 'none',
-                                        }}
-                                        label=""
-                                        key={task.id}
-                                        id="storybook-multi-readonly"
-                                        name="task"
-                                        defaultValue={task.description}
-                                        multiline
-                                        rows={3}
-                                        readOnly
-                                        helperText={
-                                            task.description.length > 80
-                                                ? 'see more'
-                                                : '  '
-                                        }
-                                        helperIcon={
-                                            task.description.length > 100 ? (
-                                                <Icon
-                                                    data={arrow_drop_down}
-                                                    height={30}
-                                                    color="#007079"
-                                                    title="arrow_drop_down"
-                                                    onClick={toggleReadMore}
-                                                />
-                                            ) : null
-                                        }
-                                    />
-                                </CustomCardContent>
-                                <Card.Actions alignRight>
-                                    {applicableStatuses[task.id] ? (
-                                        <ImageContainer />
-                                    ) : (
-                                        <Checkbox
-                                            aria-label=""
+                                    defaultValue={false}
+                                    render={({ field: { onChange } }) => (
+                                        <StyledSwitch
+                                            size="small"
+                                            label="N/A?"
                                             type="checkbox"
+                                            value={[task.id] || false}
+                                            checked={
+                                                applicableStatuses[task.id] ||
+                                                false
+                                            }
+                                            onChange={(e) => {
+                                                setApplicableStatuses(
+                                                    (prev) => ({
+                                                        ...prev,
+                                                        [task.id]:
+                                                            e.target.checked,
+                                                    })
+                                                )
+                                                onChange(
+                                                    e.target.checked
+                                                        ? 'Active'
+                                                        : 'Disabled'
+                                                )
+                                            }}
                                         />
                                     )}
-                                </Card.Actions>
-                            </CustomCard>
-                        </div>
-                    )
-                })}
+                                />
+                            </NotApplicableWrap>
+                            <CustomTaskField
+                                style={{
+                                    filter: applicableStatuses[task.id]
+                                        ? 'blur(3px)'
+                                        : 'none',
+                                }}
+                                label=""
+                                key={task?.id}
+                                id="storybook-multi-readonly"
+                                name="task"
+                                defaultValue={task.description}
+                                multiline
+                                rows={3}
+                                readOnly
+                                helperText={
+                                    task.description.length > 80
+                                        ? 'see more'
+                                        : '  '
+                                }
+                                helperIcon={
+                                    task.description.length > 100 ? (
+                                        <Icon
+                                            data={arrow_drop_down}
+                                            height={30}
+                                            color="#007079"
+                                            title="arrow_drop_down"
+                                            // onClick={toggleReadMore}
+                                        />
+                                    ) : null
+                                }
+                            />{' '}
+                        </CustomCardContent>
+                        <Card.Actions alignRight>
+                            {applicableStatuses[task.id] ? (
+                                <ImageContainer />
+                            ) : (
+                                <Controller
+                                    control={control}
+                                    rules={{
+                                        required: 'Required',
+                                    }}
+                                    name={`task.${task.id}`}
+                                    render={({ field }) => (
+                                        <Checkbox
+                                            id="checkbox"
+                                            aria-invalid={
+                                                errors.agree ? 'true' : 'false'
+                                            }
+                                            aria-required
+                                            checked={checkboxChecked}
+                                            onChange={(e) => {
+                                                setCheckboxChecked(
+                                                    e.target.checked
+                                                )
+                                                field.onChange(
+                                                    e.target.checked
+                                                        ? 'Active'
+                                                        : 'Disabled'
+                                                )
+                                            }}
+                                        />
+                                    )}
+                                />
+                            )}
+                        </Card.Actions>
+                    </CustomCard>
+                </div>
             </FillOutWrap>
+            <CustomDialog
+                title="Make Punch?"
+                buttonVariant="ghost"
+                negativeButtonOnClick={() => setPunchDialogShowing(false)}
+                negativeButtonText="Cancel"
+                positiveButtonText="OK"
+                positiveButtonOnClick={() => {
+                    createPunch()
+                }}
+                isOpen={punchDialogShowing}
+            >
+                <Typography
+                    group="input"
+                    variant="text"
+                    token={{ textAlign: 'left' }}
+                >
+                    You will be forwarded to Punch form. You will be able to
+                    continue this form where you left after.
+                </Typography>
+            </CustomDialog>
             <CustomDialog
                 title="Submit form?"
                 type="submit"
@@ -189,21 +221,23 @@ export const FillOutList: FunctionComponent<Props> = ({
                 buttonVariant="ghost"
                 negativeButtonOnClick={() => setSubmitDialogShowing(false)}
                 negativeButtonText="Cancel"
-                positiveButtonText="OK"
+                positiveButtonText="Submit"
                 positiveButtonOnClick={() => {
-                    handleSubmit()
+                    setSubmitDialogShowing(false)
                 }}
                 isOpen={submitDialogShowing}
             ></CustomDialog>
 
             <NavActionsComponent
                 buttonColor="primary"
+                as="button"
                 secondButtonColor="primary"
                 buttonVariant="outlined"
                 secondOnClick={() => setSubmitDialogShowing(true)}
                 isShown={true}
                 ButtonMessage="Clear"
-                SecondButtonMessage="Submit"
+                type="button"
+                SecondButtonMessage="sdfsdf"
             />
         </>
     )

@@ -18,12 +18,13 @@ export type SendingFormValuesEntity = {
 export const useAddWorkFlowForm = () => {
     const methods = useForm<SendingFormValuesEntity>()
     const { openSnackbar } = useContext(SnackbarContext)
-    const { handleSubmit, control } = methods
+    const { handleSubmit, control, getValues } = methods
     const navigate = useNavigate()
     const { accessToken } = useAuth()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const { setRefreshList } = useCheckListContext()
     const { currentUser } = useUserContext()
+
     const handleOpen = () => {
         setPositiveOpen(true)
     }
@@ -32,7 +33,7 @@ export const useAddWorkFlowForm = () => {
     }
 
     const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
-        const res = await fetch(`${API_URL}/CreateChecklistWorkFlow`, {
+        const res = await fetch(`${API_URL}/CreateWorkFlow`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -43,7 +44,7 @@ export const useAddWorkFlowForm = () => {
                 checklistId: data.checklistId,
                 userIds: data.userIds,
 
-                createdById: currentUser?.id,
+                creatorId: currentUser?.id,
             }),
         })
         if (res.ok) setRefreshList((prev) => !prev)

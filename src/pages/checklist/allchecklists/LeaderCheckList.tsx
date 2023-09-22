@@ -26,15 +26,22 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     if (workflow.creator.id !== currentUser?.id) {
         return null
     }
+
+    //   if
+    //    (workflow?.status === 'Committed') ret
+
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(workflow.checklist.id)}>
+            <StyledTableRow
+                onClick={() => clickHandler(workflow.checklist.id)}
+                style={{
+                    backgroundColor:
+                        workflow.status === 'Committed' ? 'lightGrey' : 'none',
+                }}
+            >
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography
-                            variant="body_long_bold"
-                            token={{ fontSize: '0.9rem' }}
-                        >
+                        <Typography variant="body_long_bold">
                             {workflow.checklist.title}
                         </Typography>
 
@@ -43,7 +50,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                             token={{
                                 fontSize: '0.8rem',
                             }}
-                            style={{ height: '4px', minWidth: '100px' }}
+                            style={{ height: '0px', minWidth: '100px' }}
                         >
                             Created {formatDate(workflow.checklist.createdDate)}
                         </Typography>

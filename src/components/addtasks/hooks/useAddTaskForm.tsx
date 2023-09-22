@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
 import { API_URL } from '../../../config'
+import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
@@ -24,19 +25,21 @@ export const useAddTaskForm = () => {
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
 
+    const { allWorkFlows, workFlowById, WorkFlows } = useWorkflowContext()
+
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        const res = await fetch(
-            `${API_URL}/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify(data.task),
-            }
-        )
+        const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+                checklistId: id,
+                id: data.task,
+            }),
+        })
         if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
@@ -45,7 +48,7 @@ export const useAddTaskForm = () => {
     }
     useEffect(() => {
         const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken) return
+            if (!id || !accessToken || !workFlowById) return
             try {
                 const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
                     headers: {
@@ -60,7 +63,7 @@ export const useAddTaskForm = () => {
 
                 const data = (await res.json()) as CheckListEntity
                 setCheckListById(data)
-                const sorted = data.tasks.sort((a: any, b: any) => {
+                const sorted = data.checklistTasks.sort((a: any, b: any) => {
                     if (a.category.name < b.category.name) {
                         return -1
                     } else if (a.category.name > b.category.name) {
@@ -69,15 +72,15 @@ export const useAddTaskForm = () => {
                         return 0
                     }
                 })
-                console.log(data, 'data')
+
                 setSortedTasks(sorted)
             } catch (error) {
                 console.error('Error fetching user data:', error)
             }
         }
-        console.log(id)
+
         fetchAllCheckListsId()
-    }, [refreshList, accessToken])
+    }, [refreshList, accessToken, id])
 
     return {
         methods,

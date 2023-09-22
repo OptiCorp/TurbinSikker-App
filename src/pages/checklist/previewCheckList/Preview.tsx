@@ -48,7 +48,7 @@ export const PreviewCheckList = () => {
                                 </Card>
                             </InfoHeader>
                             <Wrapper>
-                                {checkListById?.tasks.length === 0 ? (
+                                {checkListById?.checklistTasks?.length === 0 ? (
                                     <>
                                         <Typography variant="body_short_bold">
                                             No tasks added yet!

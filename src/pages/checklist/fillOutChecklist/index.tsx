@@ -1,168 +1,43 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
-import CustomDialog from '@components/modal/useModalHook'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { Typography } from '@equinor/eds-core-react'
-import { useContext, useState } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { API_URL } from '../../../config'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
-import { checkList } from '../../../pages/context/models/checklist'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
-import { EditListPoints } from '../editchecklist/styles'
+import { FormProvider } from 'react-hook-form'
 import { Wrapper } from '../previewCheckList/styles'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+import { useFillOutCheckList } from './FillOutCheckListHook'
 import { FillOutList } from './FillOutList'
 import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
-import { UpdatingWorkFlowEntity } from './types'
 
 export const FillOutCheckList = () => {
-    const { sortedTasks } = useAddTaskForm()
+    const { workFlowById, WorkFlows } = useWorkflowContext()
 
-    const methods = useForm<UpdatingWorkFlowEntity>()
-    const { WorkFlows } = useWorkflowContext()
-
-    const [content, setContent] = useState('')
-    const [commentDialogShowing, setCommentDialogShowing] = useState(false)
-    const [punchDialogShowing, setPunchDialogShowing] = useState(false)
-
-    const { setRefreshList } = useCheckListContext()
+    const { methods, onUpdate } = useFillOutCheckList()
     const { handleSubmit } = methods
-    const { accessToken } = useAuth()
-    const { openSnackbar } = useContext(SnackbarContext)
-
-    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
-        id: string
-        userId: string
-        status: string
-    }) => {
-        const res = await fetch(
-            `${API_URL}/UpdateChecklistWorkflow?id=${data.id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    userId: data.userId,
-                    status: data.status,
-                }),
-            }
-        )
-        if (res.ok) setRefreshList((prev) => !prev)
-
-        if (openSnackbar) {
-            openSnackbar(`Task updated`)
-        }
-    }
-
+    console.log(workFlowById?.checklist?.checklistTasks)
     return (
         <>
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onUpdate)} id="fill-out-checklist">
                     <div style={{ backgroundColor: '#f0f3f3' }}>
-                        {WorkFlows && (
-                            <div>
-                                <AddPunchHeader>
-                                    <StyledCard>
-                                        <StyledCardHeader>
-                                            <Typography
-                                                onClick={() =>
-                                                    setCommentDialogShowing(
-                                                        true
-                                                    )
-                                                }
-                                                token={{
-                                                    textAlign: 'center',
-                                                    fontWeight: 600,
-                                                    fontSize: '0.8rem',
-                                                    color: 'green',
-                                                }}
-                                                link
-                                                href="#"
-                                            >
-                                                Add comment
-                                            </Typography>
-                                            <Typography
-                                                onClick={() =>
-                                                    setPunchDialogShowing(true)
-                                                }
-                                                token={{
-                                                    textAlign: 'center',
-                                                    fontWeight: 600,
-                                                    fontSize: '0.8rem',
-                                                    color: 'red',
-                                                }}
-                                                link
-                                                href="#"
-                                            >
-                                                Add punch
-                                            </Typography>
-                                        </StyledCardHeader>
-                                    </StyledCard>
-                                </AddPunchHeader>
-                            </div>
-                        )}
-                        <Wrapper>
-                            {WorkFlows.map((WorkFlow) => (
-                                <FillOutList
-                                    key={WorkFlow.checklist.id}
-                                    WorkFlow={WorkFlow}
-                                    sortedTasks={sortedTasks}
-                                    onUpdate={onUpdate}
-                                />
-                            ))}
-                        </Wrapper>
-                        <CustomDialog
-                            isOpen={commentDialogShowing}
-                            negativeButtonOnClick={() =>
-                                setCommentDialogShowing(false)
-                            }
-                            title="Add comment?"
-                            negativeButtonText="Cancel"
-                            positiveButtonText="Save"
-                            buttonVariant="ghost"
-                        >
-                            <Typography
-                                variant="text"
-                                token={{ textAlign: 'left' }}
-                            >
-                                Comment will be added to the end of the form.
-                            </Typography>
-                            <EditListPoints
-                                label=""
-                                key={checkList.id ?? ''}
-                                id="storybook-multi-readonly"
-                                multiline
-                                rows={5}
-                                onChange={(
-                                    event: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    setContent(event.target.value)
-                                }}
-                            />
-                        </CustomDialog>
+                        <div>
+                            <AddPunchHeader>
+                                <StyledCard>
+                                    <StyledCardHeader></StyledCardHeader>
+                                </StyledCard>
+                            </AddPunchHeader>
+                        </div>
 
-                        <CustomDialog
-                            title="Make Punch?"
-                            buttonVariant="ghost"
-                            negativeButtonOnClick={() =>
-                                setPunchDialogShowing(false)
-                            }
-                            negativeButtonText="Cancel"
-                            positiveButtonText="OK"
-                            isOpen={punchDialogShowing}
-                        >
-                            <Typography
-                                group="input"
-                                variant="text"
-                                token={{ textAlign: 'left' }}
-                            >
-                                You will be forwarded to Punch form. You will be
-                                able to continue this form where you left after.
-                            </Typography>
-                        </CustomDialog>
+                        <Wrapper>
+                            {workFlowById?.checklist?.checklistTasks.map(
+                                (task) => (
+                                    <>
+                                        <FillOutList
+                                            key={task.id}
+                                            workFlowById={workFlowById}
+                                            onUpdate={onUpdate}
+                                            task={task} // tasks={workFlowById.checklist.checklistTasks}
+                                        />
+                                    </>
+                                )
+                            )}
+                        </Wrapper>
                     </div>
                 </form>
             </FormProvider>

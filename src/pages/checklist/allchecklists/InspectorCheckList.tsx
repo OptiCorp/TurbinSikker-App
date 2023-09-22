@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router'
 import { StyledTableRow } from '../checkListID/styles'
 import { WorkFlow } from '../workflow/types'
 
+import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
 import { CellContent, StyledBodyTitle, StyledTableCellCheckL } from './styles'
-import { UserChip } from './UserChip'
 
 interface CheckListRowProps {
     WorkFlow: WorkFlow
@@ -18,14 +18,26 @@ export const InspectorReceivedCheckLists: FunctionComponent<
     const navigate = useNavigate()
 
     const clickHandler = (id: string | undefined) => {
-        console.log(WorkFlow)
         navigate(`/FillOutCheckList/${id}`)
+        console.log(WorkFlow.id)
     }
 
-    if (WorkFlow.status !== 'Sent') return null
+    // const [searchParams, setSearchParams] = useSearchParams();
+
+    // function updateQueryParam(keyToUpdate: any, newValue: any) {
+    //     searchParams.set(keyToUpdate, newValue);
+    //     return searchParams.toString();
+    //   }
+
+    //   const handleNavigation = () => {
+    //     const newQueryString = updateQueryParam('workflowId', newWorkflowId);
+    //     navigate(sample?${newQueryString});
+    //   };
+
+    // if (WorkFlow.status !== 'Sent') return null
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(WorkFlow.checklist.id)}>
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.id)}>
                 <StyledTableCellCheckL>
                     <StyledBodyTitle>
                         <Typography variant="body_short_bold">

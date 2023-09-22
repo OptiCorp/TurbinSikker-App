@@ -55,7 +55,7 @@ export const CustomCardContent = styled(Card.Content)`
 `
 
 export const StyledHeaderCard = styled(Card.Header)`
-    width: 100%;
+    width: min(2s00px);
 `
 
 export const StyledCardHeader = styled(Card.Header)`
@@ -64,11 +64,7 @@ export const StyledCardHeader = styled(Card.Header)`
     margin: 0 auto;
 `
 
-export const CustomCategoryName = styled.h3`
-    margin: 17%;
-    font-size: 1rem;
-    font-weight: 600;
-`
+export const CustomCategoryName = styled.h3``
 
 export const CustomTaskField = styled(TextField)`
     & textarea {
@@ -79,6 +75,10 @@ export const CustomTaskField = styled(TextField)`
 `
 
 export const StyledSwitch = styled(Switch)`
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 0 auto;
+    align-items: baseline;
     & label {
         height: 0;
     }

@@ -1,12 +1,6 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { ListEntity } from 'src/pages/users/context/models/ListEntity'
 import { API_URL } from '../../config'
@@ -17,11 +11,35 @@ import { ICheckListUserID } from './models/CheckListUserIdEntity'
 export type ContextType = {
     userIdCheckList: ICheckListUserID[]
     allCheckList: CheckListEntity[]
-    handleSubmit: (data: { title: string; CreatedBy: string }) => void
+    handleSubmit: (data: { title: string; creatorId: string }) => void
 
     list: ListEntity[]
     refreshList: boolean
     setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
+
+    checklistById: ICheckListUserID[]
+
+   
+}
+
+type Checklist = {
+    id: string
+    createdDate: string
+    status: string
+    title: string
+    updateDate: string
+    checklistTasks: [
+        {
+            description: string
+            categoryId: string
+            id: string
+            category: {
+                id: string
+                name: string
+            }
+        },
+    ]
+
 }
 
 export const postsContextDefaultValue: ContextType = {
@@ -29,6 +47,10 @@ export const postsContextDefaultValue: ContextType = {
     allCheckList: [],
     handleSubmit: () => {},
 
+
+
+
+    checklistById: [],
     list: [],
     refreshList: false,
     setRefreshList: () => {},
@@ -36,25 +58,41 @@ export const postsContextDefaultValue: ContextType = {
 
 const CheckListContext = createContext<ContextType>(postsContextDefaultValue)
 
-const CheckListContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode
-}) => {
+const CheckListContextProvider = ({ children }: { children: React.ReactNode }) => {
     const Location = useLocation()
-    const refreshCheckLists = Location.state
-        ? Location.state?.refreshCheckLists
-        : null
+    const refreshCheckLists = Location.state ? Location.state?.refreshCheckLists : null
     const [allCheckList, setAllCheckList] = useState<CheckListEntity[]>([])
+
     const [userIdCheckList, setUserIdCheckList] = useState<ICheckListUserID[]>(
         []
     )
+    const [checklistById, setChecklistById] = useState<ICheckListUserID[]>([])
+
+
+
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])
     const { accessToken } = useAuth()
+    const { id } = useParams()
     const { openSnackbar } = useContext(SnackbarContext)
     const { currentUser } = useUserContext()
+
+    const getChecklistById = async () => {
+        if (!id) return
+        if (!accessToken) return
+        const response = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+        const data = await response.json()
+
+        setChecklistById(data)
+    }
 
     /// fetch checklist
     const fetchCheckLists = async () => {
@@ -80,7 +118,7 @@ const CheckListContextProvider = ({
 
     // submitt checklist
 
-    const handleSubmit = async (data: { title: string; CreatedBy: string }) => {
+    const handleSubmit = async (data: { title: string; creatorId: string }) => {
         if (!accessToken) return
         const res = await fetch(`${API_URL}/AddChecklist`, {
             method: 'POST',
@@ -91,7 +129,7 @@ const CheckListContextProvider = ({
             },
             body: JSON.stringify({
                 title: data.title,
-                CreatedBy: data.CreatedBy,
+                creatorId: data.creatorId,
             }),
         })
 
@@ -112,34 +150,33 @@ const CheckListContextProvider = ({
     const fetchCheckListUserId = async () => {
         if (!currentUser?.id || !accessToken) return
         try {
-            const res = await fetch(
-                `${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            const res = await fetch(`${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) {
                 throw new Error('Failed with HTTP code ' + res.status)
             }
             const data = (await res.json()) as ICheckListUserID[]
             setUserIdCheckList(data)
-            const list = data.map(
-                ({ id, title }: { id: string; title: string }) => ({
-                    value: id,
-                    label: title,
-                })
-            )
+            const list = data.map(({ id, title }: { id: string; title: string }) => ({
+                value: id,
+                label: title,
+            }))
             setList(list)
         } catch (error) {
             console.error(error)
             throw error
         }
     }
+
+    useEffect(() => {
+        getChecklistById()
+    }, [accessToken])
 
     useEffect(() => {
         fetchCheckListUserId()
@@ -158,6 +195,7 @@ const CheckListContextProvider = ({
             list,
             setList,
             handleSubmit,
+            checklistById,
         }),
         [
             setAllCheckList,
@@ -171,14 +209,13 @@ const CheckListContextProvider = ({
             list,
             setList,
             handleSubmit,
+            checklistById,
         ]
     )
 
     return (
         // the Provider gives access to the context to its children
-        <CheckListContext.Provider value={memoedValue}>
-            {children}
-        </CheckListContext.Provider>
+        <CheckListContext.Provider value={memoedValue}>{children}</CheckListContext.Provider>
     )
 }
 

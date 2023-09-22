@@ -1,6 +1,6 @@
+import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
 import CustomDialog from '@components/modal/useModalHook'
 import { useState } from 'react'
-import { CheckListEntity } from '../../../../pages/context/models/CheckListEntity'
 import {
     CategoryName,
     Container,
@@ -12,8 +12,8 @@ import { useEditCheckListContext } from '../context/editCheckListContextProvider
 import { EditListPoints } from '../styles'
 
 type Props = {
-    tasks: CheckListEntity | null
-    sortedTasks: CheckListEntity['tasks']
+    tasks: TaskEntity[]
+    sortedTasks: TaskEntity[]
 }
 
 export const EditList = (props: Props) => {

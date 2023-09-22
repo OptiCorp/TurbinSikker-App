@@ -1,11 +1,5 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
 import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
@@ -20,16 +14,8 @@ export type ContextType = {
     taskId: string
     categoryId: string
     taskDescription: string
-    handleOpen: (
-        taskId: string,
-        taskDescription: string,
-        categoryId: string
-    ) => void
-    updateCheckListTask: (data: {
-        taskId: string
-        description: string
-        categoryId: string
-    }) => void
+    handleOpen: (taskId: string, taskDescription: string, categoryId: string) => void
+    updateCheckListTask: (data: { taskId: string; description: string; categoryId: string }) => void
     handleSave: (data: { title: string; status: string }) => void
     handleDelete: (id: string | undefined) => void
     title: CheckListEntity | any
@@ -60,15 +46,9 @@ export const postsContextDefaultValue: ContextType = {
     setIsOpenNew: () => {},
 }
 
-const EditCheckListContext = createContext<ContextType>(
-    postsContextDefaultValue
-)
+const EditCheckListContext = createContext<ContextType>(postsContextDefaultValue)
 
-const EditCheckListContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode
-}) => {
+const EditCheckListContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { checkListById } = useAddTaskForm()
     const { id } = useParams()
     const navigate = useNavigate()
@@ -85,18 +65,14 @@ const EditCheckListContextProvider = ({
     const [isOpenn, setIsOpenn] = useState(false)
     const [isOpenNew, setIsOpenNew] = useState(false)
 
-    const handleOpen = (
-        taskId: string,
-        taskDescription: string,
-        categoryId: string
-    ) => {
+    const handleOpen = (taskId: string, taskDescription: string, categoryId: string) => {
         setTaskId(taskId)
         setCategoryId(categoryId)
         setTaskDescription(taskDescription)
     }
 
     useEffect(() => {
-        if (checkListById && checkListById.tasks.length === 0) {
+        if (checkListById && checkListById.checklistTasks.length === 0) {
             setIsOpenn(true)
         }
     }, [checkListById])
@@ -114,21 +90,18 @@ const EditCheckListContextProvider = ({
         description: string
         categoryId: string
     }) => {
-        const res = await fetch(
-            `${API_URL}/UpdateChecklistTask?id=${data.taskId}  `,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    description: data.description,
-                    categoryId: data.categoryId,
-                }),
-            }
-        )
+        const res = await fetch(`${API_URL}/UpdateTask?id=${data.taskId}  `, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+                description: data.description,
+                categoryId: data.categoryId,
+            }),
+        })
         if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
@@ -149,9 +122,8 @@ const EditCheckListContextProvider = ({
                 status: data.status,
             }),
         })
-        if (res.ok) {
-            setRefreshList((prev) => !prev)
-        }
+        if (res.ok) setRefreshList((prev) => !prev)
+
         navigate('/MyChecklists')
 
         if (openSnackbar) {
@@ -232,8 +204,4 @@ function useEditCheckListContext() {
     return context
 }
 
-export {
-    EditCheckListContext,
-    EditCheckListContextProvider,
-    useEditCheckListContext,
-}
+export { EditCheckListContext, EditCheckListContextProvider, useEditCheckListContext }

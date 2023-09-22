@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
     grid-template-columns: max-content;
     justify-content: center;
     min-width: 300px;
-    min-height: 200px;
+    min-height: 500px;
 
     align-items: center;
 `
