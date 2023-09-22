@@ -1,14 +1,12 @@
 import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
 import { StyledChip } from '../styles'
 
-export const NotificationBadge: React.FC<{ name: string }> = ({ name }) => {
-    const { WorkFlows, allWorkFlows } = useWorkflowContext()
-    const committedWorkflows = WorkFlows.filter(
-        (workflow) => workflow.status === 'Committed'
-    )
+export function NotificationBadge({ name }: { name: string }) {
+    const { WorkFlows } = useWorkflowContext()
+    const committedWorkflows = WorkFlows.filter((workflow) => workflow.status === 'Committed')
 
     const count = committedWorkflows.length
-    if (name! === 'Checklists')
+    if (name === 'Checklists')
         return (
             <>
                 {count > 0 && (
