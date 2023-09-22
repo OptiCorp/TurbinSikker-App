@@ -1,9 +1,18 @@
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { Button, Dialog, Icon, TextField, Typography } from '@equinor/eds-core-react'
-import { close, file_description, image, upload } from '@equinor/eds-icons'
+import {
+    Button,
+    Dialog,
+    Icon,
+    TextField,
+    Typography,
+} from '@equinor/eds-core-react'
+import { image, upload } from '@equinor/eds-icons'
 import React, { FunctionComponent, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
+import { usePunchContext } from '../context/PunchContextProvider'
+import SeverityButton from '../severityButton/SeverityButton'
+import { useAddPunch } from './AddPunchHook'
 import {
     PunchAddContainer,
     PunchAddUploadContainer,
@@ -15,9 +24,6 @@ import {
     SeverityButtonWrapper,
     SeverityContainer,
 } from './styles'
-import SeverityButton from '../severityButton/SeverityButton'
-import { useAddPunch } from './AddPunchHook'
-import { usePunchContext } from '../context/PunchContextProvider'
 
 export const AddPunch: FunctionComponent = () => {
     const navigate = useNavigate()
@@ -53,7 +59,9 @@ export const AddPunch: FunctionComponent = () => {
                             <Icon data={upload} size={48} />
                         </PunchUploadButtonIconContainer>
 
-                        <PunchUploadButtonLabel htmlFor="file">Upload</PunchUploadButtonLabel>
+                        <PunchUploadButtonLabel htmlFor="file">
+                            Upload
+                        </PunchUploadButtonLabel>
 
                         <input
                             id="file"
@@ -82,7 +90,9 @@ export const AddPunch: FunctionComponent = () => {
                         <PunchUploadFilesContainer>
                             <Typography variant="h5">Upload Files</Typography>
 
-                            <PunchUploadFileContainer onClick={() => setUploads((prev) => !prev)}>
+                            <PunchUploadFileContainer
+                                onClick={() => setUploads((prev) => !prev)}
+                            >
                                 {file?.name && (
                                     <div
                                         style={{
@@ -96,8 +106,13 @@ export const AddPunch: FunctionComponent = () => {
                                                 alignItems: 'center',
                                             }}
                                         >
-                                            <Icon color="#73B1B5" data={image} />
-                                            <Typography variant="caption">{file?.name}</Typography>
+                                            <Icon
+                                                color="#73B1B5"
+                                                data={image}
+                                            />
+                                            <Typography variant="caption">
+                                                {file?.name}
+                                            </Typography>
                                         </div>
                                     </div>
                                 )}
@@ -118,7 +133,9 @@ export const AddPunch: FunctionComponent = () => {
                         value={!punch?.description ? description : undefined}
                         multiline
                         required
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
                             setDescription(event.target.value)
                         }}
                     />
@@ -130,11 +147,14 @@ export const AddPunch: FunctionComponent = () => {
                         key={punch?.id ?? ''}
                         required
                         defaultValue={punch?.description ?? ''}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
                             setDescription(event.target.value)
                         }}
                     />
                 )}
+
                 <SeverityContainer>
                     <Typography variant="h6">Severity</Typography>
                     <SeverityButtonWrapper>
@@ -149,11 +169,17 @@ export const AddPunch: FunctionComponent = () => {
             <Dialog open={positiveOpen}>
                 <Dialog.Header>
                     <Dialog.Title>
-                        {appLocation.pathname === '/addPunch' ? 'Send punch?' : 'Update punch?'}
+                        {appLocation.pathname === '/addPunch'
+                            ? 'Send punch?'
+                            : 'Update punch?'}
                     </Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    <Typography
+                        group="input"
+                        variant="text"
+                        token={{ textAlign: 'left' }}
+                    >
                         {appLocation.pathname === '/addPunch'
                             ? 'Send punch? Request will be sent for further approval and management'
                             : 'Update punch? Punch will be update and be sent for further approval'}
@@ -165,7 +191,9 @@ export const AddPunch: FunctionComponent = () => {
                             Cancel
                         </Button>
                         <Button type="submit" form="punchForm">
-                            {appLocation.pathname === '/addPunch' ? 'Send Punch' : 'Update Punch'}
+                            {appLocation.pathname === '/addPunch'
+                                ? 'Send Punch'
+                                : 'Update Punch'}
                         </Button>
                     </div>
                 </Dialog.Actions>
@@ -173,7 +201,9 @@ export const AddPunch: FunctionComponent = () => {
             <NavActionsComponent
                 ButtonMessage="Cancel"
                 SecondButtonMessage={
-                    appLocation.pathname === '/addPunch' ? 'Submit punch' : 'Update punch'
+                    appLocation.pathname === '/addPunch'
+                        ? 'Submit punch'
+                        : 'Update punch'
                 }
                 secondButtonColor="primary"
                 buttonVariant="outlined"

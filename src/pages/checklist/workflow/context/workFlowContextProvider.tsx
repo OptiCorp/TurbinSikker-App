@@ -5,7 +5,8 @@ import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
 import { getWorkflowById } from './api'
 
-import { useParams } from 'react-router'
+import { useLocation, useParams } from 'react-router'
+import { usePunchContext } from '../../../../pages/punch/context/PunchContextProvider'
 import { TWorkflowContext } from './types'
 ///
 
@@ -104,18 +105,25 @@ const postsContextDefaultValue: TWorkflowContext = {
     },
 }
 
-const WorkflowContext = createContext<TWorkflowContext>(postsContextDefaultValue)
+const WorkflowContext = createContext<TWorkflowContext>(
+    postsContextDefaultValue
+)
 
-const WorkflowContextProvider = ({ children }: { children: React.ReactNode }) => {
+const WorkflowContextProvider = ({
+    children,
+}: {
+    children: React.ReactNode
+}) => {
     const { accessToken } = useAuth()
 
     const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
     const [workFlowById, setWorkFlowById] = useState<WorkFlow>()
-    const { id } = useParams()
-    console.log('from params', id)
-    const { currentUser } = useUserContext()
+    const { workflowId } = useParams()
 
+    const { punch, taskId, workFlow } = usePunchContext()
+    const { currentUser } = useUserContext()
+    const appLocation = useLocation()
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         return date.toLocaleDateString('en-GB')
@@ -142,7 +150,8 @@ const WorkflowContextProvider = ({ children }: { children: React.ReactNode }) =>
                         'Access-Control-Allow-Origin': '*',
                     },
                 })
-                if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+                if (!res.ok)
+                    throw new Error('Failed with HTTP code ' + res.status)
                 const data = (await res.json()) as AllWorkFlows[]
                 data.map((item) => ({
                     ...item,
@@ -158,25 +167,22 @@ const WorkflowContextProvider = ({ children }: { children: React.ReactNode }) =>
 
     useEffect(() => {
         const fetchWorkFlowId = async () => {
-            if (!accessToken || !id) return
-            const res = await fetch(
-                `${API_URL}/GetChecklistWorkflow?id=${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
+            if (!accessToken || !workflowId) return
+
+            const res = await fetch(`${API_URL}/GetWorkflow?id=${workflowId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            })
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
-            const data = await res.json()
+            const data = (await res.json()) as WorkFlow
 
             setWorkFlowById(data)
         }
-
         fetchWorkFlowId()
-    }, [currentUser, accessToken, id])
+    }, [currentUser, accessToken, workflowId])
 
     return (
         <WorkflowContext.Provider

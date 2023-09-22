@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 
 export const PunchWrapper = styled.div`
+    margin: 0;
     position: relative;
     display: flex;
+
     flex-direction: column;
-    align-items: end;
     max-width: 768px;
     padding: 20px;
 
@@ -13,17 +14,16 @@ export const PunchWrapper = styled.div`
         margin: 0;
     }
 
-    p {
-        color: #656565;
-    }
-
     span {
         color: #243746;
     }
 `
+
+export const Container = styled.div``
+
 export const PunchHeader = styled.div`
     min-width: 320px;
-    width: 100%;
+    width: 90%;
     display: flex;
     justify-content: space-between;
     margin-top: 16px;
@@ -61,15 +61,18 @@ export const PunchUploadContainer = styled.div`
 export const SeverityIconContainer = styled.div`
     display: flex;
     align-items: center;
+    padding-left: 2rem;
     gap: 4;
 `
 
 export const PunchDescriptionContainer = styled.div`
     width: 100%;
-
-    /* p {
+    margin: 0 auto;
+    padding-left: 2rem;
+    margin-top: 15px;
+    p {
         margin-bottom: 48px;
-    } */
+    }
 `
 
 export const PunchButton = styled.button`

@@ -1,58 +1,79 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { API_URL } from '../../../config'
+import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
-import { PunchEntity } from '../types'
+import { Punch } from '../types'
 
 type PunchContext = {
-    punches: PunchEntity[]
-    punch: PunchEntity
+    punches: Punch[]
+    punch?: Punch
+    taskId: string
+    workFlow: string
+
+    setTaskId: (taskId: string) => void
+    setWorkFlow: (workflow: string) => void
 }
 
 const postsContextDefaultValue: PunchContext = {
     punches: [],
     punch: {
-        id: '',
-        active: 0,
         workflowId: '',
-        creatorId: '',
-        createdDate: '',
-        description: '',
-        severity: '',
-        status: '',
-        updatedDate: null,
+        id: '',
         checklistTask: {
-            checklistTaskId: '',
-            workflowId: '',
+            id: '',
+            categoryId: '',
             description: '',
-            category: {
+            category: null,
+        },
+        user: {
+            id: '',
+            azureAdUserId: '',
+            userRoleId: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+            username: '',
+            userRole: {
                 id: '',
                 name: '',
             },
+            status: 0,
+            createdDate: '',
+            updatedDate: '',
         },
-        user: {
-            firstName: '',
-            lastName: '',
-        },
+        status: '',
+        createdDate: '',
+        updatedDate: null,
+        description: '',
+        severity: '',
+        active: 0,
+        uploads: null,
     },
+    taskId: '',
+    workFlow: '',
+    setTaskId: () => {},
+    setWorkFlow: () => {},
 }
 
 const PunchContext = createContext(postsContextDefaultValue)
 
 function PunchContextProvider({ children }: { children: React.ReactNode }) {
-    const { id } = useParams()
+    const { punchId } = useParams()
+    const { workFlowById } = useWorkflowContext()
     const { accessToken } = useAuth()
     const { currentUser } = useUserContext()
-    const [punchData, setPunchData] = useState<PunchEntity[]>([])
-    const [punchById, setPunchById] = useState<PunchEntity>()
+    const [punchData, setPunchData] = useState<Punch[]>([])
+    const [punchById, setPunchById] = useState<Punch>()
+
     const inspector = `${API_URL}/getPunchesByInspectorId?id=${currentUser?.id}`
     const leader = `${API_URL}/getPunchesByLeaderId?id=${currentUser?.id}`
+
     async function fetchPunchById() {
-        if (!accessToken) return
-        if (!id) return
+        if (!accessToken || !punchId) return
         try {
-            const response = await fetch(`${API_URL}/getPunch?id=${id}`, {
+            const response = await fetch(`${API_URL}/getPunch?id=${punchId}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -60,8 +81,9 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
                     'Access-Control-Allow-Origin': '*',
                 },
             })
-            if (!response.ok) throw new Error('Failed with HTTP code ' + response.status)
-            const data = await response.json()
+            if (!response.ok)
+                throw new Error('Failed with HTTP code ' + response.status)
+            const data = (await response.json()) as Punch
             setPunchById(data)
         } catch (error) {
             console.error('Error fetching punch data:', error)
@@ -72,7 +94,9 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
 
         try {
             const response = await fetch(
-                `${currentUser?.userRole.name === 'Leader' ? leader : inspector}`,
+                `${
+                    currentUser?.userRole.name === 'Leader' ? leader : inspector
+                }`,
                 {
                     method: 'GET',
                     headers: {
@@ -82,7 +106,8 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
                     },
                 }
             )
-            if (!response.ok) throw new Error('Failed with HTTP code ' + response.status)
+            if (!response.ok)
+                throw new Error('Failed with HTTP code ' + response.status)
 
             const data = await response.json()
             setPunchData(data)
@@ -91,9 +116,12 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
+    const [workflow, setWorkFlow] = useState('')
+    const [taskId, setTaskId] = useState('')
+
     useEffect(() => {
         fetchPunchById()
-    }, [id, accessToken])
+    }, [punchId, accessToken])
 
     useEffect(() => {
         fetchPunchesForCurrentUser()
@@ -103,7 +131,11 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
         <PunchContext.Provider
             value={{
                 punches: punchData,
-                punch: punchById as PunchEntity,
+                punch: punchById,
+                taskId: taskId,
+                setTaskId: setTaskId,
+                workFlow: workflow,
+                setWorkFlow: setWorkFlow,
             }}
         >
             {children}

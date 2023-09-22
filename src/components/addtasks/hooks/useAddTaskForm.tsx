@@ -19,7 +19,9 @@ export const useAddTaskForm = () => {
     const { refreshList, setRefreshList } = useCheckListContext()
     const [selectedOption] = useState('')
     const [selectedTask] = useState('')
-    const [checkListById, setCheckListById] = useState<CheckListEntity | null>(null)
+    const [checkListById, setCheckListById] = useState<CheckListEntity | null>(
+        null
+    )
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
 
@@ -46,7 +48,7 @@ export const useAddTaskForm = () => {
     }
     useEffect(() => {
         const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken || workFlowById) return
+            if (!id || !accessToken || !workFlowById) return
             try {
                 const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
                     headers: {
@@ -56,7 +58,8 @@ export const useAddTaskForm = () => {
                     },
                 })
 
-                if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
+                if (!res.ok)
+                    throw new Error('Failed with HTTP code ' + res.status)
 
                 const data = (await res.json()) as CheckListEntity
                 setCheckListById(data)

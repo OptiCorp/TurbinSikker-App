@@ -1,12 +1,13 @@
-import { FunctionComponent, useState } from 'react'
-
 import CustomDialog from '@components/modal/useModalHook'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
+import { FunctionComponent, useState } from 'react'
 
 import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
-import { Card, Checkbox, Icon } from '@equinor/eds-core-react'
+import { Card, Checkbox, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router'
+import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { WorkFlow } from '../workflow/types'
 import {
     CustomCard,
@@ -32,39 +33,34 @@ type Props = {
     }) => void
 }
 
-export const FillOutList: FunctionComponent<Props> = ({
-    workFlowById,
-    task,
-
-    onUpdate,
-}) => {
+export const FillOutList: FunctionComponent<Props> = ({ task }) => {
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const [applicableStatuses, setApplicableStatuses] = useState<
         Record<string, boolean>
     >({})
+    const { workFlowById: workFlow } = useWorkflowContext()
     const {
         control,
-
         formState: { errors },
     } = useFormContext()
+    const { workflowId } = useParams() as { workflowId: string }
 
-    const handleSubmit = async () => {
-        try {
-            onUpdate({
-                id: workFlowById.id,
+    const [punchDialogShowing, setPunchDialogShowing] = useState(false)
 
-                userId: workFlowById.userId,
-                status: 'Committed',
-            })
-        } catch (error) {
-            console.error('Error creating checklist:', error)
-        }
-    }
     const [checkboxChecked, setCheckboxChecked] = useState(false)
+
+    const navigate = useNavigate()
+
+    const [taskId, setTaskId] = useState('')
+
+    const createPunch = () => {
+        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
+    }
+
     return (
         <>
             <FillOutWrap>
-                <div key={workFlowById?.id}>
+                <div>
                     <CustomCard>
                         <StyledHeaderCard
                             style={{
@@ -76,6 +72,22 @@ export const FillOutList: FunctionComponent<Props> = ({
                             <CustomCategoryName>
                                 {task.category.name}
                             </CustomCategoryName>
+                            <Typography
+                                onClick={() => {
+                                    setTaskId(task.id)
+                                    setPunchDialogShowing(true)
+                                }}
+                                token={{
+                                    textAlign: 'center',
+                                    fontWeight: 600,
+                                    fontSize: '0.8rem',
+                                    color: 'red',
+                                }}
+                                link
+                                href="#"
+                            >
+                                Add punch
+                            </Typography>
                         </StyledHeaderCard>
                         <CustomCardContent>
                             <NotApplicableWrap>
@@ -114,7 +126,6 @@ export const FillOutList: FunctionComponent<Props> = ({
                                     )}
                                 />
                             </NotApplicableWrap>
-
                             <CustomTaskField
                                 style={{
                                     filter: applicableStatuses[task.id]
@@ -145,7 +156,7 @@ export const FillOutList: FunctionComponent<Props> = ({
                                         />
                                     ) : null
                                 }
-                            />
+                            />{' '}
                         </CustomCardContent>
                         <Card.Actions alignRight>
                             {applicableStatuses[task.id] ? (
@@ -153,11 +164,17 @@ export const FillOutList: FunctionComponent<Props> = ({
                             ) : (
                                 <Controller
                                     control={control}
-                                    defaultValue={false}
-                                    rules={{ required: true }}
+                                    rules={{
+                                        required: 'Required',
+                                    }}
                                     name={`task.${task.id}`}
                                     render={({ field }) => (
                                         <Checkbox
+                                            id="checkbox"
+                                            aria-invalid={
+                                                errors.agree ? 'true' : 'false'
+                                            }
+                                            aria-required
                                             checked={checkboxChecked}
                                             onChange={(e) => {
                                                 setCheckboxChecked(
@@ -169,10 +186,6 @@ export const FillOutList: FunctionComponent<Props> = ({
                                                         : 'Disabled'
                                                 )
                                             }}
-                                            id="checkbox"
-                                            aria-invalid={
-                                                errors.agree ? 'true' : 'false'
-                                            }
                                         />
                                     )}
                                 />
@@ -182,6 +195,26 @@ export const FillOutList: FunctionComponent<Props> = ({
                 </div>
             </FillOutWrap>
             <CustomDialog
+                title="Make Punch?"
+                buttonVariant="ghost"
+                negativeButtonOnClick={() => setPunchDialogShowing(false)}
+                negativeButtonText="Cancel"
+                positiveButtonText="OK"
+                positiveButtonOnClick={() => {
+                    createPunch()
+                }}
+                isOpen={punchDialogShowing}
+            >
+                <Typography
+                    group="input"
+                    variant="text"
+                    token={{ textAlign: 'left' }}
+                >
+                    You will be forwarded to Punch form. You will be able to
+                    continue this form where you left after.
+                </Typography>
+            </CustomDialog>
+            <CustomDialog
                 title="Submit form?"
                 type="submit"
                 form="fill-out-checklist"
@@ -190,7 +223,6 @@ export const FillOutList: FunctionComponent<Props> = ({
                 negativeButtonText="Cancel"
                 positiveButtonText="Submit"
                 positiveButtonOnClick={() => {
-                    handleSubmit()
                     setSubmitDialogShowing(false)
                 }}
                 isOpen={submitDialogShowing}

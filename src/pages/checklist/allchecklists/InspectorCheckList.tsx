@@ -19,7 +19,20 @@ export const InspectorReceivedCheckLists: FunctionComponent<
 
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutCheckList/${id}`)
+        console.log(WorkFlow.id)
     }
+
+    // const [searchParams, setSearchParams] = useSearchParams();
+
+    // function updateQueryParam(keyToUpdate: any, newValue: any) {
+    //     searchParams.set(keyToUpdate, newValue);
+    //     return searchParams.toString();
+    //   }
+
+    //   const handleNavigation = () => {
+    //     const newQueryString = updateQueryParam('workflowId', newWorkflowId);
+    //     navigate(sample?${newQueryString});
+    //   };
 
     // if (WorkFlow.status !== 'Sent') return null
     return (

@@ -1,11 +1,11 @@
+import { SnackbarContext } from '@components/snackbar/SnackBarContext'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
-import { API_URL } from '../../config'
-import { useContext, useEffect, useState } from 'react'
-import { useCheckListContext } from '../context/CheckListContextProvider'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { getUploadByPunchId } from '../../Upload'
+import { API_URL } from '../../config'
+import { useCheckListContext } from '../context/CheckListContextProvider'
+import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { usePunchContext } from './context/PunchContextProvider'
 
 export function usePunch() {
@@ -52,7 +52,7 @@ export function usePunch() {
 
     useEffect(() => {
         setLoading(true)
-        const uploads = getUploadByPunchId(punch?.id, accessToken)
+        const uploads = getUploadByPunchId(punch?.id ?? '', accessToken)
         uploads.then((data) => {
             setUploads(data)
             setLoading(false)

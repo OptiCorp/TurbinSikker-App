@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { UpdatingWorkFlowEntity } from './types'
 
 export type FillOutForm = {
@@ -28,6 +29,8 @@ export const useFillOutCheckList = () => {
     const clearAndClose = () => {
         setPositiveOpen(false)
     }
+
+    const { currentUser } = useUserContext()
     const methods = useForm<UpdatingWorkFlowEntity>()
     const {
         handleSubmit,
@@ -36,15 +39,24 @@ export const useFillOutCheckList = () => {
         formState: { errors },
     } = methods
 
-    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data) => {
-        const res = await fetch(`${API_URL}/UpdateChecklistWorkflow`, {
+    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
+        id: string
+    }) => {
+        const tasks = methods.watch()
+        console.log(tasks)
+
+        const res = await fetch(`${API_URL}/UpdateWorkflow`, {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+                id: data.id,
+                status: 'Committed',
+                userId: currentUser?.id,
+            }),
         })
         if (res.ok) setRefreshList((prev) => !prev)
 
