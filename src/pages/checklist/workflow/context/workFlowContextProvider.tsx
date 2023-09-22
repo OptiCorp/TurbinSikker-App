@@ -3,7 +3,7 @@ import { API_URL } from '../../../../config'
 import { useUserContext } from '../../../../pages/users/context/userContextProvider'
 import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
-import { getChecklistWorkflowById } from './api'
+import { getWorkflowById } from './api'
 
 import { useLocation, useParams } from 'react-router'
 import { usePunchContext } from '../../../../pages/punch/context/PunchContextProvider'
@@ -132,10 +132,7 @@ const WorkflowContextProvider = ({
     useEffect(() => {
         ;(async function () {
             if (!currentUser?.id || !accessToken) return
-            const workFlows = await getChecklistWorkflowById(
-                currentUser.id,
-                accessToken
-            )
+            const workFlows = await getWorkflowById(currentUser.id, accessToken)
 
             setChecklistWorkFlow(workFlows)
         })()

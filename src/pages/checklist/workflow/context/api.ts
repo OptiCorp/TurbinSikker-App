@@ -1,7 +1,7 @@
 import { formatDate } from '../../../../Helpers'
 import { API_URL } from '../../../../config'
 import { WorkFlow } from '../types'
-export const getChecklistWorkflowById = async (
+export const getWorkflowById = async (
     currentUserId: string,
     accessToken: string
 ) => {

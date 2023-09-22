@@ -6,10 +6,21 @@ import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { usePunchContext } from '../context/PunchContextProvider'
 import { Punch } from '../types'
+
+type FormValuesPunchEntity = {
+    creatorId: string
+    description: string
+    severity: string
+    checklistTaskId: string
+    workflowId: string
+}
 
 export const useAddPunch = () => {
     const { currentUser } = useUserContext()
+
+    const { punch } = usePunchContext()
 
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
@@ -19,18 +30,12 @@ export const useAddPunch = () => {
     const navigate = useNavigate()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const { workflowId, punchId, taskId } = useParams()
-    type FormValuesPunchEntity = {
-        id: string
-        createdBy: string
-        taskId: string
-        description: string
-        severity: string
-        checklistTaskId: string
-        workflowId: string
-    }
 
     const [description, setDescription] = useState('')
-    const [severity, setSeverity] = useState<SetStateAction<string>>('Minor')
+    const [severity, setSeverity] = useState<SetStateAction<string>>(
+        punch?.severity || 'Minor'
+    )
+    const [file, setFile] = useState<File | undefined>()
 
     const onSubmit: SubmitHandler<FormValuesPunchEntity> = () => {
         if (punchId) {
@@ -99,6 +104,8 @@ export const useAddPunch = () => {
     }
 
     return {
+        setFile,
+        file,
         methods,
         onSubmit,
         control,

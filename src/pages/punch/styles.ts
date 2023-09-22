@@ -6,8 +6,9 @@ export const PunchWrapper = styled.div`
     display: flex;
 
     flex-direction: column;
-
     max-width: 768px;
+    padding: 20px;
+
     h4 {
         font-weight: normal;
         margin: 0;
@@ -27,6 +28,7 @@ export const PunchHeader = styled.div`
     justify-content: space-between;
     margin-top: 16px;
     text-align: right;
+
     p {
         margin: 0;
     }
@@ -36,7 +38,24 @@ export const PunchUploadContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 175px;
+    overflow: hidden;
+    min-height: 100px;
+    position: relative;
+
+    button {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        opacity: 50%;
+        /* filter: blur(1px); */
+        background-color: transparent;
+        border: none;
+    }
+
+    img {
+        width: 100%;
+        margin: auto;
+    }
 `
 
 export const SeverityIconContainer = styled.div`
@@ -58,9 +77,6 @@ export const PunchDescriptionContainer = styled.div`
 
 export const PunchButton = styled.button`
     color: #007079;
-    position: absolute;
-    right: 0;
-    bottom: 100px;
     border: none;
     background-color: transparent;
     font-size: 12px;

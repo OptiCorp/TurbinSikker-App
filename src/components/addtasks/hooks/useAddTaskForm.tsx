@@ -24,20 +24,22 @@ export const useAddTaskForm = () => {
     )
     const { accessToken } = useAuth()
     const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
-    const { workFlowById } = useWorkflowContext()
+
+    const { allWorkFlows, workFlowById, WorkFlows } = useWorkflowContext()
+
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        const res = await fetch(
-            `${API_URL}/AddTaskToChecklist?checklistId=${id}&taskId=${data.task}`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify(data.task),
-            }
-        )
+        const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+            body: JSON.stringify({
+                checklistId: id,
+                id: data.task,
+            }),
+        })
         if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
