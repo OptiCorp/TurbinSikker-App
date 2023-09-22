@@ -1,13 +1,21 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { SetStateAction, useContext, useState } from 'react'
+import { SetStateAction, useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { API_URL } from '../../../config'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
-import { AddUpload } from '../../../Upload'
+import { addUpload } from '../../../Upload'
 import { usePunchContext } from '../context/PunchContextProvider'
+
+type FormValuesPunchEntity = {
+    creatorId: string
+    description: string
+    severity: string
+    checklistTaskId: string
+    workflowId: string
+}
 
 export const useAddPunch = () => {
     const { currentUser } = useUserContext()
@@ -22,14 +30,6 @@ export const useAddPunch = () => {
     const navigate = useNavigate()
     const [positiveOpen, setPositiveOpen] = useState(false)
 
-    type FormValuesPunchEntity = {
-        creatorId: string
-        description: string
-        severity: string
-        checklistTaskId: string
-        workflowId: string
-    }
-
     const [description, setDescription] = useState('')
     const [severity, setSeverity] = useState<SetStateAction<string>>(punch?.severity || 'Minor')
     const [file, setFile] = useState<File | undefined>()
@@ -38,7 +38,6 @@ export const useAddPunch = () => {
         if (appLocation.pathname === '/addPunch') {
             setDescription('')
             await postPunch()
-            await AddUpload(accessToken, punch.id, file)
         } else {
             const res = await fetch(`${API_URL}/UpdatePunch?id=${id}`, {
                 method: 'POST',
@@ -49,12 +48,13 @@ export const useAddPunch = () => {
                 },
                 body: JSON.stringify({
                     id: id,
-                    workflowId: '287f5297-bfa5-49be-8c56-3bfe9ec98227',
+                    workflowId: '95b927b4-1e8d-48c3-a254-7ca1b8f501c2',
                     description: description,
                     severity: severity,
                 }),
             })
             if (res.ok) setRefreshList((prev) => !prev)
+            await addUpload(accessToken, id, file)
             setPositiveOpen(false)
             navigate(`/punch/${id}`)
             if (openSnackbar) openSnackbar('Punch updated!')
@@ -82,6 +82,7 @@ export const useAddPunch = () => {
             const responseJson = await res.json()
             if (responseJson && responseJson.id) {
                 const punchId = responseJson.id
+                await addUpload(accessToken, punchId, file)
                 navigate(`/Punch/${punchId}`)
             }
             if (openSnackbar) {

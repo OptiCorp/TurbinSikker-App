@@ -2,7 +2,7 @@ import { API_URL } from '../config'
 
 async function getUploadById(id: string, accessToken: string) {
     if (!accessToken) return
-    const response = await fetch(`https://localhost:7290/api/GetUpload?id=${id}`, {
+    const response = await fetch(`${API_URL}/GetUpload?id=${id}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -33,14 +33,14 @@ async function getUploadByPunchId(id: string, accessToken: string) {
     return data
 }
 
-async function AddUpload(accessToken: string, punchId: string | undefined, file: File | undefined) {
+async function addUpload(accessToken: string, punchId: string | undefined, file: File | undefined) {
     if (!accessToken) return
 
     const formData = new FormData()
 
-    formData.append('punchId', punchId || '58ba8ff3-01a3-4fd3-8bff-13bc5173155d')
+    formData.append('punchId', punchId || '')
     formData.append('file', file || '')
-    await fetch(`https://localhost:7290/api/AddUpload`, {
+    await fetch(`${API_URL}/AddUpload`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -50,4 +50,4 @@ async function AddUpload(accessToken: string, punchId: string | undefined, file:
     })
 }
 
-export { getUploadByPunchId, getUploadById, AddUpload }
+export { getUploadByPunchId, getUploadById, addUpload }

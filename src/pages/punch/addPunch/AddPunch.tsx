@@ -65,7 +65,7 @@ export const AddPunch: FunctionComponent = () => {
                         />
                     </PunchUploadButtonContainer>
 
-                    {!uploads ? (
+                    {!file ? (
                         <div
                             style={{
                                 display: 'flex',
@@ -81,25 +81,6 @@ export const AddPunch: FunctionComponent = () => {
                     ) : (
                         <PunchUploadFilesContainer>
                             <Typography variant="h5">Upload Files</Typography>
-                            <PunchUploadFileContainer onClick={() => setUploads((prev) => !prev)}>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <Icon color="#73B1B5" data={file_description} />
-                                        <Typography variant="caption">file-name.txt</Typography>
-                                    </div>
-                                </div>
-                                <Icon data={close} color="#243746" size={16} />
-                            </PunchUploadFileContainer>
 
                             <PunchUploadFileContainer onClick={() => setUploads((prev) => !prev)}>
                                 {file?.name && (
@@ -120,7 +101,12 @@ export const AddPunch: FunctionComponent = () => {
                                         </div>
                                     </div>
                                 )}
-                                <Icon data={close} color="#243746" size={16} />
+                                {/* <Icon
+                                    onClick={(e) => console.log(e.currentTarget)}
+                                    data={close}
+                                    color="#243746"
+                                    size={16}
+                                /> */}
                             </PunchUploadFileContainer>
                         </PunchUploadFilesContainer>
                     )}

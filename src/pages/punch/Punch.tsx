@@ -1,5 +1,5 @@
-import { Icon } from '@equinor/eds-core-react'
-import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
+import { Icon, CircularProgress, Dialog, Typography, Button } from '@equinor/eds-core-react'
+import { assignment_user, error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
 import { usePunchContext } from './context/PunchContextProvider'
@@ -14,10 +14,12 @@ import {
 } from './styles'
 import { PunchSeverity } from './types'
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { useEffect, useState } from 'react'
-import { getUploadById, getUploadByPunchId } from '../../Upload'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
+import { useState } from 'react'
 import { Upload } from '../../types/Upload'
+import { useHasPermission } from '../users/hooks/useHasPermission'
+import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
+import { useForm } from 'react-hook-form'
+import { usePunch } from './PunchHook'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -39,49 +41,35 @@ export const punchSeverity: PunchSeverity[] = [
 
 function Punch() {
     const navigate = useNavigate()
+    const {
+        setStatus,
+        onSubmit,
+        positiveOpen,
+        clearAndClose,
+        handleOpen,
+        uploads,
+        loading,
+        methods,
+    } = usePunch()
     const { punch } = usePunchContext()
-    const { accessToken } = useAuth()
     const createdDate = punch && formatDate(punch.createdDate)
     const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
-    const [uploadData, setUploadData] = useState({
-        blobRef: '',
-        bytes: '',
-        id: '',
-        punchId: '',
-    })
-    const [uploads, setUploads] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
+    const { hasPermission } = useHasPermission()
+
+    const { handleSubmit } = methods
 
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
-    function nextImage(index: number) {
-        console.log(index)
+    function nextImage() {
+        if (uploads.length > 0) {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % uploads.length)
+        }
     }
 
-    useEffect(() => {
-        console.log('here', punch?.id)
-        const uploads = getUploadByPunchId(punch?.id, accessToken)
-        uploads.then((data) => setUploads(data))
-    }, [accessToken, punch?.id])
-    useEffect(() => {
-        setLoading(true)
-        const uploadResult = getUploadById('666f2475-189d-418d-a94e-b9eae5893009', accessToken)
-        uploadResult.then((data: Upload) => {
-            setUploadData({
-                blobRef: data.blobRef,
-                bytes: data.bytes,
-                id: data.id,
-                punchId: '',
-            })
-        })
-        setLoading(false)
-    }, [accessToken])
-
-    console.log(uploads)
-
     return (
-        <>
+        <form id="form" onSubmit={handleSubmit(onSubmit)}>
             <PunchWrapper>
                 <PunchHeader>
                     <SeverityIconContainer>
@@ -100,6 +88,25 @@ function Punch() {
                         <h4>Ticket-{punch?.id.split('-')[0]}</h4>
                     </SeverityIconContainer>
                     <PunchDateContainer>
+                        {hasPermission && (
+                            <div>
+                                <p>Created by</p>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        background: '#C5C5C594',
+                                        color: '#000',
+                                        boxShadow: '1px 1px 0px 0px #9d9d9d inset',
+                                    }}
+                                >
+                                    <Icon size={18} data={assignment_user} />
+
+                                    <p>{punch?.user.firstName}</p>
+                                </div>
+                            </div>
+                        )}
                         <p>{createdDate}</p>
                         {createdDate == updatedDate && (
                             <p style={{ fontSize: '10px' }}>
@@ -110,24 +117,19 @@ function Punch() {
                     </PunchDateContainer>
                 </PunchHeader>
             </PunchWrapper>
-            {/* <PunchUploadContainer>
-                {!loading && uploadData.bytes === '' ? (
-                    <span>No uploads</span>
-                ) : !loading && uploadData.bytes.length ? (
-                    <img src={`data:image/png;base64, ${uploadData.bytes}`} alt="Punch image" />
-                ) : (
-                    <span>Loading..</span>
-                )}
-            </PunchUploadContainer> */}
+
             <PunchUploadContainer>
+                {loading && <CircularProgress />}
                 <div style={{ display: 'flex', overflowX: 'auto' }}>
-                    {uploads?.map((upload: Upload, idx) => (
-                        <img
-                            onClick={() => nextImage(idx)}
-                            src={`data:image/png;base64, ${upload.bytes}`}
-                        />
-                    ))}
+                    {uploads?.map((upload: Upload, idx) => {
+                        return (
+                            /* idx === currentImageIndex && ( */
+                            <img key={idx} src={`data:image/png;base64, ${upload.bytes}`} />
+                            /*  ) */
+                        )
+                    })}
                 </div>
+                {/* <button onClick={nextImage}> {'>'} </button> */}
             </PunchUploadContainer>
             <PunchWrapper style={{ marginBottom: '48px' }}>
                 <PunchDescriptionContainer>
@@ -142,14 +144,60 @@ function Punch() {
                     <h4>Description</h4>
                     <p>{punch?.description}</p>
                 </PunchDescriptionContainer>
-                {punch && (
+                {!hasPermission && punch && (
                     <PunchButton onClick={() => clickHandler(punch.id)}>Edit Punch</PunchButton>
                 )}
             </PunchWrapper>
-            <>
-                <DefaultNavigation hideNavbar={false} />
-            </>
-        </>
+
+            <Dialog open={positiveOpen}>
+                <Dialog.Header>
+                    <Dialog.Title>Approve Punch?</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.CustomContent>
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        Request will be approved, sent and marked for further management
+                    </Typography>
+                </Dialog.CustomContent>
+                <Dialog.Actions>
+                    <div>
+                        <Button variant="ghost" onClick={clearAndClose}>
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                setStatus('Approved')
+                                navigate(-1)
+                            }}
+                            type="submit"
+                            form="form"
+                        >
+                            OK
+                        </Button>
+                    </div>
+                </Dialog.Actions>
+            </Dialog>
+
+            {punch?.status === 'Pending' && hasPermission ? (
+                <NavActionsComponent
+                    ButtonMessage="Reject"
+                    SecondButtonMessage={'Approve'}
+                    secondButtonColor="primary"
+                    buttonVariant="outlined"
+                    buttonColor="danger"
+                    secondOnClick={handleOpen}
+                    onClick={() => {
+                        setStatus('Rejected')
+                    }}
+                    type="button"
+                    primaryType="submit"
+                    isShown={true}
+                />
+            ) : (
+                <>
+                    <DefaultNavigation hideNavbar={false} />
+                </>
+            )}
+        </form>
     )
 }
 
