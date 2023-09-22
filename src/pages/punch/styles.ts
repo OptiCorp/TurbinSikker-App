@@ -39,8 +39,22 @@ export const PunchUploadContainer = styled.div`
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    min-height: 100px;
+    position: relative;
+
+    button {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        opacity: 50%;
+        /* filter: blur(1px); */
+        background-color: transparent;
+        border: none;
+    }
+
     img {
         width: 100%;
+        margin: auto;
     }
 `
 
