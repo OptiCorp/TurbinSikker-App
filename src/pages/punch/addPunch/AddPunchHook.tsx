@@ -8,6 +8,7 @@ import useAuth from '../../../pages/landingPage/context/LandingPageContextProvid
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { usePunchContext } from '../context/PunchContextProvider'
 import { Punch } from '../types'
+import { addUpload } from '../../../Upload'
 
 type FormValuesPunchEntity = {
     creatorId: string
@@ -21,7 +22,6 @@ export const useAddPunch = () => {
     const { currentUser } = useUserContext()
 
     const { punch } = usePunchContext()
-
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
@@ -32,9 +32,7 @@ export const useAddPunch = () => {
     const { workflowId, punchId, taskId } = useParams()
 
     const [description, setDescription] = useState('')
-    const [severity, setSeverity] = useState<SetStateAction<string>>(
-        punch?.severity || 'Minor'
-    )
+    const [severity, setSeverity] = useState<SetStateAction<string>>(punch?.severity || 'Minor')
     const [file, setFile] = useState<File | undefined>()
 
     const onSubmit: SubmitHandler<FormValuesPunchEntity> = () => {
@@ -62,8 +60,11 @@ export const useAddPunch = () => {
             }),
         })
         if (res.ok) setRefreshList((prev) => !prev)
+        if (file) {
+            await addUpload(accessToken, punchId, file)
+        }
         setPositiveOpen(false)
-        navigate('/Checklist')
+        navigate(`/workflow/${workflowId}/punch/${punchId}`)
         if (openSnackbar) openSnackbar('Punch updated!')
     }
 
@@ -88,6 +89,10 @@ export const useAddPunch = () => {
 
         if (res.ok) {
             const json: Promise<Punch> = res.json()
+            const id = (await json).id
+            if (file) {
+                await addUpload(accessToken, id, file)
+            }
             navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
         }
 
