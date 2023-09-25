@@ -60,9 +60,11 @@ export const useAddPunch = () => {
             }),
         })
         if (res.ok) setRefreshList((prev) => !prev)
-        await addUpload(accessToken, punchId, file)
+        if (file) {
+            await addUpload(accessToken, punchId, file)
+        }
         setPositiveOpen(false)
-        navigate('/Checklist')
+        navigate(`/workflow/${workflowId}/punch/${punchId}`)
         if (openSnackbar) openSnackbar('Punch updated!')
     }
 
@@ -88,7 +90,9 @@ export const useAddPunch = () => {
         if (res.ok) {
             const json: Promise<Punch> = res.json()
             const id = (await json).id
-            await addUpload(accessToken, id, file)
+            if (file) {
+                await addUpload(accessToken, id, file)
+            }
             navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
         }
 
