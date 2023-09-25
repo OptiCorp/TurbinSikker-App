@@ -48,7 +48,7 @@ export const useAddTaskForm = () => {
     }
     useEffect(() => {
         const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken || !workFlowById) return
+            if (!id || !accessToken || workFlowById) return
             try {
                 const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
                     headers: {
