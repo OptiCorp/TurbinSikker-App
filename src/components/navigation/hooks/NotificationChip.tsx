@@ -16,4 +16,5 @@ export function NotificationBadge({ name }: { name: string }) {
                 )}
             </>
         )
+    return <></>
 }
