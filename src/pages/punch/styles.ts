@@ -7,7 +7,7 @@ export const PunchWrapper = styled.div`
 
     flex-direction: column;
     max-width: 768px;
-    padding: 20px;
+    /* padding: 20px; */
 
     h4 {
         font-weight: normal;
@@ -41,7 +41,7 @@ export const PunchUploadContainer = styled.div`
     overflow: hidden;
     min-height: 100px;
     position: relative;
-
+    max-height: 175px;
     button {
         position: absolute;
         right: 0;
