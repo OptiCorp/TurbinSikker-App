@@ -2,16 +2,27 @@ import { Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '../styles'
+import { Punch, Status } from '../types'
+import { usePunchContext } from '../context/PunchContextProvider'
+import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 
 function SeverityButton({
     //severity,
-    setSeverity,
+    /* setSeverity, */
+    userInput,
+    setUserInput,
     defaultValue,
 }: {
-    severity: SetStateAction<string>
-    setSeverity: Dispatch<SetStateAction<string>>
-    defaultValue: string
+    /* severity: SetStateAction<string>
+    setSeverity: Dispatch<SetStateAction<{ severity: string }>> */
+    userInput: { severity: string | undefined; description: string | undefined }
+    setUserInput: Dispatch<
+        SetStateAction<{ severity: string | undefined; description: string | undefined }>
+    >
+    defaultValue: string | undefined
 }) {
+    const { punch } = usePunchContext()
+    const { hasPermission } = useHasPermission()
     const [activeButtonIndex, setActiveButtonIndex] = useState(0)
 
     const SeverityButtons = [
@@ -33,7 +44,11 @@ function SeverityButton({
     ]
     function handleChecked(index: number) {
         setActiveButtonIndex(index)
-        setSeverity(SeverityButtons[index].name)
+        /* setSeverity(SeverityButtons[index].name) */
+        setUserInput({
+            ...userInput,
+            severity: SeverityButtons[index].name,
+        })
     }
 
     useEffect(() => {
@@ -42,7 +57,6 @@ function SeverityButton({
             setActiveButtonIndex(index)
         }
     }, [defaultValue])
-
     return (
         <>
             {SeverityButtons.map((button, index) => {
@@ -53,7 +67,11 @@ function SeverityButton({
                 const buttonStyle: React.CSSProperties = {
                     backgroundColor: isActive ? '#fff' : 'transparent',
                     boxShadow: !isActive ? 'none' : '0px 4px 4px 0px #bebebe',
-                    color: isActive ? '#000' : '#bebebe',
+                    color: isActive
+                        ? '#000'
+                        : Status.APPROVED === punch?.status || hasPermission
+                        ? '#BEBEBE'
+                        : '#000' /* isActive ? '#000' : '#bebebe', */,
                     borderRadius: 4,
                 }
 
@@ -75,11 +93,17 @@ function SeverityButton({
                             style={buttonStyle}
                             type="button"
                             onClick={() => handleChecked(index)}
+                            disabled={punch?.status === Status.APPROVED || hasPermission}
                         >
                             <Icon
                                 data={button.icon}
-                                color={isActive ? button.color : '#BEBEBE'}
-                                style={{ zIndex: 3 }}
+                                color={
+                                    /* isActive ? button.color : '#BEBEBE' */ isActive
+                                        ? button.color
+                                        : Status.APPROVED === punch?.status || hasPermission
+                                        ? '#BEBEBE'
+                                        : button.color
+                                }
                             />
                             {button.name}
                         </Button>
