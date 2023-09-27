@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const PunchAddContainer = styled.div`
     padding: 20px;
@@ -9,15 +9,6 @@ export const PunchAddUploadContainer = styled.div`
     display: flex;
     width: 100%;
     padding: 25px;
-`
-
-export const PunchUploadButtonContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-right: #deedee solid 0.7px;
-    padding-right: 20px;
-    gap: 8px;
 `
 
 export const PunchUploadFileContainer = styled.div`
@@ -49,12 +40,34 @@ export const SeverityButtonWrapper = styled.div`
     box-sizing: border-box;
 `
 
+export const PunchUploadButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: #deedee solid 0.7px;
+    padding-right: 20px;
+    gap: 8px;
+    label {
+        ${(props: { disabled: boolean | undefined }) =>
+            props.disabled &&
+            css`
+                background-color: #ccc;
+            `}
+    }
+`
+
 export const PunchUploadButtonIconContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     border: 0.7px dotted #73b1b5;
     border-radius: 4px;
+
+    ${(props: { disabled: boolean | undefined }) =>
+        props.disabled &&
+        css`
+            border: 0.7px dotted #ccc;
+        `}
 `
 export const PunchUploadButtonLabel = styled.label`
     box-sizing: border-box;
