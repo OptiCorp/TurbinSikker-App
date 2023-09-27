@@ -14,10 +14,17 @@ export interface Punch {
     status: string
     createdDate: string
     updatedDate: string | null
-    description: string
+    description: string | undefined
     severity: string
     active: number
+    message: string
     uploads: string[] | null
+}
+
+export enum Status {
+    PENDING = 'Pending',
+    APPROVED = 'Approved',
+    REJECTED = 'Rejected',
 }
 
 export interface ChecklistTask {
