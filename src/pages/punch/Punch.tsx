@@ -1,18 +1,7 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import {
-    Button,
-    CircularProgress,
-    Dialog,
-    Icon,
-    Typography,
-} from '@equinor/eds-core-react'
-import {
-    assignment_user,
-    error_filled,
-    info_circle,
-    warning_filled,
-} from '@equinor/eds-icons'
+import { Button, CircularProgress, Dialog, Icon, Typography } from '@equinor/eds-core-react'
+import { assignment_user, error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
@@ -74,9 +63,7 @@ function Punch() {
     }
     function nextImage() {
         if (uploads.length > 0) {
-            setCurrentImageIndex(
-                (prevIndex) => (prevIndex + 1) % uploads.length
-            )
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % uploads.length)
         }
     }
 
@@ -110,8 +97,7 @@ function Punch() {
                                         gap: '5px',
                                         background: '#C5C5C594',
                                         color: '#000',
-                                        boxShadow:
-                                            '1px 1px 0px 0px #9d9d9d inset',
+                                        boxShadow: '1px 1px 0px 0px #9d9d9d inset',
                                     }}
                                 >
                                     <Icon size={18} data={assignment_user} />
@@ -123,9 +109,7 @@ function Punch() {
                         <p>{createdDate}</p>
                         {createdDate == updatedDate && (
                             <p style={{ fontSize: '10px' }}>
-                                <span style={{ fontWeight: 'bold' }}>
-                                    modified:
-                                </span>
+                                <span style={{ fontWeight: 'bold' }}>modified:</span>
                                 {updatedDate}
                             </p>
                         )}
@@ -139,10 +123,7 @@ function Punch() {
                     {uploads?.map((upload: Upload, idx) => {
                         return (
                             /* idx === currentImageIndex && ( */
-                            <img
-                                key={idx}
-                                src={`data:image/png;base64, ${upload.bytes}`}
-                            />
+                            <img key={idx} src={`data:image/png;base64, ${upload.bytes}`} />
                             /*  ) */
                         )
                     })}
@@ -163,9 +144,7 @@ function Punch() {
                     <p>{punch?.description}</p>
                 </PunchDescriptionContainer>
                 {!hasPermission && punch && (
-                    <PunchButton onClick={() => clickHandler(punch.id)}>
-                        Edit Punch
-                    </PunchButton>
+                    <PunchButton onClick={() => clickHandler(punch.id)}>Edit Punch</PunchButton>
                 )}
             </PunchWrapper>
 
@@ -174,13 +153,8 @@ function Punch() {
                     <Dialog.Title>Approve Punch?</Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography
-                        group="input"
-                        variant="text"
-                        token={{ textAlign: 'left' }}
-                    >
-                        Request will be approved, sent and marked for further
-                        management
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        Request will be approved, sent and marked for further management
                     </Typography>
                 </Dialog.CustomContent>
                 <Dialog.Actions>

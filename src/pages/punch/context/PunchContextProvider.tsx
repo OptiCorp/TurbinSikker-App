@@ -48,6 +48,7 @@ const postsContextDefaultValue: PunchContext = {
         updatedDate: null,
         description: '',
         severity: '',
+        message: '',
         active: 0,
         uploads: null,
     },
@@ -81,8 +82,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
                     'Access-Control-Allow-Origin': '*',
                 },
             })
-            if (!response.ok)
-                throw new Error('Failed with HTTP code ' + response.status)
+            if (!response.ok) throw new Error('Failed with HTTP code ' + response.status)
             const data = (await response.json()) as Punch
             setPunchById(data)
         } catch (error) {
@@ -94,9 +94,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
 
         try {
             const response = await fetch(
-                `${
-                    currentUser?.userRole.name === 'Leader' ? leader : inspector
-                }`,
+                `${currentUser?.userRole.name === 'Leader' ? leader : inspector}`,
                 {
                     method: 'GET',
                     headers: {
@@ -106,8 +104,7 @@ function PunchContextProvider({ children }: { children: React.ReactNode }) {
                     },
                 }
             )
-            if (!response.ok)
-                throw new Error('Failed with HTTP code ' + response.status)
+            if (!response.ok) throw new Error('Failed with HTTP code ' + response.status)
 
             const data = await response.json()
             setPunchData(data)
