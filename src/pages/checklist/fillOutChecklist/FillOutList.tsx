@@ -35,9 +35,7 @@ type Props = {
 
 export const FillOutList: FunctionComponent<Props> = ({ task }) => {
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const [applicableStatuses, setApplicableStatuses] = useState<
-        Record<string, boolean>
-    >({})
+    const [applicableStatuses, setApplicableStatuses] = useState<Record<string, boolean>>({})
     const { workFlowById: workFlow } = useWorkflowContext()
     const {
         control,
@@ -64,14 +62,10 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                     <CustomCard>
                         <StyledHeaderCard
                             style={{
-                                filter: applicableStatuses[task.id]
-                                    ? 'blur(3px)'
-                                    : 'none',
+                                filter: applicableStatuses[task.id] ? 'blur(3px)' : 'none',
                             }}
                         >
-                            <CustomCategoryName>
-                                {task.category.name}
-                            </CustomCategoryName>
+                            <CustomCategoryName>{task.category.name}</CustomCategoryName>
                             <Typography
                                 onClick={() => {
                                     setTaskId(task.id)
@@ -104,23 +98,13 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                                             label="N/A?"
                                             type="checkbox"
                                             value={[task.id] || false}
-                                            checked={
-                                                applicableStatuses[task.id] ||
-                                                false
-                                            }
+                                            checked={applicableStatuses[task.id] || false}
                                             onChange={(e) => {
-                                                setApplicableStatuses(
-                                                    (prev) => ({
-                                                        ...prev,
-                                                        [task.id]:
-                                                            e.target.checked,
-                                                    })
-                                                )
-                                                onChange(
-                                                    e.target.checked
-                                                        ? 'Active'
-                                                        : 'Disabled'
-                                                )
+                                                setApplicableStatuses((prev) => ({
+                                                    ...prev,
+                                                    [task.id]: e.target.checked,
+                                                }))
+                                                onChange(e.target.checked ? 'Active' : 'Disabled')
                                             }}
                                         />
                                     )}
@@ -128,9 +112,7 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                             </NotApplicableWrap>
                             <CustomTaskField
                                 style={{
-                                    filter: applicableStatuses[task.id]
-                                        ? 'blur(3px)'
-                                        : 'none',
+                                    filter: applicableStatuses[task.id] ? 'blur(3px)' : 'none',
                                 }}
                                 label=""
                                 key={task?.id}
@@ -140,11 +122,7 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                                 multiline
                                 rows={3}
                                 readOnly
-                                helperText={
-                                    task.description.length > 80
-                                        ? 'see more'
-                                        : '  '
-                                }
+                                helperText={task.description.length > 80 ? 'see more' : '  '}
                                 helperIcon={
                                     task.description.length > 100 ? (
                                         <Icon
@@ -171,19 +149,13 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                                     render={({ field }) => (
                                         <Checkbox
                                             id="checkbox"
-                                            aria-invalid={
-                                                errors.agree ? 'true' : 'false'
-                                            }
+                                            aria-invalid={errors.agree ? 'true' : 'false'}
                                             aria-required
                                             checked={checkboxChecked}
                                             onChange={(e) => {
-                                                setCheckboxChecked(
-                                                    e.target.checked
-                                                )
+                                                setCheckboxChecked(e.target.checked)
                                                 field.onChange(
-                                                    e.target.checked
-                                                        ? 'Active'
-                                                        : 'Disabled'
+                                                    e.target.checked ? 'Active' : 'Disabled'
                                                 )
                                             }}
                                         />
@@ -205,13 +177,9 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                 }}
                 isOpen={punchDialogShowing}
             >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
-                >
-                    You will be forwarded to Punch form. You will be able to
-                    continue this form where you left after.
+                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    You will be forwarded to Punch form. You will be able to continue this form
+                    where you left after.
                 </Typography>
             </CustomDialog>
             <CustomDialog
@@ -237,7 +205,7 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
                 isShown={true}
                 ButtonMessage="Clear"
                 type="button"
-                SecondButtonMessage="sdfsdf"
+                SecondButtonMessage="Submit"
             />
         </>
     )

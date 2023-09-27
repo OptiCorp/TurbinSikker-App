@@ -100,6 +100,8 @@ const EditCheckListContextProvider = ({ children }: { children: React.ReactNode 
             body: JSON.stringify({
                 description: data.description,
                 categoryId: data.categoryId,
+                id: data.taskId,
+                checklistId: id,
             }),
         })
         if (res.ok) setRefreshList((prev) => !prev)

@@ -1,14 +1,15 @@
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import {
     Button,
+    CircularProgress,
     Dialog,
     Icon,
     TextField,
     Typography,
 } from '@equinor/eds-core-react'
 import { image, upload } from '@equinor/eds-icons'
-import React, { FunctionComponent, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import React, { useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
 
 import { usePunchContext } from '../context/PunchContextProvider'
 import SeverityButton from '../severityButton/SeverityButton'
@@ -24,165 +25,268 @@ import {
     SeverityButtonWrapper,
     SeverityContainer,
 } from './styles'
+import { Upload } from 'src/types/Upload'
+import { PunchUploadContainer } from '../styles'
+import { usePunch } from '../PunchHook'
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
+import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import { Status } from '../types'
 
-export const AddPunch: FunctionComponent = () => {
+export function AddPunch() {
     const navigate = useNavigate()
-    const [uploads, setUploads] = useState(false)
     const {
         onSubmit,
-        description,
         positiveOpen,
         handleOpen,
         handleSubmit,
         clearAndClose,
-        setDescription,
+        userInput,
+        setUserInput,
         setFile,
         file,
-        severity,
-        setSeverity,
+        handleRejectOpen,
+        handleRejectClose,
+        rejectDialogOpen,
+        setMessage,
+        setStatus,
     } = useAddPunch()
+    const { hasPermission } = useHasPermission()
+    const { workflowId, punchId } = useParams()
+    const { loading, uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
     const { punch } = usePunchContext()
-
+    const [uploads, setUploads] = useState(false)
+    const [open, setOpen] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
             setFile(e.target.files[0])
         }
     }
 
+    const path = appLocation.pathname.split('/')
+    const lastPathSegment = path[path.length - 1]
     return (
-        <form id="punchForm" onSubmit={handleSubmit(onSubmit)}>
+        <form id="punchForm" style={{ position: 'relative' }} onSubmit={handleSubmit(onSubmit)}>
             <PunchAddContainer>
-                <PunchAddUploadContainer>
-                    <PunchUploadButtonContainer>
-                        <PunchUploadButtonIconContainer>
-                            <Icon data={upload} size={48} />
-                        </PunchUploadButtonIconContainer>
+                {!(addedUploads?.length > 0) ? (
+                    <PunchAddUploadContainer>
+                        <PunchUploadButtonContainer disabled={hasPermission}>
+                            <PunchUploadButtonIconContainer disabled={hasPermission}>
+                                <Icon
+                                    data={upload}
+                                    color={hasPermission ? '#ccc' : '#000'}
+                                    size={48}
+                                />
+                            </PunchUploadButtonIconContainer>
 
-                        <PunchUploadButtonLabel htmlFor="file">
-                            Upload
-                        </PunchUploadButtonLabel>
+                            <PunchUploadButtonLabel htmlFor="file">Upload</PunchUploadButtonLabel>
 
-                        <input
-                            id="file"
-                            type="file"
-                            accept="image/*"
-                            name="image"
-                            onChange={loadFile}
-                            style={{ display: 'none' }}
-                        />
-                    </PunchUploadButtonContainer>
+                            <input
+                                id="file"
+                                type="file"
+                                disabled={hasPermission}
+                                accept="image/*"
+                                name="image"
+                                onChange={loadFile}
+                                style={{ display: 'none' }}
+                            />
+                        </PunchUploadButtonContainer>
 
-                    {!file ? (
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                width: '100%',
-                                alignItems: 'center',
-                                color: '#243746',
-                            }}
-                            onClick={() => setUploads((prev) => !prev)}
-                        >
-                            <span>No Uploads</span>
-                        </div>
-                    ) : (
-                        <PunchUploadFilesContainer>
-                            <Typography variant="h5">Upload Files</Typography>
-
-                            <PunchUploadFileContainer
+                        {!file ? (
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    width: '100%',
+                                    alignItems: 'center',
+                                    color: '#243746',
+                                }}
                                 onClick={() => setUploads((prev) => !prev)}
                             >
-                                {file?.name && (
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                    >
+                                <span>No Uploads</span>
+                            </div>
+                        ) : (
+                            <PunchUploadFilesContainer>
+                                <Typography variant="h5">Upload Files</Typography>
+
+                                <PunchUploadFileContainer
+                                    onClick={() => setUploads((prev) => !prev)}
+                                >
+                                    {file?.name && (
                                         <div
                                             style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
                                             }}
                                         >
-                                            <Icon
-                                                color="#73B1B5"
-                                                data={image}
-                                            />
-                                            <Typography variant="caption">
-                                                {file?.name}
-                                            </Typography>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <Icon color="#73B1B5" data={image} />
+                                                <Typography variant="caption">
+                                                    {file?.name}
+                                                </Typography>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                                {/* <Icon
+                                    )}
+                                    {/* <Icon
                                     onClick={(e) => console.log(e.currentTarget)}
                                     data={close}
                                     color="#243746"
                                     size={16}
                                 /> */}
-                            </PunchUploadFileContainer>
-                        </PunchUploadFilesContainer>
-                    )}
-                </PunchAddUploadContainer>
+                                </PunchUploadFileContainer>
+                            </PunchUploadFilesContainer>
+                        )}
+                    </PunchAddUploadContainer>
+                ) : (
+                    <PunchUploadContainer>
+                        {loading && <CircularProgress />}
+                        {!loading && addedUploads?.length > 0 ? (
+                            <div style={{ display: 'flex', overflowX: 'auto' }}>
+                                {addedUploads?.map((upload: Upload, idx) => {
+                                    return (
+                                        <img
+                                            key={idx}
+                                            src={`data:image/png;base64, ${upload.bytes}`}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        ) : (
+                            <p>No uploads available.</p>
+                        )}
+                    </PunchUploadContainer>
+                )}
+                {punch?.checklistTask && (
+                    <>
+                        <Typography variant="h4">Report name</Typography>
+                        <p>{punch?.checklistTask.description}</p>
+                    </>
+                )}
+
+                <Typography variant="h4">Description</Typography>
                 {appLocation.pathname === '/AddPunch' ? (
                     <TextField
                         id=""
-                        label="Description"
-                        value={!punch?.description ? description : undefined}
+                        value={!punch?.description ? userInput.description : undefined}
                         multiline
                         required
-                        onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                            setDescription(event.target.value)
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            setUserInput((prevUserInput) => ({
+                                ...prevUserInput,
+                                description: event.target.value,
+                            }))
                         }}
                     />
                 ) : (
                     <TextField
                         id=""
-                        label="Description"
                         multiline
+                        disabled={Status.APPROVED === punch?.status || hasPermission}
                         key={punch?.id ?? ''}
                         required
-                        defaultValue={punch?.description ?? ''}
-                        onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                            setDescription(event.target.value)
+                        defaultValue={punch?.description}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            setUserInput({
+                                ...userInput,
+                                description: event.target.value,
+                            })
                         }}
                     />
                 )}
 
                 <SeverityContainer>
-                    <Typography variant="h6">Severity</Typography>
+                    <Typography variant="h4">Severity</Typography>
                     <SeverityButtonWrapper>
                         <SeverityButton
-                            defaultValue={punch?.severity ?? 'Minor'}
-                            severity={severity}
-                            setSeverity={setSeverity}
+                            defaultValue={(punch?.severity as string) || 'Minor'}
+                            userInput={userInput}
+                            setUserInput={setUserInput}
                         />
                     </SeverityButtonWrapper>
                 </SeverityContainer>
             </PunchAddContainer>
+
+            <Dialog open={rejectDialogOpen}>
+                <Dialog.Header>
+                    <Dialog.Title>Reject Punch?</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.CustomContent>
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        Request will be rejected and returned to sender.
+                    </Typography>
+                    <div style={{ marginTop: '10px' }}>
+                        <label htmlFor="comment">Add Message</label>
+                        <TextField
+                            id="comment"
+                            multiline
+                            required
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                setMessage(e.target.value)
+                            }
+                        />
+                    </div>
+                </Dialog.CustomContent>
+
+                <Dialog.Actions>
+                    <div>
+                        <Button variant="ghost" color="danger" onClick={handleRejectClose}>
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                setStatus('Rejected')
+                                navigate(-1)
+                            }}
+                            type="submit"
+                            form="punchForm"
+                            color="danger"
+                        >
+                            OK
+                        </Button>
+                    </div>
+                </Dialog.Actions>
+            </Dialog>
+            {punch?.status === Status.REJECTED && !hasPermission && (
+                <Dialog open={open}>
+                    <Dialog.Header>
+                        <Dialog.Title>Punch Message</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.CustomContent style={{ maxHeight: '50px', overflowY: 'auto' }}>
+                        <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                            {punch.message}
+                        </Typography>
+                    </Dialog.CustomContent>
+                    <Dialog.Actions>
+                        <div>
+                            <Button variant="ghost" onClick={() => navigate(-1)}>
+                                Back
+                            </Button>
+                            <Button onClick={() => setOpen(false)}>Update</Button>
+                        </div>
+                    </Dialog.Actions>
+                </Dialog>
+            )}
+
             <Dialog open={positiveOpen}>
                 <Dialog.Header>
                     <Dialog.Title>
-                        {appLocation.pathname === '/addPunch'
-                            ? 'Send punch?'
-                            : 'Update punch?'}
+                        {!hasPermission &&
+                            (lastPathSegment === 'addpunch' ? 'Send punch?' : 'Update punch?')}
+                        {hasPermission && 'Approve Punch?'}
                     </Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography
-                        group="input"
-                        variant="text"
-                        token={{ textAlign: 'left' }}
-                    >
-                        {appLocation.pathname === '/addPunch'
-                            ? 'Send punch? Request will be sent for further approval and management'
-                            : 'Update punch? Punch will be update and be sent for further approval'}
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        {!hasPermission &&
+                            (lastPathSegment === 'addpunch'
+                                ? 'Send punch? Request will be sent for further approval and management'
+                                : 'Update punch? Punch will be update and be sent for further approval')}
+                        {hasPermission && 'Punch will be approved'}
                     </Typography>
                 </Dialog.CustomContent>
                 <Dialog.Actions>
@@ -190,30 +294,62 @@ export const AddPunch: FunctionComponent = () => {
                         <Button variant="ghost" onClick={clearAndClose}>
                             Cancel
                         </Button>
-                        <Button type="submit" form="punchForm">
-                            {appLocation.pathname === '/addPunch'
-                                ? 'Send Punch'
-                                : 'Update Punch'}
-                        </Button>
+                        {!hasPermission && (
+                            <Button type="submit" form="punchForm">
+                                {lastPathSegment === 'addpunch' ? 'Send Punch' : 'Update Punch'}
+                            </Button>
+                        )}
+                        {hasPermission && (
+                            <Button
+                                onClick={() => {
+                                    setStatus('Approved')
+                                    navigate(-1)
+                                }}
+                                type="submit"
+                                form="punchForm"
+                            >
+                                Approve
+                            </Button>
+                        )}
                     </div>
                 </Dialog.Actions>
             </Dialog>
-            <NavActionsComponent
-                ButtonMessage="Cancel"
-                SecondButtonMessage={
-                    appLocation.pathname === '/addPunch'
-                        ? 'Submit punch'
-                        : 'Update punch'
-                }
-                secondButtonColor="primary"
-                buttonVariant="outlined"
-                secondOnClick={handleOpen}
-                onClick={() => {
-                    navigate(-1)
-                }}
-                type="button"
-                isShown={true}
-            />
+            {!hasPermission && (
+                <NavActionsComponent
+                    ButtonMessage="Cancel"
+                    SecondButtonMessage={
+                        lastPathSegment === 'addpunch' ? 'Submit punch' : 'Update punch'
+                    }
+                    secondButtonColor="primary"
+                    buttonVariant="outlined"
+                    secondOnClick={handleOpen}
+                    onClick={() => {
+                        navigate(`/ListPunches`)
+                    }}
+                    primaryType="button"
+                    type="button"
+                    isShown={true}
+                />
+            )}
+
+            {punch?.status !== 'Pending' && (hasPermission || punch?.status === Status.APPROVED) ? (
+                <DefaultNavigation hideNavbar={false} />
+            ) : (
+                hasPermission && (
+                    <NavActionsComponent
+                        ButtonMessage="Reject"
+                        SecondButtonMessage={'Approve'}
+                        secondButtonColor="primary"
+                        buttonVariant="outlined"
+                        buttonColor="danger"
+                        secondOnClick={handleOpen}
+                        onClick={handleRejectOpen}
+                        type="button"
+                        primaryType="button"
+                        isShown={true}
+                    />
+                )
+            )}
         </form>
     )
 }

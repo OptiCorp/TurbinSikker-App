@@ -1,4 +1,4 @@
-import { Icon } from '@equinor/eds-core-react'
+import { CircularProgress, Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { formatDate } from '../../Helpers/index'
@@ -7,7 +7,6 @@ import { usePunchContext } from './context/PunchContextProvider'
 import {
     Container,
     PunchDateContainer,
-    PunchDescriptionContainer,
     PunchHeader,
     PunchWrapper,
     SeverityIconContainer,
@@ -35,11 +34,8 @@ export const punchSeverity: PunchSeverity[] = [
 function Punch() {
     const navigate = useNavigate()
     const { punch } = usePunchContext()
-    console.log(punch)
     const createdDate = punch && formatDate(punch.createdDate)
     const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
-
-    const img = false //temporary, remove when we have an image (upload)
 
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
@@ -71,9 +67,7 @@ function Punch() {
                             <p>{createdDate}</p>
                             {createdDate == updatedDate && (
                                 <p style={{ fontSize: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>
-                                        modified:
-                                    </span>
+                                    <span style={{ fontWeight: 'bold' }}>modified:</span>
                                     {updatedDate}
                                 </p>
                             )}
@@ -81,17 +75,6 @@ function Punch() {
                     </PunchHeader>
 
                     <AddPunch />
-
-                    <PunchDescriptionContainer>
-                        <h4>Report name</h4>
-                        {!punch?.checklistTask ? (
-                            <p>loading ...</p>
-                        ) : (
-                            <div style={{ display: 'flex', gap: 4 }}>
-                                <p>{punch?.checklistTask.description}</p>
-                            </div>
-                        )}
-                    </PunchDescriptionContainer>
                 </Container>
             </PunchWrapper>
         </>
