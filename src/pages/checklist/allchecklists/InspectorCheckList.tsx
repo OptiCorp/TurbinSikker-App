@@ -12,13 +12,11 @@ interface CheckListRowProps {
     WorkFlow: WorkFlow
 }
 
-export const InspectorReceivedCheckLists: FunctionComponent<
-    CheckListRowProps
-> = ({ WorkFlow }) => {
+export const InspectorReceivedCheckLists: FunctionComponent<CheckListRowProps> = ({ WorkFlow }) => {
     const navigate = useNavigate()
 
     const clickHandler = (id: string | undefined) => {
-        navigate(`/FillOutCheckList/${id}`)
+        navigate(`/FillOutChecklist/${id}`)
         console.log(WorkFlow.id)
     }
 

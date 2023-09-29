@@ -35,17 +35,15 @@ export const Header = () => {
     const [title, setTitle] = useState('')
 
     useEffect(() => {
-        const workflow = WorkFlows.find(
-            (item) => item.checklist.id === checkListById?.id
-        )
+        const workflow = WorkFlows.find((item) => item.checklist.id === checkListById?.id)
         let pathTitle = ''
         if (location.pathname.includes('FillOutCheckList') && workflow) {
-            pathTitle =
-                checkListById?.title + ' ' + workflow.id.slice(10, -18) || ''
+            pathTitle = checkListById?.title + ' ' + workflow.id.slice(10, -18) || ''
         } else if (location.pathname === '/AddUser/') {
             pathTitle = location.pathname.slice(1, -1)
         } else {
-            pathTitle = basePath || 'Checklists'
+            pathTitle =
+                basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join(' ') || basePath || 'Checklists'
         }
         setTitle(pathTitle)
     }, [location.pathname, basePath, WorkFlows, checkListById?.id])
@@ -64,11 +62,7 @@ export const Header = () => {
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (
                         <HeaderContents>
-                            <Icon
-                                data={arrow_back_ios}
-                                color="white"
-                                onClick={onClick}
-                            />
+                            <Icon data={arrow_back_ios} color="white" onClick={onClick} />
                         </HeaderContents>
                     )}
                 </TopBar.Header>

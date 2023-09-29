@@ -7,7 +7,7 @@ export const LeaderTabs = () => {
         <>
             <Tabs.Tab
                 as={Link}
-                to="/CheckList"
+                to="/Checklist"
                 style={{
                     borderBottom: 'none',
                 }}

@@ -56,7 +56,7 @@ export function AddPunch() {
     const appLocation = useLocation()
     const { punch } = usePunchContext()
     const [uploads, setUploads] = useState(false)
-    const [open, setOpen] = useState(true)
+    const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
             setFile(e.target.files[0])
@@ -186,7 +186,10 @@ export function AddPunch() {
                     <TextField
                         id=""
                         multiline
-                        disabled={Status.APPROVED === punch?.status || hasPermission}
+                        disabled={
+                            (Status.REJECTED !== punch?.status && lastPathSegment !== 'addpunch') ||
+                            hasPermission
+                        }
                         key={punch?.id ?? ''}
                         required
                         defaultValue={punch?.description}
@@ -252,12 +255,17 @@ export function AddPunch() {
                 </Dialog.Actions>
             </Dialog>
             {punch?.status === Status.REJECTED && !hasPermission && (
-                <Dialog open={open}>
+                <Dialog open={rejectMessageDialog}>
                     <Dialog.Header>
                         <Dialog.Title>Punch Message</Dialog.Title>
                     </Dialog.Header>
                     <Dialog.CustomContent style={{ maxHeight: '50px', overflowY: 'auto' }}>
-                        <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        <Typography
+                            group="input"
+                            color="disabled"
+                            variant="text"
+                            token={{ textAlign: 'left' }}
+                        >
                             {punch.message}
                         </Typography>
                     </Dialog.CustomContent>
@@ -266,7 +274,7 @@ export function AddPunch() {
                             <Button variant="ghost" onClick={() => navigate(-1)}>
                                 Back
                             </Button>
-                            <Button onClick={() => setOpen(false)}>Update</Button>
+                            <Button onClick={() => setRejectMessageDialog(false)}>Update</Button>
                         </div>
                     </Dialog.Actions>
                 </Dialog>
@@ -314,7 +322,10 @@ export function AddPunch() {
                     </div>
                 </Dialog.Actions>
             </Dialog>
-            {!hasPermission && (
+
+            {lastPathSegment !== 'addpunch' && punch?.status !== Status.REJECTED ? (
+                <DefaultNavigation hideNavbar={false} />
+            ) : !hasPermission ? (
                 <NavActionsComponent
                     ButtonMessage="Cancel"
                     SecondButtonMessage={
@@ -324,31 +335,29 @@ export function AddPunch() {
                     buttonVariant="outlined"
                     secondOnClick={handleOpen}
                     onClick={() => {
-                        navigate(`/ListPunches`)
+                        navigate(`/Punches`)
                     }}
                     primaryType="button"
                     type="button"
                     isShown={true}
                 />
+            ) : (
+                <DefaultNavigation hideNavbar={false} />
             )}
 
-            {punch?.status !== 'Pending' && (hasPermission || punch?.status === Status.APPROVED) ? (
-                <DefaultNavigation hideNavbar={false} />
-            ) : (
-                hasPermission && (
-                    <NavActionsComponent
-                        ButtonMessage="Reject"
-                        SecondButtonMessage={'Approve'}
-                        secondButtonColor="primary"
-                        buttonVariant="outlined"
-                        buttonColor="danger"
-                        secondOnClick={handleOpen}
-                        onClick={handleRejectOpen}
-                        type="button"
-                        primaryType="button"
-                        isShown={true}
-                    />
-                )
+            {punch?.status === Status.PENDING && hasPermission && (
+                <NavActionsComponent
+                    ButtonMessage="Reject"
+                    SecondButtonMessage={'Approve'}
+                    secondButtonColor="primary"
+                    buttonVariant="outlined"
+                    buttonColor="danger"
+                    secondOnClick={handleOpen}
+                    onClick={handleRejectOpen}
+                    type="button"
+                    primaryType="button"
+                    isShown={true}
+                />
             )}
         </form>
     )
