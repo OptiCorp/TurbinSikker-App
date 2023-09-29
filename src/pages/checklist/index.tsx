@@ -14,22 +14,17 @@ export const IndexCheckLists = () => {
     return (
         <MainWrap>
             <>
-                <Tabs
-                    variant="minWidth"
-                    onChange={handleChange}
-                    activeTab={activeTab}
-                >
+                <Tabs variant="minWidth" onChange={handleChange} activeTab={activeTab}>
                     <Tabs.List>
                         <Tabs.Tab
                             as={Link}
-                            to="/CheckList"
+                            to="/Checklist"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
                                 color: 'black',
-                                backgroundColor:
-                                    activeTab === 0 ? '#007079' : '#f5f5f5',
+                                backgroundColor: activeTab === 0 ? '#007079' : '#f5f5f5',
                             }}
                         >
                             {currentUser?.userRole.name === 'Leader' ? (
@@ -46,8 +41,7 @@ export const IndexCheckLists = () => {
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
                                 color: 'black',
-                                backgroundColor:
-                                    activeTab === 1 ? '#007079' : '#f5f5f5',
+                                backgroundColor: activeTab === 1 ? '#007079' : '#f5f5f5',
                             }}
                         >
                             {currentUser?.userRole.name === 'Leader' ? (
@@ -58,14 +52,13 @@ export const IndexCheckLists = () => {
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
-                            to="/CompletedCheckList"
+                            to="/CompletedChecklist"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
                                 color: 'black',
-                                backgroundColor:
-                                    activeTab === 2 ? '#007079' : '#f5f5f5',
+                                backgroundColor: activeTab === 2 ? '#007079' : '#f5f5f5',
                             }}
                         >
                             Completed

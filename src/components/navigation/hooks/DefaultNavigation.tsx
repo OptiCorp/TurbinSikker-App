@@ -9,11 +9,7 @@ export const DefaultNavigation: React.FC<{
 }> = ({ hideNavbar }) => {
     const path = useLocation()
     const [activeTab, setActiveTab] = useState<number | undefined>(
-        path.pathname.includes('ListPunches')
-            ? 0
-            : path.pathname.includes('checklist')
-            ? 1
-            : 2
+        path.pathname.includes('ListPunches') ? 0 : path.pathname.includes('checklist') ? 1 : 2
     )
 
     const handleChange = (index: number) => {
@@ -22,18 +18,14 @@ export const DefaultNavigation: React.FC<{
     return (
         <FooterContainer>
             {!hideNavbar && (
-                <StyledTabs
-                    activeTab={activeTab}
-                    onChange={handleChange}
-                    variant="fullWidth"
-                >
+                <StyledTabs activeTab={activeTab} onChange={handleChange} variant="fullWidth">
                     <StyledList>
                         <StyledTab>
                             <NavItem
                                 icon={checkbox}
                                 name="Punches"
                                 isActive={activeTab === 0}
-                                to="/ListPunches"
+                                to="/Punches"
                             />
                         </StyledTab>
                         <StyledTab>
@@ -41,7 +33,7 @@ export const DefaultNavigation: React.FC<{
                                 icon={assignment}
                                 name="Checklists"
                                 isActive={activeTab === 1}
-                                to="/checklist"
+                                to="/Checklist"
                             />
                         </StyledTab>
                         <StyledTab>
