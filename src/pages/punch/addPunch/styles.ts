@@ -8,7 +8,7 @@ export const PunchAddContainer = styled.div`
 export const PunchAddUploadContainer = styled.div`
     display: flex;
     width: 100%;
-    padding: 25px;
+    margin-bottom: 20px;
 `
 
 export const PunchUploadFileContainer = styled.div`

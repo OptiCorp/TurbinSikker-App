@@ -2,15 +2,19 @@ import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigatio
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { formatDate } from '../../../Helpers'
+import { formatDate, formatTimeStamp } from '../../../Helpers'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import { punchSeverity } from '../Index'
 import { usePunchContext } from '../context/PunchContextProvider'
 import {
+    CreatedByContainer,
     PunchListBoxContainer,
     PunchListItem,
+    StatusBadge,
+    StatusBadgeContainer,
     TicketActions,
     TicketButtonContainer,
+    TicketCardDescription,
     TicketDetails,
     TicketIcons,
     TicketInfo,
@@ -24,13 +28,31 @@ function ListPunches() {
     const { punches } = usePunchContext()
     const navigate = useNavigate()
     const [sorted, setSorted] = useState(false)
-
+    const [showBadge, setShowBadge] = useState(true)
     punches?.sort((a, b) => {
         const dateA = new Date(a.createdDate)
         const dateB = new Date(b.createdDate)
 
         return dateB.valueOf() - dateA.valueOf()
     })
+
+    punches.sort((a, b) => {
+        if (hasPermission) {
+            if (a.status === Status.PENDING && b.status !== Status.PENDING) {
+                return -1
+            } else if (a.status !== Status.PENDING && b.status === Status.PENDING) {
+                return 1
+            }
+        } else {
+            if (a.status === Status.REJECTED && b.status !== Status.REJECTED) {
+                return -1
+            } else if (a.status !== Status.REJECTED && b.status === Status.REJECTED) {
+                return 1
+            }
+        }
+        return 0
+    })
+
     const rejectedPunches = punches.filter((punch) => punch.status === Status.REJECTED)
 
     const filteredPunches = sorted
@@ -40,7 +62,7 @@ function ListPunches() {
     function clickHandler(punchId: string, workFlowId: string) {
         navigate(`/workflow/${workFlowId}/punch/${punchId}`)
     }
-    console.log(punches)
+
     return (
         <>
             <PunchListItem>
@@ -48,113 +70,73 @@ function ListPunches() {
                     <p>Punches are displayed here..</p>
                 ) : (
                     <>
-                        <div
+                        {/* <div
                             style={{
                                 display: 'flex',
+                                flexDirection: 'column',
                                 background: '#fff',
-                                alignItems: 'center',
                                 padding: '20px',
                             }}
                         >
-                            <input
-                                id="sort"
-                                type="checkbox"
-                                onChange={() => setSorted((prev) => !prev)}
-                            />
-                            <label htmlFor="sort">Rejected ({rejectedPunches.length})</label>
-                        </div>
+                            <div>
+                                <input
+                                    id="sort"
+                                    type="checkbox"
+                                    onChange={() => setSorted((prev) => !prev)}
+                                />
+                                <label htmlFor="sort">Rejected ({rejectedPunches.length})</label>
+                            </div>
+                            <div>
+                                <input
+                                    id="show"
+                                    type="checkbox"
+                                    onChange={() => setShowBadge((prev) => !prev)}
+                                />
+                                <label htmlFor="show">Hide status badge</label>
+                            </div>
+                        </div> */}
                         {filteredPunches?.map((punch, idx) => {
                             return (
                                 <PunchListBoxContainer
                                     onClick={() => clickHandler(punch.id, punch.workflowId)}
                                     key={idx}
-                                    style={{ position: 'relative' }}
                                 >
-                                    <TicketInfo>
-                                        <TicketSeverityContainer>
-                                            {punchSeverity.map((severityItem, idx) => {
-                                                if (punch.severity === severityItem.severity) {
-                                                    return (
-                                                        <Icon
-                                                            key={idx}
-                                                            data={severityItem.icon}
-                                                            size={40}
-                                                            style={{
-                                                                color: severityItem.color,
-                                                            }}
-                                                        />
-                                                    )
-                                                }
-                                            })}
-                                            <Typography>{punch.severity}</Typography>
+                                    <StatusBadgeContainer>
+                                        {showBadge && (
+                                            <StatusBadge status={punch.status}>
+                                                {punch.status}
+                                            </StatusBadge>
+                                        )}
+                                    </StatusBadgeContainer>
 
-                                            <div>
-                                                {punch.status === Status.REJECTED && (
-                                                    <span
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: '-10px',
-                                                            left: '-10px',
-                                                            background: 'rgba(255, 0,0, .7)',
-                                                            color: '#fff',
-                                                            padding: '5px',
-                                                            borderRadius: '4px',
-                                                        }}
-                                                    >
-                                                        Rejected
-                                                    </span>
-                                                )}
-                                                {punch.status === Status.APPROVED && (
-                                                    <span
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: '-10px',
-                                                            left: '-10px',
-                                                            background: 'rgba(0, 137, 18, 0.7)',
-                                                            color: '#fff',
-                                                            padding: '5px',
-                                                            borderRadius: '4px',
-                                                        }}
-                                                    >
-                                                        Approved
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </TicketSeverityContainer>
+                                    <TicketInfo>
                                         <TicketDetails>
                                             <Typography>
                                                 Ticket-{punch?.id.split('-')[0]}
                                             </Typography>
 
-                                            <Typography color="disabled">
+                                            <TicketCardDescription>
                                                 {punch.checklistTask.description}
-                                            </Typography>
+                                            </TicketCardDescription>
 
                                             {hasPermission && (
                                                 <>
                                                     <Typography>Created By:</Typography>
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: '5px',
-                                                            background: '#C5C5C594',
-                                                            color: '#000',
-                                                            boxShadow:
-                                                                '1px 1px 0px 0px #9d9d9d inset',
-                                                        }}
-                                                    >
+                                                    <CreatedByContainer>
                                                         <Icon size={18} data={assignment_user} />
                                                         {punch.user.firstName}
-                                                    </div>
+                                                    </CreatedByContainer>
                                                 </>
                                             )}
                                         </TicketDetails>
                                     </TicketInfo>
 
                                     <TicketActions>
-                                        <Typography style={{ textAlign: 'right' }} color="disabled">
+                                        <Typography color="disabled">
                                             {formatDate(punch.createdDate)}
+                                        </Typography>
+                                        <Typography color="disabled">
+                                            {formatTimeStamp(punch.createdDate)}
                                         </Typography>
                                         <TicketIcons>
                                             <Icon data={image} />
@@ -166,7 +148,7 @@ function ListPunches() {
                                                 variant="ghost"
                                                 color="primary"
                                             >
-                                                See Details
+                                                Details
                                             </Button>
                                             <Icon size={16} data={arrow_forward_ios} />
                                         </TicketButtonContainer>

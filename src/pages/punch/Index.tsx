@@ -1,13 +1,14 @@
-import { CircularProgress, Icon } from '@equinor/eds-core-react'
+import { CircularProgress, Icon, Typography } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { formatDate } from '../../Helpers/index'
+import { formatDate, formatTimeStamp } from '../../Helpers/index'
 import { AddPunch } from './addPunch/AddPunch'
 import { usePunchContext } from './context/PunchContextProvider'
 import {
     Container,
     PunchDateContainer,
     PunchHeader,
+    PunchHeaderWrapper,
     PunchWrapper,
     SeverityIconContainer,
 } from './styles'
@@ -35,8 +36,7 @@ function Punch() {
     const navigate = useNavigate()
     const { punch } = usePunchContext()
     const createdDate = punch && formatDate(punch.createdDate)
-    const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
-
+    const timeStamp = punch && formatTimeStamp(punch?.createdDate)
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
@@ -45,34 +45,21 @@ function Punch() {
         <>
             <PunchWrapper>
                 <Container>
-                    <PunchHeader>
-                        <SeverityIconContainer>
-                            {punchSeverity.map((severityItem, idx) => {
-                                if (punch?.severity === severityItem.severity) {
-                                    return (
-                                        <Icon
-                                            key={idx}
-                                            data={severityItem.icon}
-                                            style={{
-                                                color: severityItem.color,
-                                            }}
-                                        />
-                                    )
-                                }
-                            })}
-
-                            <h4>Ticket-{punch?.id.split('-')[0]}</h4>
-                        </SeverityIconContainer>
-                        <PunchDateContainer>
-                            <p>{createdDate}</p>
-                            {createdDate == updatedDate && (
-                                <p style={{ fontSize: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>modified:</span>
-                                    {updatedDate}
-                                </p>
+                    <PunchHeaderWrapper>
+                        <PunchHeader>
+                            <SeverityIconContainer>
+                                <Typography variant="h4">
+                                    Ticket-{punch?.id.split('-')[0]}
+                                </Typography>
+                            </SeverityIconContainer>
+                            {punch && (
+                                <PunchDateContainer>
+                                    <Typography>{createdDate}</Typography>
+                                    <Typography>({timeStamp})</Typography>
+                                </PunchDateContainer>
                             )}
-                        </PunchDateContainer>
-                    </PunchHeader>
+                        </PunchHeader>
+                    </PunchHeaderWrapper>
 
                     <AddPunch />
                 </Container>

@@ -21,17 +21,17 @@ export const PunchWrapper = styled.div`
 
 export const Container = styled.div``
 
+export const PunchHeaderWrapper = styled.div`
+    padding: 0 20px;
+`
+
 export const PunchHeader = styled.div`
-    min-width: 320px;
-    width: 90%;
+    /* min-width: 320px; */
+    /* width: 90%; */
     display: flex;
     justify-content: space-between;
     margin-top: 16px;
-    text-align: right;
-
-    p {
-        margin: 0;
-    }
+    align-items: center;
 `
 
 export const PunchUploadContainer = styled.div`
@@ -59,9 +59,8 @@ export const PunchUploadContainer = styled.div`
 `
 
 export const SeverityIconContainer = styled.div`
-    display: flex;
     align-items: center;
-    padding-left: 2rem;
+    /* padding-left: 2rem; */
     gap: 4;
 `
 
@@ -105,7 +104,6 @@ export const InputWrapper = styled.div`
 
 export const PunchDateContainer = styled.div`
     text-align: right;
-    p {
-        margin: 0;
-    }
+    display: flex;
+    gap: 4px;
 `

@@ -5,6 +5,7 @@ import { Button } from '../styles'
 import { Punch, Status } from '../types'
 import { usePunchContext } from '../context/PunchContextProvider'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import { useLocation } from 'react-router'
 
 function SeverityButton({
     //severity,
@@ -23,7 +24,11 @@ function SeverityButton({
 }) {
     const { punch } = usePunchContext()
     const { hasPermission } = useHasPermission()
+    const appLocation = useLocation()
     const [activeButtonIndex, setActiveButtonIndex] = useState(0)
+
+    const path = appLocation.pathname.split('/')
+    const lastPathSegment = path[path.length - 1]
 
     const SeverityButtons = [
         {
@@ -67,11 +72,12 @@ function SeverityButton({
                 const buttonStyle: React.CSSProperties = {
                     backgroundColor: isActive ? '#fff' : 'transparent',
                     boxShadow: !isActive ? 'none' : '0px 4px 4px 0px #bebebe',
-                    color: isActive
-                        ? '#000'
-                        : Status.APPROVED === punch?.status || hasPermission
-                        ? '#BEBEBE'
-                        : '#000' /* isActive ? '#000' : '#bebebe', */,
+                    color:
+                        isActive || lastPathSegment === 'addpunch'
+                            ? '#000'
+                            : Status.REJECTED !== punch?.status || hasPermission
+                            ? '#BEBEBE'
+                            : '#000' /* isActive ? '#000' : '#bebebe', */,
                     borderRadius: 4,
                 }
 
@@ -93,14 +99,19 @@ function SeverityButton({
                             style={buttonStyle}
                             type="button"
                             onClick={() => handleChecked(index)}
-                            disabled={punch?.status === Status.APPROVED || hasPermission}
+                            disabled={
+                                (punch?.status !== Status.REJECTED &&
+                                    lastPathSegment !== 'addpunch') ||
+                                hasPermission
+                            }
                         >
                             <Icon
                                 data={button.icon}
                                 color={
-                                    /* isActive ? button.color : '#BEBEBE' */ isActive
+                                    /* isActive ? button.color : '#BEBEBE' */ lastPathSegment ===
+                                        'addpunch' || isActive
                                         ? button.color
-                                        : Status.APPROVED === punch?.status || hasPermission
+                                        : Status.REJECTED !== punch?.status || hasPermission
                                         ? '#BEBEBE'
                                         : button.color
                                 }
