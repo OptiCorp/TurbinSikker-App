@@ -90,15 +90,6 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                             <Chip variant="active" style={{ margin: '0 auto' }}>
                                 {userIdCheckList.status}
                             </Chip>
-                            {/* <Typography
-                                variant="caption"
-                                token={{
-                                    textAlign: 'center',
-                                    fontSize: '0.8rem',
-                                }}
-                            >
-                                {formattedUpdatedDate}
-                            </Typography> */}
                         </CellContentMyList>
                     </MyCheckListCell>
                 </StyledTableRow>

@@ -54,12 +54,7 @@ export const CompletedChecklists = () => {
                 </ListWrapperCompletedList>
             </BackgroundWrapCompleted>
 
-            <DefaultNavigation
-                hideNavbar={
-                    state?.isFromCompletedList ||
-                    currentUser?.userRole.name === 'Inspector'
-                }
-            />
+            <DefaultNavigation hideNavbar={state?.isFromCompletedList} />
         </>
     )
 }
