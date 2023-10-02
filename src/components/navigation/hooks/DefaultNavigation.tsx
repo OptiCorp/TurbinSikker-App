@@ -9,7 +9,7 @@ export const DefaultNavigation: React.FC<{
 }> = ({ hideNavbar }) => {
     const path = useLocation()
     const [activeTab, setActiveTab] = useState<number | undefined>(
-        path.pathname.includes('ListPunches') ? 0 : path.pathname.includes('checklist') ? 1 : 2
+        path.pathname.includes('Punches') ? 0 : path.pathname.includes('Checklist') ? 1 : 2
     )
 
     const handleChange = (index: number) => {

@@ -51,7 +51,6 @@ export const ImageContainer = styled.div`
 export const ImageContainerActive = styled.div`
     border-bottom: none;
     color: #73b1b5;
-
     margin: 0 auto;
     text-decoration: none;
     display: flex;
@@ -84,7 +83,6 @@ export const NavigationMainWrap = styled.div`
 export const StyledList = styled(Tabs.List)`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-
     width: 100vw;
     height: 100%;
 `
