@@ -4,7 +4,7 @@ import Logosidebar from '../../assets/images/bigLogo.png'
 import { Container, LinkContainer, RouteName, StyledSheet } from './styles'
 
 import { useMsal } from '@azure/msal-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export type Props = {
     open: boolean
@@ -12,9 +12,11 @@ export type Props = {
 }
 
 const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
+    const navigate = useNavigate()
     const { instance } = useMsal()
     const handleSubmit = () => {
         instance.logoutPopup()
+        navigate('/')
     }
     return (
         <>
@@ -33,32 +35,20 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                         <img style={{ width: '100%' }} src={Logosidebar} />
                     </Container>
                     <LinkContainer>
-                        <Button
-                            as={Link}
-                            to="/profile"
-                            fullWidth
-                            variant="ghost"
-                        >
+                        <Button as={Link} to="/profile" fullWidth variant="ghost">
                             <RouteName>
-                                {' '}
                                 <Typography
                                     variant="body_long_bold"
                                     color="white"
                                     style={{ minWidth: '100px' }}
                                     token={{ fontSize: '1.6em' }}
                                 >
-                                    Profile{' '}
+                                    Profile
                                 </Typography>
                             </RouteName>
                         </Button>
-                        <Button
-                            as={Link}
-                            to="/ListUsers"
-                            fullWidth
-                            variant="ghost"
-                        >
+                        <Button as={Link} to="/ListUsers" fullWidth variant="ghost">
                             <RouteName>
-                                {' '}
                                 <Typography
                                     variant="body_long_bold"
                                     color="white"
@@ -69,11 +59,7 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                                 </Typography>
                             </RouteName>
                         </Button>
-                        <Button
-                            fullWidth
-                            variant="ghost"
-                            onClick={handleSubmit}
-                        >
+                        <Button fullWidth variant="ghost" onClick={handleSubmit}>
                             <RouteName>
                                 {' '}
                                 <Typography
