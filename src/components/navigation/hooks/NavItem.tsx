@@ -17,27 +17,15 @@ export const NavItem = ({
 }) => {
     return (
         <Link to={to} style={{ textDecoration: 'none' }}>
-            {isActive ? (
-                <ImageContainerActive>
-                    <Test>
-                        <NotificationBadge name={name} />
-                    </Test>
-                    <Icon data={icon} size={24} color="#73b1b5" />
-                    <Typography variant="caption" color={'#73b1b5'}>
-                        {name}
-                    </Typography>
-                </ImageContainerActive>
-            ) : (
-                <ImageContainer>
-                    <Test>
-                        <NotificationBadge name={name} />
-                    </Test>
-                    <Icon data={icon} size={24} color="white" />
-                    <Typography variant="caption" color={'white'}>
-                        {name}
-                    </Typography>
-                </ImageContainer>
-            )}
+            <ImageContainerActive>
+                <Test>
+                    <NotificationBadge name={name} />
+                </Test>
+                <Icon data={icon} size={24} color={isActive ? '#73b1b5' : '#fff'} />
+                <Typography variant="caption" color={isActive ? '#73b1b5' : '#fff'}>
+                    {name}
+                </Typography>
+            </ImageContainerActive>
         </Link>
     )
 }
