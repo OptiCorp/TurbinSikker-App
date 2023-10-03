@@ -14,7 +14,7 @@ const App = () => {
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <AuthProvider>
+                <AuthProvider> 
                   
                         <UserContextProvider>
                         <CheckListContextProvider>

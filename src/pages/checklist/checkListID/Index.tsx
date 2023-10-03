@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router'
 import { useCheckListContext } from '../../context/CheckListContextProvider'
 import { LeaderMyChecklists } from './LeaderMyChecklists'
 
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { useUserContext } from '../../users/context/userContextProvider'
 import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { InspectorPendingRow } from './InspectorPendingRow'
@@ -62,10 +63,14 @@ export const MyCheckLists = () => {
                                     <StyledHeadTitle>Title</StyledHeadTitle>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledHeadContents>Assigned</StyledHeadContents>
+                                    <StyledHeadContents>
+                                        Assigned
+                                    </StyledHeadContents>
                                 </HeadCell>
                                 <HeadCell>
-                                    <StyledHeadContents>Status</StyledHeadContents>
+                                    <StyledHeadContents>
+                                        Status
+                                    </StyledHeadContents>
                                 </HeadCell>
                             </Table.Row>
                         </Table.Head>
@@ -83,14 +88,18 @@ export const MyCheckLists = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {userIdCheckList?.map((userIdCheckList) => (
-                                            <LeaderMyChecklists
-                                                userIdCheckList={userIdCheckList}
-                                                key={userIdCheckList.id}
-                                                setActiveRow={setActiveRow}
-                                                activeRow={activeRow}
-                                            />
-                                        ))}
+                                        {userIdCheckList?.map(
+                                            (userIdCheckList) => (
+                                                <LeaderMyChecklists
+                                                    userIdCheckList={
+                                                        userIdCheckList
+                                                    }
+                                                    key={userIdCheckList.id}
+                                                    setActiveRow={setActiveRow}
+                                                    activeRow={activeRow}
+                                                />
+                                            )
+                                        )}
                                     </>
                                 )}
                             </>
@@ -111,7 +120,7 @@ export const MyCheckLists = () => {
                     SecondButtonMessage="Cancel"
                     isShown={true}
                 />
-            ) : (
+            ) : currentUser?.userRole.name === 'Leader' ? (
                 <NavActionsComponent
                     buttonVariant="outlined"
                     onClick={() => {
@@ -125,7 +134,10 @@ export const MyCheckLists = () => {
                     isShown={true}
                     SecondButtonMessage="Send Checklist"
                 />
+            ) : (
+                <DefaultNavigation hideNavbar={false} />
             )}
+
             <CustomDialog
                 title="Title of checklist"
                 buttonVariant="ghost"
