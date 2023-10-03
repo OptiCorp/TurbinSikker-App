@@ -1,10 +1,9 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
+import { useApiHooks } from '../../../Helpers/useApiHooks'
 import useAuth from '../../../context/AuthContextProvider'
-import apiService from '../../../services/api'
 import { ApiStatus } from "../../../services/apiTypes"
-import { useUserContext } from '../../users/context/userContextProvider'
 import { HeadCell } from '../checkListID/styles'
 import { WorkFlow } from '../workflow/types'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
@@ -19,11 +18,13 @@ import {
 
 export const CheckList = () => {
     const {accessToken} = useAuth()
-    const api = apiService(accessToken)
+    const {params, currentUserId, currentUser,api} = useApiHooks()
+  
     const [workflow, setWorkFlow] = useState<WorkFlow[]>([])
     const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const { accounts, inProgress } = useAuth()
-    const { currentUser } = useUserContext()
+
+
 
     // const { WorkFlows, allWorkFlows, workFlowById } = useWorkflowContext()
 
@@ -40,10 +41,10 @@ export const CheckList = () => {
 
     useEffect(() => {
      
-            if (!currentUser?.id || !accessToken) return
+            if (!currentUserId || !accessToken) return
             (async (): Promise<void> => {
                 try {
-            const workFlows = await api.getAllWorkflowsByUserId(currentUser.id)
+            const workFlows = await api.getAllWorkflowsByUserId(currentUserId)
 
             setWorkFlow(workFlows)
             setWorkflowStatus(ApiStatus.SUCCESS);
@@ -51,7 +52,9 @@ export const CheckList = () => {
             setWorkflowStatus(ApiStatus.ERROR);
         }
     })();
-    }, [accessToken, currentUser])
+
+   
+    }, [accessToken, currentUserId])
 
 
   

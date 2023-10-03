@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { ApiService } from "../services/api";
+import React, { useEffect, useState } from "react";
+import apiService, { ApiService } from "../services/api";
 import { ApiStatus } from "../services/apiTypes";
 
 import { Progress, Typography } from "@equinor/eds-core-react";
@@ -13,34 +13,36 @@ const TurbinSikkerApiContext = React.createContext({} as TurbinSikkerApiProps);
 
 type TurbinSikkerApiProps = {
     api: ApiService
-    auth: AuthContextType
-    fetchChecklistStatus: ApiStatus
+    auth?: AuthContextType
+    fetchChecklistStatus?: ApiStatus
     accessToken: string
 };
 
 
 
-type TurbinSikkerApiContextProviderProps = {
-    children: ReactNode;
-    auth: AuthContextType
-    api: ApiService
-    fetchChecklistStatus: ApiStatus,
-    accessToken: string
-//     appConfig: AppConfig;
-//     featureFlags: FeatureFlags;
-//    acessToken: string
-//     ipoApi: ProcosysIPOApiService;
-};
+// type TurbinSikkerApiContextProviderProps = {
+//     children: ReactNode;
+//     auth?: AuthContextType
+//     api: ApiService
+//     fetchChecklistStatus?: ApiStatus,
+//     accessToken: string
+// //     appConfig: AppConfig;
+// //     featureFlags: FeatureFlags;
+// //    acessToken: string
+// //     ipoApi: ProcosysIPOApiService;
+// };
 
 
 
 
 
 
-const TurbinSikkerApiContextProvider: React.FC<TurbinSikkerApiContextProviderProps> = ({
-children, api, auth,
-}: TurbinSikkerApiContextProviderProps) => {
-    const { accessToken } = useAuth()
+const TurbinSikkerApiContextProvider = ({
+    children,
+}: {
+    children: React.ReactNode
+}) => {
+ 
 
     const [fetchChecklistStatus, setFetchChecklistStatus] = useState<ApiStatus>(
         ApiStatus.LOADING
@@ -53,15 +55,12 @@ children, api, auth,
     // const { workflowId } = useParams()
     const { currentUser } = useUserContext()
 
-    const {
-        accounts,
-
-        accountname,
-
-        inProgress,
-    } = useAuth()
+    const {accessToken, } =useAuth()
 
 
+const api  = apiService(accessToken)
+
+   
 
     useEffect(() => {
         (async (): Promise<void> => {
@@ -89,7 +88,7 @@ children, api, auth,
 
 return (
 
-<TurbinSikkerApiContext.Provider value={{fetchChecklistStatus, api,auth, accessToken}}>
+<TurbinSikkerApiContext.Provider value={{ api, accessToken, fetchChecklistStatus}}>
 
     {children}
 </TurbinSikkerApiContext.Provider>

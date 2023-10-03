@@ -5,6 +5,10 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import { pca } from './msalconfig.ts'
 
+
+
+
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <MsalProvider instance={pca}>
