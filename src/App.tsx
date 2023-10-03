@@ -3,19 +3,33 @@ import './assets/App.css'
 import { RoutesContainer } from './components/RoutesContainer'
 import { SnackbarComponent } from './components/snackbar/SnackBar'
 import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
+import { TurbinSikkerApiContextProvider } from './context/TurbinSikkerApiContext'
 import { CheckListContextProvider } from './pages/context/CheckListContextProvider'
-import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
+import useAuth, { AuthContextType, AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
 import { Login } from './pages/login'
 import { UserContextProvider } from './pages/users/context/userContextProvider'
+import { ApiService } from './services/api'
+import { ApiStatus } from './services/apiTypes'
 
-const App = () => {
+type AppProps = {
+
+    api: ApiService
+    auth: AuthContextType
+    fetchChecklistStatus: ApiStatus
+
+
+
+};
+
+
+const App = ({auth, api, fetchChecklistStatus}: AppProps): JSX.Element => { 
     const isAuthenticated = useIsAuthenticated()
-
+const {accessToken} =useAuth()
     return (
         <div className="wrapper">
             {isAuthenticated && (
                 <AuthProvider> 
-                  
+                  <TurbinSikkerApiContextProvider auth={auth} api={api} fetchChecklistStatus={fetchChecklistStatus} accessToken={accessToken}>
                         <UserContextProvider>
                         <CheckListContextProvider>
                             <SnackbarContextProvider>
@@ -24,7 +38,7 @@ const App = () => {
                             </SnackbarContextProvider>
                             </CheckListContextProvider>
                         </UserContextProvider>
-                  
+                        </TurbinSikkerApiContextProvider>
                 </AuthProvider>
             )}
             {!isAuthenticated && <Login />}

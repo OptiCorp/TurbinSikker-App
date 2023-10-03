@@ -4,9 +4,20 @@ export enum ApiStatus {
     ERROR,
 }
 
-export type UserEntity = {
+export type User = {
     id: string
+    azureAdUserId: string
+    firstName: string
+    lastName: string
+    email: string
     username: string
+    userRole: {
+        id: string
+        name: string
+    }
+    status: string
+    createdDate: string
+    updatedDate: string | null
     // rest
 }
 
@@ -19,7 +30,7 @@ export type PunchItem = {
     message: string
     createdDate: string
     updatedDate: null | string
-    user: UserEntity
+    user: User
     // checklistTask: ChecklistTaskEntity
     // uploads: UploadEntity
 }

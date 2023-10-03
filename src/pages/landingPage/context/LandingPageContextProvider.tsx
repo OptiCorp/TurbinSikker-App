@@ -16,7 +16,7 @@ import {
 
 /////////
 
-interface AuthContextType {
+export interface AuthContextType {
   // We defined the user type in `index.d.ts`, but it's
   // a simple object with email, name and password.
   idToken: string;
