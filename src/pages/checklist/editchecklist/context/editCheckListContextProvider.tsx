@@ -4,9 +4,9 @@ import { useNavigate, useParams } from 'react-router'
 import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
 import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
 import { API_URL } from '../../../../config'
+import useAuth from '../../../../context/AuthContextProvider'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../context/models/CheckListEntity'
-import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 
 export type ContextType = {
     task: TaskEntity | any
@@ -207,3 +207,4 @@ function useEditCheckListContext() {
 }
 
 export { EditCheckListContext, EditCheckListContextProvider, useEditCheckListContext }
+

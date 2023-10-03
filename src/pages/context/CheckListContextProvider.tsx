@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 import { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
 import { ListEntity } from 'src/pages/users/context/models/ListEntity'
 import { API_URL } from '../../config'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
+import useAuth from '../../context/AuthContextProvider'
 import { useUserContext } from '../users/context/userContextProvider'
 import { ICheckListUserID } from './models/CheckListUserIdEntity'
 
@@ -228,3 +228,4 @@ function useCheckListContext() {
 }
 
 export { CheckListContext, CheckListContextProvider, useCheckListContext }
+

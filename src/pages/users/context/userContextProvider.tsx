@@ -1,14 +1,14 @@
 import decode from 'jwt-decode'
 import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react'
 import { useLocation } from 'react-router'
 import { API_URL } from '../../../config'
-import useAuth from '../../landingPage/context/LandingPageContextProvider'
+import useAuth from '../../../context/AuthContextProvider'
 import { Option } from '../context/models/OptionsEntity'
 import { AzureUserInfo } from './models/AzureUserEntity'
 import { UserEntity } from './models/UserEntity'
@@ -276,3 +276,4 @@ function useUserContext() {
 }
 
 export { UserContext, UserContextProvider, useUserContext }
+

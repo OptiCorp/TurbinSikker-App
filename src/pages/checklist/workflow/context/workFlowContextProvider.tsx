@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { API_URL } from '../../../../config'
+import useAuth from '../../../../context/AuthContextProvider'
 import { useUserContext } from '../../../../pages/users/context/userContextProvider'
-import useAuth from '../../../landingPage/context/LandingPageContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
 import { getWorkflowById } from './api'
 
@@ -206,3 +206,4 @@ function useWorkflowContext() {
 }
 
 export { WorkflowContext, WorkflowContextProvider, useWorkflowContext }
+

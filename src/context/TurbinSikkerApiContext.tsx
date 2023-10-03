@@ -4,8 +4,8 @@ import { ApiStatus } from "../services/apiTypes";
 
 import { Progress, Typography } from "@equinor/eds-core-react";
 import PageNotFound from "../pages/PageNotFound";
-import useAuth, { AuthContextType } from '../pages/landingPage/context/LandingPageContextProvider';
 import { useUserContext } from "../pages/users/context/userContextProvider";
+import useAuth, { AuthContextType } from './AuthContextProvider';
 
 
 const TurbinSikkerApiContext = React.createContext({} as TurbinSikkerApiProps);

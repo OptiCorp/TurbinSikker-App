@@ -1,7 +1,7 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
+import useAuth from '../../../context/AuthContextProvider'
 import apiService from '../../../services/api'
 import { ApiStatus } from "../../../services/apiTypes"
 import { useUserContext } from '../../users/context/userContextProvider'
@@ -20,7 +20,6 @@ import {
 export const CheckList = () => {
     const {accessToken} = useAuth()
     const api = apiService(accessToken)
-
     const [workflow, setWorkFlow] = useState<WorkFlow[]>([])
     const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const { accounts, inProgress } = useAuth()

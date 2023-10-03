@@ -1,16 +1,16 @@
 import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react'
 
 import { useParams } from 'react-router'
 import { API_URL } from '../../../config'
+import useAuth from '../../../context/AuthContextProvider'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
 import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { Category } from './models/CategoryEntity'
 import { TaskEntity } from './models/TaskEntity'
@@ -160,7 +160,8 @@ function useTaskCategoryContext() {
 }
 
 export {
-    TaskCategoryContext,
-    TaskCategoryContextProvider,
-    useTaskCategoryContext,
+  TaskCategoryContext,
+  TaskCategoryContextProvider,
+  useTaskCategoryContext
 }
+

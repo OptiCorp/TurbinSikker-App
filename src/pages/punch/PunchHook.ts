@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
 import { getUploadByPunchId } from '../../Upload'
 import { API_URL } from '../../config'
+import useAuth from '../../context/AuthContextProvider'
 import { useCheckListContext } from '../context/CheckListContextProvider'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
 import { usePunchContext } from './context/PunchContextProvider'
 
 export function usePunch() {
