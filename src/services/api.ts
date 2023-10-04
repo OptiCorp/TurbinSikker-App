@@ -1,8 +1,8 @@
 import { API_URL } from '../config'
-import { PunchItem, User } from './apiTypes'
+import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow } from './apiTypes'
 
 const apiService = (token: string) => {
-    //Generic function for get requests
+    // Generic function for get requests
     const getByFetch = async (url: string): Promise<any> => {
         const GetOperation = {
             method: 'GET',
@@ -16,14 +16,13 @@ const apiService = (token: string) => {
         if (res.ok) {
             const jsonResult = await res.json()
             const resultObj = jsonResult
-
             return resultObj
         } else {
             console.error('Get by fetch failed. Url=' + url, res)
         }
     }
 
-    //Generic function for post requests
+    // Generic function for post requests
     const postByFetch = async (url: string, bodyData?: any): Promise<any> => {
         const postOperation = {
             method: 'POST',
@@ -38,13 +37,13 @@ const apiService = (token: string) => {
         if (res.ok) {
             const jsonResult = await res.json()
             const resultObj = jsonResult
-
             return resultObj
         } else {
             console.error('Post by fetch failed. Url=' + url, res)
         }
     }
 
+    // Generic function for put requests
     const putByFetch = async (url: string, bodyData: any): Promise<any> => {
         const putOperations = {
             method: 'PUT',
@@ -59,14 +58,13 @@ const apiService = (token: string) => {
         if (res.ok) {
             const jsonResult = await res.json()
             const resultObj = jsonResult
-
             return resultObj
         } else {
             console.error('Put by fetch failed. Url=' + url, res)
         }
     }
 
-    //Generic function for delete requests
+    // Generic function for delete requests
     const deleteByFetch = async (url: string): Promise<any> => {
         const deleteOperation = {
             method: 'DELETE',
@@ -80,7 +78,6 @@ const apiService = (token: string) => {
         if (res.ok) {
             const jsonResult = await res.json()
             const resultObj = jsonResult
-
             return resultObj
         } else {
             console.error('Delete by fetch failed. Url=' + url, res)
@@ -91,31 +88,26 @@ const apiService = (token: string) => {
 
     const getAllUsers = async (): Promise<User> => {
         const data = await getByFetch('GetAllUsers')
-
         return data
     }
 
-    const getAllUsersAdmin = async () => {
+    const getAllUsersAdmin = async (): Promise<User> => {
         const data = await getByFetch('GetAllUsersAdmin')
-
         return data
     }
 
-    const getUser = async (id: string) => {
+    const getUser = async (id: string): Promise<User> => {
         const data = await getByFetch(`GetUser?id=${id}`)
-
         return data
     }
 
     const getUserByAzureAdUserId = async (id: string) => {
         const data = await getByFetch(`GetUserByAzureAdUserId?id=${id}`)
-
         return data
     }
 
-    const getUserByUserName = async (username: string) => {
+    const getUserByUserName = async (username: string): Promise<User> => {
         const data = await getByFetch(`GetUserByUserName?username=${username}`)
-
         return data
     }
 
@@ -167,15 +159,13 @@ const apiService = (token: string) => {
 
     // user role
 
-    const getAllUserRoles = async () => {
+    const getAllUserRoles = async (): Promise<UserRole> => {
         const data = await getByFetch('GetAllUserRoles')
-
         return data
     }
 
-    const getUserRole = async (id: string) => {
+    const getUserRole = async (id: string): Promise<UserRole> => {
         const data = await getByFetch(`GetUserRole?id=${id}`)
-
         return data
     }
 
@@ -198,44 +188,36 @@ const apiService = (token: string) => {
 
     // checklist
 
-    const getAllCheckLists = async () => {
+    const getAllCheckLists = async (): Promise<Checklist> => {
         const data = await getByFetch(`GetAllChecklists`)
         return data
     }
 
-    const getChecklist = async (checklistId: string) => {
+    const getChecklist = async (checklistId: string): Promise<Checklist> => {
         const data = await getByFetch(`GetChecklist?id=${checklistId}`)
         if (!checklistId) {
             throw new Error('An error occurred, please try again')
         }
-
         return data
     }
 
-    const getAllChecklistsByUserId = async (userId: string) => {
+    const getAllChecklistsByUserId = async (userId: string): Promise<Checklist> => {
         const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`)
         if (!userId) {
             throw new Error('An error occurred, please try again')
         }
-
         return data
     }
 
-    const getChecklistByName = async (searchString: string) => {
-        const data = await getByFetch(
-            `GetChecklistsByName?searchString=${searchString}`
-        )
+    const getChecklistByName = async (searchString: string): Promise<Checklist> => {
+        const data = await getByFetch(`GetChecklistsByName?searchString=${searchString}`)
         if (!searchString) {
             throw new Error('An error occurred, please try again')
         }
-
         return data
     }
 
-    const addChecklist = async (
-        creatorId: string,
-        title: string
-    ): Promise<void> => {
+    const addChecklist = async (creatorId: string, title: string): Promise<void> => {
         await postByFetch('AddChecklist', {
             creatorId: creatorId,
             title: title,
@@ -244,11 +226,7 @@ const apiService = (token: string) => {
 
     // AddChecklistWithTasks
 
-    const updateChecklist = async (
-        id: string,
-        title: string,
-        status: string
-    ): Promise<void> => {
+    const updateChecklist = async (id: string, title: string, status: string): Promise<void> => {
         await postByFetch('UpdateChecklist', {
             id: id,
             title: title,
@@ -260,25 +238,20 @@ const apiService = (token: string) => {
         await deleteByFetch(`DeleteChecklist?id=${id}`)
     }
 
-    //Workflow
+    // Workflow
 
-    const getAllWorkflows = async () => {
+    const getAllWorkflows = async (): Promise<Workflow> => {
         const data = await getByFetch('GetAllWorkflows')
-
         return data
     }
 
-    const getWorkflow = async (id: string) => {
+    const getWorkflow = async (id: string): Promise<Workflow> => {
         const data = await getByFetch(`GetWorkflow?id=${id}`)
-
         return data
     }
 
-    const getAllWorkflowsByUserId = async (userId: string) => {
-        const data = await getByFetch(
-            `GetAllWorkflowsByUserId?userId=${userId}`
-        )
-
+    const getAllWorkflowsByUserId = async (userId: string): Promise<Workflow> => {
+        const data = await getByFetch(`GetAllWorkflowsByUserId?userId=${userId}`)
         return data
     }
 
@@ -294,11 +267,7 @@ const apiService = (token: string) => {
         })
     }
 
-    const updateWorkflow = async (
-        id: string,
-        userId: string,
-        status: string
-    ): Promise<void> => {
+    const updateWorkflow = async (id: string, userId: string, status: string): Promise<void> => {
         await putByFetch('UpdateWorkflow', {
             id: id,
             userId: userId,
@@ -310,44 +279,34 @@ const apiService = (token: string) => {
         await deleteByFetch(`DeleteWorkflow?id=${id}`)
     }
 
-    //Checklist Task
+    // Checklist Task
 
-    const getAllTaks = async () => {
+    const getAllTasks = async (): Promise<Task> => {
         const data = await getByFetch('GetAllTasks')
-
         return data
     }
 
-    const getTask = async (id: string) => {
+    const getTask = async (id: string): Promise<Task> => {
         const data = await getByFetch(`GetTask?id=${id}`)
-
         return data
     }
 
-    const getAllTasksByCategoryId = async (id: string) => {
+    const getAllTasksByCategoryId = async (id: string): Promise<Task> => {
         const data = await getByFetch(`GetAllTasksByCategoryId?id=${id}`)
-
         return data
     }
 
-    const getAllTasksByChecklistId = async (id: string) => {
+    const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
         const data = await getByFetch(`GetAllTasksByChecklistId?id=${id}`)
-
         return data
     }
 
-    const getTasksByDescription = async (searchString: string) => {
-        const data = await getByFetch(
-            `GetTasksByDescription?searchString=${searchString}`
-        )
-
+    const getTasksByDescription = async (searchString: string): Promise<Task> => {
+        const data = await getByFetch(`GetTasksByDescription?searchString=${searchString}`)
         return data
     }
 
-    const addTask = async (
-        categoryId: string,
-        description: string
-    ): Promise<void> => {
+    const addTask = async (categoryId: string, description: string): Promise<void> => {
         await postByFetch('AddTask', {
             categoryId: categoryId,
             description: description,
@@ -368,10 +327,7 @@ const apiService = (token: string) => {
         })
     }
 
-    const addTaskToChecklist = async (
-        id: string,
-        checklistId: string
-    ): Promise<void> => {
+    const addTaskToChecklist = async (id: string, checklistId: string): Promise<void> => {
         await postByFetch('AddTaskToChecklist', {
             id: id,
             checklistId: checklistId,
@@ -384,23 +340,18 @@ const apiService = (token: string) => {
 
     // Category
 
-    const getAllCategories = async () => {
+    const getAllCategories = async (): Promise<Category> => {
         const data = await getByFetch('GetAllCategories')
-
         return data
     }
 
-    const getCategory = async (id: string) => {
+    const getCategory = async (id: string): Promise<Category> => {
         const data = await getByFetch(`GetCategory?id=${id}`)
-
         return data
     }
 
-    const getCategoriesByName = async (searchString: string) => {
-        const data = await getByFetch(
-            `GetCategoriesByName?searchString=${searchString}`
-        )
-
+    const getCategoriesByName = async (searchString: string): Promise<Category> => {
+        const data = await getByFetch(`GetCategoriesByName?searchString=${searchString}`)
         return data
     }
 
@@ -422,9 +373,8 @@ const apiService = (token: string) => {
     }
 
     // punch
-    const getAllPunches = async () => {
+    const getAllPunches = async (): Promise<PunchItem> => {
         const data = await getByFetch('GetAllPunches')
-
         return data
     }
 
@@ -433,17 +383,17 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getPunchesByWorkflowId = async (id: string) => {
+    const getPunchesByWorkflowId = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunchesByWorkflowId?workflowId=${id}`)
         return data
     }
 
-    const getPunchInspectorId = async (id: string) => {
+    const getPunchInspectorId = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunchesByInspectorId?id=${id}`)
         return data
     }
 
-    const getPunchByLeaderId = async (id: string) => {
+    const getPunchByLeaderId = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunchesByLeaderId?id=${id}`)
         return data
     }
@@ -484,23 +434,20 @@ const apiService = (token: string) => {
         await deleteByFetch(`DeletePunch?id=${id}`)
     }
 
-    //Upload
+    // Upload
 
-    const getUpload = async (id: string) => {
+    const getUpload = async (id: string): Promise<Upload> => {
         const data = await getByFetch(`GetUpload?id=${id}`)
-
         return data
     }
 
-    const getUploadByPunchId = async (punchId: string) => {
+    const getUploadByPunchId = async (punchId: string): Promise<Upload> => {
         const data = await getByFetch(`GetUploadByPunchId?punchId=${punchId}`)
-
         return data
     }
 
     const addUpload = async (punchId: string, file: File): Promise<void> => {
         const formData = new FormData()
-
         formData.append('punchId', punchId)
         formData.append('file', file)
         await postByFetch('AddUpload', {
@@ -509,9 +456,9 @@ const apiService = (token: string) => {
     }
 
     const updateUpload = async (id: string, punchId: string): Promise<void> => {
-        await postByFetch("UpdateUpload", {
+        await postByFetch('UpdateUpload', {
             id: id,
-            punchId: punchId
+            punchId: punchId,
         })
     }
 
@@ -555,16 +502,26 @@ const apiService = (token: string) => {
         addChecklist,
         updateChecklist,
         deleteChecklist,
+        getAllTasks,
+        getTask,
+        getAllTasksByCategoryId,
+        getAllTasksByChecklistId,
+        getTasksByDescription,
+        addTask,
+        updateTask,
+        addTaskToChecklist,
+        deleteTask,
         getAllWorkflows,
         getWorkflow,
         getAllWorkflowsByUserId,
         createWorkflow,
         updateWorkflow,
+        deleteWorkflow,
         getUpload,
         getUploadByPunchId,
         addUpload,
         updateUpload,
-        deleteUpload
+        deleteUpload,
     }
 }
 
