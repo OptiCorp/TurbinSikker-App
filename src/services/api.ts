@@ -98,16 +98,25 @@ const apiService = (token: string) => {
 
     const getUser = async (id: string): Promise<User> => {
         const data = await getByFetch(`GetUser?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid user id')
+        }
         return data
     }
 
     const getUserByAzureAdUserId = async (id: string) => {
         const data = await getByFetch(`GetUserByAzureAdUserId?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid AzureAD user id')
+        }
         return data
     }
 
     const getUserByUserName = async (username: string): Promise<User> => {
         const data = await getByFetch(`GetUserByUserName?username=${username}`)
+        if (!username) {
+            throw new Error('Username not found, please enter valid username')
+        }
         return data
     }
 
@@ -166,6 +175,9 @@ const apiService = (token: string) => {
 
     const getUserRole = async (id: string): Promise<UserRole> => {
         const data = await getByFetch(`GetUserRole?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid user role id')
+        }
         return data
     }
 
@@ -196,7 +208,7 @@ const apiService = (token: string) => {
     const getChecklist = async (checklistId: string): Promise<Checklist> => {
         const data = await getByFetch(`GetChecklist?id=${checklistId}`)
         if (!checklistId) {
-            throw new Error('An error occurred, please try again')
+            throw new Error('Please enter a valid checklist id')
         }
         return data
     }
@@ -204,7 +216,7 @@ const apiService = (token: string) => {
     const getAllChecklistsByUserId = async (userId: string): Promise<Checklist> => {
         const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`)
         if (!userId) {
-            throw new Error('An error occurred, please try again')
+            throw new Error('Please enter a valid user id')
         }
         return data
     }
@@ -247,11 +259,17 @@ const apiService = (token: string) => {
 
     const getWorkflow = async (id: string): Promise<Workflow> => {
         const data = await getByFetch(`GetWorkflow?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid workflow id')
+        }
         return data
     }
 
     const getAllWorkflowsByUserId = async (userId: string): Promise<Workflow> => {
         const data = await getByFetch(`GetAllWorkflowsByUserId?userId=${userId}`)
+        if (!userId) {
+            throw new Error('Please enter a valid user id')
+        }
         return data
     }
 
@@ -288,21 +306,33 @@ const apiService = (token: string) => {
 
     const getTask = async (id: string): Promise<Task> => {
         const data = await getByFetch(`GetTask?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid task id')
+        }
         return data
     }
 
     const getAllTasksByCategoryId = async (id: string): Promise<Task> => {
         const data = await getByFetch(`GetAllTasksByCategoryId?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid category id')
+        }
         return data
     }
 
     const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
         const data = await getByFetch(`GetAllTasksByChecklistId?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid checklist id')
+        }
         return data
     }
 
     const getTasksByDescription = async (searchString: string): Promise<Task> => {
         const data = await getByFetch(`GetTasksByDescription?searchString=${searchString}`)
+        if (!searchString) {
+            throw new Error('An error occurred, please try again')
+        }
         return data
     }
 
@@ -347,11 +377,17 @@ const apiService = (token: string) => {
 
     const getCategory = async (id: string): Promise<Category> => {
         const data = await getByFetch(`GetCategory?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid category id')
+        }
         return data
     }
 
     const getCategoriesByName = async (searchString: string): Promise<Category> => {
         const data = await getByFetch(`GetCategoriesByName?searchString=${searchString}`)
+        if (!searchString) {
+            throw new Error('An error occurred, please try again')
+        }
         return data
     }
 
@@ -380,21 +416,33 @@ const apiService = (token: string) => {
 
     const getPunch = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunch?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid punch id')
+        }
         return data
     }
 
     const getPunchesByWorkflowId = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunchesByWorkflowId?workflowId=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid workflow id')
+        }
         return data
     }
 
     const getPunchInspectorId = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunchesByInspectorId?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid (user) inspector id')
+        }
         return data
     }
 
     const getPunchByLeaderId = async (id: string): Promise<PunchItem> => {
         const data = await getByFetch(`GetPunchesByLeaderId?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid (user) leader id')
+        }
         return data
     }
 
@@ -438,11 +486,17 @@ const apiService = (token: string) => {
 
     const getUpload = async (id: string): Promise<Upload> => {
         const data = await getByFetch(`GetUpload?id=${id}`)
+        if (!id) {
+            throw new Error('Please enter a valid upload id')
+        }
         return data
     }
 
     const getUploadByPunchId = async (punchId: string): Promise<Upload> => {
         const data = await getByFetch(`GetUploadByPunchId?punchId=${punchId}`)
+        if (!punchId) {
+            throw new Error('Please enter a valid punch id')
+        }
         return data
     }
 
