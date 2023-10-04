@@ -9,9 +9,10 @@ import { AllWorkFlows } from '../workflow/types'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
 import { CellContent, StyledTableCellCheckL } from './styles'
+import { Workflow } from 'src/services/apiTypes'
 
 interface CheckListRowProps {
-    workflow: AllWorkFlows
+    workflow: Workflow
 }
 
 export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({

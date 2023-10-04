@@ -1,11 +1,10 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
-import { useEffect, useState } from 'react'
 import { useApiHooks } from '../../../Helpers/useApiHooks'
 import useAuth from '../../../context/AuthContextProvider'
-import { ApiStatus } from "../../../services/apiTypes"
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
 import { HeadCell } from '../checkListID/styles'
-import { WorkFlow } from '../workflow/types'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
 import { LeaderCheckListSend } from './LeaderCheckList'
 import {
@@ -15,50 +14,12 @@ import {
     Wrap,
 } from './styles'
 
-
 export const CheckList = () => {
-    const {accessToken} = useAuth()
-    const {params, currentUserId, currentUser,api} = useApiHooks()
-  
-    const [workflow, setWorkFlow] = useState<WorkFlow[]>([])
-    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+
+    const { currentUser } = useUserContext()
     const { accounts, inProgress } = useAuth()
-
-
-
-    // const { WorkFlows, allWorkFlows, workFlowById } = useWorkflowContext()
-
-    // const sortedWorkFlows = workflow.sort((a, b) => {
-    //     if (a.status === 'Committed' && b.status !== 'Committed') {
-    //         return -1
-    //     } else if (a.status !== 'Committed' && b.status === 'Committed') {
-    //         return 1
-    //     } else {
-    //         return 0
-    //     }
-    // })
-
-
-    useEffect(() => {
-     
-            if (!currentUserId || !accessToken) return
-            (async (): Promise<void> => {
-                try {
-            const workFlows = await api.getAllWorkflowsByUserId(currentUserId)
-
-            setWorkFlow(workFlows)
-            setWorkflowStatus(ApiStatus.SUCCESS);
-        } catch (error) {
-            setWorkflowStatus(ApiStatus.ERROR);
-        }
-    })();
-
-   
-    }, [accessToken, currentUserId])
-
-
+    const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
   
-
     if (accounts.length > 0) {
         return (
             <>
@@ -94,25 +55,21 @@ export const CheckList = () => {
                                     {currentUser?.userRole.name ===
                                     'Inspector' ? (
                                         <>
-                                            {workflow.map((WorkFlow) => (
+                                            {workflows?.map((workFlow) => (
                                                 <InspectorReceivedCheckLists
-                                                    WorkFlow={WorkFlow}
-                                                    key={WorkFlow.id}
+                                                    WorkFlow={workFlow}
+                                                    key={workFlow.id}
                                                 />
                                             ))}
                                         </>
                                     ) : (
                                         <>
-                                            {workflow.map(
-                                                (workflow) => (
-                                                    <LeaderCheckListSend
-                                                        workflow={
-                                                            workflow
-                                                        }
-                                                        key={workflow.id}
-                                                    />
-                                                )
-                                            )}
+                                            {workflows?.map((workflow) => (
+                                                <LeaderCheckListSend
+                                                    workflow={workflow}
+                                                    key={workflow.id}
+                                                />
+                                            ))}
                                         </>
                                     )}
                                 </>

@@ -1,17 +1,16 @@
 import CustomDialog from '@components/modal/useModalHook'
+import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Table } from '@equinor/eds-core-react'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-
+import { useApiHooks } from '../../../Helpers/useApiHooks'
+import { ApiStatus } from '../../../services/apiTypes'
 import { useCheckListContext } from '../../context/CheckListContextProvider'
-import { LeaderMyChecklists } from './LeaderMyChecklists'
-
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { useUserContext } from '../../users/context/userContextProvider'
-import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+import { WorkFlow } from '../workflow/types'
 import { InspectorPendingRow } from './InspectorPendingRow'
+import { LeaderMyChecklists } from './LeaderMyChecklists'
 import {
     BackgroundWrap,
     HeadCell,
@@ -24,7 +23,19 @@ import {
 export const MyCheckLists = () => {
     const { handleSubmit } = useCheckListContext()
     const { openSnackbar } = useContext(SnackbarContext)
-    const { currentUser } = useUserContext()
+    const [workflow, setWorkFlow] = useState<WorkFlow[]>([])
+    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+    const {currentUserId, currentUser,api, accessToken} = useApiHooks()
+    const navigate = useNavigate()
+    const handleClose = () => {
+        setDialogShowing(false)
+    }
+    const [title, setTitle] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
+    const [dialogShowing, setDialogShowing] = useState(false)
+    const { userIdCheckList } = useCheckListContext()
+
+    const [activeRow, setActiveRow] = useState(false)
 
     const handleCreateChecklist = async () => {
         try {
@@ -41,16 +52,19 @@ export const MyCheckLists = () => {
         }
     }
 
-    const navigate = useNavigate()
-    const handleClose = () => {
-        setDialogShowing(false)
-    }
-    const [title, setTitle] = useState('')
-    const [isOpen, setIsOpen] = useState(false)
-    const [dialogShowing, setDialogShowing] = useState(false)
-    const { userIdCheckList } = useCheckListContext()
-    const { WorkFlows, workFlowById } = useWorkflowContext()
-    const [activeRow, setActiveRow] = useState(false)
+    useEffect(() => {
+        if (!currentUserId || !accessToken) return
+        (async (): Promise<void> => {
+            try {
+        const workFlowData = await api.getAllWorkflowsByUserId(currentUserId)
+        setWorkFlow(workFlowData)
+        setWorkflowStatus(ApiStatus.SUCCESS);
+    } catch (error) {
+        setWorkflowStatus(ApiStatus.ERROR); }
+})();
+
+
+}, [accessToken, currentUserId])
 
     return (
         <>
@@ -79,7 +93,7 @@ export const MyCheckLists = () => {
                             <>
                                 {currentUser?.userRole.name === 'Inspector' ? (
                                     <>
-                                        {WorkFlows.map((WorkFlow) => (
+                                        {workflow.map((WorkFlow) => (
                                             <InspectorPendingRow
                                                 WorkFlow={WorkFlow}
                                                 key={WorkFlow.id}

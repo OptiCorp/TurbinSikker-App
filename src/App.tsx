@@ -11,15 +11,6 @@ import { UserContextProvider } from './pages/users/context/userContextProvider'
 import { ApiService } from './services/api'
 import { ApiStatus } from './services/apiTypes'
 
-type AppProps = {
-
-    api: ApiService
-    auth: AuthContextType
-    fetchChecklistStatus: ApiStatus
-
-
-
-};
 
 
 const App = () => { 

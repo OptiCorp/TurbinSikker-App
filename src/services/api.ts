@@ -1,5 +1,14 @@
 import { API_URL } from '../config'
-import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow } from './apiTypes'
+import {
+    Category,
+    Checklist,
+    PunchItem,
+    Task,
+    Upload,
+    User,
+    UserRole,
+    Workflow,
+} from './apiTypes'
 
 const apiService = (token: string) => {
     // Generic function for get requests
@@ -201,7 +210,9 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getAllChecklistsByUserId = async (userId: string): Promise<Checklist> => {
+    const getAllChecklistsByUserId = async (
+        userId: string
+    ): Promise<Checklist> => {
         const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`)
         if (!userId) {
             throw new Error('An error occurred, please try again')
@@ -209,15 +220,22 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getChecklistByName = async (searchString: string): Promise<Checklist> => {
-        const data = await getByFetch(`GetChecklistsByName?searchString=${searchString}`)
+    const getChecklistByName = async (
+        searchString: string
+    ): Promise<Checklist> => {
+        const data = await getByFetch(
+            `GetChecklistsByName?searchString=${searchString}`
+        )
         if (!searchString) {
             throw new Error('An error occurred, please try again')
         }
         return data
     }
 
-    const addChecklist = async (creatorId: string, title: string): Promise<void> => {
+    const addChecklist = async (
+        creatorId: string,
+        title: string
+    ): Promise<void> => {
         await postByFetch('AddChecklist', {
             creatorId: creatorId,
             title: title,
@@ -226,7 +244,11 @@ const apiService = (token: string) => {
 
     // AddChecklistWithTasks
 
-    const updateChecklist = async (id: string, title: string, status: string): Promise<void> => {
+    const updateChecklist = async (
+        id: string,
+        title: string,
+        status: string
+    ): Promise<void> => {
         await postByFetch('UpdateChecklist', {
             id: id,
             title: title,
@@ -245,13 +267,17 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getWorkflow = async (id: string): Promise<Workflow> => {
+    const getWorkflow = async (id: string | undefined): Promise<Workflow> => {
         const data = await getByFetch(`GetWorkflow?id=${id}`)
         return data
     }
 
-    const getAllWorkflowsByUserId = async (userId: string): Promise<Workflow> => {
-        const data = await getByFetch(`GetAllWorkflowsByUserId?userId=${userId}`)
+    const getAllWorkflowsByUserId = async (
+        userId: string
+    ): Promise<Workflow[]> => {
+        const data = await getByFetch(
+            `GetAllWorkflowsByUserId?userId=${userId}`
+        )
         return data
     }
 
@@ -267,7 +293,11 @@ const apiService = (token: string) => {
         })
     }
 
-    const updateWorkflow = async (id: string, userId: string, status: string): Promise<void> => {
+    const updateWorkflow = async (
+        id: string,
+        userId: string,
+        status: string
+    ): Promise<void> => {
         await putByFetch('UpdateWorkflow', {
             id: id,
             userId: userId,
@@ -301,12 +331,19 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getTasksByDescription = async (searchString: string): Promise<Task> => {
-        const data = await getByFetch(`GetTasksByDescription?searchString=${searchString}`)
+    const getTasksByDescription = async (
+        searchString: string
+    ): Promise<Task> => {
+        const data = await getByFetch(
+            `GetTasksByDescription?searchString=${searchString}`
+        )
         return data
     }
 
-    const addTask = async (categoryId: string, description: string): Promise<void> => {
+    const addTask = async (
+        categoryId: string,
+        description: string
+    ): Promise<void> => {
         await postByFetch('AddTask', {
             categoryId: categoryId,
             description: description,
@@ -327,7 +364,10 @@ const apiService = (token: string) => {
         })
     }
 
-    const addTaskToChecklist = async (id: string, checklistId: string): Promise<void> => {
+    const addTaskToChecklist = async (
+        id: string,
+        checklistId: string
+    ): Promise<void> => {
         await postByFetch('AddTaskToChecklist', {
             id: id,
             checklistId: checklistId,
@@ -350,8 +390,12 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getCategoriesByName = async (searchString: string): Promise<Category> => {
-        const data = await getByFetch(`GetCategoriesByName?searchString=${searchString}`)
+    const getCategoriesByName = async (
+        searchString: string
+    ): Promise<Category> => {
+        const data = await getByFetch(
+            `GetCategoriesByName?searchString=${searchString}`
+        )
         return data
     }
 

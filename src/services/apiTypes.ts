@@ -48,7 +48,7 @@ export type Checklist = {
     createdDate: string
     updatedDate: null | string
     user: User
-    task: Task
+    checklistTasks: Task[]
 }
 
 export type Task = {
@@ -71,7 +71,7 @@ export type Workflow = {
     createdDate: string
     updatedDate: null | string
     checklist: Checklist
-    task: Task
+
     user: User
     creator: User
 }

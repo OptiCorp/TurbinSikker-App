@@ -1,10 +1,10 @@
 import { Chip, Typography } from '@equinor/eds-core-react'
 import { FC } from 'react'
 import { formatDate } from '../../../Helpers'
-import { AllWorkFlows } from '../workflow/types'
+import { Workflow } from '../../../services/apiTypes'
 
 type ChipStatusProps = {
-    workflow: AllWorkFlows
+    workflow: Workflow
 }
 
 export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {

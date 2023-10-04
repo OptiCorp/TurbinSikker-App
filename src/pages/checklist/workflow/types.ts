@@ -1,20 +1,6 @@
 import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
 import { UserEntity } from 'src/pages/users/context/models/UserEntity'
 
-export type WorkFlow = {
-    id: string
-
-    userId: string
-    status: string
-    createdById: string
-    createdDate: string
-    updatedDate: string
-    formattedUpdateDate: string
-    checklist: CheckList
-    user: UserEntity
-    creator: Creator
-}
-
 export type AllWorkFlows = {
     id: string
 

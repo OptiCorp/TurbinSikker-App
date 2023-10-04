@@ -1,12 +1,12 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { FC } from 'react'
-import { AllWorkFlows } from '../workflow/types'
+import { Workflow } from '../../../services/apiTypes'
 import { useUserContext } from './../../../pages/users/context/userContextProvider'
 import { StyledChip } from './styles'
 
 type UserChip = {
-    workflow: AllWorkFlows
+    workflow: Workflow
 }
 
 export const UserChip: FC<UserChip> = ({ workflow }) => {

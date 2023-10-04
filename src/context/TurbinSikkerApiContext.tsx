@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from "react";
-import apiService, { ApiService } from "../services/api";
-import { ApiStatus } from "../services/apiTypes";
+import React, { useEffect, useState } from 'react'
+import apiService, { ApiService } from '../services/api'
+import { ApiStatus } from '../services/apiTypes'
 
-import { Progress, Typography } from "@equinor/eds-core-react";
-import PageNotFound from "../pages/PageNotFound";
-import { useUserContext } from "../pages/users/context/userContextProvider";
-import useAuth, { AuthContextType } from './AuthContextProvider';
+import { Progress, Typography } from '@equinor/eds-core-react'
+import PageNotFound from '../pages/PageNotFound'
+import { useUserContext } from '../pages/users/context/userContextProvider'
+import useAuth, { AuthContextType } from './AuthContextProvider'
 
-
-const TurbinSikkerApiContext = React.createContext({} as TurbinSikkerApiProps);
-
+const TurbinSikkerApiContext = React.createContext({} as TurbinSikkerApiProps)
 
 type TurbinSikkerApiProps = {
     api: ApiService
     auth?: AuthContextType
     fetchChecklistStatus?: ApiStatus
     accessToken: string
-};
-
-
+}
 
 // type TurbinSikkerApiContextProviderProps = {
 //     children: ReactNode;
@@ -32,22 +28,14 @@ type TurbinSikkerApiProps = {
 // //     ipoApi: ProcosysIPOApiService;
 // };
 
-
-
-
-
-
 const TurbinSikkerApiContextProvider = ({
     children,
 }: {
     children: React.ReactNode
 }) => {
- 
-
     const [fetchChecklistStatus, setFetchChecklistStatus] = useState<ApiStatus>(
         ApiStatus.LOADING
-    );
-
+    )
 
     // const [checklistWorkFlows, setChecklistWorkFlow] = useState<WorkFlow[]>([])
     // const [allWorkFlows, setAllWorkFlows] = useState<AllWorkFlows[]>([])
@@ -55,48 +43,42 @@ const TurbinSikkerApiContextProvider = ({
     // const { workflowId } = useParams()
     const { currentUser } = useUserContext()
 
-    const {accessToken, } =useAuth()
+    const { accessToken } = useAuth()
 
-
-const api  = apiService(accessToken)
-
-   
+    const api = apiService(accessToken)
 
     useEffect(() => {
-        (async (): Promise<void> => {
-            setFetchChecklistStatus(ApiStatus.LOADING);
+        ;(async (): Promise<void> => {
+            setFetchChecklistStatus(ApiStatus.LOADING)
             try {
-               
-         
-                setFetchChecklistStatus(ApiStatus.SUCCESS);
+                setFetchChecklistStatus(ApiStatus.SUCCESS)
             } catch (error) {
-                setFetchChecklistStatus(ApiStatus.ERROR);
+                setFetchChecklistStatus(ApiStatus.ERROR)
             }
-        })();
-    }, [api]);
-
-
+        })()
+    }, [api])
 
     if (fetchChecklistStatus === ApiStatus.LOADING) {
-        return  <Progress.Circular> <Typography variant="h4" as="h2">
-      Loading
-      </Typography></Progress.Circular>;
+        return (
+            <Progress.Circular>
+                {' '}
+                <Typography variant="h4" as="h2">
+                    Loading
+                </Typography>
+            </Progress.Circular>
+        )
     }
     if (fetchChecklistStatus === ApiStatus.ERROR) {
-        return (<PageNotFound/>)
+        return <PageNotFound />
     }
 
-return (
-
-<TurbinSikkerApiContext.Provider value={{ api, accessToken, fetchChecklistStatus}}>
-
-    {children}
-</TurbinSikkerApiContext.Provider>
-)
-
-
-
+    return (
+        <TurbinSikkerApiContext.Provider
+            value={{ api, accessToken, fetchChecklistStatus }}
+        >
+            {children}
+        </TurbinSikkerApiContext.Provider>
+    )
 }
 
-export { TurbinSikkerApiContext, TurbinSikkerApiContextProvider };
-
+export { TurbinSikkerApiContext, TurbinSikkerApiContextProvider }

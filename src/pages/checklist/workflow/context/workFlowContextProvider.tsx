@@ -3,7 +3,6 @@ import { API_URL } from '../../../../config'
 import useAuth from '../../../../context/AuthContextProvider'
 import { useUserContext } from '../../../../pages/users/context/userContextProvider'
 import { AllWorkFlows, WorkFlow } from '../types'
-import { getWorkflowById } from './api'
 
 import { useLocation, useParams } from 'react-router'
 import { usePunchContext } from '../../../../pages/punch/context/PunchContextProvider'
@@ -129,41 +128,41 @@ const WorkflowContextProvider = ({
         return date.toLocaleDateString('en-GB')
     }
 
-    useEffect(() => {
-        ;(async function () {
-            if (!currentUser?.id || !accessToken) return
-            const workFlows = await getWorkflowById(currentUser.id, accessToken)
+    // useEffect(() => {
+    //     ;(async function () {
+    //         if (!currentUser?.id || !accessToken) return
+    //         const workFlows = await getWorkflowById(currentUser.id, accessToken)
 
-            setChecklistWorkFlow(workFlows)
-        })()
-    }, [currentUser, accessToken])
+    //         setChecklistWorkFlow(workFlows)
+    //     })()
+    // }, [currentUser, accessToken])
 
-    useEffect(() => {
-        const fetchAllCheckListWorkFlow = async () => {
-            if (!accessToken) return
-            try {
-                const res = await fetch(`${API_URL}/GetAllWorkflows`, {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                })
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
-                const data = (await res.json()) as AllWorkFlows[]
-                data.map((item) => ({
-                    ...item,
-                    formattedUpdateDate: formatDate(item.updatedDate),
-                }))
-                setAllWorkFlows(data)
-            } catch (error) {
-                console.error('Error fetching checklist workflow:', error)
-            }
-        }
-        fetchAllCheckListWorkFlow()
-    }, [currentUser, accessToken])
+    // useEffect(() => {
+    //     const fetchAllCheckListWorkFlow = async () => {
+    //         if (!accessToken) return
+    //         try {
+    //             const res = await fetch(`${API_URL}/GetAllWorkflows`, {
+    //                 method: 'GET',
+    //                 headers: {
+    //                     Authorization: `Bearer ${accessToken}`,
+    //                     'Content-Type': 'application/json',
+    //                     'Access-Control-Allow-Origin': '*',
+    //                 },
+    //             })
+    //             if (!res.ok)
+    //                 throw new Error('Failed with HTTP code ' + res.status)
+    //             const data = (await res.json()) as AllWorkFlows[]
+    //             data.map((item) => ({
+    //                 ...item,
+    //                 formattedUpdateDate: formatDate(item.updatedDate),
+    //             }))
+    //             setAllWorkFlows(data)
+    //         } catch (error) {
+    //             console.error('Error fetching checklist workflow:', error)
+    //         }
+    //     }
+    //     fetchAllCheckListWorkFlow()
+    // }, [currentUser, accessToken])
 
     useEffect(() => {
         const fetchWorkFlowId = async () => {
