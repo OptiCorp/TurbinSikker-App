@@ -11,14 +11,15 @@ export type User = {
     lastName: string
     email: string
     username: string
-    userRole: {
-        id: string
-        name: string
-    }
+    userRole: UserRole
     status: string
     createdDate: string
     updatedDate: string | null
-    // rest
+}
+
+export type UserRole = {
+    id: string
+    name: string
 }
 
 export type PunchItem = {
@@ -33,4 +34,44 @@ export type PunchItem = {
     user: User
     // checklistTask: ChecklistTaskEntity
     // uploads: UploadEntity
+}
+
+export type Category = {
+    id: string
+    name: string
+}
+
+export type Checklist = {
+    id: string
+    title: string
+    status: string
+    createdDate: string
+    updatedDate: null | string
+    user: User
+    task: Task
+}
+
+export type Task = {
+    id: string
+    description: string
+    category: Category
+}
+
+export type Upload = {
+    id: string
+    punchId: string
+    blobRef: string
+    contentType: string
+    bytes: string
+}
+
+export type Workflow = {
+    id: string
+    status: string
+    createdDate: string
+    updatedDate: null | string
+    checklist: Checklist
+    task: Task
+    user: User
+    creator: User
 }
