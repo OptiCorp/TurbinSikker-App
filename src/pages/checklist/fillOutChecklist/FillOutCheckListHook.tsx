@@ -1,6 +1,7 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useParams } from 'react-router'
+import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../config'
 import useAuth from '../../../context/AuthContextProvider'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
@@ -29,7 +30,7 @@ export const useFillOutCheckList = () => {
     const clearAndClose = () => {
         setPositiveOpen(false)
     }
-
+    const { workflowId } = useParams()
     const { currentUser } = useUserContext()
     const methods = useForm<UpdatingWorkFlowEntity>()
     const {
@@ -43,7 +44,6 @@ export const useFillOutCheckList = () => {
         id: string
     }) => {
         const tasks = methods.watch()
-        console.log(tasks)
 
         const res = await fetch(`${API_URL}/UpdateWorkflow`, {
             method: 'PUT',
@@ -53,7 +53,7 @@ export const useFillOutCheckList = () => {
                 'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
-                id: data.id,
+                id: workflowId,
                 status: 'Committed',
                 userId: currentUser?.id,
             }),

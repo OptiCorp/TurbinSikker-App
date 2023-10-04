@@ -1,8 +1,8 @@
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
 import { useLocation } from 'react-router'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
 import { useUserContext } from '../../users/context/userContextProvider'
-import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 import { CompletedList } from './CompletedList'
 import {
     BackgroundWrapCompleted,
@@ -13,7 +13,7 @@ import {
 } from './styles'
 
 export const CompletedChecklists = () => {
-    const { WorkFlows } = useWorkflowContext()
+    const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
     const { currentUser } = useUserContext()
     const location = useLocation()
     const state = location.state
@@ -43,7 +43,7 @@ export const CompletedChecklists = () => {
                         </Table.Head>
 
                         <Table.Body>
-                            {WorkFlows.map((WorkFlow) => (
+                            {workflows?.map((WorkFlow) => (
                                 <CompletedList
                                     WorkFlow={WorkFlow}
                                     key={WorkFlow.id}

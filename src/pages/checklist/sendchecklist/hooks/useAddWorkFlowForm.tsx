@@ -1,7 +1,7 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../../config'
 import useAuth from '../../../../context/AuthContextProvider'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'

@@ -22,13 +22,7 @@ const apiService = (token: string) => {
             },
         }
         const res = await fetch(`${API_URL}/${url}`, GetOperation)
-        if (res.ok) {
-            const jsonResult = await res.json()
-            const resultObj = jsonResult
-            return resultObj
-        } else {
-            console.error('Get by fetch failed. Url=' + url, res)
-        }
+        return res.json()
     }
 
     // Generic function for post requests
@@ -262,8 +256,9 @@ const apiService = (token: string) => {
 
     // Workflow
 
-    const getAllWorkflows = async (): Promise<Workflow> => {
+    const getAllWorkflows = async (): Promise<Workflow[]> => {
         const data = await getByFetch('GetAllWorkflows')
+       
         return data
     }
 

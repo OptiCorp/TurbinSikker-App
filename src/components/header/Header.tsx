@@ -1,11 +1,12 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
-import Sidebar from '@components/sidebar/Sidebar'
 import { Icon, TopBar } from '@equinor/eds-core-react'
 import { arrow_back_ios, menu } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { useWorkflowContext } from '../../pages/checklist/workflow/context/workFlowContextProvider'
+
 import { useCheckListContext } from '../../pages/context/CheckListContextProvider'
+import { useGetWorkflowByUserId } from '../../services/hooks/useGetWorkflowByUserId'
+import { useAddTaskForm } from '../addtasks/hooks/useAddTaskForm'
+import Sidebar from '../sidebar/Sidebar'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
@@ -13,7 +14,7 @@ export const Header = () => {
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')
-    const { WorkFlows } = useWorkflowContext()
+
     const [open, setOpen] = useState(false)
     const { checkListById } = useAddTaskForm()
 
@@ -31,22 +32,27 @@ export const Header = () => {
         )
     }
     const basePath = useBasePath()
-
+    const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
     const [title, setTitle] = useState('')
 
     useEffect(() => {
-        const workflow = WorkFlows.find((item) => item.checklist.id === checkListById?.id)
+        const workflow = workflows?.find(
+            (item) => item.checklist.id === checkListById?.id
+        )
         let pathTitle = ''
         if (location.pathname.includes('FillOutCheckList') && workflow) {
-            pathTitle = checkListById?.title + ' ' + workflow.id.slice(10, -18) || ''
+            pathTitle =
+                checkListById?.title + ' ' + workflow.id.slice(10, -18) || ''
         } else if (location.pathname === '/AddUser/') {
             pathTitle = location.pathname.slice(1, -1)
         } else {
             pathTitle =
-                basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join(' ') || basePath || 'Checklists'
+                basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join(' ') ||
+                basePath ||
+                'Checklists'
         }
         setTitle(pathTitle)
-    }, [location.pathname, basePath, WorkFlows, checkListById?.id])
+    }, [location.pathname, basePath, workflows, checkListById?.id])
 
     const onClick = () => {
         setRefreshList((prev) => !prev)
@@ -62,7 +68,11 @@ export const Header = () => {
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (
                         <HeaderContents>
-                            <Icon data={arrow_back_ios} color="white" onClick={onClick} />
+                            <Icon
+                                data={arrow_back_ios}
+                                color="white"
+                                onClick={onClick}
+                            />
                         </HeaderContents>
                     )}
                 </TopBar.Header>

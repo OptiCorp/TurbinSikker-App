@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { ApiStatus, Workflow } from '../../../services/apiTypes'
 import { Wrapper } from '../previewCheckList/styles'
-import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 
 import { useParams } from 'react-router'
 import useAuth from '../../../context/AuthContextProvider'
@@ -12,7 +11,6 @@ import { FillOutList } from './FillOutList'
 import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
 
 export const FillOutCheckList = () => {
-    const { workFlowById, WorkFlows } = useWorkflowContext()
     const [workflow, setWorkFlow] = useState<Workflow>()
     const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
         ApiStatus.LOADING
@@ -51,13 +49,13 @@ export const FillOutCheckList = () => {
                         </div>
 
                         <Wrapper>
-                            {workflow?.checklist?.checklistTasks.map((task) => (
+                            {workflow?.checklist.checklistTasks.map((task) => (
                                 <>
                                     <FillOutList
                                         key={task.id}
-                                        workFlowById={workFlowById}
+                                        workFlowById={workflow}
                                         onUpdate={onUpdate}
-                                        task={task} // tasks={workFlowById.checklist.checklistTasks}
+                                        task={task}
                                     />
                                 </>
                             ))}

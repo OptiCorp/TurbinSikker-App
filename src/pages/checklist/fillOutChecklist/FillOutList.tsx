@@ -1,13 +1,12 @@
-import CustomDialog from '@components/modal/useModalHook'
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { FunctionComponent, useState } from 'react'
 
 import { Card, Checkbox, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
-import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
 
+import CustomDialog from '../../../components/modal/useModalHook'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { Task, Workflow } from '../../../services/apiTypes'
 import {
     CustomCard,
@@ -38,7 +37,7 @@ export const FillOutList: FunctionComponent<Props> = ({ task }) => {
     const [applicableStatuses, setApplicableStatuses] = useState<
         Record<string, boolean>
     >({})
-    const { workFlowById: workFlow } = useWorkflowContext()
+
     const {
         control,
         formState: { errors },

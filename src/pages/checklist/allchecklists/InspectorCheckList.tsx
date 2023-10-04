@@ -19,7 +19,7 @@ export const InspectorReceivedCheckLists: FunctionComponent<
 
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutChecklist/${id}`)
-        console.log(WorkFlow.id)
+     
     }
 
     // const [searchParams, setSearchParams] = useSearchParams();

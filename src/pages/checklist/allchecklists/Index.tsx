@@ -1,8 +1,8 @@
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
-import { useApiHooks } from '../../../Helpers/useApiHooks'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import useAuth from '../../../context/AuthContextProvider'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { useGetAllWorkflows } from '../../../services/hooks/useGetAllWorkflows'
 import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
 import { HeadCell } from '../checkListID/styles'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
@@ -15,11 +15,12 @@ import {
 } from './styles'
 
 export const CheckList = () => {
-
     const { currentUser } = useUserContext()
     const { accounts, inProgress } = useAuth()
-    const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
-  
+
+    const { data: allWorkflows } = useGetAllWorkflows()
+    const { data: workflows } = useGetWorkflowByUserId()
+
     if (accounts.length > 0) {
         return (
             <>
@@ -64,7 +65,7 @@ export const CheckList = () => {
                                         </>
                                     ) : (
                                         <>
-                                            {workflows?.map((workflow) => (
+                                            {allWorkflows?.map((workflow) => (
                                                 <LeaderCheckListSend
                                                     workflow={workflow}
                                                     key={workflow.id}
