@@ -258,7 +258,7 @@ const apiService = (token: string) => {
 
     const getAllWorkflows = async (): Promise<Workflow[]> => {
         const data = await getByFetch('GetAllWorkflows')
-       
+
         return data
     }
 
@@ -316,7 +316,7 @@ const apiService = (token: string) => {
         return data
     }
 
-    const getAllTasksByCategoryId = async (id: string): Promise<Task> => {
+    const getAllTasksByCategoryId = async (id: string): Promise<Task[]> => {
         const data = await getByFetch(`GetAllTasksByCategoryId?id=${id}`)
         return data
     }
@@ -375,7 +375,7 @@ const apiService = (token: string) => {
 
     // Category
 
-    const getAllCategories = async (): Promise<Category> => {
+    const getAllCategories = async (): Promise<Category[]> => {
         const data = await getByFetch('GetAllCategories')
         return data
     }

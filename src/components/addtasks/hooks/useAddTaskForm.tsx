@@ -6,25 +6,63 @@ import useAuth from '../../../context/AuthContextProvider'
 
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 
-import { Checklist } from '../../../services/apiTypes'
+import apiService from '../../../services/api'
+import {
+    ApiStatus,
+    Checklist,
+    Task,
+    TaskPicker,
+} from '../../../services/apiTypes'
 import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { FormValuesEntity } from '../context/models/FormValuesEntity'
-import { TaskEntity } from '../context/models/TaskEntity'
+
+type ChecklistAndTasks = Checklist & TaskPicker
+
+export type CategoryTaskSelector = {
+    value: string
+    label: string
+}
+
+type Test = {
+    value: string
+    label: string
+    id: string
+    description: string
+    category: { id: string; name: string }
+}
+
+type TaskChooser = CategoryTaskSelector & Task
+
 export const useAddTaskForm = () => {
     const { id } = useParams() as { id: string }
+    const [tasks, setTasks] = useState<Task[]>([])
 
     const appLocation = useLocation()
     const methods = useForm<FormValuesEntity>()
     const { reset, watch, handleSubmit, register, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
     const { refreshList, setRefreshList } = useCheckListContext()
-    const [selectedOption] = useState('')
-    const [selectedTask] = useState('')
-    const [checkListById, setCheckListById] = useState<Checklist | null>(null)
+    const [selectedOption, setSelectedOption] = useState('')
+    const [selectedTask, setSelectedTask] = useState('')
+    const [checkListById, setCheckListById] =
+        useState<ChecklistAndTasks | null>(null)
     const { accessToken } = useAuth()
-    const [sortedTasks, setSortedTasks] = useState<TaskEntity>()
 
+    const api = apiService(accessToken)
+    const [category, setCategory] = useState<CategoryTaskSelector[]>([])
+    const [categoryStatus, setCategoryStatus] = useState<ApiStatus>(
+        ApiStatus.LOADING
+    )
+    const [taskStatus, setTaskStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const { workflowId } = useParams()
+
+    const handleCategorySelect = (selectedCategory: string) => {
+        setSelectedOption(selectedCategory)
+    }
+
+    const handleTaskSelect = (selectedTask: any) => {
+        setSelectedTask(selectedTask.value)
+    }
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
         const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
@@ -62,17 +100,6 @@ export const useAddTaskForm = () => {
 
                 const data = await res.json()
                 setCheckListById(data)
-                const sorted = data.checklistTasks.sort((a: any, b: any) => {
-                    if (a.category.name < b.category.name) {
-                        return -1
-                    } else if (a.category.name > b.category.name) {
-                        return 1
-                    } else {
-                        return 0
-                    }
-                })
-
-                setSortedTasks(sorted)
             } catch (error) {
                 console.error('Error fetching user data:', error)
             }
@@ -80,6 +107,45 @@ export const useAddTaskForm = () => {
 
         fetchAllCheckListsId()
     }, [refreshList, accessToken, id])
+
+    useEffect(() => {
+        if (!accessToken) return
+        ;(async (): Promise<void> => {
+            try {
+                const categoryData = await api.getAllCategories()
+                const category = categoryData.map(
+                    ({ id, name }: { id: string; name: string }) => ({
+                        value: id,
+                        label: name,
+                    })
+                )
+                setCategory(category)
+                setTaskStatus(ApiStatus.SUCCESS)
+            } catch (error) {
+                setTaskStatus(ApiStatus.ERROR)
+            }
+        })()
+    }, [accessToken])
+
+    useEffect(() => {
+        if (!accessToken) return
+        ;(async (): Promise<void> => {
+            try {
+                const taskData =
+                    await api.getAllTasksByCategoryId(selectedOption)
+
+                setTasks(taskData)
+
+                setTaskStatus(ApiStatus.SUCCESS)
+            } catch (error) {
+                setTaskStatus(ApiStatus.ERROR)
+            }
+        })()
+
+        if (selectedOption) {
+            api.getAllTasksByCategoryId(selectedOption)
+        }
+    }, [selectedOption, accessToken])
 
     return {
         methods,
@@ -92,7 +158,11 @@ export const useAddTaskForm = () => {
         selectedOption,
         reset,
         selectedTask,
-        sortedTasks,
+
+        category,
         checkListById,
+        handleCategorySelect,
+        handleTaskSelect,
+        tasks,
     }
 }

@@ -30,22 +30,15 @@ export const EditList = (props: Props) => {
         })
         setDialogShowing(false)
     }
-
+    
     return (
         <>
             <PreviewListWrap>
-                {props.sortedTasks.map((task) => {
-                    const categoryName =
-                        task.category.name !== lastCategoryName
-                            ? task.category.name
-                            : ''
+     
 
-                    lastCategoryName = task.category.name
-
-                    return (
                         <>
                             <Container>
-                                <CategoryName>{categoryName}</CategoryName>
+                                <CategoryName></CategoryName>
                                 <StyledCard
                                     style={{
                                         width: '100%',
@@ -67,7 +60,7 @@ export const EditList = (props: Props) => {
                             </Container>
                         </>
                     )
-                })}
+          
             </PreviewListWrap>
             <CustomDialog
                 isOpen={dialogShowing}

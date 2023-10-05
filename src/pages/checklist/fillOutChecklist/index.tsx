@@ -16,11 +16,15 @@ export const FillOutCheckList = () => {
         ApiStatus.LOADING
     )
     const { workflowId } = useParams()
-    const { accessToken } = useAuth()
+
     const { methods, onUpdate } = useFillOutCheckList()
     const { handleSubmit } = methods
 
+    
+    const { accessToken } = useAuth()
+
     const api = apiService(accessToken)
+    
     useEffect(() => {
         if (!accessToken) return
         ;(async (): Promise<void> => {

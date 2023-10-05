@@ -1,13 +1,11 @@
-import { useContext } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import { TaskCategoryContext } from './context/addTaskCategoryContextProvider'
+import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 
 export const CategorySelector = () => {
-    const { handleCategorySelect, category, tasks, handleTaskSelect } =
-        useContext(TaskCategoryContext)
-
+    const { category, tasks, handleCategorySelect, handleTaskSelect } =
+        useAddTaskForm()
     const { control } = useFormContext()
 
     return (

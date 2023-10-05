@@ -55,6 +55,16 @@ export type Task = {
     id: string
     description: string
     category: Category
+    value?: string
+}
+
+export type TaskPicker = {
+    id: string
+    tasks: Task[]
+    value: string
+    categoryId: string
+    description: string
+    category: { id: string; name: string }
 }
 
 export type Upload = {

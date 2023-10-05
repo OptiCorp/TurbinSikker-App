@@ -19,7 +19,6 @@ import ListPunches from '../pages/punch/listPunches/index'
 import { AddUser } from '../pages/users/addUser/AddUser'
 import { ListUsers } from '../pages/users/listUsers/ListUsers'
 import { ProtectedRoute } from './ProtectedRoute'
-import { TaskCategoryContextProvider } from './addtasks/context/addTaskCategoryContextProvider'
 
 export function RoutesContainer() {
     return (
@@ -68,9 +67,7 @@ export function RoutesContainer() {
                         element={
                             <CheckListContextProvider>
                                 <EditCheckListContextProvider>
-                                    <TaskCategoryContextProvider>
-                                        <EditCheckList />
-                                    </TaskCategoryContextProvider>
+                                    <EditCheckList />
                                 </EditCheckListContextProvider>
                             </CheckListContextProvider>
                         }

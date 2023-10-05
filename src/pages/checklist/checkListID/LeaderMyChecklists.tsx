@@ -1,15 +1,15 @@
 import { FunctionComponent } from 'react'
-import { ICheckListUserID } from '../../context/models/ICheckListUserIDEntity'
 
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
+import { Checklist } from '../../../services/apiTypes'
 import { StyledChip } from '../allchecklists/styles'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
 
 interface CheckListRowProps {
-    userIdCheckList: ICheckListUserID
+    userIdCheckList: Checklist
     activeRow: boolean
     setActiveRow: (open: boolean) => void
 }

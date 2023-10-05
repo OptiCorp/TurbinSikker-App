@@ -1,6 +1,5 @@
 import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { TaskCategoryContextProvider } from '../../../components/addtasks/context/addTaskCategoryContextProvider'
 import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
@@ -20,7 +19,7 @@ export const PreviewCheckList = () => {
     const { currentUser } = useUserContext()
     return (
         <>
-            <TaskCategoryContextProvider>
+            <>
                 <div style={{ backgroundColor: '#f0f3f3' }}>
                     {checkListById && (
                         <div key={checkListById.id}>
@@ -68,7 +67,6 @@ export const PreviewCheckList = () => {
                                     <PreviewList
                                         key={checkListById.id}
                                         tasks={checkListById}
-                                       
                                     />
                                 )}
                             </Wrapper>
@@ -101,7 +99,7 @@ export const PreviewCheckList = () => {
                         )}
                     </>
                 </div>
-            </TaskCategoryContextProvider>
+            </>
         </>
     )
 }
