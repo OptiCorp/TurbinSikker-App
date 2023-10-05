@@ -12,35 +12,28 @@ import { ApiService } from './services/api'
 import { ApiStatus } from './services/apiTypes'
 
 type AppProps = {
-
     api: ApiService
     auth: AuthContextType
     fetchChecklistStatus: ApiStatus
+}
 
-
-
-};
-
-
-const App = () => { 
+const App = () => {
     const isAuthenticated = useIsAuthenticated()
-
-
 
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <AuthProvider> 
-                  <TurbinSikkerApiContextProvider>
-                        <UserContextProvider>
-                        <CheckListContextProvider>
-                            <SnackbarContextProvider>
-                                <RoutesContainer />
-                                <SnackbarComponent />
-                            </SnackbarContextProvider>
+                <AuthProvider>
+                    <UserContextProvider>
+                        <TurbinSikkerApiContextProvider>
+                            <CheckListContextProvider>
+                                <SnackbarContextProvider>
+                                    <RoutesContainer />
+                                    <SnackbarComponent />
+                                </SnackbarContextProvider>
                             </CheckListContextProvider>
-                        </UserContextProvider>
                         </TurbinSikkerApiContextProvider>
+                    </UserContextProvider>
                 </AuthProvider>
             )}
             {!isAuthenticated && <Login />}

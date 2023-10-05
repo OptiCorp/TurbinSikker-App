@@ -1,30 +1,22 @@
 import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import { useApiHooks } from '../../../Helpers/useApiHooks'
+import { useApiHook } from '../../../Helpers/useApiHook'
 import useAuth from '../../../context/AuthContextProvider'
-import { ApiStatus } from "../../../services/apiTypes"
+import { ApiStatus } from '../../../services/apiTypes'
 import { HeadCell } from '../checkListID/styles'
 import { WorkFlow } from '../workflow/types'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
 import { LeaderCheckListSend } from './LeaderCheckList'
-import {
-    ListWrapperCheckL,
-    StyledHeadContents,
-    StyledHeadTitle,
-    Wrap,
-} from './styles'
-
+import { ListWrapperCheckL, StyledHeadContents, StyledHeadTitle, Wrap } from './styles'
 
 export const CheckList = () => {
-    const {accessToken} = useAuth()
-    const {params, currentUserId, currentUser,api} = useApiHooks()
-  
+    const { accessToken } = useAuth()
+    const { params, currentUserId, currentUser, api } = useApiHook()
+
     const [workflow, setWorkFlow] = useState<WorkFlow[]>([])
     const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const { accounts, inProgress } = useAuth()
-
-
 
     // const { WorkFlows, allWorkFlows, workFlowById } = useWorkflowContext()
 
@@ -38,26 +30,19 @@ export const CheckList = () => {
     //     }
     // })
 
-
     useEffect(() => {
-     
-            if (!currentUserId || !accessToken) return
-            (async (): Promise<void> => {
-                try {
-            const workFlows = await api.getAllWorkflowsByUserId(currentUserId)
+        if (!currentUserId || !accessToken) return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlows = await api.getAllWorkflowsByUserId(currentUserId)
 
-            setWorkFlow(workFlows)
-            setWorkflowStatus(ApiStatus.SUCCESS);
-        } catch (error) {
-            setWorkflowStatus(ApiStatus.ERROR);
-        }
-    })();
-
-   
+                setWorkFlow(workFlows)
+                setWorkflowStatus(ApiStatus.SUCCESS)
+            } catch (error) {
+                setWorkflowStatus(ApiStatus.ERROR)
+            }
+        })()
     }, [accessToken, currentUserId])
-
-
-  
 
     if (accounts.length > 0) {
         return (
@@ -68,14 +53,11 @@ export const CheckList = () => {
                             <Table.Head sticky>
                                 <Table.Row>
                                     <HeadCell>
-                                        <StyledHeadTitle>
-                                            Title{' '}
-                                        </StyledHeadTitle>
+                                        <StyledHeadTitle>Title </StyledHeadTitle>
                                     </HeadCell>
                                     <HeadCell>
                                         <StyledHeadContents>
-                                            {currentUser?.userRole.name ===
-                                            'Inspector' ? (
+                                            {currentUser?.userRole.name === 'Inspector' ? (
                                                 <>Assigned by</>
                                             ) : (
                                                 <>Assigned</>
@@ -83,16 +65,13 @@ export const CheckList = () => {
                                         </StyledHeadContents>
                                     </HeadCell>
                                     <HeadCell>
-                                        <StyledHeadContents>
-                                            Status
-                                        </StyledHeadContents>
+                                        <StyledHeadContents>Status</StyledHeadContents>
                                     </HeadCell>
                                 </Table.Row>
                             </Table.Head>
                             <Table.Body>
                                 <>
-                                    {currentUser?.userRole.name ===
-                                    'Inspector' ? (
+                                    {currentUser?.userRole.name === 'Inspector' ? (
                                         <>
                                             {workflow.map((WorkFlow) => (
                                                 <InspectorReceivedCheckLists
@@ -103,16 +82,12 @@ export const CheckList = () => {
                                         </>
                                     ) : (
                                         <>
-                                            {workflow.map(
-                                                (workflow) => (
-                                                    <LeaderCheckListSend
-                                                        workflow={
-                                                            workflow
-                                                        }
-                                                        key={workflow.id}
-                                                    />
-                                                )
-                                            )}
+                                            {workflow.map((workflow) => (
+                                                <LeaderCheckListSend
+                                                    workflow={workflow}
+                                                    key={workflow.id}
+                                                />
+                                            ))}
                                         </>
                                     )}
                                 </>

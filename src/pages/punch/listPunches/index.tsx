@@ -20,15 +20,33 @@ import {
     TicketInfo,
     TicketSeverityContainer,
 } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Status } from '../types'
+import { useApiHook } from '../../../Helpers/useApiHook'
+import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { ApiStatus, PunchItem } from '../../../services/apiTypes'
 
 function ListPunches() {
     const { hasPermission } = useHasPermission()
-    const { punches } = usePunchContext()
+    // const { punches } = usePunchContext()
     const navigate = useNavigate()
+    const { api } = useApiHook()
     const [sorted, setSorted] = useState(false)
     const [showBadge, setShowBadge] = useState(true)
+    const [punches, setPunches] = useState<PunchItem[]>()
+    const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+    const { currentUser } = useUserContext()
+    useEffect(() => {
+        ;(async (): Promise<void> => {
+            try {
+                const punchesFromApi = await api.getPunchInspectorId(currentUser.id)
+                setPunches(punchesFromApi)
+                setFetchPunchesStatus(ApiStatus.SUCCESS)
+            } catch (err) {
+                setFetchPunchesStatus(ApiStatus.ERROR)
+            }
+        })()
+    }, [])
     punches?.sort((a, b) => {
         const dateA = new Date(a.createdDate)
         const dateB = new Date(b.createdDate)
@@ -36,7 +54,7 @@ function ListPunches() {
         return dateB.valueOf() - dateA.valueOf()
     })
 
-    punches.sort((a, b) => {
+    punches?.sort((a, b) => {
         if (hasPermission) {
             if (a.status === Status.PENDING && b.status !== Status.PENDING) {
                 return -1
@@ -53,10 +71,10 @@ function ListPunches() {
         return 0
     })
 
-    const rejectedPunches = punches.filter((punch) => punch.status === Status.REJECTED)
+    const rejectedPunches = punches?.filter((punch) => punch.status === Status.REJECTED)
 
     const filteredPunches = sorted
-        ? punches.filter((punch) => punch.status === Status.REJECTED)
+        ? punches?.filter((punch) => punch.status === Status.REJECTED)
         : punches
 
     function clickHandler(punchId: string, workFlowId: string) {
@@ -66,7 +84,7 @@ function ListPunches() {
     return (
         <>
             <PunchListItem>
-                {punches.length < 1 ? (
+                {punches?.length < 1 ? (
                     <p>Punches are displayed here..</p>
                 ) : (
                     <>

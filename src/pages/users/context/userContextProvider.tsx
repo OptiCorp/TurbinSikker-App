@@ -1,11 +1,5 @@
 import decode from 'jwt-decode'
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { API_URL } from '../../../config'
 import useAuth from '../../../context/AuthContextProvider'
@@ -13,11 +7,12 @@ import { Option } from '../context/models/OptionsEntity'
 import { AzureUserInfo } from './models/AzureUserEntity'
 import { UserEntity } from './models/UserEntity'
 import { UserListEntity } from './models/UserListEntity'
+import { User } from 'src/services/apiTypes'
 export type ContextType = {
     result: UserEntity[]
     userList: UserListEntity[]
     options: Option[]
-    currentUser: UserEntity | null
+    currentUser: User
     refreshUsers: boolean
     setRefreshUsers: React.Dispatch<React.SetStateAction<boolean>>
     handleDeleteUser: (id: string | undefined) => void
@@ -32,13 +27,13 @@ export const postsContextDefaultValue: ContextType = {
     userList: [],
     currentUser: {
         createdDate: '',
-        checklistWorkFlow: {
+        /* checklistWorkFlow: {
             id: '',
             checklistId: '',
             status: '',
             updatedDate: '',
             userId: '',
-        },
+        }, */
         email: '',
         firstName: '',
         id: '',
@@ -49,9 +44,9 @@ export const postsContextDefaultValue: ContextType = {
             id: '',
             name: '',
         },
-        userRoleId: '',
+        /* userRoleId: '', */
         username: '',
-        AzureAdUser: '',
+        azureAdUserId: '',
     },
 }
 
@@ -62,7 +57,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     const { state } = useLocation()
     const newUserFunc = state ? state?.newUserFunc : null
     const [refreshUsers, setRefreshUsers] = React.useState<boolean>(false)
-    const [currentUser, setCurrentUser] = useState<UserEntity | null>(null)
+    const [currentUser, setCurrentUser] = useState<User | null>(null)
     const [userList, setUserList] = useState<UserListEntity[]>([])
     const { idToken, accessToken } = useAuth()
 
@@ -82,12 +77,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = await res.json()
         setResult(data)
-        const userList = data.map(
-            ({ id, username }: { id: string; username: string }) => ({
-                value: id,
-                label: username,
-            })
-        )
+        const userList = data.map(({ id, username }: { id: string; username: string }) => ({
+            value: id,
+            label: username,
+        }))
         setUserList(userList)
     }
 
@@ -111,12 +104,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
             const data = await res.json()
 
-            const options = data.map(
-                ({ id, name }: { id: string; name: string }) => ({
-                    value: id,
-                    label: name,
-                })
-            )
+            const options = data.map(({ id, name }: { id: string; name: string }) => ({
+                value: id,
+                label: name,
+            }))
             setOptions(options)
         }
         fetchUserRoles()
@@ -213,20 +204,14 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                     // other user properties
                 }),
             })
-            console.log(
-                'User creation response status:',
-                createUserResponse.status
-            )
+            console.log('User creation response status:', createUserResponse.status)
             if (createUserResponse.status === 200) {
                 //const newUser = await createUserResponse.json();
                 await createUserResponse.json()
 
                 //return newUser; // Return the newly created user
             } else {
-                console.log(
-                    'Error creating user:',
-                    createUserResponse.statusText
-                )
+                console.log('Error creating user:', createUserResponse.statusText)
                 return null // Return null if there's an error
             }
         } catch (error) {
@@ -260,11 +245,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         ]
     )
 
-    return (
-        <UserContext.Provider value={memoedValue}>
-            {children}
-        </UserContext.Provider>
-    )
+    return <UserContext.Provider value={memoedValue}>{children}</UserContext.Provider>
 }
 
 function useUserContext() {
@@ -276,4 +257,3 @@ function useUserContext() {
 }
 
 export { UserContext, UserContextProvider, useUserContext }
-

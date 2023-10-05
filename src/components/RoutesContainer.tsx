@@ -26,13 +26,7 @@ export function RoutesContainer() {
     return (
         <>
             <Routes>
-                <Route
-                    element={
-                        <WorkflowContextProvider>
-                            <Layout />
-                        </WorkflowContextProvider>
-                    }
-                >
+                <Route element={<Layout />}>
                     <Route path="/Profile" element={<Profile />} />
 
                     <Route
@@ -46,7 +40,6 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 <CheckListContextProvider>
-                                    
                                     <CheckList />
                                 </CheckListContextProvider>
                             }
@@ -114,14 +107,7 @@ export function RoutesContainer() {
                     />
                     <Route path="/AddUser" element={<AddUser />} />
 
-                    <Route
-                        path="/Punches"
-                        element={
-                            <PunchContextProvider>
-                                <ListPunches />
-                            </PunchContextProvider>
-                        }
-                    />
+                    <Route path="/Punches" element={<ListPunches />} />
                     <Route
                         path="/workflow/:workflowId/punch"
                         element={

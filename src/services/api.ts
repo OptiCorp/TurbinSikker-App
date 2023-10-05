@@ -105,7 +105,7 @@ const apiService = (token: string) => {
     }
 
     const getUserByAzureAdUserId = async (id: string) => {
-        const data = await getByFetch(`GetUserByAzureAdUserId?id=${id}`)
+        const data = await getByFetch(`GetUserByAzureAdUserId?azureAdUserId=${id}`)
         if (!id) {
             throw new Error('Please enter a valid AzureAD user id')
         }

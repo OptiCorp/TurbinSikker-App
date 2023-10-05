@@ -32,6 +32,7 @@ export type PunchItem = {
     createdDate: string
     updatedDate: null | string
     user: User
+    checklistTask: Task
     // checklistTask: ChecklistTaskEntity
     // uploads: UploadEntity
 }
