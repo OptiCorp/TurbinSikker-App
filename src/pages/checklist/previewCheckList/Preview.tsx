@@ -1,9 +1,9 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TaskCategoryContextProvider } from '../../../components/addtasks/context/addTaskCategoryContextProvider'
+import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { useUserContext } from '../../../pages/users/context/userContextProvider'
 import { PreviewList } from './PreviewList'
 import { InfoHeader, Wrapper } from './styles'
@@ -68,7 +68,7 @@ export const PreviewCheckList = () => {
                                     <PreviewList
                                         key={checkListById.id}
                                         tasks={checkListById}
-                                        sortedTasks={sortedTasks}
+                                       
                                     />
                                 )}
                             </Wrapper>

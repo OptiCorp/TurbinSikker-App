@@ -1,5 +1,3 @@
-import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
@@ -7,8 +5,11 @@ import { API_URL } from '../../../config'
 import useAuth from '../../../context/AuthContextProvider'
 
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
-import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
+
+import { Checklist } from '../../../services/apiTypes'
+import { SnackbarContext } from '../../snackbar/SnackBarContext'
 import { FormValuesEntity } from '../context/models/FormValuesEntity'
+import { TaskEntity } from '../context/models/TaskEntity'
 export const useAddTaskForm = () => {
     const { id } = useParams() as { id: string }
 
@@ -19,11 +20,9 @@ export const useAddTaskForm = () => {
     const { refreshList, setRefreshList } = useCheckListContext()
     const [selectedOption] = useState('')
     const [selectedTask] = useState('')
-    const [checkListById, setCheckListById] = useState<CheckListEntity | null>(
-        null
-    )
+    const [checkListById, setCheckListById] = useState<Checklist | null>(null)
     const { accessToken } = useAuth()
-    const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
+    const [sortedTasks, setSortedTasks] = useState<TaskEntity>()
 
     const { workflowId } = useParams()
 
@@ -61,7 +60,7 @@ export const useAddTaskForm = () => {
                 if (!res.ok)
                     throw new Error('Failed with HTTP code ' + res.status)
 
-                const data = (await res.json()) as CheckListEntity
+                const data = await res.json()
                 setCheckListById(data)
                 const sorted = data.checklistTasks.sort((a: any, b: any) => {
                     if (a.category.name < b.category.name) {
