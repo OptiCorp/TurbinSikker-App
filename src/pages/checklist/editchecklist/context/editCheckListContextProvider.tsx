@@ -68,8 +68,7 @@ const EditCheckListContextProvider = ({
 }: {
     children: React.ReactNode
 }) => {
-    const { checkListById } = useAddTaskForm()
-    const { id } = useParams()
+
     const navigate = useNavigate()
     const { setRefreshList } = apiService()
     const { accessToken } = useGlobal()
@@ -93,19 +92,7 @@ const EditCheckListContextProvider = ({
         setTaskDescription(taskDescription)
     }
 
-    useEffect(() => {
-        if (checkListById && checkListById.checklistTasks.length === 0) {
-            setIsOpenn(true)
-        }
-    }, [checkListById])
-
-    const handleTitleChange = (title: string) => {
-        setTitle(title)
-    }
-
-    const handleCloseNewCheckList = () => {
-        setIsOpenNew(false)
-    }
+   
 
     const updateCheckListTask = async (data: {
         taskId: string
@@ -150,10 +137,7 @@ const EditCheckListContextProvider = ({
 
         navigate('/MyChecklists')
 
-        // if (openSnackbar) {
-        //     openSnackbar(`Checklist updated`)
-        //     setTimeout(() => openSnackbar(''), 3000)
-        // }
+      
     }
 
     const handleDelete = async (id: string | undefined) => {

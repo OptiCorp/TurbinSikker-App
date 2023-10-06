@@ -11,7 +11,6 @@ import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { MyCheckLists } from './pages/checklist/myChecklists/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
-import { FillOutCheckList } from './pages/checklist/workflowAddPunch'
 import { Profile } from './pages/profile'
 import Punch from './pages/punch/Index'
 import { AddPunch } from './pages/punch/addPunch/AddPunch'
@@ -19,6 +18,7 @@ import { PunchContextProvider } from './pages/punch/context/PunchContextProvider
 import ListPunches from './pages/punch/listPunches/index'
 import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
+import { FillOutCheckList } from './pages/workflowAddPunch'
 
 export function RoutesContainer() {
     return (

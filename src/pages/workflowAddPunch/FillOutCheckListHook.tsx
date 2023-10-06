@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
-import { API_URL } from '../../../config'
-import useGlobal from '../../../context/globalContextProvider'
+import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
+import { API_URL } from '../../config'
+import useGlobal from '../../context/globalContextProvider'
 
 import { UpdatingWorkFlowEntity } from './types'
 

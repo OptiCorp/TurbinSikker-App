@@ -8,10 +8,11 @@ import {
     useEffect,
     useState,
 } from 'react'
+import { useParams } from 'react-router'
 import { API_URL } from '../config'
 import { AzureUserInfo } from '../pages/users/context/models/AzureUserEntity'
 import apiService, { ApiService } from '../services/api'
-import { ApiStatus, User } from '../services/apiTypes'
+import { ApiStatus, Checklist, User } from '../services/apiTypes'
 export interface GlobalContextType {
     idToken: string
     accessToken: string
@@ -24,6 +25,7 @@ export interface GlobalContextType {
     currentUser: User | null
     api: ApiService
     instance: any
+    checklist: Checklist | undefined
 }
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
 
@@ -34,6 +36,7 @@ export function GlobalProvider({
 }): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
+    const { id } = useParams() as { id: string }
 
     const accountUsername = account?.username
     const accountname = account?.name
@@ -44,7 +47,10 @@ export function GlobalProvider({
     )
     const [currentUser, setCurrentUser] = useState<User | null>(null)
     const api = apiService()
-
+    const [checklistStatus, setChecklistStatus] = useState<ApiStatus>(
+        ApiStatus.LOADING
+    )
+    const [checklist, setChecklist] = useState<Checklist>()
     console.log(currentUser)
     useEffect(() => {
         if (inProgress === InteractionStatus.None) {
@@ -157,6 +163,18 @@ export function GlobalProvider({
         }
     }, [idToken])
 
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;async (): Promise<void> => {
+            try {
+                const checklistData = await api.getChecklist(id)
+                setChecklist(checklistData)
+            } catch (error) {
+                setChecklistStatus(ApiStatus.ERROR)
+            }
+        }
+    }, [accessToken, currentUser?.id])
+
     // const fetchCheckLists = async () => {
     //     if (!accessToken) return
     //     ;(async (): Promise<void> => {
@@ -217,6 +235,7 @@ export function GlobalProvider({
                     api,
                     fetchChecklistStatus,
                     currentUser,
+                    checklist,
                 }}
             >
                 {children}

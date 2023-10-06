@@ -40,10 +40,6 @@ export const MyCheckLists = () => {
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
 
-    // const handleSubmit = () => {
-    //     if (!currentUser) return
-    //     api.addChecklist(title, currentUser.id)
-    // }
 
     const handleCreateChecklist = async () => {
         try {

@@ -5,9 +5,9 @@ import { arrow_drop_down } from '@equinor/eds-icons'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
-import CustomDialog from '../../../components/modal/useModalHook'
-import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import { Task, Workflow } from '../../../services/apiTypes'
+import CustomDialog from '../../components/modal/useModalHook'
+import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
+import { Task, Workflow } from '../../services/apiTypes'
 import {
     CustomCard,
     CustomCardContent,
