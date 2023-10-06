@@ -1,8 +1,7 @@
 import { Table } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-
-import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { ApiStatus, Workflow } from '../../../services/apiTypes'

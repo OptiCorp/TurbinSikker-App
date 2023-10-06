@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { StyledTableRow } from '../checkListID/styles'
+import { StyledTableRow } from '../myChecklists/styles'
 
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'

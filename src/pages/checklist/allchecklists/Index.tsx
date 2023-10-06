@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { ApiStatus, Workflow } from '../../../services/apiTypes'
-import { HeadCell } from '../checkListID/styles'
+import { HeadCell } from '../myChecklists/styles'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
 import { LeaderCheckListSend } from './LeaderCheckList'
 import {

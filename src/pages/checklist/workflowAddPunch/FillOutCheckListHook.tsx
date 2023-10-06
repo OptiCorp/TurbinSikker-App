@@ -5,7 +5,6 @@ import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../config'
 import useGlobal from '../../../context/globalContextProvider'
 
-import apiService from '../../../services/api'
 import { UpdatingWorkFlowEntity } from './types'
 
 export type FillOutForm = {
@@ -17,7 +16,7 @@ export type FillOutForm = {
     status: string
 }
 export const useFillOutCheckList = () => {
-    const { setRefreshList } = apiService()
+    // const { setRefreshList } = apiService()
 
     const { accessToken } = useGlobal()
     const { openSnackbar } = useContext(SnackbarContext)
@@ -58,7 +57,7 @@ export const useFillOutCheckList = () => {
                 userId: currentUser?.id,
             }),
         })
-        if (res.ok) setRefreshList((prev) => !prev)
+        // if (res.ok) setRefreshList((prev) => !prev)
 
         if (openSnackbar) {
             openSnackbar(`Checklist sent`)

@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
 import CustomDialog from '../../../components/modal/useModalHook'
-import { MakeTitleField } from '../checkListID/styles'
+import { MakeTitleField } from '../myChecklists/styles'
 import { InfoHeader } from '../previewCheckList/styles'
 
 type Props = {
