@@ -1,12 +1,12 @@
 import { Typography } from '@equinor/eds-core-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { useUser } from '../../../pages/users/context/userContextProvider'
 import { useCheckListContext } from '../../context/CheckListContextProvider'
 import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 
 export const SelectComponent = () => {
-    const { userList } = useUserContext()
+    const { userList } = useUser()
     const { list } = useCheckListContext()
     const { control, register } = useFormContext()
 

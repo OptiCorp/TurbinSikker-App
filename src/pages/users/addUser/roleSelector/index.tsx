@@ -1,12 +1,13 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import { useUserContext } from '../../context/userContextProvider'
+
+import { useUser } from '../../context/userContextProvider'
 import { useAddUser } from '../hooks/useAddUser'
 
 export const RoleSelector = () => {
     const { control, setValue } = useFormContext()
     const { user } = useAddUser()
-    const { options } = useUserContext()
+    const { options } = useUser()
 
     const currentDefaultValue = options.find(
         (option) => option.label === user?.userRole.name

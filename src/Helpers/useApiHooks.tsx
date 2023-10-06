@@ -1,8 +1,6 @@
-import { useContext } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import useAuth from '../context/AuthContextProvider'
-import { TurbinSikkerApiContext } from '../context/TurbinSikkerApiContext'
-import { useUserContext } from '../pages/users/context/userContextProvider'
+
+import useGlobal from '../context/globalContextProvider'
 
 export type apiParams = {
     id: string
@@ -13,17 +11,14 @@ export type apiParams = {
 }
 
 export const useApiHooks = () => {
-    const { api, auth } = useContext(TurbinSikkerApiContext)
-
+    const { api, accessToken } = useGlobal()
     const params = useParams<apiParams>()
-
-    const { accessToken } = useAuth()
 
     // const apii = apiService(accessToken)
 
     const location = useLocation()
 
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     const currentUserId: string = currentUser?.id ?? ''
 
@@ -35,7 +30,7 @@ export const useApiHooks = () => {
         location,
         params,
         navigate,
-        auth,
+
         currentUserId,
     }
 }

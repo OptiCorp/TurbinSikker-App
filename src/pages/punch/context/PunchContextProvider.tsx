@@ -1,9 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { API_URL } from '../../../config'
-import useAuth from '../../../context/AuthContextProvider'
 
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import useGlobal from '../../../context/globalContextProvider'
 import { Punch } from '../types'
 
 type PunchContext = {
@@ -63,8 +62,7 @@ const PunchContext = createContext(postsContextDefaultValue)
 function PunchContextProvider({ children }: { children: React.ReactNode }) {
     const { punchId } = useParams()
 
-    const { accessToken } = useAuth()
-    const { currentUser } = useUserContext()
+    const { currentUser, accessToken } = useGlobal()
     const [punchData, setPunchData] = useState<Punch[]>([])
     const [punchById, setPunchById] = useState<Punch>()
 

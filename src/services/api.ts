@@ -1,4 +1,5 @@
 import { API_URL } from '../config'
+import { pca } from '../msalconfig'
 import {
     Category,
     Checklist,
@@ -10,81 +11,102 @@ import {
     Workflow,
 } from './apiTypes'
 
-const apiService = (token: string) => {
+const request = {
+    scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
+    account: pca.getAllAccounts()[0],
+    
+}
+
+const apiService = () => {
     // Generic function for get requests
+
     const getByFetch = async (url: string): Promise<any> => {
-        const GetOperation = {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-        }
-        const res = await fetch(`${API_URL}/${url}`, GetOperation)
-        return res.json()
+        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+            const GetOperation = {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
+            const res = await fetch(`${API_URL}/${url}`, GetOperation)
+            if (res.ok) {
+                const jsonResult = await res.json()
+                const resultObj = jsonResult
+                return resultObj
+            } else {
+                console.error('Get by fetch failed. Url=' + url, res)
+            }
+        })
     }
 
     // Generic function for post requests
     const postByFetch = async (url: string, bodyData?: any): Promise<any> => {
-        const postOperation = {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify(bodyData),
-        }
-        const res = await fetch(`${API_URL}/${url}`, postOperation)
-        if (res.ok) {
-            const jsonResult = await res.json()
-            const resultObj = jsonResult
-            return resultObj
-        } else {
-            console.error('Post by fetch failed. Url=' + url, res)
-        }
+        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+            const postOperation = {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify(bodyData),
+            }
+            const res = await fetch(`${API_URL}/${url}`, postOperation)
+            if (res.ok) {
+                const jsonResult = await res.json()
+                const resultObj = jsonResult
+                return resultObj
+            } else {
+                console.error('Post by fetch failed. Url=' + url, res)
+            }
+        })
     }
 
     // Generic function for put requests
     const putByFetch = async (url: string, bodyData: any): Promise<any> => {
-        const putOperations = {
-            method: 'PUT',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify(bodyData),
-        }
-        const res = await fetch(`${API_URL}/${url}`, putOperations)
-        if (res.ok) {
-            const jsonResult = await res.json()
-            const resultObj = jsonResult
-            return resultObj
-        } else {
-            console.error('Put by fetch failed. Url=' + url, res)
-        }
+        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+            const putOperations = {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify(bodyData),
+            }
+            const res = await fetch(`${API_URL}/${url}`, putOperations)
+            if (res.ok) {
+                const jsonResult = await res.json()
+                const resultObj = jsonResult
+                return resultObj
+            } else {
+                console.error('Put by fetch failed. Url=' + url, res)
+            }
+        })
     }
 
     // Generic function for delete requests
     const deleteByFetch = async (url: string): Promise<any> => {
-        const deleteOperation = {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-        }
-        const res = await fetch(`${API_URL}/${url}`, deleteOperation)
-        if (res.ok) {
-            const jsonResult = await res.json()
-            const resultObj = jsonResult
-            return resultObj
-        } else {
-            console.error('Delete by fetch failed. Url=' + url, res)
-        }
+        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+            const deleteOperation = {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
+            const res = await fetch(`${API_URL}/${url}`, deleteOperation)
+            if (res.ok) {
+                const jsonResult = await res.json()
+                const resultObj = jsonResult
+                return resultObj
+            } else {
+                console.error('Delete by fetch failed. Url=' + url, res)
+            }
+        })
     }
 
     // User
@@ -206,7 +228,7 @@ const apiService = (token: string) => {
 
     const getAllChecklistsByUserId = async (
         userId: string
-    ): Promise<Checklist> => {
+    ): Promise<Checklist[]> => {
         const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`)
         if (!userId) {
             throw new Error('An error occurred, please try again')

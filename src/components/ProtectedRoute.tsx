@@ -1,9 +1,8 @@
 import { Navigate } from 'react-router'
-
-import { useUserContext } from '../pages/users/context/userContextProvider'
+import useGlobal from '../context/globalContextProvider'
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     if (currentUser?.userRole.name === 'Inspector') {
         return <Navigate to="/" replace />

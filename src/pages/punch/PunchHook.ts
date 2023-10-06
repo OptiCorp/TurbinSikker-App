@@ -1,10 +1,10 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
 import { getUploadByPunchId } from '../../Upload'
+import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../config'
-import useAuth from '../../context/AuthContextProvider'
+import useGlobal from '../../context/globalContextProvider'
 import { useCheckListContext } from '../context/CheckListContextProvider'
 import { usePunchContext } from './context/PunchContextProvider'
 
@@ -12,7 +12,7 @@ export function usePunch() {
     const { id } = useParams()
     const { punch } = usePunchContext()
     const methods = useForm()
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
     const { setRefreshList } = useCheckListContext()
     const { openSnackbar } = useContext(SnackbarContext)
     const [status, setStatus] = useState('')

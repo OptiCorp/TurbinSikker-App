@@ -2,7 +2,8 @@ import { Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { FC } from 'react'
 import { Workflow } from '../../../services/apiTypes'
-import { useUserContext } from './../../../pages/users/context/userContextProvider'
+
+import useGlobal from '../../../context/globalContextProvider'
 import { StyledChip } from './styles'
 
 type UserChip = {
@@ -10,7 +11,7 @@ type UserChip = {
 }
 
 export const UserChip: FC<UserChip> = ({ workflow }) => {
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     return (
         <div>

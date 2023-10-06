@@ -9,13 +9,13 @@ import { StyledChip } from '../allchecklists/styles'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
 
 interface CheckListRowProps {
-    userIdCheckList: Checklist
+    checklist: Checklist
     activeRow: boolean
     setActiveRow: (open: boolean) => void
 }
 
 export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
-    userIdCheckList,
+    checklist,
 }) => {
     const formatDate = (dateString: string | null) => {
         if (!dateString) {
@@ -27,8 +27,8 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
     }
 
     const navigate = useNavigate()
-    const formattedCreatedDate = formatDate(userIdCheckList.createdDate)
-    const formattedUpdatedDate = formatDate(userIdCheckList.updatedDate)
+    const formattedCreatedDate = formatDate(checklist.createdDate)
+    const formattedUpdatedDate = formatDate(checklist.updatedDate)
 
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
@@ -36,14 +36,12 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
 
     return (
         <>
-            {userIdCheckList?.id && (
-                <StyledTableRow
-                    onClick={() => clickHandler(userIdCheckList.id)}
-                >
+            {checklist?.id && (
+                <StyledTableRow onClick={() => clickHandler(checklist.id)}>
                     <MyCheckListCell>
                         <CellContentMyList>
                             <Typography variant="body_long_bold">
-                                {userIdCheckList.title}
+                                {checklist.title}
                             </Typography>
 
                             <Typography
@@ -88,7 +86,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                     <MyCheckListCell>
                         <CellContentMyList>
                             <Chip variant="active" style={{ margin: '0 auto' }}>
-                                {userIdCheckList.status}
+                                {checklist.status}
                             </Chip>
                         </CellContentMyList>
                     </MyCheckListCell>

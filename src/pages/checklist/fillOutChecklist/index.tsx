@@ -4,7 +4,7 @@ import { ApiStatus, Workflow } from '../../../services/apiTypes'
 import { Wrapper } from '../previewCheckList/styles'
 
 import { useParams } from 'react-router'
-import useAuth from '../../../context/AuthContextProvider'
+import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { useFillOutCheckList } from './FillOutCheckListHook'
 import { FillOutList } from './FillOutList'
@@ -20,11 +20,10 @@ export const FillOutCheckList = () => {
     const { methods, onUpdate } = useFillOutCheckList()
     const { handleSubmit } = methods
 
-    
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
 
-    const api = apiService(accessToken)
-    
+    const api = apiService()
+
     useEffect(() => {
         if (!accessToken) return
         ;(async (): Promise<void> => {

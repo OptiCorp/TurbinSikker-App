@@ -8,9 +8,8 @@ import React, {
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../config'
-import useAuth from '../../context/AuthContextProvider'
+import { default as useGlobal } from '../../context/globalContextProvider'
 import { Checklist } from '../../services/apiTypes'
-import { useUserContext } from '../users/context/userContextProvider'
 
 export type ListEntity = {
     value: string
@@ -59,14 +58,14 @@ const CheckListContextProvider = ({
     const navigate = useNavigate()
     const [refreshList, setRefreshList] = React.useState<boolean>(false)
     const [list, setList] = useState<ListEntity[]>([])
-    const { accessToken } = useAuth()
+
     const { id } = useParams()
     const { openSnackbar } = useContext(SnackbarContext)
-    const { currentUser } = useUserContext()
+    const { currentUser, accessToken } = useGlobal()
 
     const getChecklistById = async () => {
-        if (!id) return
-        if (!accessToken) return
+        if (!id || !accessToken) return
+
         const response = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
             method: 'GET',
             headers: {
@@ -83,7 +82,6 @@ const CheckListContextProvider = ({
     /// fetch checklist
     const fetchCheckLists = async () => {
         if (!accessToken) return
-
         const res = await fetch(`${API_URL}/GetAllChecklists`, {
             method: 'GET',
             headers: {
@@ -92,6 +90,7 @@ const CheckListContextProvider = ({
                 'Access-Control-Allow-Origin': '*',
             },
         })
+
         if (!res.ok) throw new Error('Failed with HTTP code ' + res.status)
         const data = (await res.json()) as Checklist[]
 
@@ -133,52 +132,13 @@ const CheckListContextProvider = ({
     }
 
     // userIdchecklist
-    const fetchCheckListUserId = async () => {
-        if (!currentUser?.id || !accessToken) return
-        try {
-            const res = await fetch(
-                `${API_URL}/GetAllChecklistsByUserId?id=${currentUser?.id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                }
-            )
-            if (!res.ok) {
-                throw new Error('Failed with HTTP code ' + res.status)
-            }
-            const data = (await res.json()) as Checklist[]
-            setUserIdCheckList(data)
-            const list = data.map(
-                ({ id, title }: { id: string; title: string }) => ({
-                    value: id,
-                    label: title,
-                })
-            )
-            setList(list)
-        } catch (error) {
-            console.error(error)
-            throw error
-        }
-    }
-
-    useEffect(() => {
-        getChecklistById()
-    }, [accessToken])
-
-    useEffect(() => {
-        fetchCheckListUserId()
-    }, [refreshList, currentUser, accessToken])
 
     const memoedValue = useMemo(
         () => ({
             setAllCheckList,
             allCheckList,
-            userIdCheckList,
-            setUserIdCheckList,
+            
+            
             fetchCheckLists,
             refreshCheckLists,
             setRefreshList,
@@ -191,8 +151,8 @@ const CheckListContextProvider = ({
         [
             setAllCheckList,
             allCheckList,
-            userIdCheckList,
-            setUserIdCheckList,
+           
+           
             fetchCheckLists,
             setRefreshList,
             refreshCheckLists,

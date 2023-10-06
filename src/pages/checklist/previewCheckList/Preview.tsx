@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+
+import useGlobal from '../../../context/globalContextProvider'
 import { PreviewList } from './PreviewList'
 import { InfoHeader, Wrapper } from './styles'
 
@@ -13,10 +14,10 @@ export const PreviewCheckList = () => {
     }
     const location = useLocation()
     const state = location.state
-    const { checkListById, sortedTasks } = useAddTaskForm()
+    const { checkListById } = useAddTaskForm()
 
     const navigate = useNavigate()
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
     return (
         <>
             <>

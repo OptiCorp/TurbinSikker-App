@@ -1,5 +1,4 @@
-import { TaskEntity } from '../../../components/addtasks/context/models/TaskEntity'
-import { Checklist } from '../../../services/apiTypes'
+import { Checklist, Task } from '../../../services/apiTypes'
 import {
     CategoryName,
     Container,
@@ -9,12 +8,10 @@ import {
 } from './styles'
 
 type Props = {
-    tasks: Checklist & TaskEntity
+    tasks: Checklist & Task
 }
 
 export const PreviewList = ({ tasks }: Props) => {
- 
-
     return (
         <PreviewListWrap>
             return (

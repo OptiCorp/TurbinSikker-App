@@ -1,7 +1,8 @@
 import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { useUserContext } from '../users/context/userContextProvider'
+
+import useGlobal from '../../context/globalContextProvider'
 import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
@@ -9,7 +10,7 @@ export const IndexCheckLists = () => {
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     return (
         <MainWrap>

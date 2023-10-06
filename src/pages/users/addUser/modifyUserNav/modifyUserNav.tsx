@@ -1,10 +1,11 @@
-import CustomDialog from '@components/modal/useModalHook'
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { useUserContext } from '../../context/userContextProvider'
+
+import CustomDialog from '../../../../components/modal/useModalHook'
+import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
+import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
+import { useUser } from '../../context/userContextProvider'
 import { useAddUser } from '../hooks/useAddUser'
 export const ModifyUserNav = () => {
     const { methods, location } = useAddUser()
@@ -12,7 +13,7 @@ export const ModifyUserNav = () => {
     const [addNav, setAddNav] = useState(false)
     const [editNav, setEditNav] = useState(false)
     const [negativeOpen, setNegativeOpen] = useState(false)
-    const { handleDeleteUser } = useUserContext()
+    const { handleDeleteUser } = useUser()
     const { openSnackbar } = useContext(SnackbarContext)
     const { id } = useParams()
     const navigate = useNavigate()

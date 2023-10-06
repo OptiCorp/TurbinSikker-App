@@ -1,10 +1,11 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { useUserContext } from '../../users/context/userContextProvider'
+
 import { StyledTableRow } from '../checkListID/styles'
 
 import { formatDate } from '../../../Helpers'
+import useGlobal from '../../../context/globalContextProvider'
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
@@ -21,7 +22,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     if (workflow.creator.id !== currentUser?.id) {
         return null

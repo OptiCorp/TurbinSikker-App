@@ -12,14 +12,15 @@ import {
 } from './styles'
 import { UserRow } from './userRow'
 
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Icon } from '@equinor/eds-core-react'
 import { visibility, visibility_off } from '@equinor/eds-icons'
-import { useUserContext } from '../context/userContextProvider'
+
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { useUser } from '../context/userContextProvider'
 import { useHasPermission } from '../hooks/useHasPermission'
 
 export const ListUsers = () => {
-    const { result: users } = useUserContext()
+    const { result: users } = useUser()
 
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
 

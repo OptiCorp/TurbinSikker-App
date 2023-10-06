@@ -2,7 +2,8 @@ import { Table } from '@equinor/eds-core-react'
 import { useLocation } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
-import { useUserContext } from '../../users/context/userContextProvider'
+
+import useGlobal from '../../../context/globalContextProvider'
 import { CompletedList } from './CompletedList'
 import {
     BackgroundWrapCompleted,
@@ -14,7 +15,7 @@ import {
 
 export const CompletedChecklists = () => {
     const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
     const location = useLocation()
     const state = location.state
     return (

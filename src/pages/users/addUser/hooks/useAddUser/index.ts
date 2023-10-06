@@ -3,12 +3,13 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { SnackbarContext } from '../../../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../../../config'
-import useAuth from '../../../../../context/AuthContextProvider'
+
+import useGlobal from '../../../../../context/globalContextProvider'
 import { UserContext } from '../../../context/userContextProvider'
 import { FormValues } from './types'
 
 export const useAddUser = () => {
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const methods = useForm<FormValues>()

@@ -1,7 +1,7 @@
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { SelectComponent } from './SelectComponent'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { SendBackgroundWrap } from './styles'

@@ -3,9 +3,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../../config'
-import useAuth from '../../../../context/AuthContextProvider'
+import { default as useGlobal } from '../../../../context/globalContextProvider'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
-import { useUserContext } from '../../../../pages/users/context/userContextProvider'
 
 export type SendingFormValuesEntity = {
     checklistId: string
@@ -20,10 +19,10 @@ export const useAddWorkFlowForm = () => {
     const { openSnackbar } = useContext(SnackbarContext)
     const { handleSubmit, control, getValues } = methods
     const navigate = useNavigate()
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const { setRefreshList } = useCheckListContext()
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     const handleOpen = () => {
         setPositiveOpen(true)

@@ -2,15 +2,15 @@ import { Table } from '@equinor/eds-core-react'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
-import { ApiStatus, Workflow } from '../../../services/apiTypes'
+import { ApiStatus, Checklist, Workflow } from '../../../services/apiTypes'
 import { useCheckListContext } from '../../context/CheckListContextProvider'
 
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import useAuth from '../../../context/AuthContextProvider'
+import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { useUserContext } from '../../users/context/userContextProvider'
+
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklists } from './LeaderMyChecklists'
 import {
@@ -25,13 +25,14 @@ import {
 export const MyCheckLists = () => {
     const { handleSubmit } = useCheckListContext()
 
-    const { accessToken } = useAuth()
-    const api = apiService(accessToken)
+    const { accessToken } = useGlobal()
+    const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
     const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
         ApiStatus.LOADING
     )
-    const { currentUser } = useUserContext()
+    const [checklists, setChecklists] = useState<Checklist[]>([])
+    const { currentUser } = useGlobal()
     const navigate = useNavigate()
     const handleClose = () => {
         setDialogShowing(false)
@@ -39,7 +40,7 @@ export const MyCheckLists = () => {
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { userIdCheckList } = useCheckListContext()
+
     const { openSnackbar } = useContext(SnackbarContext)
     const [activeRow, setActiveRow] = useState(false)
 
@@ -73,6 +74,22 @@ export const MyCheckLists = () => {
         })()
     }, [accessToken, currentUser?.id])
 
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return;
+        (async (): Promise<void> => {
+            try {
+                const checklistData = await api.getAllChecklistsByUserId(
+                    currentUser.id
+                )
+
+                setChecklists(checklistData)
+                setWorkflowStatus(ApiStatus.SUCCESS)
+            } catch (error) {
+                setWorkflowStatus(ApiStatus.ERROR)
+            }
+        })()
+    }, [accessToken])
+    console.log(currentUser?.id)
     return (
         <>
             <BackgroundWrap>
@@ -109,18 +126,14 @@ export const MyCheckLists = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {userIdCheckList?.map(
-                                            (userIdCheckList) => (
-                                                <LeaderMyChecklists
-                                                    userIdCheckList={
-                                                        userIdCheckList
-                                                    }
-                                                    key={userIdCheckList.id}
-                                                    setActiveRow={setActiveRow}
-                                                    activeRow={activeRow}
-                                                />
-                                            )
-                                        )}
+                                        {checklists?.map((checklist) => (
+                                            <LeaderMyChecklists
+                                                checklist={checklist}
+                                                key={checklist.id}
+                                                setActiveRow={setActiveRow}
+                                                activeRow={activeRow}
+                                            />
+                                        ))}
                                     </>
                                 )}
                             </>

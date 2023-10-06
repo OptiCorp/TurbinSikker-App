@@ -1,4 +1,3 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
 import {
     Button,
     Card,
@@ -6,10 +5,9 @@ import {
     TextField,
     Typography,
 } from '@equinor/eds-core-react'
-
 import { useEffect, useState } from 'react'
-
-import CustomDialog from '@components/modal/useModalHook'
+import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
+import CustomDialog from '../../../components/modal/useModalHook'
 import { MakeTitleField } from '../checkListID/styles'
 import { InfoHeader } from '../previewCheckList/styles'
 

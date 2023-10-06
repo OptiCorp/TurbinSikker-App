@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
-import useAuth from '../../context/AuthContextProvider'
-import { useUserContext } from '../../pages/users/context/userContextProvider'
+
+import useGlobal from '../../context/globalContextProvider'
 import apiService from '../api'
 
 export const useGetAllWorkflows = () => {
-    const { currentUser } = useUserContext()
-    const { accessToken } = useAuth()
+    const { currentUser, accessToken } = useGlobal()
+
     const { data, isLoading, isFetching } = useQuery({
         queryKey: ['allWorkflows'],
-        queryFn: () => apiService(accessToken).getAllWorkflows(),
+        queryFn: () => apiService().getAllWorkflows(),
         enabled: !!currentUser?.id && !!accessToken,
     })
-
+  
     return {
         data,
         isLoading,

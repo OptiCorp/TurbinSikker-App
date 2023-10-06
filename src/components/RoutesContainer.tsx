@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router'
+import { GlobalProvider } from '../context/globalContextProvider'
 import Layout from '../pages/Layout'
 import PageNotFound from '../pages/PageNotFound'
 import { IndexCheckLists } from '../pages/checklist'
@@ -27,21 +28,31 @@ export function RoutesContainer() {
                 <Route element={<Layout />}>
                     <Route path="/Profile" element={<Profile />} />
 
-                    <Route element={<IndexCheckLists />}>
+                    <Route
+                        element={
+                            <GlobalProvider>
+                                <IndexCheckLists />
+                            </GlobalProvider>
+                        }
+                    >
                         <Route
                             path="/"
                             element={
-                                <CheckListContextProvider>
-                                    <CheckList />
-                                </CheckListContextProvider>
+                                <GlobalProvider>
+                                    <CheckListContextProvider>
+                                        <CheckList />
+                                    </CheckListContextProvider>
+                                </GlobalProvider>
                             }
                         />
                         <Route
                             path="/Checklist"
                             element={
-                                <CheckListContextProvider>
-                                    <CheckList />
-                                </CheckListContextProvider>
+                                <GlobalProvider>
+                                    <CheckListContextProvider>
+                                        <CheckList />
+                                    </CheckListContextProvider>
+                                </GlobalProvider>
                             }
                         />
                         <Route
@@ -50,7 +61,13 @@ export function RoutesContainer() {
                         />
                         <Route
                             path="/MyChecklists"
-                            element={<MyCheckLists />}
+                            element={
+                                <GlobalProvider>
+                                    <CheckListContextProvider>
+                                        <MyCheckLists />
+                                    </CheckListContextProvider>
+                                </GlobalProvider>
+                            }
                         />
                     </Route>
                     <Route

@@ -1,10 +1,16 @@
 import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
 import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
 import { API_URL } from '../../../../config'
-import useAuth from '../../../../context/AuthContextProvider'
+import useGlobal from '../../../../context/globalContextProvider'
 import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
 import { CheckListEntity } from '../../../context/models/CheckListEntity'
 
@@ -14,8 +20,16 @@ export type ContextType = {
     taskId: string
     categoryId: string
     taskDescription: string
-    handleOpen: (taskId: string, taskDescription: string, categoryId: string) => void
-    updateCheckListTask: (data: { taskId: string; description: string; categoryId: string }) => void
+    handleOpen: (
+        taskId: string,
+        taskDescription: string,
+        categoryId: string
+    ) => void
+    updateCheckListTask: (data: {
+        taskId: string
+        description: string
+        categoryId: string
+    }) => void
     handleSave: (data: { title: string; status: string }) => void
     handleDelete: (id: string | undefined) => void
     title: CheckListEntity | any
@@ -46,14 +60,20 @@ export const postsContextDefaultValue: ContextType = {
     setIsOpenNew: () => {},
 }
 
-const EditCheckListContext = createContext<ContextType>(postsContextDefaultValue)
+const EditCheckListContext = createContext<ContextType>(
+    postsContextDefaultValue
+)
 
-const EditCheckListContextProvider = ({ children }: { children: React.ReactNode }) => {
+const EditCheckListContextProvider = ({
+    children,
+}: {
+    children: React.ReactNode
+}) => {
     const { checkListById } = useAddTaskForm()
     const { id } = useParams()
     const navigate = useNavigate()
     const { setRefreshList } = useCheckListContext()
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
     const { openSnackbar } = useContext(SnackbarContext)
 
     const [task, setTask] = useState<TaskEntity | any>()
@@ -65,7 +85,11 @@ const EditCheckListContextProvider = ({ children }: { children: React.ReactNode 
     const [isOpenn, setIsOpenn] = useState(false)
     const [isOpenNew, setIsOpenNew] = useState(false)
 
-    const handleOpen = (taskId: string, taskDescription: string, categoryId: string) => {
+    const handleOpen = (
+        taskId: string,
+        taskDescription: string,
+        categoryId: string
+    ) => {
         setTaskId(taskId)
         setCategoryId(categoryId)
         setTaskDescription(taskDescription)
@@ -206,5 +230,8 @@ function useEditCheckListContext() {
     return context
 }
 
-export { EditCheckListContext, EditCheckListContextProvider, useEditCheckListContext }
-
+export {
+    EditCheckListContext,
+    EditCheckListContextProvider,
+    useEditCheckListContext,
+}

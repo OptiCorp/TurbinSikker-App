@@ -1,6 +1,6 @@
-import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
-import CustomDialog from '@components/modal/useModalHook'
 import { useState } from 'react'
+import CustomDialog from '../../../../components/modal/useModalHook'
+import { Task } from '../../../../services/apiTypes'
 import {
     CategoryName,
     Container,
@@ -12,12 +12,10 @@ import { useEditCheckListContext } from '../context/editCheckListContextProvider
 import { EditListPoints } from '../styles'
 
 type Props = {
-    tasks: TaskEntity[]
-    sortedTasks: TaskEntity[]
+    tasks: Task[]
 }
 
 export const EditList = (props: Props) => {
-    let lastCategoryName = ''
     const [content, setContent] = useState('')
     const [dialogShowing, setDialogShowing] = useState(false)
     const { task, setTask, updateCheckListTask } = useEditCheckListContext()
@@ -30,37 +28,33 @@ export const EditList = (props: Props) => {
         })
         setDialogShowing(false)
     }
-    
+
     return (
         <>
             <PreviewListWrap>
-     
-
-                        <>
-                            <Container>
-                                <CategoryName></CategoryName>
-                                <StyledCard
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                >
-                                    <PreviewListPoints
-                                        label=""
-                                        key={task.id}
-                                        id="storybook-multi-readonly"
-                                        placeholder={task.description}
-                                        multiline
-                                        rows={3}
-                                        onClick={() => {
-                                            setTask(task)
-                                            setDialogShowing(true)
-                                        }}
-                                    />
-                                </StyledCard>
-                            </Container>
-                        </>
-                    )
-          
+                <>
+                    <Container>
+                        <CategoryName></CategoryName>
+                        <StyledCard
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            <PreviewListPoints
+                                label=""
+                                key={task?.id}
+                                id="storybook-multi-readonly"
+                                placeholder={task?.description}
+                                multiline
+                                rows={3}
+                                onClick={() => {
+                                    setTask(task)
+                                    setDialogShowing(true)
+                                }}
+                            />
+                        </StyledCard>
+                    </Container>
+                </>
             </PreviewListWrap>
             <CustomDialog
                 isOpen={dialogShowing}

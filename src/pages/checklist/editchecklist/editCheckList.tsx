@@ -56,7 +56,7 @@ export const EditCheckList = () => {
     function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
         return status ? 'Active' : 'Inactive'
     }
-    console.log(checklist)
+    console.log(tasks)
     return (
         <div style={{ backgroundColor: '#f0f3f3' }}>
             {checklist && (
@@ -77,11 +77,7 @@ export const EditCheckList = () => {
                         <Wrapper>
                             {isOpenn && <AddTasks />}
 
-                            <EditList
-                                key={checklist.id}
-                                tasks={checklist.checklistTasks}
-                                sortedTasks={tasks}
-                            />
+                            <EditList key={checklist.id} tasks={tasks} />
                         </Wrapper>
                     </div>
 

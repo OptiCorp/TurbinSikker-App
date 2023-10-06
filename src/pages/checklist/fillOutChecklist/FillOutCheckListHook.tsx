@@ -3,9 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
 import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../config'
-import useAuth from '../../../context/AuthContextProvider'
+import useGlobal from '../../../context/globalContextProvider'
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+
 import { UpdatingWorkFlowEntity } from './types'
 
 export type FillOutForm = {
@@ -19,7 +19,7 @@ export type FillOutForm = {
 export const useFillOutCheckList = () => {
     const { setRefreshList } = useCheckListContext()
 
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
     const { openSnackbar } = useContext(SnackbarContext)
 
     const [positiveOpen, setPositiveOpen] = useState(false)
@@ -31,7 +31,7 @@ export const useFillOutCheckList = () => {
         setPositiveOpen(false)
     }
     const { workflowId } = useParams()
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
     const methods = useForm<UpdatingWorkFlowEntity>()
     const {
         handleSubmit,

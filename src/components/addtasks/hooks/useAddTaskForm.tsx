@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
 import { API_URL } from '../../../config'
-import useAuth from '../../../context/AuthContextProvider'
+import useGlobal from '../../../context/globalContextProvider'
 
 import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 
@@ -46,9 +46,9 @@ export const useAddTaskForm = () => {
     const [selectedTask, setSelectedTask] = useState('')
     const [checkListById, setCheckListById] =
         useState<ChecklistAndTasks | null>(null)
-    const { accessToken } = useAuth()
+    const { accessToken } = useGlobal()
 
-    const api = apiService(accessToken)
+    const api = apiService()
     const [category, setCategory] = useState<CategoryTaskSelector[]>([])
     const [categoryStatus, setCategoryStatus] = useState<ApiStatus>(
         ApiStatus.LOADING
@@ -83,63 +83,63 @@ export const useAddTaskForm = () => {
             openSnackbar('Task added!')
         }
     }
+    // useEffect(() => {
+    //     const fetchAllCheckListsId = async () => {
+    //         if (!id || workflowId) return
+    //         try {
+    //             const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${accessToken}`,
+    //                     'Content-Type': 'application/json',
+    //                     'Access-Control-Allow-Origin': '*',
+    //                 },
+    //             })
+
+    //             if (!res.ok)
+    //                 throw new Error('Failed with HTTP code ' + res.status)
+
+    //             const data = await res.json()
+    //             setCheckListById(data)
+    //         } catch (error) {
+    //             console.error('Error fetching user data:', error)
+    //         }
+    //     }
+
+    //     fetchAllCheckListsId()
+    // }, [refreshList, accessToken, id])
+
     useEffect(() => {
-        const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken || workflowId) return
-            try {
-                const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                })
-
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
-
-                const data = await res.json()
-                setCheckListById(data)
-            } catch (error) {
-                console.error('Error fetching user data:', error)
-            }
-        }
-
-        fetchAllCheckListsId()
-    }, [refreshList, accessToken, id])
-
-    useEffect(() => {
-        if (!accessToken) return
         ;(async (): Promise<void> => {
-            try {
-                const categoryData = await api.getAllCategories()
-                const category = categoryData.map(
-                    ({ id, name }: { id: string; name: string }) => ({
-                        value: id,
-                        label: name,
-                    })
-                )
-                setCategory(category)
-                setTaskStatus(ApiStatus.SUCCESS)
-            } catch (error) {
-                setTaskStatus(ApiStatus.ERROR)
-            }
+            if (!accessToken || !category)
+                try {
+                    const categoryData = await api.getAllCategories()
+                    const category = categoryData.map(
+                        ({ id, name }: { id: string; name: string }) => ({
+                            value: id,
+                            label: name,
+                        })
+                    )
+                    setCategory(category)
+                    setTaskStatus(ApiStatus.SUCCESS)
+                } catch (error) {
+                    setTaskStatus(ApiStatus.ERROR)
+                }
         })()
     }, [accessToken])
 
     useEffect(() => {
-        if (!accessToken) return
         ;(async (): Promise<void> => {
-            try {
-                const taskData =
-                    await api.getAllTasksByCategoryId(selectedOption)
+            if (!category)
+                try {
+                    const taskData =
+                        await api.getAllTasksByCategoryId(selectedOption)
 
-                setTasks(taskData)
+                    setTasks(taskData)
 
-                setTaskStatus(ApiStatus.SUCCESS)
-            } catch (error) {
-                setTaskStatus(ApiStatus.ERROR)
-            }
+                    setTaskStatus(ApiStatus.SUCCESS)
+                } catch (error) {
+                    setTaskStatus(ApiStatus.ERROR)
+                }
         })()
 
         if (selectedOption) {

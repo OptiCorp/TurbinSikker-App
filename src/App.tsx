@@ -3,7 +3,7 @@ import './assets/App.css'
 import { RoutesContainer } from './components/RoutesContainer'
 import { SnackbarComponent } from './components/snackbar/SnackBar'
 import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
-import { AuthProvider } from './context/AuthContextProvider'
+import { GlobalProvider } from './context/globalContextProvider'
 import { CheckListContextProvider } from './pages/context/CheckListContextProvider'
 import { Login } from './pages/login'
 import { UserContextProvider } from './pages/users/context/userContextProvider'
@@ -14,7 +14,7 @@ const App = () => {
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <AuthProvider>
+                <GlobalProvider>
                     <UserContextProvider>
                         <CheckListContextProvider>
                             <SnackbarContextProvider>
@@ -23,7 +23,7 @@ const App = () => {
                             </SnackbarContextProvider>
                         </CheckListContextProvider>
                     </UserContextProvider>
-                </AuthProvider>
+                </GlobalProvider>
             )}
             {!isAuthenticated && <Login />}
         </div>

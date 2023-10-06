@@ -1,7 +1,7 @@
 import { Table } from '@equinor/eds-core-react'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import useAuth from '../../../context/AuthContextProvider'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+
+import useGlobal from '../../../context/globalContextProvider'
 import { useGetAllWorkflows } from '../../../services/hooks/useGetAllWorkflows'
 import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
 import { HeadCell } from '../checkListID/styles'
@@ -15,9 +15,9 @@ import {
 } from './styles'
 
 export const CheckList = () => {
-    const { currentUser } = useUserContext()
-    const { accounts, inProgress } = useAuth()
-
+    const { currentUser } = useGlobal()
+    const { accounts, inProgress } = useGlobal()
+   
     const { data: allWorkflows } = useGetAllWorkflows()
     const { data: workflows } = useGetWorkflowByUserId()
 
