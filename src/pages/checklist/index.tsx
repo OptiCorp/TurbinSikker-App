@@ -13,7 +13,8 @@ export const IndexCheckLists = () => {
     const { currentUser } = useGlobal()
 
     return (
-        <MainWrap>
+        <MainWrap> 
+            
             <>
                 <Tabs
                     variant="minWidth"

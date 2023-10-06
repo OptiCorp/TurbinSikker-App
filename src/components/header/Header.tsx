@@ -3,14 +3,15 @@ import { arrow_back_ios, menu } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 
-import { useCheckListContext } from '../../pages/context/CheckListContextProvider'
-import { useGetWorkflowByUserId } from '../../services/hooks/useGetWorkflowByUserId'
+import useGlobal from '../../context/globalContextProvider'
+import apiService from '../../services/api'
+import { ApiStatus, Workflow } from '../../services/apiTypes'
 import { useAddTaskForm } from '../addtasks/hooks/useAddTaskForm'
 import Sidebar from '../sidebar/Sidebar'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
-    const { setRefreshList } = useCheckListContext()
+    // const { setRefreshList } = apiService()
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')
@@ -31,9 +32,28 @@ export const Header = () => {
             location.pathname.slice(1)
         )
     }
+
+    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
+        ApiStatus.LOADING
+    )
+    const api = apiService()
     const basePath = useBasePath()
-    const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
+    const { accessToken, currentUser } = useGlobal()
+    const [workflows, setWorkFlows] = useState<Workflow[]>([])
     const [title, setTitle] = useState('')
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflowsByUserId(
+                    currentUser.id
+                )
+                setWorkFlows(workFlowData)
+            } catch (error) {
+                setWorkflowStatus(ApiStatus.ERROR)
+            }
+        }
+    }, [accessToken, currentUser?.id])
 
     useEffect(() => {
         const workflow = workflows?.find(
@@ -55,7 +75,7 @@ export const Header = () => {
     }, [location.pathname, basePath, workflows, checkListById?.id])
 
     const onClick = () => {
-        setRefreshList((prev) => !prev)
+        // setRefreshList((prev) => !prev)
 
         navigate(-1)
     }

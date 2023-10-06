@@ -1,4 +1,3 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import React, {
     createContext,
     useContext,
@@ -7,15 +6,15 @@ import React, {
     useState,
 } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { TaskEntity } from '../../../../components/addtasks/context/models/TaskEntity'
+
 import { useAddTaskForm } from '../../../../components/addtasks/hooks/useAddTaskForm'
 import { API_URL } from '../../../../config'
 import useGlobal from '../../../../context/globalContextProvider'
-import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
-import { CheckListEntity } from '../../../context/models/CheckListEntity'
+import apiService from '../../../../services/api'
+import { Checklist, Task } from '../../../../services/apiTypes'
 
 export type ContextType = {
-    task: TaskEntity | any
+    task: Task | any
     setTask: React.Dispatch<any>
     taskId: string
     categoryId: string
@@ -32,7 +31,7 @@ export type ContextType = {
     }) => void
     handleSave: (data: { title: string; status: string }) => void
     handleDelete: (id: string | undefined) => void
-    title: CheckListEntity | any
+    title: Checklist | any
     handleTitleChange: (title: string) => void
     isOpenn: boolean
     setIsOpenn: (isOpenn: boolean) => void
@@ -72,15 +71,14 @@ const EditCheckListContextProvider = ({
     const { checkListById } = useAddTaskForm()
     const { id } = useParams()
     const navigate = useNavigate()
-    const { setRefreshList } = useCheckListContext()
+    const { setRefreshList } = apiService()
     const { accessToken } = useGlobal()
-    const { openSnackbar } = useContext(SnackbarContext)
 
-    const [task, setTask] = useState<TaskEntity | any>()
+    const [task, setTask] = useState<Task | any>()
     const [taskId, setTaskId] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [taskDescription, setTaskDescription] = useState('')
-    const [title, setTitle] = useState<CheckListEntity | string>()
+    const [title, setTitle] = useState<Checklist | string>()
 
     const [isOpenn, setIsOpenn] = useState(false)
     const [isOpenNew, setIsOpenNew] = useState(false)
@@ -130,9 +128,9 @@ const EditCheckListContextProvider = ({
         })
         if (res.ok) setRefreshList((prev) => !prev)
 
-        if (openSnackbar) {
-            openSnackbar(`Task updated`)
-        }
+        // if (openSnackbar) {
+        //     openSnackbar(`Task updated`)
+        // }
     }
 
     const handleSave = async (data: { title: string; status: string }) => {
@@ -152,10 +150,10 @@ const EditCheckListContextProvider = ({
 
         navigate('/MyChecklists')
 
-        if (openSnackbar) {
-            openSnackbar(`Checklist updated`)
-            setTimeout(() => openSnackbar(''), 3000)
-        }
+        // if (openSnackbar) {
+        //     openSnackbar(`Checklist updated`)
+        //     setTimeout(() => openSnackbar(''), 3000)
+        // }
     }
 
     const handleDelete = async (id: string | undefined) => {

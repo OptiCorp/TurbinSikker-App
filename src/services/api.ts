@@ -252,13 +252,26 @@ const apiService = () => {
     const addChecklist = async (
         creatorId: string,
         title: string
-    ): Promise<void> => {
-        await postByFetch('AddChecklist', {
-            creatorId: creatorId,
-            title: title,
-        })
-    }
+    ): Promise<number | null> => {
+        try {
+            const res = await postByFetch('AddChecklist', {
+                creatorId: creatorId,
+                title: title,
+            })
 
+            if (res.ok) {
+                const responseJson = await res.json()
+                if (responseJson && responseJson.id) {
+                    return responseJson.id
+                }
+            }
+
+            return null
+        } catch (error) {
+            console.error('Error creating checklist:', error)
+            return null
+        }
+    }
     // AddChecklistWithTasks
 
     const updateChecklist = async (
@@ -528,6 +541,14 @@ const apiService = () => {
         await deleteByFetch(`DeleteUpload?id=${id}`)
     }
 
+    // const sdasdsa = () => {
+    //     const Location = useLocation()
+    //     const refreshCheckLists = Location.state
+    //         ? Location.state?.refreshCheckLists
+    //         : null
+    //     const [refreshList, setRefreshList] = React.useState<boolean>(false)
+    // }
+
     return {
         getAllUsers,
         getAllUsersAdmin,
@@ -583,6 +604,7 @@ const apiService = () => {
         getUploadByPunchId,
         addUpload,
         updateUpload,
+
         deleteUpload,
     }
 }

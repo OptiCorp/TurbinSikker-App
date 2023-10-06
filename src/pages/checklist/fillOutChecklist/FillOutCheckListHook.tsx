@@ -4,8 +4,8 @@ import { useParams } from 'react-router'
 import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../config'
 import useGlobal from '../../../context/globalContextProvider'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 
+import apiService from '../../../services/api'
 import { UpdatingWorkFlowEntity } from './types'
 
 export type FillOutForm = {
@@ -17,7 +17,7 @@ export type FillOutForm = {
     status: string
 }
 export const useFillOutCheckList = () => {
-    const { setRefreshList } = useCheckListContext()
+    const { setRefreshList } = apiService()
 
     const { accessToken } = useGlobal()
     const { openSnackbar } = useContext(SnackbarContext)

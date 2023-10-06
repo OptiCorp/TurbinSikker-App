@@ -152,11 +152,31 @@ export function GlobalProvider({
     }
 
     useEffect(() => {
-        console.log(idToken)
         if (idToken) {
             fetchUserAndUpdateContext(idToken)
         }
     }, [idToken])
+
+    // const fetchCheckLists = async () => {
+    //     if (!accessToken) return
+    //     ;(async (): Promise<void> => {
+    //         try {
+    //             const checklistData = await api.getAllCheckLists(
+
+    //             )
+
+    //             setAllChecklists(checklistData)
+    //             setWorkflowStatus(ApiStatus.SUCCESS)
+    //         } catch (error) {
+    //             setWorkflowStatus(ApiStatus.ERROR)
+    //         }
+    //     })()
+
+    // }
+
+    // useEffect(() => {
+    //     fetchCheckLists()
+    // }, [refreshCheckLists, accessToken])
 
     // useEffect(() => {
     //     ;(async (): Promise<void> => {

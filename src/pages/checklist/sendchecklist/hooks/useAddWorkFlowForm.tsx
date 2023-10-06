@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../../config'
 import { default as useGlobal } from '../../../../context/globalContextProvider'
-import { useCheckListContext } from '../../../../pages/context/CheckListContextProvider'
+import apiService from '../../../../services/api'
 
 export type SendingFormValuesEntity = {
     checklistId: string
@@ -21,7 +21,7 @@ export const useAddWorkFlowForm = () => {
     const navigate = useNavigate()
     const { accessToken } = useGlobal()
     const [positiveOpen, setPositiveOpen] = useState(false)
-    const { setRefreshList } = useCheckListContext()
+    const { setRefreshList } = apiService()
     const { currentUser } = useGlobal()
 
     const handleOpen = () => {

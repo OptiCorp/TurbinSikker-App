@@ -6,14 +6,15 @@ import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
 
+import apiService from '../../services/api'
 import { usePunchContext } from './context/PunchContextProvider'
-
 export function usePunch() {
     const { id } = useParams()
     const { punch } = usePunchContext()
     const methods = useForm()
+    const { getUploadByPunchId } = apiService()
     const { accessToken } = useGlobal()
-    const { setRefreshList } = useCheckListContext()
+    const { setRefreshList } = apiService()
     const { openSnackbar } = useContext(SnackbarContext)
     const [status, setStatus] = useState('')
     const [uploads, setUploads] = useState([])
@@ -52,7 +53,7 @@ export function usePunch() {
 
     useEffect(() => {
         setLoading(true)
-        const uploads = getUploadByPunchId(punch?.id ?? '', accessToken)
+        const uploads = getUploadByPunchId(punch?.id ?? '')
         uploads.then((data) => {
             setUploads(data)
             setLoading(false)

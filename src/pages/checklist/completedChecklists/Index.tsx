@@ -1,9 +1,11 @@
 import { Table } from '@equinor/eds-core-react'
 import { useLocation } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
 
+import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { ApiStatus, Workflow } from '../../../services/apiTypes'
 import { CompletedList } from './CompletedList'
 import {
     BackgroundWrapCompleted,
@@ -14,10 +16,28 @@ import {
 } from './styles'
 
 export const CompletedChecklists = () => {
-    const { data: workflows, isFetching, isLoading } = useGetWorkflowByUserId()
-    const { currentUser } = useGlobal()
+    const api = apiService()
+    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
+        ApiStatus.LOADING
+    )
     const location = useLocation()
     const state = location.state
+    const { accessToken, currentUser } = useGlobal()
+    const [workflows, setWorkFlows] = useState<Workflow[]>([])
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflowsByUserId(
+                    currentUser.id
+                )
+                setWorkFlows(workFlowData)
+            } catch (error) {
+                setWorkflowStatus(ApiStatus.ERROR)
+            }
+        }
+    }, [accessToken, currentUser?.id])
+
     return (
         <>
             <BackgroundWrapCompleted>

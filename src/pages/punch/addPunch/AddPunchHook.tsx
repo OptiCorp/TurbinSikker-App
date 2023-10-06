@@ -1,12 +1,13 @@
 import { SetStateAction, useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
-import { addUpload } from '../../../Upload'
+
 import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../config'
 import { default as useGlobal } from '../../../context/globalContextProvider'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
+
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import apiService from '../../../services/api'
 import { usePunchContext } from '../context/PunchContextProvider'
 import { Punch } from '../types'
 
@@ -31,7 +32,7 @@ export const useAddPunch = () => {
     const { workflowId, punchId, taskId } = useParams()
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
-    const { setRefreshList } = useCheckListContext()
+    const { setRefreshList } = apiService()
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)

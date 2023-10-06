@@ -1,10 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
-import { API_URL } from '../../../config'
 import useGlobal from '../../../context/globalContextProvider'
-
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
 
 import apiService from '../../../services/api'
 import {
@@ -36,12 +33,13 @@ type TaskChooser = CategoryTaskSelector & Task
 export const useAddTaskForm = () => {
     const { id } = useParams() as { id: string }
     const [tasks, setTasks] = useState<Task[]>([])
-
+    const { checklistId, taskId } = useParams()
     const appLocation = useLocation()
+    const { currentUser } = useGlobal()
     const methods = useForm<FormValuesEntity>()
     const { reset, watch, handleSubmit, register, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
-    const { refreshList, setRefreshList } = useCheckListContext()
+    const { refreshList, setRefreshList } = apiService()
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
     const [checkListById, setCheckListById] =
@@ -65,48 +63,20 @@ export const useAddTaskForm = () => {
     }
 
     const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                checklistId: id,
-                id: data.task,
-            }),
-        })
-        if (res.ok) setRefreshList((prev) => !prev)
+        const api = apiService()
+        if (!currentUser || !checklistId || !taskId) return
+        try {
+            api.addTaskToChecklist(checklistId, data.task)
 
-        if (openSnackbar) {
-            openSnackbar('Task added!')
+            setRefreshList((prev) => !prev)
+
+            if (openSnackbar) {
+                openSnackbar('Task added!')
+            }
+        } catch (error) {
+            console.error('Error adding task:', error)
         }
     }
-    // useEffect(() => {
-    //     const fetchAllCheckListsId = async () => {
-    //         if (!id || workflowId) return
-    //         try {
-    //             const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
-    //                 headers: {
-    //                     Authorization: `Bearer ${accessToken}`,
-    //                     'Content-Type': 'application/json',
-    //                     'Access-Control-Allow-Origin': '*',
-    //                 },
-    //             })
-
-    //             if (!res.ok)
-    //                 throw new Error('Failed with HTTP code ' + res.status)
-
-    //             const data = await res.json()
-    //             setCheckListById(data)
-    //         } catch (error) {
-    //             console.error('Error fetching user data:', error)
-    //         }
-    //     }
-
-    //     fetchAllCheckListsId()
-    // }, [refreshList, accessToken, id])
 
     useEffect(() => {
         ;(async (): Promise<void> => {

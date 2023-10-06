@@ -20,7 +20,6 @@ import {
 } from './styles'
 
 export const MyCheckLists = () => {
-    
     const { accessToken } = useGlobal()
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
@@ -29,7 +28,7 @@ export const MyCheckLists = () => {
     )
     const [checklists, setChecklists] = useState<Checklist[]>([])
     const { currentUser } = useGlobal()
-    const navigate = useNavigate()
+
     const handleClose = () => {
         setDialogShowing(false)
     }
@@ -39,25 +38,26 @@ export const MyCheckLists = () => {
 
     const { openSnackbar } = useContext(SnackbarContext)
     const [activeRow, setActiveRow] = useState(false)
+    const navigate = useNavigate()
 
-    const handleSubmit= () =>{
-
-const api = apiService()
-api.addChecklist(title, currentUser?.id)
-
-
-    }
-
+    // const handleSubmit = () => {
+    //     if (!currentUser) return
+    //     api.addChecklist(title, currentUser.id)
+    // }
 
     const handleCreateChecklist = async () => {
         try {
-            handleSubmit({
-                title,
-                creatorId: currentUser?.id ?? '',
-            })
+            if (!currentUser) return
+            const checklistId = await api.addChecklist(currentUser.id, title)
+
             setDialogShowing(false)
+
             if (openSnackbar) {
                 openSnackbar(`CheckList Created`)
+            }
+
+            if (checklistId !== null) {
+                navigate(`/EditCheckList/${checklistId}`)
             }
         } catch (error) {
             console.error('Error creating checklist:', error)
@@ -93,8 +93,8 @@ api.addChecklist(title, currentUser?.id)
                 setWorkflowStatus(ApiStatus.ERROR)
             }
         })()
-    }, [accessToken])
-    console.log(currentUser?.id)
+    }, [accessToken, currentUser?.id])
+
     return (
         <>
             <BackgroundWrap>

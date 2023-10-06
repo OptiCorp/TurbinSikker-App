@@ -3,7 +3,8 @@ import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 import { UserChip } from '../allchecklists/UserChip'
 import { ChipStatus } from '../allchecklists/chipStatus'
-import { WorkFlow } from '../workflow/types'
+
+import { Workflow } from '../../../services/apiTypes'
 import {
     CellContentCompleted,
     CompletedCell,
@@ -12,7 +13,7 @@ import {
 } from './styles'
 
 interface CompletedRowProps {
-    WorkFlow: WorkFlow
+    WorkFlow: Workflow
 }
 
 export const CompletedList: FunctionComponent<CompletedRowProps> = ({

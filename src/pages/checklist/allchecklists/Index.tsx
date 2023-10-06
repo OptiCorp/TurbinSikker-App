@@ -1,9 +1,10 @@
 import { Table } from '@equinor/eds-core-react'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 
+import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
-import { useGetAllWorkflows } from '../../../services/hooks/useGetAllWorkflows'
-import { useGetWorkflowByUserId } from '../../../services/hooks/useGetWorkflowByUserId'
+import apiService from '../../../services/api'
+import { ApiStatus, Workflow } from '../../../services/apiTypes'
 import { HeadCell } from '../checkListID/styles'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
 import { LeaderCheckListSend } from './LeaderCheckList'
@@ -17,9 +18,40 @@ import {
 export const CheckList = () => {
     const { currentUser } = useGlobal()
     const { accounts, inProgress } = useGlobal()
-   
-    const { data: allWorkflows } = useGetAllWorkflows()
-    const { data: workflows } = useGetWorkflowByUserId()
+    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
+    const [workflows, setWorkFlows] = useState<Workflow[]>([])
+    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
+        ApiStatus.LOADING
+    )
+    const api = apiService()
+    const { accessToken } = useGlobal()
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflows()
+                setAllWorkFlows(workFlowData)
+                setWorkflowStatus(ApiStatus.SUCCESS)
+            } catch (error) {
+                setWorkflowStatus(ApiStatus.ERROR)
+            }
+        })()
+    }, [accessToken, currentUser?.id])
+
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflowsByUserId(
+                    currentUser.id
+                )
+                setWorkFlows(workFlowData)
+                setWorkflowStatus(ApiStatus.SUCCESS)
+            } catch (error) {
+                setWorkflowStatus(ApiStatus.ERROR)
+            }
+        })()
+    }, [accessToken, currentUser?.id])
 
     if (accounts.length > 0) {
         return (
