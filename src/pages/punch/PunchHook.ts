@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-import { getUploadByPunchId } from '../../Upload'
+
 import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
-import { useCheckListContext } from '../context/CheckListContextProvider'
+
 import { usePunchContext } from './context/PunchContextProvider'
 
 export function usePunch() {

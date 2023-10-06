@@ -1,25 +1,24 @@
 import { Navigate, Route, Routes } from 'react-router'
-import { GlobalProvider } from '../context/globalContextProvider'
-import Layout from '../pages/Layout'
-import PageNotFound from '../pages/PageNotFound'
-import { IndexCheckLists } from '../pages/checklist'
-import { CheckList } from '../pages/checklist/allchecklists/Index'
-import { MyCheckLists } from '../pages/checklist/checkListID/Index'
-import { CompletedChecklists } from '../pages/checklist/completedChecklists/Index'
-import { EditCheckListContextProvider } from '../pages/checklist/editchecklist/context/editCheckListContextProvider'
-import { EditCheckList } from '../pages/checklist/editchecklist/editCheckList'
-import { FillOutCheckList } from '../pages/checklist/fillOutChecklist'
-import { PreviewCheckList } from '../pages/checklist/previewCheckList/Preview'
-import { SendCheckList } from '../pages/checklist/sendchecklist'
-import { CheckListContextProvider } from '../pages/context/CheckListContextProvider'
-import { Profile } from '../pages/profile'
-import Punch from '../pages/punch/Index'
-import { AddPunch } from '../pages/punch/addPunch/AddPunch'
-import { PunchContextProvider } from '../pages/punch/context/PunchContextProvider'
-import ListPunches from '../pages/punch/listPunches/index'
-import { AddUser } from '../pages/users/addUser/AddUser'
-import { ListUsers } from '../pages/users/listUsers/ListUsers'
-import { ProtectedRoute } from './ProtectedRoute'
+import Layout from './Layout'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { GlobalProvider } from './context/globalContextProvider'
+import PageNotFound from './pages/PageNotFound'
+import { IndexCheckLists } from './pages/checklist'
+import { CheckList } from './pages/checklist/allchecklists/Index'
+import { MyCheckLists } from './pages/checklist/checkListID/Index'
+import { CompletedChecklists } from './pages/checklist/completedChecklists/Index'
+import { EditCheckListContextProvider } from './pages/checklist/editchecklist/context/editCheckListContextProvider'
+import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
+import { FillOutCheckList } from './pages/checklist/fillOutChecklist'
+import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
+import { SendCheckList } from './pages/checklist/sendchecklist'
+import { Profile } from './pages/profile'
+import Punch from './pages/punch/Index'
+import { AddPunch } from './pages/punch/addPunch/AddPunch'
+import { PunchContextProvider } from './pages/punch/context/PunchContextProvider'
+import ListPunches from './pages/punch/listPunches/index'
+import { AddUser } from './pages/users/addUser/AddUser'
+import { ListUsers } from './pages/users/listUsers/ListUsers'
 
 export function RoutesContainer() {
     return (
@@ -39,9 +38,7 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 <GlobalProvider>
-                                    <CheckListContextProvider>
-                                        <CheckList />
-                                    </CheckListContextProvider>
+                                    <CheckList />
                                 </GlobalProvider>
                             }
                         />
@@ -49,9 +46,7 @@ export function RoutesContainer() {
                             path="/Checklist"
                             element={
                                 <GlobalProvider>
-                                    <CheckListContextProvider>
-                                        <CheckList />
-                                    </CheckListContextProvider>
+                                    <CheckList />
                                 </GlobalProvider>
                             }
                         />
@@ -63,9 +58,7 @@ export function RoutesContainer() {
                             path="/MyChecklists"
                             element={
                                 <GlobalProvider>
-                                    <CheckListContextProvider>
-                                        <MyCheckLists />
-                                    </CheckListContextProvider>
+                                    <MyCheckLists />
                                 </GlobalProvider>
                             }
                         />
@@ -82,11 +75,9 @@ export function RoutesContainer() {
                     <Route
                         path="/EditCheckList/:id"
                         element={
-                            <CheckListContextProvider>
-                                <EditCheckListContextProvider>
-                                    <EditCheckList />
-                                </EditCheckListContextProvider>
-                            </CheckListContextProvider>
+                            <EditCheckListContextProvider>
+                                <EditCheckList />
+                            </EditCheckListContextProvider>
                         }
                     />
                     <Route path="/SendCheckList" element={<SendCheckList />} />

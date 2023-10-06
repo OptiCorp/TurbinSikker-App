@@ -14,7 +14,6 @@ import {
 const request = {
     scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
     account: pca.getAllAccounts()[0],
-    
 }
 
 const apiService = () => {
@@ -127,7 +126,9 @@ const apiService = () => {
     }
 
     const getUserByAzureAdUserId = async (id: string) => {
-        const data = await getByFetch(`GetUserByAzureAdUserId?id=${id}`)
+        const data = await getByFetch(
+            `GetUserByAzureAdUserId?azureAdUserId=${id}`
+        )
         return data
     }
 

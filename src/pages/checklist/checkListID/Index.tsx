@@ -1,16 +1,13 @@
 import { Table } from '@equinor/eds-core-react'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
-import { ApiStatus, Checklist, Workflow } from '../../../services/apiTypes'
-import { useCheckListContext } from '../../context/CheckListContextProvider'
-
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-
+import { ApiStatus, Checklist, Workflow } from '../../../services/apiTypes'
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklists } from './LeaderMyChecklists'
 import {
@@ -23,8 +20,7 @@ import {
 } from './styles'
 
 export const MyCheckLists = () => {
-    const { handleSubmit } = useCheckListContext()
-
+    
     const { accessToken } = useGlobal()
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
@@ -43,6 +39,15 @@ export const MyCheckLists = () => {
 
     const { openSnackbar } = useContext(SnackbarContext)
     const [activeRow, setActiveRow] = useState(false)
+
+    const handleSubmit= () =>{
+
+const api = apiService()
+api.addChecklist(title, currentUser?.id)
+
+
+    }
+
 
     const handleCreateChecklist = async () => {
         try {
@@ -75,8 +80,8 @@ export const MyCheckLists = () => {
     }, [accessToken, currentUser?.id])
 
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return;
-        (async (): Promise<void> => {
+        if (!currentUser?.id || !accessToken) return
+        ;(async (): Promise<void> => {
             try {
                 const checklistData = await api.getAllChecklistsByUserId(
                     currentUser.id
