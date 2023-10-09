@@ -44,7 +44,7 @@ export const useEditChecklist = () => {
     }, [accessToken, currentUser?.id])
 
     useEffect(() => {
-        if (checklist && checklist.checklistTasks.length === 0) {
+        if (checklist && checklist?.checklistTasks?.length === 0) {
             setHeaderOpen(true)
         }
     }, [checklist])
@@ -61,10 +61,16 @@ export const useEditChecklist = () => {
         description: string
         categoryId: string
         taskId: string
+        checklistId: string
     }) => {
         try {
             if (!currentUser) return
-            await api.updateTask(taskId, categoryId, data.description, id)
+            await api.updateTask(
+                data.taskId,
+                data.categoryId,
+                data.description,
+                data.checklistId
+            )
 
             setDialogShowing(false)
         } catch (error) {

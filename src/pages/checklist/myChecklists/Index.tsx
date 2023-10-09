@@ -35,15 +35,6 @@ export const MyCheckLists = () => {
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
     const [checklistData, setChecklistData] = useState<Checklist | string>()
-    // const openSnackbar = (message: string) => {
-    //     setSnackbarMessage(message)
-
-    //     setIsOpen(true)
-    // }
-
-    // const closeSnackbar = () => {
-    //     setIsOpen(false)
-    // }
 
     const handleCreateChecklist = async () => {
         try {
@@ -87,18 +78,6 @@ export const MyCheckLists = () => {
             }
         })()
     }, [accessToken, currentUser?.id])
-
-    // useEffect(() => {
-    //     if (!currentUser?.id || !accessToken) return
-    //     ;async (): Promise<void> => {
-    //         try {
-    //             const checklistData = await api.getChecklist(id)
-    //             setChecklist(checklistData)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    // }, [accessToken, currentUser?.id])
 
     return (
         <>

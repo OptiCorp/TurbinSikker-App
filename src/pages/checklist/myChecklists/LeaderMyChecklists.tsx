@@ -27,8 +27,8 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
     }
 
     const navigate = useNavigate()
-    const formattedCreatedDate = formatDate(checklist.createdDate)
-    const formattedUpdatedDate = formatDate(checklist.updatedDate)
+    const formattedCreatedDate = formatDate(checklist.createdDate || '')
+    const formattedUpdatedDate = formatDate(checklist.updatedDate || '')
 
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
@@ -37,7 +37,9 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
     return (
         <>
             {checklist?.id && (
-                <StyledTableRow onClick={() => clickHandler(checklist.id)}>
+                <StyledTableRow
+                    onClick={() => clickHandler(checklist.id || '')}
+                >
                     <MyCheckListCell>
                         <CellContentMyList>
                             <Typography variant="body_long_bold">

@@ -5,8 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { ApiStatus, Workflow } from '../../services/apiTypes'
-import { useAddTaskForm } from '../addtasks/hooks/useAddTaskForm'
+import { Checklist, Workflow } from '../../services/apiTypes'
 import Sidebar from '../sidebar/Sidebar'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
@@ -17,7 +16,6 @@ export const Header = () => {
     const [activeUrl, setActiveUrl] = useState<string>('')
 
     const [open, setOpen] = useState(false)
-    const { checkListById } = useAddTaskForm()
 
     useEffect(() => {
         setActiveUrl(window.location.pathname)
@@ -33,12 +31,11 @@ export const Header = () => {
         )
     }
 
-    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
+    const { id } = useParams() as { id: string }
     const api = apiService()
     const basePath = useBasePath()
     const { accessToken, currentUser } = useGlobal()
+    const [checklist, setChecklist] = useState<Checklist>()
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
     const [title, setTitle] = useState('')
     useEffect(() => {
@@ -50,19 +47,33 @@ export const Header = () => {
                 )
                 setWorkFlows(workFlowData)
             } catch (error) {
-                setWorkflowStatus(ApiStatus.ERROR)
+                console.log(error)
+            }
+        }
+    }, [accessToken, currentUser?.id])
+
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;async (): Promise<void> => {
+            try {
+                const checklistData = await api.getChecklist(id)
+
+                setChecklist(checklistData)
+                if (!checklistData.checklistTasks) return
+            } catch (error) {
+                console.log(error)
             }
         }
     }, [accessToken, currentUser?.id])
 
     useEffect(() => {
         const workflow = workflows?.find(
-            (item) => item.checklist.id === checkListById?.id
+            (item) => item.checklist.id === checklist?.id
         )
         let pathTitle = ''
         if (location.pathname.includes('FillOutCheckList') && workflow) {
             pathTitle =
-                checkListById?.title + ' ' + workflow.id.slice(10, -18) || ''
+                checklist?.title + ' ' + workflow.id.slice(10, -18) || ''
         } else if (location.pathname === '/AddUser/') {
             pathTitle = location.pathname.slice(1, -1)
         } else {
@@ -72,7 +83,7 @@ export const Header = () => {
                 'Checklists'
         }
         setTitle(pathTitle)
-    }, [location.pathname, basePath, workflows, checkListById?.id])
+    }, [location.pathname, basePath, workflows, checklist?.id])
 
     const onClick = () => {
         // setRefreshList((prev) => !prev)

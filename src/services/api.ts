@@ -36,7 +36,6 @@ const apiService = () => {
             } else {
                 console.error('Get by fetch failed. Url=' + url, res)
             }
-            console.log(tokenResponse.accessToken)
         })
     }
 
@@ -246,23 +245,30 @@ const apiService = () => {
     const addChecklist = async (
         creatorId: string,
         title: string
-    ): Promise<Checklist | void> => {
+    ): Promise<{ id: string }> => {
         try {
-            await postByFetch('AddChecklist', {
+            const response = await postByFetch('AddChecklist', {
                 creatorId: creatorId,
                 title: title,
             })
+
+            return response
         } catch (error) {
             console.error('Error creating checklist:', error)
+            throw error
         }
     }
     // AddChecklistWithTasks
 
     const updateChecklist = async (
-        update: Pick<Checklist, 'id' | 'title' | 'status'>
+        id: string,
+        title: string,
+        status: string
     ): Promise<void> => {
         await postByFetch('UpdateChecklist', {
-            update,
+            id: id,
+            title: title,
+            status: status,
         })
     }
 
@@ -274,7 +280,7 @@ const apiService = () => {
 
     const getAllWorkflows = async (): Promise<Workflow[]> => {
         const data = await getByFetch('GetAllWorkflows')
-        console.log(data)
+
         return data
     }
 
@@ -332,9 +338,13 @@ const apiService = () => {
         return data
     }
 
-    const getAllTasksByCategoryId = async (id: string): Promise<Task[]> => {
-        const data = await getByFetch(`GetAllTasksByCategoryId?id=${id}`)
-        return data
+    const getAllTasksByCategoryId = async (
+        categoryId: string
+    ): Promise<Task[]> => {
+        const response = await getByFetch(
+            `GetAllTasksByCategoryId?id=${categoryId}`
+        )
+        return response
     }
 
     const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
@@ -351,45 +361,77 @@ const apiService = () => {
         return data
     }
 
+    // const addTask = async (
+    //     task: Pick<Task, 'category' | 'description'>
+    // ): Promise<void> => {
+    //     await postByFetch('AddTask', {
+    //         task,
+    //     })
+    // }
+
     const addTask = async (
-        task: Pick<Task, 'category' | 'description'>
+        categoryId: string,
+        description: string
     ): Promise<void> => {
         await postByFetch('AddTask', {
-            task,
+            categoryId: categoryId,
+            description: description,
         })
     }
 
-    addTask({ category: { id: '' }, description: '' })
+    // const updateTask = async (
+    //     // checklistId: string,
+    //     //  update: Task
+    //     id: string,
+    //     categoryId: string,
+    //     description: string
+    //     // checklistId: string
+    // ): Promise<void> => {
+    //     await postByFetch('UpdateTask', {
+    //         checklistId: checklistId,
+    //         ...update,
+    //         /* id: id,
+    //         categoryId: categoryId,
+    //         description: description,
+    //         checklistId: checklistId, */
+    //     })
+    // }
 
     const updateTask = async (
-        checklistId: string,
-        update: Task
-        /* id: string,
+        id: string,
         categoryId: string,
         description: string,
-        checklistId: string */
+        checklistId: string
     ): Promise<void> => {
         await postByFetch('UpdateTask', {
-            checklistId: checklistId,
-            ...update,
-            /* id: id,
+            id: id,
             categoryId: categoryId,
             description: description,
-            checklistId: checklistId, */
+            checklistId: checklistId,
         })
     }
 
     const addTaskToChecklist = async (
-        checklistId: string,
-        task: Pick<Task, 'id'> /* id: string, checklistId: string */
+        id: string,
+        checklistId: string
     ): Promise<void> => {
         await postByFetch('AddTaskToChecklist', {
+            id: id,
             checklistId: checklistId,
-            ...task,
-            /* id: id,
-            checklistId: checklistId, */
         })
     }
+
+    // const addTaskToChecklist = async (
+    //     checklistId: string,
+    //     task: Pick<Task, 'id'> /* id: string, checklistId: string */
+    // ): Promise<void> => {
+    //     await postByFetch('AddTaskToChecklist', {
+    //         checklistId: checklistId,
+    //         ...task,
+    //         /* id: id,
+    //         checklistId: checklistId, */
+    //     })
+    // }
 
     const deleteTask = async (id: string): Promise<void> => {
         await deleteByFetch(`DeleteTask?id=${id}`)

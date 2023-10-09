@@ -21,10 +21,14 @@ export const InspectorPendingRow: FunctionComponent<
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    if (WorkFlow.status !== 'Committed') return null
+    if (WorkFlow.status !== 'Committed' || !WorkFlow.checklist) return null
+
+    console.log(WorkFlow.checklist.id)
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(WorkFlow.checklist.id)}>
+            <StyledTableRow
+                onClick={() => clickHandler(WorkFlow.checklist.id || '')}
+            >
                 <MyCheckListCell>
                     <StyledBodyTitle>
                         <Typography variant="body_long_bold">

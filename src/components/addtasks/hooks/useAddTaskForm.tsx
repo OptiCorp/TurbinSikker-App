@@ -20,7 +20,6 @@ type FormData = {
 }
 
 export const useAddTaskForm = () => {
-    const { id } = useParams() as { id: string }
     const [tasks, setTasks] = useState<Task[]>([])
     const { checklistId, taskId } = useParams()
     const appLocation = useLocation()
@@ -31,8 +30,7 @@ export const useAddTaskForm = () => {
     // const { refreshList, setRefreshList } = apiService()
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
-    const [checkListById, setCheckListById] =
-        useState<ChecklistAndTasks | null>(null)
+
     const { accessToken } = useGlobal()
 
     const api = apiService()
@@ -47,7 +45,6 @@ export const useAddTaskForm = () => {
     }
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        const api = apiService()
         if (!currentUser || !checklistId || !taskId) return
         try {
             api.addTaskToChecklist(checklistId, data.task)
@@ -58,27 +55,27 @@ export const useAddTaskForm = () => {
         }
     }
 
-    useEffect(() => {
-        ;(async (): Promise<void> => {
-            if (!accessToken || !category)
-                try {
-                    const categoryData = await api.getAllCategories()
-                    const category = categoryData.map(
-                        ({ id, name }: { id: string; name: string }) => ({
-                            value: id,
-                            label: name,
-                        })
-                    )
-                    setCategory(category)
-                } catch (error) {
-                    console.log(error)
-                }
-        })()
-    }, [accessToken])
+    // useEffect(() => {
+    //     ;(async (): Promise<void> => {
+    //         if (!accessToken || !category) return
+    //         try {
+    //             const categoryData = await api.getAllCategories()
+    //             const category = categoryData.map(
+    //                 ({ id, name }: { id: string; name: string }) => ({
+    //                     value: id,
+    //                     label: name,
+    //                 })
+    //             )
+    //             setCategory(category)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     })()
+    // }, [accessToken])
 
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!category)
+            if (!category || !accessToken)
                 try {
                     const taskData =
                         await api.getAllTasksByCategoryId(selectedOption)
@@ -107,7 +104,7 @@ export const useAddTaskForm = () => {
         selectedTask,
 
         category,
-        checkListById,
+
         handleCategorySelect,
         handleTaskSelect,
         tasks,

@@ -49,7 +49,7 @@ export const FillOutCheckList = () => {
                         </div>
 
                         <Wrapper>
-                            {workflow?.checklist.checklistTasks.map((task) => (
+                            {workflow.checklist.checklistTasks.map((task) => (
                                 <>
                                     <FillOutList
                                         key={task.id}

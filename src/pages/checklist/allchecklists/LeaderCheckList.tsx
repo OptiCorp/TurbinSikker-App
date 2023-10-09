@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router'
 
 import { StyledTableRow } from '../myChecklists/styles'
 
-import { formatDate } from '../../../Helpers'
 import useGlobal from '../../../context/globalContextProvider'
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
@@ -19,7 +18,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     workflow,
 }) => {
     const navigate = useNavigate()
-    const clickHandler = (id: string) => {
+    const clickHandler = (id: string | undefined) => {
         navigate(`/PreviewCheckList/${id}`)
     }
     const { currentUser } = useGlobal()
@@ -50,7 +49,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                             }}
                             style={{ height: '0px', minWidth: '100px' }}
                         >
-                            Created {formatDate(workflow.checklist.createdDate)}
+                            Created {workflow.checklist.createdDate}
                         </Typography>
                     </CellContent>
                 </StyledTableCellCheckL>

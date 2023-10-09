@@ -1,10 +1,12 @@
 import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 
+import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Checklist, Task } from '../../../services/apiTypes'
 import { PreviewList } from './PreviewList'
 import { InfoHeader, Wrapper } from './styles'
 
@@ -13,17 +15,41 @@ export const PreviewCheckList = () => {
         navigate(`/EditCheckList/${id}`)
     }
     const location = useLocation()
+    const api = apiService()
+    const { accessToken, currentUser } = useGlobal()
     const state = location.state
-    const { checkListById } = useAddTaskForm()
+    const [checklist, setChecklist] = useState<Checklist>()
+    const [tasks, setTasks] = useState<Task[]>([])
+
+    const { id } = useParams() as { id: string }
+
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken || !id) return
+
+        const fetchChecklist = async () => {
+            try {
+                const checklistData = await api.getChecklist(id)
+
+                setChecklist(checklistData)
+                if (checklistData?.checklistTasks) {
+                    setTasks(checklistData.checklistTasks)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchChecklist()
+    }, [accessToken, currentUser?.id, id])
 
     const navigate = useNavigate()
-    const { currentUser } = useGlobal()
+
     return (
         <>
             <>
                 <div style={{ backgroundColor: '#f0f3f3' }}>
-                    {checkListById && (
-                        <div key={checkListById.id}>
+                    {checklist && (
+                        <div key={checklist.id}>
                             <InfoHeader>
                                 <Card style={{ background: 'white' }}>
                                     <Card.Header
@@ -35,7 +61,7 @@ export const PreviewCheckList = () => {
                                     >
                                         <TextField
                                             id="storybook-readonly"
-                                            placeholder={checkListById.title}
+                                            placeholder={checklist.title}
                                             label=""
                                             readOnly
                                             style={{
@@ -48,7 +74,7 @@ export const PreviewCheckList = () => {
                                 </Card>
                             </InfoHeader>
                             <Wrapper>
-                                {checkListById?.checklistTasks?.length === 0 ? (
+                                {checklist?.checklistTasks?.length === 0 ? (
                                     <>
                                         <Typography variant="body_short_bold">
                                             No tasks added yet!
@@ -57,7 +83,7 @@ export const PreviewCheckList = () => {
                                             variant="outlined"
                                             onClick={() => {
                                                 navigate(
-                                                    `/EditCheckList/${checkListById.id}`
+                                                    `/EditCheckList/${checklist.id}`
                                                 )
                                             }}
                                         >
@@ -66,8 +92,8 @@ export const PreviewCheckList = () => {
                                     </>
                                 ) : (
                                     <PreviewList
-                                        key={checkListById.id}
-                                        tasks={checkListById}
+                                        key={checklist.id}
+                                        tasks={tasks}
                                     />
                                 )}
                             </Wrapper>
@@ -78,7 +104,7 @@ export const PreviewCheckList = () => {
                             <DefaultNavigation hideNavbar={false} />
                         ) : (
                             <>
-                                {checkListById && (
+                                {checklist && (
                                     <NavActionsComponent
                                         disabled={
                                             state?.isFromCompletedList
@@ -88,9 +114,7 @@ export const PreviewCheckList = () => {
                                         buttonColor="primary"
                                         secondButtonColor="primary"
                                         buttonVariant="outlined"
-                                        onClick={() =>
-                                            clickHandler(checkListById.id)
-                                        }
+                                        onClick={() => clickHandler(id)}
                                         isShown={true}
                                         ButtonMessage="Edit Checklist"
                                         SecondButtonMessage="Send"

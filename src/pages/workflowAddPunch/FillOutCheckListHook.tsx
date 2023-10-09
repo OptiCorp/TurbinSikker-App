@@ -56,11 +56,6 @@ export const useFillOutCheckList = () => {
                 userId: currentUser?.id,
             }),
         })
-        // if (res.ok) setRefreshList((prev) => !prev)
-
-        // if (openSnackbar) {
-        //     openSnackbar(`Checklist sent`)
-        // }
     }
 
     return {

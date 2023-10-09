@@ -6,8 +6,11 @@ import {
     Typography,
 } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
+import { useParams } from 'react-router'
 import CustomDialog from '../../../components/modal/useModalHook'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Checklist } from '../../../services/apiTypes'
 import { MakeTitleField } from '../myChecklists/styles'
 import { InfoHeader } from '../previewCheckList/styles'
 
@@ -34,17 +37,31 @@ export const EditHeader = ({
     checked,
     setChecked,
 }: Props) => {
-    const { checkListById } = useAddTaskForm()
-
     const [changeTitle, setChangeTitle] = useState('')
 
     useEffect(() => {
         setTitle(changeTitle)
     })
+    const { id } = useParams() as { id: string }
+    const [checklist, setChecklist] = useState<Checklist>()
+    const api = apiService()
+    const { accessToken, currentUser } = useGlobal()
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;async (): Promise<void> => {
+            try {
+                const checklistData = await api.getChecklist(id)
+
+                setChecklist(checklistData)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }, [accessToken, currentUser?.id])
 
     return (
         <>
-            {checkListById && (
+            {checklist && (
                 <>
                     <InfoHeader>
                         <Card style={{ background: 'white' }}>
@@ -64,7 +81,7 @@ export const EditHeader = ({
 
                                         top: '0',
                                     }}
-                                    value={checkListById.status}
+                                    value={checklist?.status}
                                     onChange={(e) => {
                                         setChecked(e.target.checked)
 
@@ -77,8 +94,8 @@ export const EditHeader = ({
 
                                 <TextField
                                     id="storybook-readonly"
-                                    value={title || checkListById.title}
-                                    key={checkListById.id}
+                                    value={title || checklist?.title}
+                                    key={checklist?.id}
                                     label=""
                                     readOnly
                                     style={{
@@ -124,9 +141,7 @@ export const EditHeader = ({
                             <MakeTitleField
                                 id="storybook-readonly"
                                 placeholder="name"
-                                defaultValue={
-                                    changeTitle || checkListById.title
-                                }
+                                defaultValue={changeTitle || checklist?.title}
                                 label=""
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
