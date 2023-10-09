@@ -32,23 +32,26 @@ export type PunchItem = {
     createdDate: string
     updatedDate: null | string
     user: User
-    // checklistTask: ChecklistTaskEntity
+    checklistTask: {
+        id?: string
+        description?: string
+    }
     // uploads: UploadEntity
 }
 
 export type Category = {
-    id: string
-    name: string
+    id?: string
+    name?: string
 }
 
 export type Checklist = {
-    id: string
-    title: string
-    status: string
-    createdDate: string
-    updatedDate: null | string
-    user: User
-    checklistTasks: Task[]
+    id?: string
+    title?: string
+    status?: string
+    createdDate?: string
+    updatedDate?: null | string
+    user?: User
+    checklistTasks?: Task[]
 }
 
 export type Task = {
@@ -81,7 +84,6 @@ export type Workflow = {
     createdDate: string
     updatedDate: null | string
     checklist: Checklist
-
     user: User
     creator: User
 }
