@@ -8,24 +8,18 @@ import {
     useEffect,
     useState,
 } from 'react'
-import { useParams } from 'react-router'
 import { API_URL } from '../config'
 import { AzureUserInfo } from '../pages/users/context/models/AzureUserEntity'
-import apiService, { ApiService } from '../services/api'
-import { ApiStatus, Checklist, User } from '../services/apiTypes'
+import { User } from '../services/apiTypes'
 export interface GlobalContextType {
     idToken: string
     accessToken: string
     account: any
     accounts: any
-    accountUsername: any
-    accountname: any
-    inProgress: InteractionStatus
-    fetchChecklistStatus?: ApiStatus
+
     currentUser: User | null
-    api: ApiService
+
     instance: any
-    checklist: Checklist | undefined
 }
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
 
@@ -36,27 +30,20 @@ export function GlobalProvider({
 }): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
-    const { id } = useParams() as { id: string }
 
     const accountUsername = account?.username
     const accountname = account?.name
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
-    const [fetchChecklistStatus, setFetchChecklistStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
+
     const [currentUser, setCurrentUser] = useState<User | null>(null)
-    const api = apiService()
-    const [checklistStatus, setChecklistStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
-    const [checklist, setChecklist] = useState<Checklist>()
+
     console.log(currentUser)
     useEffect(() => {
         if (inProgress === InteractionStatus.None) {
             const accessTokenRequest = {
                 scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
-                account: accounts[0],
+                account: accounts.at(0),
             }
             instance
                 .acquireTokenSilent(accessTokenRequest)
@@ -110,7 +97,6 @@ export function GlobalProvider({
     }
 
     async function fetchUserByEmail(userEmail: string, name: string) {
-        console.log(userEmail)
         const response = await fetch(
             `${API_URL}/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`,
             {
@@ -163,64 +149,7 @@ export function GlobalProvider({
         }
     }, [idToken])
 
-    useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
-        ;async (): Promise<void> => {
-            try {
-                const checklistData = await api.getChecklist(id)
-                setChecklist(checklistData)
-            } catch (error) {
-                setChecklistStatus(ApiStatus.ERROR)
-            }
-        }
-    }, [accessToken, currentUser?.id])
-
-    // const fetchCheckLists = async () => {
-    //     if (!accessToken) return
-    //     ;(async (): Promise<void> => {
-    //         try {
-    //             const checklistData = await api.getAllCheckLists(
-
-    //             )
-
-    //             setAllChecklists(checklistData)
-    //             setWorkflowStatus(ApiStatus.SUCCESS)
-    //         } catch (error) {
-    //             setWorkflowStatus(ApiStatus.ERROR)
-    //         }
-    //     })()
-
-    // }
-
-    // useEffect(() => {
-    //     fetchCheckLists()
-    // }, [refreshCheckLists, accessToken])
-
-    // useEffect(() => {
-    //     ;(async (): Promise<void> => {
-    //         setFetchChecklistStatus(ApiStatus.LOADING)
-    //         try {
-    //             setFetchChecklistStatus(ApiStatus.SUCCESS)
-    //         } catch (error) {
-    //             setFetchChecklistStatus(ApiStatus.ERROR)
-    //         }
-    //     })()
-    // }, [api])
-
-    // if (fetchChecklistStatus === ApiStatus.LOADING) {
-    //     return (
-    //         <Progress.Circular>
-    //             {' '}
-    //             <Typography variant="h4" as="h2">
-    //                 Loading
-    //             </Typography>
-    //         </Progress.Circular>
-    //     )
-    // }
-    // if (fetchChecklistStatus === ApiStatus.ERROR) {
-    //     return <PageNotFound />
-    // }
-    if (accounts.length > 0) {
+    if (accounts.length) {
         return (
             <GlobalContext.Provider
                 value={{
@@ -228,14 +157,10 @@ export function GlobalProvider({
                     idToken,
                     accessToken,
                     accounts,
-                    accountUsername,
-                    accountname,
-                    inProgress,
+
                     instance,
-                    api,
-                    fetchChecklistStatus,
+
                     currentUser,
-                    checklist,
                 }}
             >
                 {children}

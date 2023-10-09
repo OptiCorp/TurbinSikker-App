@@ -24,7 +24,7 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     }
     const { currentUser } = useGlobal()
 
-    if (workflow.creator.id !== currentUser?.id) {
+    if (workflow?.creator.id !== currentUser?.id) {
         return null
     }
 

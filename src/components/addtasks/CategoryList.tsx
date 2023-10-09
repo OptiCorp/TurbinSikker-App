@@ -7,7 +7,7 @@ export const CategorySelector = () => {
     const { category, tasks, handleCategorySelect, handleTaskSelect } =
         useAddTaskForm()
     const { control } = useFormContext()
-    console.log(tasks)
+
     return (
         <>
             <ControllerWrap>

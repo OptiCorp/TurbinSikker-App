@@ -1,10 +1,10 @@
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
-import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
+
 import { useUser } from '../../context/userContextProvider'
 import { useAddUser } from '../hooks/useAddUser'
 export const ModifyUserNav = () => {
@@ -14,7 +14,7 @@ export const ModifyUserNav = () => {
     const [editNav, setEditNav] = useState(false)
     const [negativeOpen, setNegativeOpen] = useState(false)
     const { handleDeleteUser } = useUser()
-    const { openSnackbar } = useContext(SnackbarContext)
+
     const { id } = useParams()
     const navigate = useNavigate()
     const [updateOpen, setUpdateOpen] = useState(false)
@@ -68,10 +68,10 @@ export const ModifyUserNav = () => {
         try {
             handleDeleteUser(id)
 
-            if (openSnackbar) {
-                navigate('/ListUsers')
-                openSnackbar(`User deleted`)
-            }
+            // if (openSnackbar) {
+            //     navigate('/ListUsers')
+            //     openSnackbar(`User deleted`)
+            // }
         } catch (error) {
             console.error('Error deleting user:', error)
         }

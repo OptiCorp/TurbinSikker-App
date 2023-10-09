@@ -1,7 +1,7 @@
 export enum ApiStatus {
-    LOADING,
-    SUCCESS,
-    ERROR,
+    LOADING = 'loading',
+    SUCCESS = 'success',
+    ERROR = 'error',
 }
 
 export type User = {

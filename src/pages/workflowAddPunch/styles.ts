@@ -1,6 +1,6 @@
 import { Card, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
-import NA from '../../../assets/images/notApplicable.png'
+import NA from '../../assets/images/notApplicable.png'
 
 export const AddPunchHeader = styled.div`
     display: flex;

@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
-import { SnackbarContext } from '../../../../components/snackbar/SnackBarContext'
+
 import { API_URL } from '../../../../config'
 import { default as useGlobal } from '../../../../context/globalContextProvider'
-import apiService from '../../../../services/api'
 
 export type SendingFormValuesEntity = {
     checklistId: string
@@ -16,12 +15,12 @@ export type SendingFormValuesEntity = {
 }
 export const useAddWorkFlowForm = () => {
     const methods = useForm<SendingFormValuesEntity>()
-    const { openSnackbar } = useContext(SnackbarContext)
+
     const { handleSubmit, control, getValues } = methods
     const navigate = useNavigate()
     const { accessToken } = useGlobal()
     const [positiveOpen, setPositiveOpen] = useState(false)
-    const { setRefreshList } = apiService()
+    // const { setRefreshList } = apiService()
     const { currentUser } = useGlobal()
 
     const handleOpen = () => {
@@ -46,10 +45,12 @@ export const useAddWorkFlowForm = () => {
                 creatorId: currentUser?.id,
             }),
         })
-        if (res.ok) setRefreshList((prev) => !prev)
+        // if (res.ok) setRefreshList((prev) => !prev)
         setPositiveOpen(false)
         navigate('/Checklist')
-        if (openSnackbar) openSnackbar('Checklist sendt!')
+        // if (openSnackbar) {
+        //     openSnackbar('Workflow created!')
+        // }
     }
 
     return {

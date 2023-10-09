@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { SnackbarContext } from '../../../../../components/snackbar/SnackBarContext'
+
 import { API_URL } from '../../../../../config'
 
 import useGlobal from '../../../../../context/globalContextProvider'
@@ -17,7 +17,6 @@ export const useAddUser = () => {
     const { id } = useParams()
     const { result: users } = useContext(UserContext)
     const user = users.find((x) => x.id === id)
-    const { openSnackbar } = useContext(SnackbarContext)
 
     useEffect(() => {
         if (!user) return
@@ -40,9 +39,9 @@ export const useAddUser = () => {
 
             navigate('/ListUsers', { state: { newUser: data.email } })
 
-            if (openSnackbar) {
-                openSnackbar('User added successfully!')
-            }
+            // if (openSnackbar) {
+            //     openSnackbar('User added successfully!')
+            // }
         } else {
             await fetch(`${API_URL}/UpdateUser?id=${id}`, {
                 method: 'POST',
@@ -55,9 +54,9 @@ export const useAddUser = () => {
             })
 
             navigate('/ListUsers', { state: { newUser: data.email } })
-            if (openSnackbar) {
-                openSnackbar('User edited successfully!')
-            }
+            // if (openSnackbar) {
+            //     openSnackbar('User edited successfully!')
+            // }
         }
     }
 

@@ -1,33 +1,38 @@
-import { Snackbar, Typography } from '@equinor/eds-core-react'
-import { useContext } from 'react'
-import { SnackbarContext } from './SnackBarContext'
+// import { Snackbar, Typography } from '@equinor/eds-core-react'
 
-export const SnackbarComponent = () => {
-    const { isOpen, snackbarMessage, closeSnackbar } =
-        useContext(SnackbarContext)
+// import useGlobal from '../../context/globalContextProvider'
 
-    return (
-        <Snackbar
-            open={isOpen}
-            onClose={closeSnackbar}
-            autoHideDuration={5000}
-            placement="bottom-right"
-        >
-            {snackbarMessage ? (
-                <Typography
-                    group="navigation"
-                    variant="menu_title"
-                    token={{
-                        textAlign: 'center',
-                        lineHeight: '1em',
-                        color: 'white',
-                    }}
-                >
-                    {snackbarMessage}
-                </Typography>
-            ) : null}{' '}
-        </Snackbar>
-    )
-}
+// export const SnackbarComponent = () => {
 
-export default Snackbar
+//     return (
+//         <Snackbar
+//             open={isOpen}
+//             onClose={() => {
+//                 closeSnackbar
+
+//                 setSnackbarMessage('')
+//             }}
+//             autoHideDuration={5000}
+//             placement="bottom-right"
+//         >
+//             {snackbarMessage ? (
+//                 <Typography
+//                     group="navigation"
+//                     variant="menu_title"
+//                     token={{
+//                         textAlign: 'center',
+//                         lineHeight: '1em',
+//                         color:
+//                             snackbarMessage === successMessage
+//                                 ? 'green'
+//                                 : 'red',
+//                     }}
+//                 >
+//                     {snackbarMessage}
+//                 </Typography>
+//             ) : null}{' '}
+//         </Snackbar>
+//     )
+// }
+
+// export default Snackbar

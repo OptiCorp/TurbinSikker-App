@@ -1,16 +1,15 @@
 import { SetStateAction, useContext, useEffect, useState } from 'react'
+import { SetStateAction, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
-import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../../config'
 import { default as useGlobal } from '../../../context/globalContextProvider'
 
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import apiService from '../../../services/api'
-import { usePunchContext } from '../context/PunchContextProvider'
-import { Punch } from '../types'
 import { PunchItem } from '../../../services/apiTypes'
+import { Punch } from '../types'
 
 type FormValuesPunchEntity = {
     creatorId: string
@@ -35,9 +34,10 @@ export const useAddPunch = () => {
     }
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
+    // const { setRefreshList } = apiService()
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
-    const { openSnackbar } = useContext(SnackbarContext)
+
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
     const [punch, setPunch] = useState<PunchItem>()
@@ -82,14 +82,14 @@ export const useAddPunch = () => {
                 message: message,
             }),
         })
-        /* if (res.ok) setRefreshList((prev) => !prev) */
+        // if (res.ok) setRefreshList((prev) => !prev)
         if (file) {
             await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
         setPositiveOpen(false)
         navigate(`/workflow/${workflowId}/punch/${punchId}`)
-        if (openSnackbar) openSnackbar('Punch updated!')
+        // if (openSnackbar) openSnackbar('Punch updated!')
     }
 
     const updatePunchLeader = async () => {
@@ -113,7 +113,7 @@ export const useAddPunch = () => {
         }
         setRejectDialogOpen(false)
         navigate(`/workflow/${workflowId}/punch/${punchId}`)
-        if (openSnackbar) openSnackbar('Punch updated!')
+        // if (openSnackbar) openSnackbar('Punch updated!')
     }
 
     const postPunch = async () => {
@@ -144,9 +144,9 @@ export const useAddPunch = () => {
             navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
         }
 
-        if (openSnackbar) {
-            openSnackbar(`Punch created`)
-        }
+        // if (openSnackbar) {
+        //     openSnackbar(`Punch created`)
+        // }
     }
 
     const handleOpen = () => {

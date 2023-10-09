@@ -1,13 +1,12 @@
 import { Table } from '@equinor/eds-core-react'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import { SnackbarContext } from '../../../components/snackbar/SnackBarContext'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { ApiStatus, Checklist, Workflow } from '../../../services/apiTypes'
+import { Checklist, Workflow } from '../../../services/apiTypes'
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklists } from './LeaderMyChecklists'
 import {
@@ -23,9 +22,7 @@ export const MyCheckLists = () => {
     const { accessToken } = useGlobal()
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
-    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
+
     const [checklists, setChecklists] = useState<Checklist[]>([])
     const { currentUser } = useGlobal()
 
@@ -35,25 +32,27 @@ export const MyCheckLists = () => {
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-
-    const { openSnackbar } = useContext(SnackbarContext)
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
+    const [checklistData, setChecklistData] = useState<Checklist | string>()
+    // const openSnackbar = (message: string) => {
+    //     setSnackbarMessage(message)
 
+    //     setIsOpen(true)
+    // }
+
+    // const closeSnackbar = () => {
+    //     setIsOpen(false)
+    // }
 
     const handleCreateChecklist = async () => {
         try {
             if (!currentUser) return
-            const checklistId = await api.addChecklist(currentUser.id, title)
-
+            const res = await api.addChecklist(currentUser.id, title)
+            setChecklistData(res.id)
             setDialogShowing(false)
-
-            if (openSnackbar) {
-                openSnackbar(`CheckList Created`)
-            }
-
-            if (checklistId !== null) {
-                navigate(`/EditCheckList/${checklistId}`)
+            {
+                navigate(`/EditCheckList/${checklistData}`)
             }
         } catch (error) {
             console.error('Error creating checklist:', error)
@@ -68,9 +67,8 @@ export const MyCheckLists = () => {
                     currentUser.id
                 )
                 setWorkFlow(workFlowData)
-                setWorkflowStatus(ApiStatus.SUCCESS)
             } catch (error) {
-                setWorkflowStatus(ApiStatus.ERROR)
+                console.log(error)
             }
         })()
     }, [accessToken, currentUser?.id])
@@ -84,12 +82,23 @@ export const MyCheckLists = () => {
                 )
 
                 setChecklists(checklistData)
-                setWorkflowStatus(ApiStatus.SUCCESS)
             } catch (error) {
-                setWorkflowStatus(ApiStatus.ERROR)
+                console.log(error)
             }
         })()
     }, [accessToken, currentUser?.id])
+
+    // useEffect(() => {
+    //     if (!currentUser?.id || !accessToken) return
+    //     ;async (): Promise<void> => {
+    //         try {
+    //             const checklistData = await api.getChecklist(id)
+    //             setChecklist(checklistData)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }, [accessToken, currentUser?.id])
 
     return (
         <>

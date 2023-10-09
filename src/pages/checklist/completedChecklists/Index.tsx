@@ -4,7 +4,7 @@ import { useLocation } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { ApiStatus, Workflow } from '../../../services/apiTypes'
+import { Workflow } from '../../../services/apiTypes'
 import { CompletedList } from './CompletedList'
 import {
     BackgroundWrapCompleted,
@@ -16,9 +16,7 @@ import {
 
 export const CompletedChecklists = () => {
     const api = apiService()
-    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
+
     const location = useLocation()
     const state = location.state
     const { accessToken, currentUser } = useGlobal()
@@ -32,7 +30,7 @@ export const CompletedChecklists = () => {
                 )
                 setWorkFlows(workFlowData)
             } catch (error) {
-                setWorkflowStatus(ApiStatus.ERROR)
+                console.log(error)
             }
         }
     }, [accessToken, currentUser?.id])

@@ -5,11 +5,10 @@ import { AddTasks } from '../../../components/addtasks/AddTasks'
 import { useAddTaskForm } from '../../../components/addtasks/hooks/useAddTaskForm'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import { useGetChecklistById } from '../../../services/hooks/useGetChecklistById'
 import { Wrapper } from '../previewCheckList/styles'
 import { EditHeader } from './EditHeader'
 import { EditList } from './EditList/EditList'
-import { useEditCheckListContext } from './context/editCheckListContextProvider'
+import { useEditChecklist } from './hooks/useEditChecklist'
 
 export const EditCheckList = () => {
     const navigate = useNavigate()
@@ -17,15 +16,8 @@ export const EditCheckList = () => {
     const [dialogShowing, setDialogShowing] = useState(false)
     const { id } = useParams() as { id: string }
 
-    const handleDeleteChecklist = async () => {
-        try {
-            handleDelete(id)
-            setDialogDelete(false)
-            navigate('/MyChecklists')
-        } catch (error) {
-            console.error('Error creating checklist:', error)
-        }
-    }
+    const { handleDelete, setHeaderOpen, headerOpen, handleSave, checklist } =
+        useEditChecklist()
 
     const handleCloseDelete = () => {
         setDialogDelete(false)
@@ -37,15 +29,6 @@ export const EditCheckList = () => {
 
     const [title, setTitle] = useState('')
     const { tasks } = useAddTaskForm()
-    const {
-        handleSave,
-
-        isOpenn,
-        setIsOpenn,
-        handleDelete,
-    } = useEditCheckListContext()
-
-    const { data: checklist } = useGetChecklistById(id)
 
     const [checked, setChecked] = useState(!!checklist?.status)
 
@@ -56,7 +39,7 @@ export const EditCheckList = () => {
     function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
         return status ? 'Active' : 'Inactive'
     }
-    console.log(tasks)
+
     return (
         <div style={{ backgroundColor: '#f0f3f3' }}>
             {checklist && (
@@ -65,8 +48,8 @@ export const EditCheckList = () => {
                         <EditHeader
                             dialogShowing={dialogShowing}
                             setDialogShowing={setDialogShowing}
-                            isOpenn={isOpenn}
-                            setIsOpenn={setIsOpenn}
+                            isOpenn={headerOpen}
+                            setIsOpenn={setHeaderOpen}
                             handleClose={handleClose}
                             title={title}
                             setTitle={setTitle}
@@ -75,7 +58,7 @@ export const EditCheckList = () => {
                         />
 
                         <Wrapper>
-                            {isOpenn && <AddTasks />}
+                            {headerOpen && <AddTasks />}
 
                             <EditList key={checklist.id} tasks={tasks} />
                         </Wrapper>
@@ -86,7 +69,7 @@ export const EditCheckList = () => {
                         negativeButtonText="Cancel"
                         positiveButtonText="Delete"
                         positiveButtonColor="danger"
-                        positiveButtonOnClick={handleDeleteChecklist}
+                        positiveButtonOnClick={handleDelete}
                         negativeButtonOnClick={handleCloseDelete}
                         isOpen={dialogDelete}
                     >

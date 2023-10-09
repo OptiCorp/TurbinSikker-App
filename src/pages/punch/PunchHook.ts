@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
+
 import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
@@ -13,7 +13,7 @@ export function usePunch() {
     const methods = useForm()
     const { getUploadByPunchId } = apiService()
     const { accessToken } = useGlobal()
-    const { openSnackbar } = useContext(SnackbarContext)
+
     const [status, setStatus] = useState('')
     const [uploads, setUploads] = useState<Upload[]>([])
     const [positiveOpen, setPositiveOpen] = useState(false)
@@ -36,7 +36,7 @@ export function usePunch() {
             })
             // if (res.ok) setRefreshList((prev) => !prev)
             setPositiveOpen(false)
-            if (openSnackbar) openSnackbar(`Punch ${status}`)
+            // if (openSnackbar) openSnackbar(`Punch ${status}`)
         } catch (error) {
             console.error(error)
         }

@@ -1,17 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
 import useGlobal from '../../../context/globalContextProvider'
 
 import apiService from '../../../services/api'
-import {
-    ApiStatus,
-    Checklist,
-    Task,
-    TaskPicker,
-} from '../../../services/apiTypes'
-import { SnackbarContext } from '../../snackbar/SnackBarContext'
-import { FormValuesEntity } from '../context/models/FormValuesEntity'
+import { Checklist, Task, TaskPicker } from '../../../services/apiTypes'
 
 type ChecklistAndTasks = Checklist & TaskPicker
 
@@ -20,15 +13,11 @@ export type CategoryTaskSelector = {
     label: string
 }
 
-type Test = {
-    value: string
-    label: string
+type FormData = {
+    task: string
     id: string
-    description: string
-    category: { id: string; name: string }
+    checklistId: string
 }
-
-type TaskChooser = CategoryTaskSelector & Task
 
 export const useAddTaskForm = () => {
     const { id } = useParams() as { id: string }
@@ -36,10 +25,10 @@ export const useAddTaskForm = () => {
     const { checklistId, taskId } = useParams()
     const appLocation = useLocation()
     const { currentUser } = useGlobal()
-    const methods = useForm<FormValuesEntity>()
+    const methods = useForm<FormData>()
     const { reset, watch, handleSubmit, register, control } = methods
-    const { openSnackbar } = useContext(SnackbarContext)
-    const { refreshList, setRefreshList } = apiService()
+
+    // const { refreshList, setRefreshList } = apiService()
     const [selectedOption, setSelectedOption] = useState('')
     const [selectedTask, setSelectedTask] = useState('')
     const [checkListById, setCheckListById] =
@@ -48,11 +37,6 @@ export const useAddTaskForm = () => {
 
     const api = apiService()
     const [category, setCategory] = useState<CategoryTaskSelector[]>([])
-    const [categoryStatus, setCategoryStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
-    const [taskStatus, setTaskStatus] = useState<ApiStatus>(ApiStatus.LOADING)
-    const { workflowId } = useParams()
 
     const handleCategorySelect = (selectedCategory: string) => {
         setSelectedOption(selectedCategory)
@@ -62,19 +46,15 @@ export const useAddTaskForm = () => {
         setSelectedTask(selectedTask.value)
     }
 
-    const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
         const api = apiService()
         if (!currentUser || !checklistId || !taskId) return
         try {
             api.addTaskToChecklist(checklistId, data.task)
 
-            setRefreshList((prev) => !prev)
-
-            if (openSnackbar) {
-                openSnackbar('Task added!')
-            }
+            // setRefreshList((prev) => !prev)
         } catch (error) {
-            console.error('Error adding task:', error)
+            console.log(error)
         }
     }
 
@@ -90,9 +70,8 @@ export const useAddTaskForm = () => {
                         })
                     )
                     setCategory(category)
-                    setTaskStatus(ApiStatus.SUCCESS)
                 } catch (error) {
-                    setTaskStatus(ApiStatus.ERROR)
+                    console.log(error)
                 }
         })()
     }, [accessToken])
@@ -105,10 +84,8 @@ export const useAddTaskForm = () => {
                         await api.getAllTasksByCategoryId(selectedOption)
 
                     setTasks(taskData)
-
-                    setTaskStatus(ApiStatus.SUCCESS)
                 } catch (error) {
-                    setTaskStatus(ApiStatus.ERROR)
+                    console.log(error)
                 }
         })()
 

@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
+
 import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
 
@@ -19,7 +19,6 @@ export const useFillOutCheckList = () => {
     // const { setRefreshList } = apiService()
 
     const { accessToken } = useGlobal()
-    const { openSnackbar } = useContext(SnackbarContext)
 
     const [positiveOpen, setPositiveOpen] = useState(false)
 
@@ -59,9 +58,9 @@ export const useFillOutCheckList = () => {
         })
         // if (res.ok) setRefreshList((prev) => !prev)
 
-        if (openSnackbar) {
-            openSnackbar(`Checklist sent`)
-        }
+        // if (openSnackbar) {
+        //     openSnackbar(`Checklist sent`)
+        // }
     }
 
     return {

@@ -8,7 +8,7 @@ import {
     PreviewListWrap,
     StyledCard,
 } from '../../previewCheckList/styles'
-import { useEditCheckListContext } from '../context/editCheckListContextProvider'
+import { useEditChecklist } from '../hooks/useEditChecklist'
 import { EditListPoints } from '../styles'
 
 type Props = {
@@ -18,13 +18,16 @@ type Props = {
 export const EditList = (props: Props) => {
     const [content, setContent] = useState('')
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { task, setTask, updateCheckListTask } = useEditCheckListContext()
+    const { task, setTask, handleUpdateTask,  } = useEditChecklist()
 
     const handleSubmit = () => {
-        updateCheckListTask({
+        const categoryId = task?.category.id
+        const taskId = task?.id
+        if (!categoryId || !taskId) return
+        handleUpdateTask({
             description: content,
-            categoryId: task?.categoryId ?? '',
-            taskId: task?.id ?? '',
+            categoryId,
+            taskId,
         })
         setDialogShowing(false)
     }

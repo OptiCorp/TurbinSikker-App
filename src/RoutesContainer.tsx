@@ -6,7 +6,6 @@ import PageNotFound from './pages/PageNotFound'
 import { IndexCheckLists } from './pages/checklist'
 import { CheckList } from './pages/checklist/allchecklists/Index'
 import { CompletedChecklists } from './pages/checklist/completedChecklists/Index'
-import { EditCheckListContextProvider } from './pages/checklist/editchecklist/context/editCheckListContextProvider'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { MyCheckLists } from './pages/checklist/myChecklists/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
@@ -65,11 +64,7 @@ export function RoutesContainer() {
                     <Route path="/FillOutChecklist/:workflowId" element={<FillOutCheckList />} />
                     <Route
                         path="/EditCheckList/:id"
-                        element={
-                            <EditCheckListContextProvider>
-                                <EditCheckList />
-                            </EditCheckListContextProvider>
-                        }
+                        element={<EditCheckList />}
                     />
                     <Route path="/SendCheckList" element={<SendCheckList />} />
                     <Route path="/SendCheckList/:id" element={<SendCheckList />} />

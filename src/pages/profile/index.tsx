@@ -17,7 +17,6 @@ import { useMsal } from '@azure/msal-react'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
 import useGlobal from '../../context/globalContextProvider'
 
-
 export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
     const { instance } = useMsal()
@@ -31,7 +30,7 @@ export const Profile: FunctionComponent = () => {
         }
     }
     const { currentUser } = useGlobal()
-console.log(currentUser)
+
     return (
         <>
             <Wrapper>

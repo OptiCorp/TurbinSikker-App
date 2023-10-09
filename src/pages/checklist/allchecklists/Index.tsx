@@ -4,7 +4,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { ApiStatus, Workflow } from '../../../services/apiTypes'
+import { Workflow } from '../../../services/apiTypes'
 import { HeadCell } from '../myChecklists/styles'
 import { InspectorReceivedCheckLists } from './InspectorCheckList'
 import { LeaderCheckListSend } from './LeaderCheckList'
@@ -17,43 +17,40 @@ import {
 
 export const CheckList = () => {
     const { currentUser } = useGlobal()
-    const { accounts, inProgress } = useGlobal()
+    const { accounts } = useGlobal()
     const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
-    const [workflowStatus, setWorkflowStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
+
     const api = apiService()
     const { accessToken } = useGlobal()
+
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
+        if (!currentUser || !accessToken) return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflows()
                 setAllWorkFlows(workFlowData)
-                setWorkflowStatus(ApiStatus.SUCCESS)
-            } catch (error) {
-                setWorkflowStatus(ApiStatus.ERROR)
-            }
+            } catch (error) {}
         })()
     }, [accessToken, currentUser?.id])
 
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
+        if (!currentUser || !accessToken) return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
                 setWorkFlows(workFlowData)
-                setWorkflowStatus(ApiStatus.SUCCESS)
             } catch (error) {
-                setWorkflowStatus(ApiStatus.ERROR)
+                console.log(error)
             }
         })()
+
+        console.log(workflows)
     }, [accessToken, currentUser?.id])
 
-    if (accounts.length > 0) {
+    if (accounts?.length > 0) {
         return (
             <>
                 <Wrap>
@@ -113,9 +110,7 @@ export const CheckList = () => {
                 <DefaultNavigation hideNavbar={false} />
             </>
         )
-    } else if (inProgress === 'login') {
-        return <span>Login is currently in progress!</span>
-    } else {
+    } else if (!currentUser?.id) {
         return <span>There are currently no users signed in!</span>
     }
 }
