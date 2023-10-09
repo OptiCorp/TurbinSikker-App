@@ -1,11 +1,9 @@
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 import { formatDate, formatTimeStamp } from '../../../Helpers'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { punchSeverity } from '../Index'
-import { usePunchContext } from '../context/PunchContextProvider'
 import {
     CreatedByContainer,
     PunchListBoxContainer,
@@ -18,17 +16,33 @@ import {
     TicketDetails,
     TicketIcons,
     TicketInfo,
-    TicketSeverityContainer,
 } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Status } from '../types'
+import { PunchItem, User } from '../../../services/apiTypes'
+import apiService from '../../../services/api'
+import useGlobal from '../../../context/globalContextProvider'
 
 function ListPunches() {
+    const { currentUser } = useGlobal() as { currentUser: User }
+    const api = apiService()
     const { hasPermission } = useHasPermission()
-    const { punches } = usePunchContext()
     const navigate = useNavigate()
+    const [punches, setPunches] = useState<PunchItem[]>([])
     const [sorted, setSorted] = useState(false)
     const [showBadge, setShowBadge] = useState(true)
+    useEffect(() => {
+        ;async () => {
+            if (currentUser.userRole.name === 'Inspector') {
+                const punchesFromApi = await api.getPunchInspectorId(currentUser?.id)
+                setPunches(punchesFromApi)
+            } else {
+                const punchesFromApi = await api.getPunchByLeaderId(currentUser?.id)
+                setPunches(punchesFromApi)
+            }
+        }
+    }, [])
+
     punches?.sort((a, b) => {
         const dateA = new Date(a.createdDate)
         const dateB = new Date(b.createdDate)
@@ -36,7 +50,7 @@ function ListPunches() {
         return dateB.valueOf() - dateA.valueOf()
     })
 
-    punches.sort((a, b) => {
+    punches?.sort((a, b) => {
         if (hasPermission) {
             if (a.status === Status.PENDING && b.status !== Status.PENDING) {
                 return -1
@@ -53,10 +67,10 @@ function ListPunches() {
         return 0
     })
 
-    const rejectedPunches = punches.filter((punch) => punch.status === Status.REJECTED)
+    const rejectedPunches = punches?.filter((punch) => punch.status === Status.REJECTED)
 
     const filteredPunches = sorted
-        ? punches.filter((punch) => punch.status === Status.REJECTED)
+        ? punches?.filter((punch) => punch.status === Status.REJECTED)
         : punches
 
     function clickHandler(punchId: string, workFlowId: string) {
@@ -66,7 +80,7 @@ function ListPunches() {
     return (
         <>
             <PunchListItem>
-                {punches.length < 1 ? (
+                {punches && punches?.length < 1 ? (
                     <p>Punches are displayed here..</p>
                 ) : (
                     <>
@@ -116,7 +130,7 @@ function ListPunches() {
                                             </Typography>
 
                                             <TicketCardDescription>
-                                                {punch.checklistTask.description}
+                                                {punch?.checklistTask.description}
                                             </TicketCardDescription>
 
                                             {hasPermission && (

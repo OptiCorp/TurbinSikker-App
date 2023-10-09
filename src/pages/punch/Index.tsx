@@ -13,6 +13,10 @@ import {
     SeverityIconContainer,
 } from './styles'
 import { PunchSeverity } from './types'
+import { useEffect, useState } from 'react'
+import { PunchItem, User } from '../../services/apiTypes'
+import apiService from '../../services/api'
+import useGlobal from '../../context/globalContextProvider'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -33,14 +37,22 @@ export const punchSeverity: PunchSeverity[] = [
 ]
 
 function Punch() {
+    const { currentUser } = useGlobal() as { currentUser: User }
+    const api = apiService()
     const navigate = useNavigate()
-    const { punch } = usePunchContext()
+    const [punch, setPunch] = useState<PunchItem>()
     const createdDate = punch && formatDate(punch.createdDate)
     const timeStamp = punch && formatTimeStamp(punch?.createdDate)
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
 
+    useEffect(() => {
+        ;async () => {
+            const punchFromApi = await api.getPunch(currentUser?.id)
+            setPunch(punchFromApi)
+        }
+    }, [])
     return (
         <>
             <PunchWrapper>

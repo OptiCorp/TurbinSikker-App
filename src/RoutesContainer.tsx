@@ -50,10 +50,7 @@ export function RoutesContainer() {
                                 </GlobalProvider>
                             }
                         />
-                        <Route
-                            path="/CompletedChecklist"
-                            element={<CompletedChecklists />}
-                        />
+                        <Route path="/CompletedChecklist" element={<CompletedChecklists />} />
                         <Route
                             path="/MyChecklists"
                             element={
@@ -63,15 +60,9 @@ export function RoutesContainer() {
                             }
                         />
                     </Route>
-                    <Route
-                        path="/PreviewCheckList/:id"
-                        element={<PreviewCheckList />}
-                    />
+                    <Route path="/PreviewCheckList/:id" element={<PreviewCheckList />} />
 
-                    <Route
-                        path="/FillOutChecklist/:workflowId"
-                        element={<FillOutCheckList />}
-                    />
+                    <Route path="/FillOutChecklist/:workflowId" element={<FillOutCheckList />} />
                     <Route
                         path="/EditCheckList/:id"
                         element={
@@ -81,10 +72,7 @@ export function RoutesContainer() {
                         }
                     />
                     <Route path="/SendCheckList" element={<SendCheckList />} />
-                    <Route
-                        path="/SendCheckList/:id"
-                        element={<SendCheckList />}
-                    />
+                    <Route path="/SendCheckList/:id" element={<SendCheckList />} />
 
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route
@@ -97,46 +85,14 @@ export function RoutesContainer() {
                     />
                     <Route path="/AddUser" element={<AddUser />} />
 
-                    <Route
-                        path="/Punches"
-                        element={
-                            <PunchContextProvider>
-                                <ListPunches />
-                            </PunchContextProvider>
-                        }
-                    />
-                    <Route
-                        path="/workflow/:workflowId/punch"
-                        element={
-                            <PunchContextProvider>
-                                <Punch />
-                            </PunchContextProvider>
-                        }
-                    />
-                    <Route
-                        path="/workflow/:workflowId/punch/:punchId"
-                        element={
-                            <PunchContextProvider>
-                                <Punch />
-                            </PunchContextProvider>
-                        }
-                    />
+                    <Route path="/Punches" element={<ListPunches />} />
+                    <Route path="/workflow/:workflowId/punch" element={<Punch />} />
+                    <Route path="/workflow/:workflowId/punch/:punchId" element={<Punch />} />
                     <Route
                         path="/workflow/:workflowId/EditPunch/:punchId/"
-                        element={
-                            <PunchContextProvider>
-                                <AddPunch />
-                            </PunchContextProvider>
-                        }
+                        element={<AddPunch />}
                     />
-                    <Route
-                        path="/workflow/:workflowId/:taskId/AddPunch/"
-                        element={
-                            <PunchContextProvider>
-                                <AddPunch />
-                            </PunchContextProvider>
-                        }
-                    />
+                    <Route path="/workflow/:workflowId/:taskId/AddPunch/" element={<AddPunch />} />
 
                     <Route path="/EditUser/:id" element={<AddUser />} />
                     <Route path="/User/:id" element={<AddUser />} />

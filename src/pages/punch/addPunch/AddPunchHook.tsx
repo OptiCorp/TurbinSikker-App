@@ -1,4 +1,4 @@
-import { SetStateAction, useContext, useState } from 'react'
+import { SetStateAction, useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
@@ -10,6 +10,7 @@ import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import apiService from '../../../services/api'
 import { usePunchContext } from '../context/PunchContextProvider'
 import { Punch } from '../types'
+import { PunchItem } from '../../../services/apiTypes'
 
 type FormValuesPunchEntity = {
     creatorId: string
@@ -25,19 +26,21 @@ type UserInput = {
 }
 
 export const useAddPunch = () => {
-    const { currentUser } = useGlobal()
-
-    const { accessToken } = useGlobal()
-    const { punch } = usePunchContext()
-    const { workflowId, punchId, taskId } = useParams()
+    const { currentUser, accessToken } = useGlobal()
+    const api = apiService()
+    const { workflowId, punchId, taskId } = useParams() as {
+        workflowId: string
+        punchId: string
+        taskId: string
+    }
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
-    const { setRefreshList } = apiService()
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
     const { openSnackbar } = useContext(SnackbarContext)
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+    const [punch, setPunch] = useState<PunchItem>()
     const [userInput, setUserInput] = useState<UserInput>({
         description: punch?.description,
         severity: punch?.severity,
@@ -46,6 +49,13 @@ export const useAddPunch = () => {
     const [file, setFile] = useState<File | undefined>()
     const [message, setMessage] = useState<SetStateAction<string>>()
     const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        ;async () => {
+            const punchFromAPi = await api.getPunch(punchId)
+            setPunch(punchFromAPi)
+        }
+    }, [])
     const onSubmit: SubmitHandler<FormValuesPunchEntity> = () => {
         if (hasPermission) {
             updatePunchLeader()
@@ -72,9 +82,9 @@ export const useAddPunch = () => {
                 message: message,
             }),
         })
-        if (res.ok) setRefreshList((prev) => !prev)
+        /* if (res.ok) setRefreshList((prev) => !prev) */
         if (file) {
-            await addUpload(accessToken, punchId, file)
+            await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
         setPositiveOpen(false)
@@ -97,9 +107,9 @@ export const useAddPunch = () => {
                 message: message,
             }),
         })
-        if (res.ok) setRefreshList((prev) => !prev)
+        // if (res.ok) setRefreshList((prev) => !prev)
         if (file) {
-            await addUpload(accessToken, punchId, file)
+            await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
         navigate(`/workflow/${workflowId}/punch/${punchId}`)
@@ -129,7 +139,7 @@ export const useAddPunch = () => {
             const json: Promise<Punch> = res.json()
             const id = (await json).id
             if (file) {
-                await addUpload(accessToken, id, file)
+                await api.addUpload(id, file)
             }
             navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
         }

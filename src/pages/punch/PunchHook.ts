@@ -1,23 +1,21 @@
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-
 import { SnackbarContext } from '../../components/snackbar/SnackBarContext'
 import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
-
 import apiService from '../../services/api'
-import { usePunchContext } from './context/PunchContextProvider'
+import { Upload } from '../../services/apiTypes'
+
 export function usePunch() {
-    const { id } = useParams()
-    const { punch } = usePunchContext()
+    const api = apiService()
+    const { id } = useParams() as { id: string }
     const methods = useForm()
     const { getUploadByPunchId } = apiService()
     const { accessToken } = useGlobal()
-    const { setRefreshList } = apiService()
     const { openSnackbar } = useContext(SnackbarContext)
     const [status, setStatus] = useState('')
-    const [uploads, setUploads] = useState([])
+    const [uploads, setUploads] = useState<Upload[]>([])
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -36,7 +34,7 @@ export function usePunch() {
                     workflowId: '95b927b4-1e8d-48c3-a254-7ca1b8f501c2',
                 }),
             })
-            if (res.ok) setRefreshList((prev) => !prev)
+            // if (res.ok) setRefreshList((prev) => !prev)
             setPositiveOpen(false)
             if (openSnackbar) openSnackbar(`Punch ${status}`)
         } catch (error) {
@@ -53,12 +51,12 @@ export function usePunch() {
 
     useEffect(() => {
         setLoading(true)
-        const uploads = getUploadByPunchId(punch?.id ?? '')
-        uploads.then((data) => {
-            setUploads(data)
+        ;async () => {
+            const uploadFromApi = await api.getUploadByPunchId(id)
+            setUploads(uploadFromApi)
             setLoading(false)
-        })
-    }, [accessToken, punch?.id])
+        }
+    }, [accessToken, id])
 
     return {
         setStatus,
