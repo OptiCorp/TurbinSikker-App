@@ -31,17 +31,18 @@ export const useEditChecklist = () => {
         setTaskDescription(taskDescription)
     }
 
-    useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
-        ;async (): Promise<void> => {
-            try {
-                const checklistData = await api.getChecklist(id)
-                setChecklist(checklistData)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }, [accessToken, currentUser?.id])
+    // useEffect(() => {
+    //     if (!currentUser?.id || !accessToken) return
+    //     ;async (): Promise<void> => {
+    //         try {
+    //             const checklistData = await api.getChecklist(id)
+    //             setChecklist(checklistData)
+    //             console.log(checklistData)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }, [accessToken, currentUser?.id])
 
     useEffect(() => {
         if (checklist && checklist?.checklistTasks?.length === 0) {

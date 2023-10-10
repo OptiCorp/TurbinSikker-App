@@ -284,8 +284,12 @@ const apiService = () => {
         return data
     }
 
-    const getWorkflow = async (id: string | undefined): Promise<Workflow> => {
-        const data = await getByFetch(`GetWorkflow?id=${id}`)
+    const getWorkflow = async (workflowId: string): Promise<Workflow> => {
+        const data = await getByFetch(`GetWorkflow?id=${workflowId}`)
+
+        if (!workflowId) {
+            throw new Error('An error occurred, please try again')
+        }
         return data
     }
 
@@ -314,13 +318,19 @@ const apiService = () => {
         })
     }
 
-    const updateWorkflow = async (
-        update: Pick<Workflow, 'id' | 'user' | 'status'>
-    ): Promise<void> => {
-        await putByFetch('UpdateWorkflow', {
-            update,
+    const updateWorkflow = async (id: string): Promise<void> => {
+        await postByFetch('Update', {
+            id: id,
         })
     }
+
+    // const updateWorkflow = async (
+    //     update: Pick<Workflow, 'id' | 'user' | 'status'>
+    // ): Promise<void> => {
+    //     await putByFetch('UpdateWorkflow', {
+    //         update,
+    //     })
+    // }
 
     const deleteWorkflow = async (id: string): Promise<void> => {
         await deleteByFetch(`DeleteWorkflow?id=${id}`)
@@ -340,7 +350,7 @@ const apiService = () => {
 
     const getAllTasksByCategoryId = async (
         categoryId: string
-    ): Promise<Task[]> => {
+    ): Promise<Task> => {
         const response = await getByFetch(
             `GetAllTasksByCategoryId?id=${categoryId}`
         )

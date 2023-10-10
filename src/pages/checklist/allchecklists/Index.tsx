@@ -47,7 +47,7 @@ export const CheckList = () => {
             }
         })()
 
-        console.log(workflows)
+        
     }, [accessToken, currentUser?.id])
 
     if (accounts?.length > 0) {

@@ -38,7 +38,6 @@ export function GlobalProvider({
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
-    console.log(currentUser)
     useEffect(() => {
         if (inProgress === InteractionStatus.None) {
             const accessTokenRequest = {
