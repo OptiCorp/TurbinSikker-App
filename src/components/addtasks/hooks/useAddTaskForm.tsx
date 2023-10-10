@@ -4,9 +4,7 @@ import { useLocation, useParams } from 'react-router'
 import useGlobal from '../../../context/globalContextProvider'
 
 import apiService from '../../../services/api'
-import { Checklist, Task, TaskPicker } from '../../../services/apiTypes'
-
-type ChecklistAndTasks = Checklist & TaskPicker
+import { Category, Task } from '../../../services/apiTypes'
 
 export type CategoryTaskSelector = {
     value: string
@@ -14,42 +12,24 @@ export type CategoryTaskSelector = {
 }
 
 type FormData = {
-    task: string
     id: string
-    checklistId: string
 }
 
 export const useAddTaskForm = () => {
-    const [tasks, setTasks] = useState<Task >()
-    const { checklistId, taskId } = useParams()
+    const [tasks, setTasks] = useState<Task[]>([])
+    const { id: checklistId } = useParams() as { id: string }
     const appLocation = useLocation()
     const { currentUser } = useGlobal()
     const methods = useForm<FormData>()
-    const { reset, watch, handleSubmit, register, control } = methods
-
-    // const { refreshList, setRefreshList } = apiService()
+    const { reset, watch, handleSubmit, register, control, setValue } = methods
     const [selectedOption, setSelectedOption] = useState('')
-    const [selectedTask, setSelectedTask] = useState('')
-
     const { accessToken } = useGlobal()
-
     const api = apiService()
-    const [category, setCategory] = useState<CategoryTaskSelector[]>([])
+    const [category, setCategory] = useState<Category[]>([])
 
-    const handleCategorySelect = (selectedCategory: string) => {
-        setSelectedOption(selectedCategory)
-    }
-
-    const handleTaskSelect = (selectedTask: any) => {
-        setSelectedTask(selectedTask.value)
-    }
-
-    const onSubmit: SubmitHandler<FormData> = async (data) => {
-        if (!currentUser || !checklistId || !taskId) return
+    const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         try {
-            api.addTaskToChecklist(checklistId, data.task)
-
-            // setRefreshList((prev) => !prev)
+            await api.addTaskToChecklist(data.id, checklistId)
         } catch (error) {
             console.log(error)
         }
@@ -57,56 +37,49 @@ export const useAddTaskForm = () => {
 
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!accessToken || !category) return
+            if (!accessToken || !category || !currentUser?.id) return
             try {
                 const categoryData = await api.getAllCategories()
-                const category = categoryData.map(
-                    ({ id, name }: { id: string; name: string }) => ({
+                const categories: Category[] = categoryData.map(
+                    ({ id, name }) => ({
+                        id,
+                        name,
                         value: id,
                         label: name,
                     })
                 )
-                setCategory(category)
+                setCategory(categories)
             } catch (error) {
                 console.log(error)
             }
         })()
-    }, [accessToken])
+    }, [accessToken, currentUser?.id])
 
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!category || !accessToken)
-                try {
-                    const taskData =
-                        await api.getAllTasksByCategoryId(selectedOption)
-
+            if (!accessToken || !selectedOption || !currentUser?.id) return
+            try {
+                const taskData =
+                    await api.getAllTasksByCategoryId(selectedOption)
+                if (taskData) {
                     setTasks(taskData)
-                } catch (error) {
-                    console.log(error)
+                } else {
+                    setTasks([])
                 }
+            } catch (error) {
+                console.log(error)
+            }
         })()
-
-        if (selectedOption) {
-            api.getAllTasksByCategoryId(selectedOption)
-        }
-    }, [selectedOption, accessToken])
+    }, [selectedOption, accessToken, currentUser?.id])
 
     return {
         methods,
         onSubmit,
         control,
-        register,
         handleSubmit,
-        watch,
         location: appLocation.pathname,
-        selectedOption,
-        reset,
-        selectedTask,
-
+        setSelectedOption,
         category,
-
-        handleCategorySelect,
-        handleTaskSelect,
         tasks,
     }
 }

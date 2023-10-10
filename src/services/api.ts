@@ -1,6 +1,15 @@
 import { API_URL } from '../config'
 import { pca } from '../msalconfig'
-import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow } from './apiTypes'
+import {
+    Category,
+    Checklist,
+    PunchItem,
+    Task,
+    Upload,
+    User,
+    UserRole,
+    Workflow,
+} from './apiTypes'
 
 const request = {
     scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
@@ -165,7 +174,9 @@ const apiService = () => {
     }
 
     const getUserByAzureAdUserId = async (id: string) => {
-        const data = await getByFetch(`GetUserByAzureAdUserId?azureAdUserId=${id}`)
+        const data = await getByFetch(
+            `GetUserByAzureAdUserId?azureAdUserId=${id}`
+        )
         return data
     }
 
@@ -175,7 +186,10 @@ const apiService = () => {
     }
 
     const addUser = async (
-        user: Omit<User, 'id' | 'status' | 'userRole' | 'createdDate' | 'updatedDate'>
+        user: Omit<
+            User,
+            'id' | 'status' | 'userRole' | 'createdDate' | 'updatedDate'
+        >
     ): Promise<Response> => {
         return await postByFetch('AddUser', {
             ...user,
@@ -238,7 +252,9 @@ const apiService = () => {
         return data
     }
 
-    const addUserRole = async (userRole: Pick<UserRole, 'name'>): Promise<void> => {
+    const addUserRole = async (
+        userRole: Pick<UserRole, 'name'>
+    ): Promise<void> => {
         await postByFetch('AddUserRole', {
             userRole,
         })
@@ -270,7 +286,9 @@ const apiService = () => {
         return data
     }
 
-    const getAllChecklistsByUserId = async (userId: string): Promise<Checklist[]> => {
+    const getAllChecklistsByUserId = async (
+        userId: string
+    ): Promise<Checklist[]> => {
         const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`)
         if (!userId) {
             throw new Error('An error occurred, please try again')
@@ -278,15 +296,22 @@ const apiService = () => {
         return data
     }
 
-    const getChecklistByName = async (searchString: string): Promise<Checklist> => {
-        const data = await getByFetch(`GetChecklistsByName?searchString=${searchString}`)
+    const getChecklistByName = async (
+        searchString: string
+    ): Promise<Checklist> => {
+        const data = await getByFetch(
+            `GetChecklistsByName?searchString=${searchString}`
+        )
         if (!searchString) {
             throw new Error('An error occurred, please try again')
         }
         return data
     }
 
-    const addChecklist = async (creatorId: string, title: string): Promise<{ id: string }> => {
+    const addChecklist = async (
+        creatorId: string,
+        title: string
+    ): Promise<{ id: string }> => {
         try {
             const response = await postByFetch('AddChecklist', {
                 creatorId: creatorId,
@@ -301,7 +326,11 @@ const apiService = () => {
     }
     // TODO: AddChecklistWithTasks
 
-    const updateChecklist = async (id: string, title: string, status: string): Promise<void> => {
+    const updateChecklist = async (
+        id: string,
+        title: string,
+        status: string
+    ): Promise<void> => {
         await postByFetch('UpdateChecklist', {
             id: id,
             title: title,
@@ -330,8 +359,12 @@ const apiService = () => {
         return data
     }
 
-    const getAllWorkflowsByUserId = async (userId: string): Promise<Workflow[]> => {
-        const data = await getByFetch(`GetAllWorkflowsByUserId?userId=${userId}`)
+    const getAllWorkflowsByUserId = async (
+        userId: string
+    ): Promise<Workflow[]> => {
+        const data = await getByFetch(
+            `GetAllWorkflowsByUserId?userId=${userId}`
+        )
         return data
     }
 
@@ -381,8 +414,12 @@ const apiService = () => {
         return data
     }
 
-    const getAllTasksByCategoryId = async (categoryId: string): Promise<Task[]> => {
-        const response = await getByFetch(`GetAllTasksByCategoryId?id=${categoryId}`)
+    const getAllTasksByCategoryId = async (
+        categoryId: string
+    ): Promise<Task[]> => {
+        const response = await getByFetch(
+            `GetAllTasksByCategoryId?id=${categoryId}`
+        )
         return response
     }
 
@@ -391,8 +428,12 @@ const apiService = () => {
         return data
     }
 
-    const getTasksByDescription = async (searchString: string): Promise<Task> => {
-        const data = await getByFetch(`GetTasksByDescription?searchString=${searchString}`)
+    const getTasksByDescription = async (
+        searchString: string
+    ): Promise<Task> => {
+        const data = await getByFetch(
+            `GetTasksByDescription?searchString=${searchString}`
+        )
         return data
     }
 
@@ -404,7 +445,10 @@ const apiService = () => {
     //     })
     // }
 
-    const addTask = async (categoryId: string, description: string): Promise<void> => {
+    const addTask = async (
+        categoryId: string,
+        description: string
+    ): Promise<void> => {
         await postByFetch('AddTask', {
             categoryId: categoryId,
             description: description,
@@ -443,7 +487,10 @@ const apiService = () => {
         })
     }
 
-    const addTaskToChecklist = async (id: string, checklistId: string): Promise<void> => {
+    const addTaskToChecklist = async (
+        id: string,
+        checklistId: string
+    ): Promise<void> => {
         await postByFetch('AddTaskToChecklist', {
             id: id,
             checklistId: checklistId,
@@ -478,8 +525,12 @@ const apiService = () => {
         return data
     }
 
-    const getCategoriesByName = async (searchString: string): Promise<Category> => {
-        const data = await getByFetch(`GetCategoriesByName?searchString=${searchString}`)
+    const getCategoriesByName = async (
+        searchString: string
+    ): Promise<Category> => {
+        const data = await getByFetch(
+            `GetCategoriesByName?searchString=${searchString}`
+        )
         return data
     }
 
@@ -530,7 +581,10 @@ const apiService = () => {
 
     const addPunch = async (
         creatorId: string,
-        punch: Omit<PunchItem, 'id' | 'status' | 'message' | 'createdDate' | 'updatedDate' | 'user'>
+        punch: Omit<
+            PunchItem,
+            'id' | 'status' | 'message' | 'createdDate' | 'updatedDate' | 'user'
+        >
     ): Promise<void> => {
         await postByFetch('AddPunch', {
             creatorId: creatorId,
@@ -544,7 +598,12 @@ const apiService = () => {
         update: Partial<
             Omit<
                 PunchItem,
-                'id' | 'workflowId' | 'createdDate' | 'updatedDate' | 'user' | 'checklistTask'
+                | 'id'
+                | 'workflowId'
+                | 'createdDate'
+                | 'updatedDate'
+                | 'user'
+                | 'checklistTask'
             >
         >
     ): Promise<void> => {
@@ -579,7 +638,9 @@ const apiService = () => {
         await postFileByFetch('AddUpload', formData)
     }
 
-    const updateUpload = async (update: Pick<Upload, 'id' | 'punchId'>): Promise<void> => {
+    const updateUpload = async (
+        update: Pick<Upload, 'id' | 'punchId'>
+    ): Promise<void> => {
         await postByFetch('UpdateUpload', {
             update,
         })
