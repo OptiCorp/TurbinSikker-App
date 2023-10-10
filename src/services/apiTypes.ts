@@ -40,8 +40,10 @@ export type PunchItem = {
 }
 
 export type Category = {
-    id?: string
-    name?: string
+    id: string
+    name: string
+    value: string
+    label: string
 }
 
 export type Checklist = {
@@ -58,7 +60,7 @@ export type Task = {
     id: string
     description: string
     category: Category
-    value?: string
+    value: string
 }
 
 export type TaskPicker = {

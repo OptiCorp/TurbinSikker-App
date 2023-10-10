@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { FormProvider } from 'react-hook-form'
 
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useHasPermission } from '../hooks/useHasPermission'
 import { useAddUser } from './hooks/useAddUser'
 import { InputField } from './inputField'

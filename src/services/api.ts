@@ -350,7 +350,7 @@ const apiService = () => {
 
     const getAllTasksByCategoryId = async (
         categoryId: string
-    ): Promise<Task> => {
+    ): Promise<Task[]> => {
         const response = await getByFetch(
             `GetAllTasksByCategoryId?id=${categoryId}`
         )
@@ -429,6 +429,7 @@ const apiService = () => {
             id: id,
             checklistId: checklistId,
         })
+
     }
 
     // const addTaskToChecklist = async (

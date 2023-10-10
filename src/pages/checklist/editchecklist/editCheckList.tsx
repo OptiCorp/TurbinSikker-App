@@ -7,10 +7,11 @@ import { NavActionsComponent } from '../../../components/navigation/hooks/useNav
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Task } from '../../../services/apiTypes'
-import { Wrapper } from '../previewCheckList/styles'
+
 import { EditHeader } from './EditHeader'
 import { EditList } from './EditList/EditList'
 import { useEditChecklist } from './hooks/useEditChecklist'
+import { BackgroundContainer, EditWrapper, ScrollWrapper } from './styles'
 
 export const EditCheckList = () => {
     const [dialogDelete, setDialogDelete] = useState(false)
@@ -64,14 +65,14 @@ export const EditCheckList = () => {
     }
 
     return (
-        <div style={{ backgroundColor: '#f0f3f3' }}>
+        <BackgroundContainer>
             <>
-                <div key={checklist?.id}>
+                <ScrollWrapper key={checklist?.id}>
                     <EditHeader
                         dialogShowing={dialogShowing}
                         setDialogShowing={setDialogShowing}
-                        isOpenn={headerOpen}
-                        setIsOpenn={setHeaderOpen}
+                        headerOpen={headerOpen}
+                        setHeaderOpen={setHeaderOpen}
                         handleClose={handleClose}
                         title={title}
                         setTitle={setTitle}
@@ -79,7 +80,7 @@ export const EditCheckList = () => {
                         setChecked={setChecked}
                     />
 
-                    <Wrapper>
+                    <EditWrapper>
                         {headerOpen && <AddTasks />}
                         {checklist && (
                             <EditList
@@ -88,8 +89,8 @@ export const EditCheckList = () => {
                                 tasks={tasks}
                             />
                         )}
-                    </Wrapper>
-                </div>
+                    </EditWrapper>
+                </ScrollWrapper>
 
                 <CustomDialog
                     title="Delete checklist?"
@@ -127,6 +128,6 @@ export const EditCheckList = () => {
                     isShown={true}
                 />
             </>
-        </div>
+        </BackgroundContainer>
     )
 }

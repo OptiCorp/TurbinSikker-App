@@ -17,11 +17,7 @@ export const PreviewList = ({ tasks }: Props) => {
             {tasks.map((task) => (
                 <Container key={task.id}>
                     <CategoryName>{task.category.name}</CategoryName>
-                    <StyledCard
-                        style={{
-                            width: '100%',
-                        }}
-                    >
+                    <StyledCard>
                         <PreviewListPoints
                             label=""
                             key={task.id}

@@ -1,4 +1,4 @@
-import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
+import { Button, TextField, Typography } from '@equinor/eds-core-react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
@@ -8,7 +8,13 @@ import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Task } from '../../../services/apiTypes'
 import { PreviewList } from './PreviewList'
-import { InfoHeader, Wrapper } from './styles'
+import {
+    BackgroundContainer,
+    EditStyledCardHeader,
+    InfoHeader,
+    PreviewWrapper,
+    StyledCard,
+} from './styles'
 
 export const PreviewCheckList = () => {
     const location = useLocation()
@@ -20,7 +26,6 @@ export const PreviewCheckList = () => {
 
     const { id } = useParams() as { id: string }
     const clickHandler = (id: string) => {
-        console.log(id)
         navigate(`/EditCheckList/${id}`)
     }
 
@@ -47,18 +52,12 @@ export const PreviewCheckList = () => {
 
     return (
         <>
-            <div style={{ backgroundColor: '#f0f3f3' }}>
+            <BackgroundContainer>
                 {checklist && (
                     <div key={checklist.id}>
                         <InfoHeader>
-                            <Card style={{ background: 'white' }}>
-                                <Card.Header
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        margin: '0 auto',
-                                    }}
-                                >
+                            <StyledCard>
+                                <EditStyledCardHeader>
                                     <TextField
                                         id="storybook-readonly"
                                         placeholder={checklist.title}
@@ -69,10 +68,10 @@ export const PreviewCheckList = () => {
                                             background: '#F7F7F7',
                                         }}
                                     />
-                                </Card.Header>
-                            </Card>
+                                </EditStyledCardHeader>
+                            </StyledCard>
                         </InfoHeader>
-                        <Wrapper>
+                        <PreviewWrapper>
                             {checklist?.checklistTasks?.length === 0 ? (
                                 <>
                                     <Typography variant="body_short_bold">
@@ -92,7 +91,7 @@ export const PreviewCheckList = () => {
                             ) : (
                                 <PreviewList key={checklist.id} tasks={tasks} />
                             )}
-                        </Wrapper>
+                        </PreviewWrapper>
                     </div>
                 )}
                 <>
@@ -119,7 +118,7 @@ export const PreviewCheckList = () => {
                         </>
                     )}
                 </>
-            </div>
+            </BackgroundContainer>
         </>
     )
 }
