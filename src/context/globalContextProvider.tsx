@@ -28,7 +28,6 @@ export function GlobalProvider({ children }: { children: ReactNode }): JSX.Eleme
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
-    console.log(currentUser)
     useEffect(() => {
         if (inProgress === InteractionStatus.None) {
             const accessTokenRequest = {

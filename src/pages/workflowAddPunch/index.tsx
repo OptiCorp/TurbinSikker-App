@@ -13,7 +13,7 @@ import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
 export const FillOutCheckList = () => {
     const [workflow, setWorkFlow] = useState<Workflow>()
 
-    const { workflowId } = useParams()
+    const { workflowId } = useParams() as { workflowId: string }
 
     const { methods, onUpdate } = useFillOutCheckList()
     const { handleSubmit } = methods
@@ -49,16 +49,18 @@ export const FillOutCheckList = () => {
                         </div>
 
                         <Wrapper>
-                            {workflow.checklist.checklistTasks.map((task) => (
-                                <>
-                                    <FillOutList
-                                        key={task.id}
-                                        workFlowById={workflow}
-                                        onUpdate={onUpdate}
-                                        task={task}
-                                    />
-                                </>
-                            ))}
+                            {workflow?.checklist?.checklistTasks?.map(
+                                (task) => (
+                                    <>
+                                        <FillOutList
+                                            key={task.id}
+                                            workFlow={workflow}
+                                            onUpdate={onUpdate}
+                                            task={task}
+                                        />
+                                    </>
+                                )
+                            )}
                         </Wrapper>
                     </div>
                 </form>

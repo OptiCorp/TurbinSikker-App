@@ -20,7 +20,7 @@ type FormData = {
 }
 
 export const useAddTaskForm = () => {
-    const [tasks, setTasks] = useState<Task[]>([])
+    const [tasks, setTasks] = useState<Task >()
     const { checklistId, taskId } = useParams()
     const appLocation = useLocation()
     const { currentUser } = useGlobal()
@@ -55,23 +55,23 @@ export const useAddTaskForm = () => {
         }
     }
 
-    // useEffect(() => {
-    //     ;(async (): Promise<void> => {
-    //         if (!accessToken || !category) return
-    //         try {
-    //             const categoryData = await api.getAllCategories()
-    //             const category = categoryData.map(
-    //                 ({ id, name }: { id: string; name: string }) => ({
-    //                     value: id,
-    //                     label: name,
-    //                 })
-    //             )
-    //             setCategory(category)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     })()
-    // }, [accessToken])
+    useEffect(() => {
+        ;(async (): Promise<void> => {
+            if (!accessToken || !category) return
+            try {
+                const categoryData = await api.getAllCategories()
+                const category = categoryData.map(
+                    ({ id, name }: { id: string; name: string }) => ({
+                        value: id,
+                        label: name,
+                    })
+                )
+                setCategory(category)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [accessToken])
 
     useEffect(() => {
         ;(async (): Promise<void> => {

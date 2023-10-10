@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
 
+import apiService from '../../services/api'
 import { UpdatingWorkFlowEntity } from './types'
 
 export type FillOutForm = {
@@ -28,6 +29,7 @@ export const useFillOutCheckList = () => {
     const clearAndClose = () => {
         setPositiveOpen(false)
     }
+    const api = apiService()
     const { workflowId } = useParams()
     const { currentUser } = useGlobal()
     const methods = useForm<UpdatingWorkFlowEntity>()
@@ -41,7 +43,14 @@ export const useFillOutCheckList = () => {
     const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
         id: string
     }) => {
-        const tasks = methods.watch()
+        // try {
+        //     await api.updateWorkflow(data.id)
+        // } catch (error) {
+        //     if (error) return
+        //     console.log(error)
+        // } finally {
+        //     console.log('Success updating workflow')
+        // }
 
         const res = await fetch(`${API_URL}/UpdateWorkflow`, {
             method: 'PUT',

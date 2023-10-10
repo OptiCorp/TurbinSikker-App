@@ -47,17 +47,22 @@ export const EditHeader = ({
     const api = apiService()
     const { accessToken, currentUser } = useGlobal()
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
-        ;async (): Promise<void> => {
+        if (!currentUser?.id || !accessToken || !id) return
+
+        const fetchChecklist = async () => {
             try {
                 const checklistData = await api.getChecklist(id)
 
                 setChecklist(checklistData)
+                if (checklistData?.checklistTasks) {
+                }
             } catch (error) {
                 console.log(error)
             }
         }
-    }, [accessToken, currentUser?.id])
+
+        fetchChecklist()
+    }, [accessToken, currentUser?.id, id])
 
     return (
         <>
