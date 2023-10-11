@@ -1,10 +1,4 @@
-import {
-    Button,
-    Card,
-    Switch,
-    TextField,
-    Typography,
-} from '@equinor/eds-core-react'
+import { Button, TextField, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import CustomDialog from '../../../components/modal/useModalHook'
@@ -13,13 +7,14 @@ import apiService from '../../../services/api'
 import { Checklist } from '../../../services/apiTypes'
 import { MakeTitleField } from '../myChecklists/styles'
 import { InfoHeader } from '../previewCheckList/styles'
+import { EditCard, EditStyledCardHeader, StyledSwitch } from './styles'
 
 type Props = {
     dialogShowing: boolean
     setDialogShowing: (dialogShowing: boolean) => void
     handleClose: () => void
-    isOpenn: boolean
-    setIsOpenn: (isOpenn: boolean) => void
+    headerOpen: boolean
+    setHeaderOpen: (headerOpen: boolean) => void
     setTitle: (title: string) => void
     title: string
     checked: any
@@ -29,8 +24,8 @@ type Props = {
 export const EditHeader = ({
     setDialogShowing,
     dialogShowing,
-    isOpenn,
-    setIsOpenn,
+    headerOpen,
+    setHeaderOpen,
     handleClose,
     title,
     setTitle,
@@ -43,12 +38,15 @@ export const EditHeader = ({
         setTitle(changeTitle)
     })
     const { id } = useParams() as { id: string }
+
     const [checklist, setChecklist] = useState<Checklist>()
     const api = apiService()
     const { accessToken, currentUser } = useGlobal()
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
-        ;async (): Promise<void> => {
+        if (!currentUser?.id || !accessToken || !id) return
+
+        const fetchChecklist = async (id: string) => {
+            if (!id) return
             try {
                 const checklistData = await api.getChecklist(id)
 
@@ -57,30 +55,19 @@ export const EditHeader = ({
                 console.log(error)
             }
         }
-    }, [accessToken, currentUser?.id])
+
+        fetchChecklist(id)
+    }, [accessToken, currentUser?.id, id])
 
     return (
         <>
             {checklist && (
                 <>
                     <InfoHeader>
-                        <Card style={{ background: 'white' }}>
-                            <Card.Header
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    margin: '0 auto',
-                                }}
-                            >
-                                <Switch
+                        <EditCard>
+                            <EditStyledCardHeader>
+                                <StyledSwitch
                                     checked={checked}
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        margin: '0 auto',
-
-                                        top: '0',
-                                    }}
                                     value={checklist?.status}
                                     onChange={(e) => {
                                         setChecked(e.target.checked)
@@ -106,8 +93,9 @@ export const EditHeader = ({
                                 />
                                 <Button
                                     color="secondary"
+                                    as="button"
                                     onClick={() => {
-                                        setIsOpenn(!isOpenn)
+                                        setHeaderOpen(!headerOpen)
                                     }}
                                 >
                                     <Typography
@@ -120,8 +108,8 @@ export const EditHeader = ({
                                         Add Task
                                     </Typography>
                                 </Button>
-                            </Card.Header>
-                        </Card>
+                            </EditStyledCardHeader>
+                        </EditCard>
                     </InfoHeader>
                     <>
                         <CustomDialog

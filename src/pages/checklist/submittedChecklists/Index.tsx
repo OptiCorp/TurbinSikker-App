@@ -30,7 +30,9 @@ export const CheckList = () => {
             try {
                 const workFlowData = await api.getAllWorkflows()
                 setAllWorkFlows(workFlowData)
-            } catch (error) {}
+            } catch (error) {
+                console.log(error)
+            }
         })()
     }, [accessToken, currentUser?.id])
 
@@ -46,8 +48,6 @@ export const CheckList = () => {
                 console.log(error)
             }
         })()
-
-        console.log(workflows)
     }, [accessToken, currentUser?.id])
 
     if (accounts?.length > 0) {

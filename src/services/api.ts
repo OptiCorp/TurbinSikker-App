@@ -262,9 +262,9 @@ const apiService = () => {
         return data
     }
 
-    const getChecklist = async (checklistId: string): Promise<Checklist> => {
-        const data = await getByFetch(`GetChecklist?id=${checklistId}`)
-        if (!checklistId) {
+    const getChecklist = async (id: string): Promise<Checklist> => {
+        const data = await getByFetch(`GetChecklist?id=${id}`)
+        if (!id) {
             throw new Error('An error occurred, please try again')
         }
         return data
@@ -321,8 +321,12 @@ const apiService = () => {
         return data
     }
 
-    const getWorkflow = async (id: string | undefined): Promise<Workflow> => {
-        const data = await getByFetch(`GetWorkflow?id=${id}`)
+    const getWorkflow = async (workflowId: string): Promise<Workflow> => {
+        const data = await getByFetch(`GetWorkflow?id=${workflowId}`)
+
+        if (!workflowId) {
+            throw new Error('An error occurred, please try again')
+        }
         return data
     }
 
@@ -332,28 +336,30 @@ const apiService = () => {
     }
 
     const createWorkflow = async (
-        workflow: Pick<Workflow, 'checklist' | 'creator'>,
-        userIds: string[]
-        /* checklistId: string,
-        userIds: [],
-        creatorId: string */
+        checklistId: string,
+        userIds: string[],
+        creatorId: string
     ): Promise<void> => {
         await postByFetch('CreateWorkflow', {
-            workflow,
+            checklistId: checklistId,
             userIds: userIds,
-            /* checklistId: checklistId,
-            userIds: userIds,
-            creatorId: creatorId, */
+            creatorId: creatorId,
         })
     }
 
-    const updateWorkflow = async (
-        update: Pick<Workflow, 'id' | 'user' | 'status'>
-    ): Promise<void> => {
-        await putByFetch('UpdateWorkflow', {
-            update,
+    const updateWorkflow = async (id: string): Promise<void> => {
+        await postByFetch('Update', {
+            id: id,
         })
     }
+
+    // const updateWorkflow = async (
+    //     update: Pick<Workflow, 'id' | 'user' | 'status'>
+    // ): Promise<void> => {
+    //     await putByFetch('UpdateWorkflow', {
+    //         update,
+    //     })
+    // }
 
     const deleteWorkflow = async (id: string): Promise<void> => {
         await deleteByFetch(`DeleteWorkflow?id=${id}`)

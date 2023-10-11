@@ -21,7 +21,7 @@ import {
 } from './styles'
 
 type Props = {
-    workFlowById: Workflow
+    workFlow: Workflow
     task: Task
 
     onUpdate: (data: {

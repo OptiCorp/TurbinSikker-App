@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { Workflow } from '../../services/apiTypes'
-import { Wrapper } from '../checklist/previewCheckList/styles'
+import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 
 import { useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
@@ -13,7 +13,7 @@ import { AddPunchHeader, StyledCard, StyledCardHeader } from './styles'
 export const FillOutCheckList = () => {
     const [workflow, setWorkFlow] = useState<Workflow>()
 
-    const { workflowId } = useParams()
+    const { workflowId } = useParams() as { workflowId: string }
 
     const { methods, onUpdate } = useFillOutCheckList()
     const { handleSubmit } = methods
@@ -48,18 +48,20 @@ export const FillOutCheckList = () => {
                             </AddPunchHeader>
                         </div>
 
-                        <Wrapper>
-                            {workflow.checklist.checklistTasks.map((task) => (
-                                <>
-                                    <FillOutList
-                                        key={task.id}
-                                        workFlowById={workflow}
-                                        onUpdate={onUpdate}
-                                        task={task}
-                                    />
-                                </>
-                            ))}
-                        </Wrapper>
+                        <PreviewWrapper>
+                            {workflow?.checklist?.checklistTasks?.map(
+                                (task) => (
+                                    <>
+                                        <FillOutList
+                                            key={task.id}
+                                            workFlow={workflow}
+                                            onUpdate={onUpdate}
+                                            task={task}
+                                        />
+                                    </>
+                                )
+                            )}
+                        </PreviewWrapper>
                     </div>
                 </form>
             </FormProvider>

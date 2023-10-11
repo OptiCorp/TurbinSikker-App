@@ -3,11 +3,13 @@ import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
 import { useUser } from '../../../pages/users/context/userContextProvider'
 
+import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 
 export const SelectComponent = () => {
     const { userList } = useUser()
     const { control, register } = useFormContext()
+    const { list } = useAddWorkFlowForm()
 
     return (
         <>
@@ -35,7 +37,7 @@ export const SelectComponent = () => {
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 options={list}
-                                value={list.find((c) => c.value === value)}
+                                value={list.find((c) => c.id === value)}
                                 onChange={(val) => onChange(val?.value)}
                             />
                         )}

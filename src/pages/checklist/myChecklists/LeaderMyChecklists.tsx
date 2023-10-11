@@ -5,7 +5,7 @@ import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
 import { Checklist } from '../../../services/apiTypes'
-import { StyledChip } from '../allchecklists/styles'
+import { StyledChip } from '../submittedChecklists/styles'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
 
 interface CheckListRowProps {

@@ -11,7 +11,7 @@ export type apiParams = {
 }
 
 export const useApiHooks = () => {
-    const { api, accessToken } = useGlobal()
+    const { accessToken } = useGlobal()
     const params = useParams<apiParams>()
 
     // const apii = apiService(accessToken)
@@ -25,7 +25,6 @@ export const useApiHooks = () => {
     const navigate = useNavigate()
 
     return {
-        api,
         accessToken,
         location,
         params,
