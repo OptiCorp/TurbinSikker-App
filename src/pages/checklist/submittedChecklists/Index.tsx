@@ -112,5 +112,7 @@ export const CheckList = () => {
         )
     } else if (!currentUser?.id) {
         return <span>There are currently no users signed in!</span>
+    } else {
+        return null
     }
 }

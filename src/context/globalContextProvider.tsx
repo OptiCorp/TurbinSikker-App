@@ -1,22 +1,24 @@
 import { InteractionStatus } from '@azure/msal-browser'
 import { useAccount, useMsal } from '@azure/msal-react'
 import decode from 'jwt-decode'
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
-import { AzureUserInfo } from '../pages/users/context/models/AzureUserEntity'
-import { ApiStatus, User } from '../services/apiTypes'
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from 'react'
 import apiService from '../services/api'
+import { ApiStatus, User } from '../services/apiTypes'
+import { AzureUserInfo, GlobalContextType } from './types'
 
-export interface GlobalContextType {
-    idToken: string
-    accessToken: string
-    account: any
-    accounts: any
-    currentUser: User | null
-    instance: any
-}
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
 
-export function GlobalProvider({ children }: { children: ReactNode }): JSX.Element {
+export function GlobalProvider({
+    children,
+}: {
+    children: ReactNode
+}): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
     const api = apiService()
@@ -34,10 +36,12 @@ export function GlobalProvider({ children }: { children: ReactNode }): JSX.Eleme
                 scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
                 account: accounts.at(0),
             }
-            instance.acquireTokenSilent(accessTokenRequest).then((tokenResponse) => {
-                setAccessToken(tokenResponse.accessToken)
-                setIdToken(tokenResponse.idToken)
-            })
+            instance
+                .acquireTokenSilent(accessTokenRequest)
+                .then((tokenResponse) => {
+                    setAccessToken(tokenResponse.accessToken)
+                    setIdToken(tokenResponse.idToken)
+                })
         }
     }, [account, inProgress, accounts, instance, accountname, accountUsername])
 
@@ -53,11 +57,17 @@ export function GlobalProvider({ children }: { children: ReactNode }): JSX.Eleme
                 username: username,
                 email: userEmail,
             })
-            console.log('User creation response status:', createUserResponse.status)
+            console.log(
+                'User creation response status:',
+                createUserResponse.status
+            )
             if (createUserResponse.status === 200) {
                 await createUserResponse.json()
             } else {
-                console.log('Error creating user:', createUserResponse.statusText)
+                console.log(
+                    'Error creating user:',
+                    createUserResponse.statusText
+                )
                 return null
             }
         } catch (error) {

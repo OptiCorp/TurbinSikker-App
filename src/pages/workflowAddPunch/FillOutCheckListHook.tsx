@@ -17,7 +17,6 @@ export type FillOutForm = {
     status: string
 }
 export const useFillOutCheckList = () => {
-  
     const { accessToken } = useGlobal()
 
     const [positiveOpen, setPositiveOpen] = useState(false)
@@ -39,11 +38,7 @@ export const useFillOutCheckList = () => {
         formState: { errors },
     } = methods
 
-    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async (data: {
-        id: string
-    }) => {
-     
-
+    const onUpdate: SubmitHandler<UpdatingWorkFlowEntity> = async () => {
         const res = await fetch(`${API_URL}/UpdateWorkflow`, {
             method: 'PUT',
             headers: {
