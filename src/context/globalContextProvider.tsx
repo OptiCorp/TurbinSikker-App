@@ -1,40 +1,30 @@
 import { InteractionStatus } from '@azure/msal-browser'
 import { useAccount, useMsal } from '@azure/msal-react'
 import decode from 'jwt-decode'
-import {
-    ReactNode,
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-} from 'react'
-import { API_URL } from '../config'
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { AzureUserInfo } from '../pages/users/context/models/AzureUserEntity'
-import { User } from '../services/apiTypes'
+import { ApiStatus, User } from '../services/apiTypes'
+import apiService from '../services/api'
+
 export interface GlobalContextType {
     idToken: string
     accessToken: string
     account: any
     accounts: any
-
     currentUser: User | null
-
     instance: any
 }
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
 
-export function GlobalProvider({
-    children,
-}: {
-    children: ReactNode
-}): JSX.Element {
+export function GlobalProvider({ children }: { children: ReactNode }): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
-
+    const api = apiService()
     const accountUsername = account?.username
     const accountname = account?.name
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
+    const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
@@ -45,49 +35,30 @@ export function GlobalProvider({
                 scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
                 account: accounts.at(0),
             }
-            instance
-                .acquireTokenSilent(accessTokenRequest)
-                .then((tokenResponse) => {
-                    setAccessToken(tokenResponse.accessToken)
-                    setIdToken(tokenResponse.idToken)
-                })
+            instance.acquireTokenSilent(accessTokenRequest).then((tokenResponse) => {
+                setAccessToken(tokenResponse.accessToken)
+                setIdToken(tokenResponse.idToken)
+            })
         }
     }, [account, inProgress, accounts, instance, accountname, accountUsername])
-
-    // azure fetch //
 
     async function createUser(userEmail: string, name: string) {
         const firstName = name.split(' ')[0]
         const lastName = name.split(' ')[1]
         const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
         try {
-            const createUserResponse = await fetch(`${API_URL}/addUser`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify({
-                    azureAdUserId: userEmail,
-                    firstName: firstName,
-                    lastName: lastName,
-                    userName: username,
-                    email: userEmail,
-                    // other user properties
-                }),
+            const createUserResponse = await api.addUser({
+                azureAdUserId: userEmail,
+                firstName: firstName,
+                lastName: lastName,
+                username: username,
+                email: userEmail,
             })
-            console.log(
-                'User creation response status:',
-                createUserResponse.status
-            )
+            console.log('User creation response status:', createUserResponse.status)
             if (createUserResponse.status === 200) {
                 await createUserResponse.json()
             } else {
-                console.log(
-                    'Error creating user:',
-                    createUserResponse.statusText
-                )
+                console.log('Error creating user:', createUserResponse.statusText)
                 return null
             }
         } catch (error) {
@@ -97,22 +68,12 @@ export function GlobalProvider({
     }
 
     async function fetchUserByEmail(userEmail: string, name: string) {
-        const response = await fetch(
-            `${API_URL}/GetUserByAzureAdUserId?azureAdUserId=${userEmail}`,
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-            }
-        )
-        if (response.ok) {
-            const user = await response.json()
+        const response = await api.getUserByAzureAdUserId(userEmail)
+        if (response) {
+            const user = response
 
             setCurrentUser(user)
-        } else if (response.status === 404) {
+        } else if (!response) {
             const newUser = await createUser(userEmail, name)
 
             if (newUser) {
@@ -142,7 +103,13 @@ export function GlobalProvider({
             name: decodedToken.name || '',
         }
     }
-
+    /* if (status === ApiStatus.LOADING) {
+        return (
+            <>
+                <Loading />
+            </>
+        )
+    } */
     useEffect(() => {
         if (idToken) {
             fetchUserAndUpdateContext(idToken)
@@ -157,9 +124,7 @@ export function GlobalProvider({
                     idToken,
                     accessToken,
                     accounts,
-
                     instance,
-
                     currentUser,
                 }}
             >
