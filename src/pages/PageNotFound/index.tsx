@@ -1,4 +1,4 @@
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
+import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
 import { PageNotFoundWrapper } from './styles'
 
 function PageNotFound() {

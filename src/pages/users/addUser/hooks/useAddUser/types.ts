@@ -1,23 +1,11 @@
-import { Option } from '../../../context/models/OptionsEntity'
-
-export type IUser = {
-    status: string
-    email: string
-    firstName: string
-    lastName: string
-    id: string
-    userRole: { id: string; name: string }
-    username: string
-    createdDate: string
-    updatedDate: string | null
-}
+import { ListEntity } from '../../../../../services/apiTypes'
 
 export type FormValues = {
     firstName: string
     lastName: string
-    userRole: { id: string; name: string }
+    userRoleId: string
     email: string
-    options: Option
+    options: ListEntity
     username: string
     status: string
 }

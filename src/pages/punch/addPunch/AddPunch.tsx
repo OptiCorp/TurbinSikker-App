@@ -1,4 +1,3 @@
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import {
     Button,
     CircularProgress,
@@ -9,9 +8,7 @@ import {
 } from '@equinor/eds-core-react'
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
-
-import { usePunchContext } from '../context/PunchContextProvider'
+import { useLocation, useNavigate } from 'react-router'
 import SeverityButton from '../severityButton/SeverityButton'
 import { useAddPunch } from './AddPunchHook'
 import {
@@ -25,14 +22,14 @@ import {
     SeverityButtonWrapper,
     SeverityContainer,
 } from './styles'
-import { Upload } from 'src/types/Upload'
-import { PunchUploadContainer } from '../styles'
 import { usePunch } from '../PunchHook'
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
+import { PunchUploadContainer } from '../styles'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { Status } from '../types'
+import { PunchItem, Status, Upload } from '../../../services/apiTypes'
 
-export function AddPunch() {
+export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
     const {
         onSubmit,
@@ -51,10 +48,8 @@ export function AddPunch() {
         setStatus,
     } = useAddPunch()
     const { hasPermission } = useHasPermission()
-    const { workflowId, punchId } = useParams()
     const { loading, uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
-    const { punch } = usePunchContext()
     const [uploads, setUploads] = useState(false)
     const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -65,6 +60,7 @@ export function AddPunch() {
 
     const path = appLocation.pathname.split('/')
     const lastPathSegment = path[path.length - 1]
+
     return (
         <form id="punchForm" style={{ position: 'relative' }} onSubmit={handleSubmit(onSubmit)}>
             <PunchAddContainer>
@@ -132,12 +128,6 @@ export function AddPunch() {
                                             </div>
                                         </div>
                                     )}
-                                    {/* <Icon
-                                    onClick={(e) => console.log(e.currentTarget)}
-                                    data={close}
-                                    color="#243746"
-                                    size={16}
-                                /> */}
                                 </PunchUploadFileContainer>
                             </PunchUploadFilesContainer>
                         )}
@@ -209,6 +199,7 @@ export function AddPunch() {
                             defaultValue={(punch?.severity as string) || 'Minor'}
                             userInput={userInput}
                             setUserInput={setUserInput}
+                            punch={punch}
                         />
                     </SeverityButtonWrapper>
                 </SeverityContainer>

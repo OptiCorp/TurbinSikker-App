@@ -1,95 +1,91 @@
-import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
-import CustomDialog from '@components/modal/useModalHook'
 import { useState } from 'react'
+import { useParams } from 'react-router'
+import CustomDialog from '../../../../components/modal/useModalHook'
+import { Checklist, Task } from '../../../../services/apiTypes'
 import {
     CategoryName,
-    Container,
     PreviewListPoints,
     PreviewListWrap,
     StyledCard,
 } from '../../previewCheckList/styles'
-import { useEditCheckListContext } from '../context/editCheckListContextProvider'
+import { useEditChecklist } from '../hooks/useEditChecklist'
 import { EditListPoints } from '../styles'
 
 type Props = {
-    tasks: TaskEntity[]
-    sortedTasks: TaskEntity[]
+    checklist: Checklist
+    tasks: Task[]
 }
 
-export const EditList = (props: Props) => {
-    let lastCategoryName = ''
+export const EditList = ({ tasks }: Props) => {
     const [content, setContent] = useState('')
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { task, setTask, updateCheckListTask } = useEditCheckListContext()
-
+    const { handleUpdateTask } = useEditChecklist()
+    const { id } = useParams() as { id: string }
+    const [task, setTask] = useState<Task>()
     const handleSubmit = () => {
-        updateCheckListTask({
+        const categoryId = task?.category.id
+        const taskId = task?.id
+
+        if (!categoryId || !taskId) return
+        handleUpdateTask({
             description: content,
-            categoryId: task?.categoryId ?? '',
-            taskId: task?.id ?? '',
+            categoryId,
+            taskId,
+            checklistId: id,
         })
         setDialogShowing(false)
     }
 
     return (
         <>
-            <PreviewListWrap>
-                {props.sortedTasks.map((task) => {
-                    const categoryName =
-                        task.category.name !== lastCategoryName
-                            ? task.category.name
-                            : ''
-
-                    lastCategoryName = task.category.name
-
-                    return (
-                        <>
-                            <Container>
-                                <CategoryName>{categoryName}</CategoryName>
-                                <StyledCard
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                >
-                                    <PreviewListPoints
-                                        label=""
-                                        key={task.id}
-                                        id="storybook-multi-readonly"
-                                        placeholder={task.description}
-                                        multiline
-                                        rows={3}
-                                        onClick={() => {
-                                            setTask(task)
-                                            setDialogShowing(true)
-                                        }}
-                                    />
-                                </StyledCard>
-                            </Container>
-                        </>
-                    )
-                })}
-            </PreviewListWrap>
-            <CustomDialog
-                isOpen={dialogShowing}
-                negativeButtonOnClick={() => setDialogShowing(false)}
-                title="Edit task"
-                negativeButtonText="Cancel"
-                positiveButtonText="Save"
-                buttonVariant="ghost"
-                positiveButtonOnClick={handleSubmit}
-            >
-                <EditListPoints
-                    label=""
-                    key={task?.id ?? ''}
-                    id="storybook-multi-readonly"
-                    defaultValue={task?.description ?? ''}
-                    multiline
-                    rows={5}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        setContent(event.target.value)
-                    }}
-                />
-            </CustomDialog>
+            {tasks.map((task) => (
+                <>
+                    <PreviewListWrap key={task.id}>
+                        <CategoryName>{task.category.name}</CategoryName>
+                        <StyledCard
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            <PreviewListPoints
+                                label=""
+                                key={task?.id}
+                                id="storybook-multi-readonly"
+                                placeholder={task?.description}
+                                multiline
+                                rows={3}
+                                onClick={() => {
+                                    setTask(task)
+                                    setDialogShowing(true)
+                                }}
+                            />{' '}
+                        </StyledCard>
+                    </PreviewListWrap>
+                    <CustomDialog
+                        isOpen={dialogShowing}
+                        negativeButtonOnClick={() => setDialogShowing(false)}
+                        title="Edit task"
+                        negativeButtonText="Cancel"
+                        positiveButtonText="Save"
+                        buttonVariant="ghost"
+                        positiveButtonOnClick={handleSubmit}
+                    >
+                        <EditListPoints
+                            label=""
+                            key={task?.id ?? ''}
+                            id="storybook-multi-readonly"
+                            defaultValue={task?.description ?? ''}
+                            multiline
+                            rows={5}
+                            onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setContent(event.target.value)
+                            }}
+                        />
+                    </CustomDialog>
+                </>
+            ))}
         </>
     )
 }

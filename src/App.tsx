@@ -1,12 +1,8 @@
 import { useIsAuthenticated } from '@azure/msal-react'
-import './assets/App.css'
-import { RoutesContainer } from './components/RoutesContainer'
-import { SnackbarComponent } from './components/snackbar/SnackBar'
-import { SnackbarContextProvider } from './components/snackbar/SnackBarContext'
-import { CheckListContextProvider } from './pages/context/CheckListContextProvider'
-import { AuthProvider } from './pages/landingPage/context/LandingPageContextProvider'
+import { RoutesContainer } from './RoutesContainer'
+import { GlobalProvider } from './context/globalContextProvider'
 import { Login } from './pages/login'
-import { UserContextProvider } from './pages/users/context/userContextProvider'
+import './style/App.css'
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
@@ -14,18 +10,10 @@ const App = () => {
     return (
         <div className="wrapper">
             {isAuthenticated && (
-                <AuthProvider> 
-                  
-                        <UserContextProvider>
-                        <CheckListContextProvider>
-                            <SnackbarContextProvider>
-                                <RoutesContainer />
-                                <SnackbarComponent />
-                            </SnackbarContextProvider>
-                            </CheckListContextProvider>
-                        </UserContextProvider>
-                  
-                </AuthProvider>
+                <GlobalProvider>
+                    <RoutesContainer />
+                    {/* <SnackbarComponent />  */}
+                </GlobalProvider>
             )}
             {!isAuthenticated && <Login />}
         </div>

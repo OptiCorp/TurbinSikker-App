@@ -1,107 +1,124 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { Button, Card, TextField, Typography } from '@equinor/eds-core-react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { TaskCategoryContextProvider } from '../../../components/addtasks/context/addTaskCategoryContextProvider'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
+import { Button, TextField, Typography } from '@equinor/eds-core-react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+
+import { useEffect, useState } from 'react'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Checklist, Task } from '../../../services/apiTypes'
 import { PreviewList } from './PreviewList'
-import { InfoHeader, Wrapper } from './styles'
+import {
+    BackgroundContainer,
+    EditStyledCardHeader,
+    InfoHeader,
+    PreviewWrapper,
+    StyledCard,
+} from './styles'
 
 export const PreviewCheckList = () => {
+    const location = useLocation()
+    const api = apiService()
+    const { accessToken, currentUser } = useGlobal()
+    const state = location.state
+    const [checklist, setChecklist] = useState<Checklist>()
+    const [tasks, setTasks] = useState<Task[]>([])
+
+    const { id } = useParams() as { id: string }
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
-    const location = useLocation()
-    const state = location.state
-    const { checkListById, sortedTasks } = useAddTaskForm()
+
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken || !id) return
+
+        const fetchChecklist = async () => {
+            try {
+                const checklistData = await api.getChecklist(id)
+
+                setChecklist(checklistData)
+                if (checklistData?.checklistTasks) {
+                    setTasks(checklistData.checklistTasks)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchChecklist()
+    }, [accessToken, currentUser?.id, id])
 
     const navigate = useNavigate()
-    const { currentUser } = useUserContext()
+
     return (
         <>
-            <TaskCategoryContextProvider>
-                <div style={{ backgroundColor: '#f0f3f3' }}>
-                    {checkListById && (
-                        <div key={checkListById.id}>
-                            <InfoHeader>
-                                <Card style={{ background: 'white' }}>
-                                    <Card.Header
+            <BackgroundContainer>
+                {checklist && (
+                    <div key={checklist.id}>
+                        <InfoHeader>
+                            <StyledCard>
+                                <EditStyledCardHeader>
+                                    <TextField
+                                        id="storybook-readonly"
+                                        placeholder={checklist.title}
+                                        label=""
+                                        readOnly
                                         style={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            margin: '0 auto',
+                                            borderBottom: '1px solid #243746',
+                                            background: '#F7F7F7',
+                                        }}
+                                    />
+                                </EditStyledCardHeader>
+                            </StyledCard>
+                        </InfoHeader>
+                        <PreviewWrapper>
+                            {checklist?.checklistTasks?.length === 0 ? (
+                                <>
+                                    <Typography variant="body_short_bold">
+                                        No tasks added yet!
+                                    </Typography>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            navigate(
+                                                `/EditCheckList/${checklist.id}`
+                                            )
                                         }}
                                     >
-                                        <TextField
-                                            id="storybook-readonly"
-                                            placeholder={checkListById.title}
-                                            label=""
-                                            readOnly
-                                            style={{
-                                                borderBottom:
-                                                    '1px solid #243746',
-                                                background: '#F7F7F7',
-                                            }}
-                                        />
-                                    </Card.Header>
-                                </Card>
-                            </InfoHeader>
-                            <Wrapper>
-                                {checkListById?.checklistTasks?.length === 0 ? (
-                                    <>
-                                        <Typography variant="body_short_bold">
-                                            No tasks added yet!
-                                        </Typography>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={() => {
-                                                navigate(
-                                                    `/EditCheckList/${checkListById.id}`
-                                                )
-                                            }}
-                                        >
-                                            Add some tasks here!
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <PreviewList
-                                        key={checkListById.id}
-                                        tasks={checkListById}
-                                        sortedTasks={sortedTasks}
-                                    />
-                                )}
-                            </Wrapper>
-                        </div>
+                                        Add some tasks here!
+                                    </Button>
+                                </>
+                            ) : (
+                                <PreviewList key={checklist.id} tasks={tasks} />
+                            )}
+                        </PreviewWrapper>
+                    </div>
+                )}
+                <>
+                    {currentUser?.userRole.name === 'Inspector' ? (
+                        <DefaultNavigation hideNavbar={false} />
+                    ) : (
+                        <>
+                            {checklist && (
+                                <NavActionsComponent
+                                    disabled={
+                                        state?.isFromCompletedList
+                                            ? true
+                                            : false
+                                    }
+                                    buttonColor="primary"
+                                    secondButtonColor="primary"
+                                    buttonVariant="outlined"
+                                    onClick={() => clickHandler(id)}
+                                    isShown={true}
+                                    ButtonMessage="Edit Checklist"
+                                    SecondButtonMessage="Send"
+                                />
+                            )}
+                        </>
                     )}
-                    <>
-                        {currentUser?.userRole.name === 'Inspector' ? (
-                            <DefaultNavigation hideNavbar={false} />
-                        ) : (
-                            <>
-                                {checkListById && (
-                                    <NavActionsComponent
-                                        disabled={
-                                            state?.isFromCompletedList
-                                                ? true
-                                                : false
-                                        }
-                                        buttonColor="primary"
-                                        secondButtonColor="primary"
-                                        buttonVariant="outlined"
-                                        onClick={() =>
-                                            clickHandler(checkListById.id)
-                                        }
-                                        isShown={true}
-                                        ButtonMessage="Edit Checklist"
-                                        SecondButtonMessage="Send"
-                                    />
-                                )}
-                            </>
-                        )}
-                    </>
-                </div>
-            </TaskCategoryContextProvider>
+                </>
+            </BackgroundContainer>
         </>
     )
 }

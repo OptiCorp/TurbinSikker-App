@@ -1,17 +1,17 @@
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 import { useNavigate } from 'react-router'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { SelectComponent } from './SelectComponent'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { SendBackgroundWrap } from './styles'
 
 export const SendCheckList = () => {
-    const navigate = useNavigate()
     const { methods, onSubmit, handleOpen, clearAndClose, positiveOpen } =
         useAddWorkFlowForm()
-    const { handleSubmit, getValues } = methods
 
+    const { handleSubmit } = methods
+    const navigate = useNavigate()
     return (
         <>
             <FormProvider {...methods}>
@@ -28,7 +28,7 @@ export const SendCheckList = () => {
                         type="button"
                         secondOnClick={handleOpen}
                         onClick={() => {
-                            navigate(-1)
+                            navigate('/')
                         }}
                     />
                     <Dialog open={positiveOpen}>

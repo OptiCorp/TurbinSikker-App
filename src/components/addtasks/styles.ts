@@ -1,5 +1,4 @@
 import { Card } from '@equinor/eds-core-react'
-import Select from 'react-select'
 import styled from 'styled-components'
 export const TitleHeader = styled.div`
     display: flex;
@@ -32,7 +31,7 @@ export const customStyles = {
     }),
     menu: (styles: any) => ({
         ...styles,
-        width: '200',
+        width: '500',
         lineHeight: '20px',
     }),
 }

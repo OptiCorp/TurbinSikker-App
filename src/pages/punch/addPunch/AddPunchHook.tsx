@@ -1,15 +1,12 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { SetStateAction, useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { API_URL } from '../../../config'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
-import { usePunchContext } from '../context/PunchContextProvider'
-import { Punch } from '../types'
-import { addUpload } from '../../../Upload'
+import { default as useGlobal } from '../../../context/globalContextProvider'
+import { useEffect, useState } from 'react'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import apiService from '../../../services/api'
+import { PunchItem } from '../../../services/apiTypes'
+import { Punch } from '../types'
 
 type FormValuesPunchEntity = {
     creatorId: string
@@ -25,27 +22,36 @@ type UserInput = {
 }
 
 export const useAddPunch = () => {
-    const { currentUser } = useUserContext()
-
-    const { accessToken } = useAuth()
-    const { punch } = usePunchContext()
-    const { workflowId, punchId, taskId } = useParams()
+    const { currentUser, accessToken } = useGlobal()
+    const api = apiService()
+    const { workflowId, punchId, taskId } = useParams() as {
+        workflowId: string
+        punchId: string
+        taskId: string
+    }
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
-    const { setRefreshList } = useCheckListContext()
+    // const { setRefreshList } = apiService()
     const methods = useForm<FormValuesPunchEntity>()
     const { handleSubmit, control } = methods
-    const { openSnackbar } = useContext(SnackbarContext)
+
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+    const [punch, setPunch] = useState<PunchItem>()
     const [userInput, setUserInput] = useState<UserInput>({
         description: punch?.description,
         severity: punch?.severity,
     })
-    /* const [severity, setSeverity] = useState<SetStateAction<string>>(punch?.severity || 'Minor') */
     const [file, setFile] = useState<File | undefined>()
-    const [message, setMessage] = useState<SetStateAction<string>>()
+    const [message, setMessage] = useState<string>()
     const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        ;async () => {
+            const punchFromAPi = await api.getPunch(punchId)
+            setPunch(punchFromAPi)
+        }
+    }, [])
     const onSubmit: SubmitHandler<FormValuesPunchEntity> = () => {
         if (hasPermission) {
             updatePunchLeader()
@@ -56,7 +62,30 @@ export const useAddPunch = () => {
         }
     }
     const updatePunch = async () => {
-        const res = await fetch(`${API_URL}/UpdatePunch?id=${punchId}`, {
+        try {
+            await api.updatePunch(punchId, workflowId, {
+                description: userInput.description,
+                severity: userInput.severity,
+                status: 'Pending',
+                message: message,
+            })
+
+            setRejectDialogOpen(false)
+            setPositiveOpen(false)
+            if (file) {
+                await api.addUpload(punchId, file)
+            }
+            navigate(`/workflow/${workflowId}/punch/${punchId}`)
+        } catch (error) {
+            console.error(error)
+        }
+        /* const res = await api.updatePunch(punchId, workflowId, {
+            description: userInput.description,
+            severity: userInput.severity,
+            status: 'Pending',
+            message: message,
+        }) */
+        /* await fetch(`${API_URL}/UpdatePunch?id=${punchId}`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -72,38 +101,25 @@ export const useAddPunch = () => {
                 message: message,
             }),
         })
-        if (res.ok) setRefreshList((prev) => !prev)
-        if (file) {
-            await addUpload(accessToken, punchId, file)
-        }
+        // if (res.ok) setRefreshList((prev) => !prev)
         setRejectDialogOpen(false)
         setPositiveOpen(false)
-        navigate(`/workflow/${workflowId}/punch/${punchId}`)
-        if (openSnackbar) openSnackbar('Punch updated!')
+        if (file) {
+            await api.addUpload(punchId, file)
+        }
+        navigate(`/workflow/${workflowId}/punch/${punchId}`) */
+        // if (openSnackbar) openSnackbar('Punch updated!')
     }
 
     const updatePunchLeader = async () => {
-        const res = await fetch(`${API_URL}/UpdatePunch?id=${punchId}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                id: punchId,
-                workflowId: workflowId,
-                status: status,
-                message: message,
-            }),
-        })
-        if (res.ok) setRefreshList((prev) => !prev)
+        await api.updatePunch(punchId, workflowId, { status: status, message: message })
+
         if (file) {
-            await addUpload(accessToken, punchId, file)
+            await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
         navigate(`/workflow/${workflowId}/punch/${punchId}`)
-        if (openSnackbar) openSnackbar('Punch updated!')
+        // if (openSnackbar) openSnackbar('Punch updated!')
     }
 
     const postPunch = async () => {
@@ -129,14 +145,14 @@ export const useAddPunch = () => {
             const json: Promise<Punch> = res.json()
             const id = (await json).id
             if (file) {
-                await addUpload(accessToken, id, file)
+                await api.addUpload(id, file)
             }
             navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
         }
 
-        if (openSnackbar) {
-            openSnackbar(`Punch created`)
-        }
+        // if (openSnackbar) {
+        //     openSnackbar(`Punch created`)
+        // }
     }
 
     const handleOpen = () => {

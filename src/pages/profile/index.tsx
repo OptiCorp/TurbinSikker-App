@@ -14,8 +14,8 @@ import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { useUserContext } from '../users/context/userContextProvider'
+import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
+import useGlobal from '../../context/globalContextProvider'
 
 export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
@@ -29,7 +29,7 @@ export const Profile: FunctionComponent = () => {
             console.log(URL.createObjectURL(event.target.files[0]))
         }
     }
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
 
     return (
         <>

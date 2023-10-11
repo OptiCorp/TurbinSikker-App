@@ -1,99 +1,85 @@
-import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
-import { API_URL } from '../../../config'
-import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
-import { useCheckListContext } from '../../../pages/context/CheckListContextProvider'
-import { CheckListEntity } from '../../../pages/context/models/CheckListEntity'
-import useAuth from '../../../pages/landingPage/context/LandingPageContextProvider'
-import { FormValuesEntity } from '../context/models/FormValuesEntity'
+import useGlobal from '../../../context/globalContextProvider'
+
+import apiService from '../../../services/api'
+import { Category, Task } from '../../../services/apiTypes'
+
+export type CategoryTaskSelector = {
+    value: string
+    label: string
+}
+
+type FormData = {
+    id: string
+}
+
 export const useAddTaskForm = () => {
-    const { id } = useParams() as { id: string }
-
+    const [tasks, setTasks] = useState<Task[]>([])
+    const { id: checklistId } = useParams() as { id: string }
     const appLocation = useLocation()
-    const methods = useForm<FormValuesEntity>()
-    const { reset, watch, handleSubmit, register, control } = methods
-    const { openSnackbar } = useContext(SnackbarContext)
-    const { refreshList, setRefreshList } = useCheckListContext()
-    const [selectedOption] = useState('')
-    const [selectedTask] = useState('')
-    const [checkListById, setCheckListById] = useState<CheckListEntity | null>(
-        null
-    )
-    const { accessToken } = useAuth()
-    const [sortedTasks, setSortedTasks] = useState<TaskEntity[]>([])
+    const { currentUser } = useGlobal()
+    const methods = useForm<FormData>()
+    const { handleSubmit, control } = methods
+    const [selectedOption, setSelectedOption] = useState('')
+    const { accessToken } = useGlobal()
+    const api = apiService()
+    const [category, setCategory] = useState<Category[]>([])
 
-    const { allWorkFlows, workFlowById, WorkFlows } = useWorkflowContext()
-
-    const onSubmit: SubmitHandler<FormValuesEntity> = async (data) => {
-        const res = await fetch(`${API_URL}/AddTaskToChecklist?checklistId`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                checklistId: id,
-                id: data.task,
-            }),
-        })
-        if (res.ok) setRefreshList((prev) => !prev)
-
-        if (openSnackbar) {
-            openSnackbar('Task added!')
+    const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
+        try {
+            await api.addTaskToChecklist(data.id, checklistId)
+        } catch (error) {
+            console.log(error)
         }
     }
+
     useEffect(() => {
-        const fetchAllCheckListsId = async () => {
-            if (!id || !accessToken || workFlowById) return
+        ;(async (): Promise<void> => {
+            if (!accessToken || !currentUser?.id) return
             try {
-                const res = await fetch(`${API_URL}/GetChecklist?id=${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                })
-
-                if (!res.ok)
-                    throw new Error('Failed with HTTP code ' + res.status)
-
-                const data = (await res.json()) as CheckListEntity
-                setCheckListById(data)
-                const sorted = data.checklistTasks.sort((a: any, b: any) => {
-                    if (a.category.name < b.category.name) {
-                        return -1
-                    } else if (a.category.name > b.category.name) {
-                        return 1
-                    } else {
-                        return 0
-                    }
-                })
-
-                setSortedTasks(sorted)
+                const categoryData = await api.getAllCategories()
+                const categories: Category[] = categoryData.map(
+                    ({ id, name }) => ({
+                        id,
+                        name,
+                        value: id,
+                        label: name,
+                    })
+                )
+                setCategory(categories)
             } catch (error) {
-                console.error('Error fetching user data:', error)
+                console.log(error)
             }
-        }
+        })()
+    }, [accessToken, currentUser?.id])
 
-        fetchAllCheckListsId()
-    }, [refreshList, accessToken, id])
+    useEffect(() => {
+        ;(async (): Promise<void> => {
+            if (!accessToken || !selectedOption || !currentUser?.id) return
+            try {
+                const taskData =
+                    await api.getAllTasksByCategoryId(selectedOption)
+                if (taskData) {
+                    setTasks(taskData)
+                } else {
+                    setTasks([])
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [selectedOption, accessToken, currentUser?.id])
 
     return {
         methods,
         onSubmit,
         control,
-        register,
         handleSubmit,
-        watch,
         location: appLocation.pathname,
-        selectedOption,
-        reset,
-        selectedTask,
-        sortedTasks,
-        checkListById,
+        setSelectedOption,
+        category,
+        tasks,
     }
 }

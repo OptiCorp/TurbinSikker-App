@@ -1,8 +1,10 @@
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
 import { Table } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
-import { useUserContext } from '../../users/context/userContextProvider'
-import { useWorkflowContext } from '../workflow/context/workFlowContextProvider'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Workflow } from '../../../services/apiTypes'
 import { CompletedList } from './CompletedList'
 import {
     BackgroundWrapCompleted,
@@ -13,10 +15,26 @@ import {
 } from './styles'
 
 export const CompletedChecklists = () => {
-    const { WorkFlows } = useWorkflowContext()
-    const { currentUser } = useUserContext()
+    const api = apiService()
+
     const location = useLocation()
     const state = location.state
+    const { accessToken, currentUser } = useGlobal()
+    const [workflows, setWorkFlows] = useState<Workflow[]>([])
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflowsByUserId(
+                    currentUser.id
+                )
+                setWorkFlows(workFlowData)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }, [accessToken, currentUser?.id])
+
     return (
         <>
             <BackgroundWrapCompleted>
@@ -43,7 +61,7 @@ export const CompletedChecklists = () => {
                         </Table.Head>
 
                         <Table.Body>
-                            {WorkFlows.map((WorkFlow) => (
+                            {workflows?.map((WorkFlow) => (
                                 <CompletedList
                                     WorkFlow={WorkFlow}
                                     key={WorkFlow.id}

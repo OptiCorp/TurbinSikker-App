@@ -1,15 +1,35 @@
-import { useWorkflowContext } from '../../../pages/checklist/workflow/context/workFlowContextProvider'
+import { useEffect, useState } from 'react'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Workflow } from '../../../services/apiTypes'
 import { StyledChip } from '../styles'
 
 export function NotificationBadge({ name }: { name: string }) {
-    const { WorkFlows } = useWorkflowContext()
-    const committedWorkflows = WorkFlows.filter((workflow) => workflow.status === 'Committed')
+    const api = apiService()
+    const { currentUser } = useGlobal()
+    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
+    const { accessToken } = useGlobal()
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken || name !== 'Checklists') return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflows()
+                setAllWorkFlows(workFlowData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [accessToken, currentUser?.id])
 
-    const count = committedWorkflows.length
+    const committedWorkflows = allWorkflows?.filter(
+        (workflow: any) => workflow.status === 'Committed'
+    )
+
+    const count = committedWorkflows?.length
     if (name === 'Checklists')
         return (
             <>
-                {count > 0 && (
+                {count! > 0 && (
                     <StyledChip variant="error">
                         {count} {count === 1 ? '  New' : ' New'}
                     </StyledChip>

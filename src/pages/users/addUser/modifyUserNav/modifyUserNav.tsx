@@ -1,23 +1,25 @@
-import CustomDialog from '@components/modal/useModalHook'
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
-import { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
-import { useUserContext } from '../../context/userContextProvider'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import CustomDialog from '../../../../components/modal/useModalHook'
+import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
+import apiService from '../../../../services/api'
 import { useAddUser } from '../hooks/useAddUser'
 export const ModifyUserNav = () => {
+    const api = apiService()
     const { methods, location } = useAddUser()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [addNav, setAddNav] = useState(false)
     const [editNav, setEditNav] = useState(false)
     const [negativeOpen, setNegativeOpen] = useState(false)
-    const { handleDeleteUser } = useUserContext()
-    const { openSnackbar } = useContext(SnackbarContext)
-    const { id } = useParams()
-    const navigate = useNavigate()
+
+    const { id } = useParams() as { id: string }
     const [updateOpen, setUpdateOpen] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
+
+    const handleDeleteUser = async (id: string) => {
+        await api.softDeleteUser(id)
+    }
 
     useEffect(() => {
         if (location === '/AddUser/') {
@@ -66,11 +68,6 @@ export const ModifyUserNav = () => {
     const handleDeleteUserFunction = async () => {
         try {
             handleDeleteUser(id)
-
-            if (openSnackbar) {
-                navigate('/ListUsers')
-                openSnackbar(`User deleted`)
-            }
         } catch (error) {
             console.error('Error deleting user:', error)
         }
