@@ -1,8 +1,8 @@
 import { useIsAuthenticated } from '@azure/msal-react'
 import { RoutesContainer } from './RoutesContainer'
-import './assets/App.css'
 import { GlobalProvider } from './context/globalContextProvider'
 import { Login } from './pages/login'
+import './style/App.css'
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()

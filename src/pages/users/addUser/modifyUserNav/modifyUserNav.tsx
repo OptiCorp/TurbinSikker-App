@@ -1,10 +1,10 @@
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
-import { useAddUser } from '../hooks/useAddUser'
 import apiService from '../../../../services/api'
+import { useAddUser } from '../hooks/useAddUser'
 export const ModifyUserNav = () => {
     const api = apiService()
     const { methods, location } = useAddUser()
@@ -19,8 +19,6 @@ export const ModifyUserNav = () => {
 
     const handleDeleteUser = async (id: string) => {
         await api.softDeleteUser(id)
-
-        // setRefreshUsers((prevRefresh) => !prevRefresh)
     }
 
     useEffect(() => {
@@ -70,11 +68,6 @@ export const ModifyUserNav = () => {
     const handleDeleteUserFunction = async () => {
         try {
             handleDeleteUser(id)
-
-            // if (openSnackbar) {
-            //     navigate('/ListUsers')
-            //     openSnackbar(`User deleted`)
-            // }
         } catch (error) {
             console.error('Error deleting user:', error)
         }
@@ -97,8 +90,13 @@ export const ModifyUserNav = () => {
                     <Dialog.Title>Create User?</Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
-                        Are you sure you want to create a new account with the provided information?
+                    <Typography
+                        group="input"
+                        variant="text"
+                        token={{ textAlign: 'left' }}
+                    >
+                        Are you sure you want to create a new account with the
+                        provided information?
                     </Typography>
                 </Dialog.CustomContent>
                 <Dialog.Actions>
@@ -122,8 +120,13 @@ export const ModifyUserNav = () => {
                 positiveButtonOnClick={handleCloseSecond}
                 positiveButtonText="Cancel"
             >
-                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
-                    Are you sure you want to clear your changes? Any unsaved data will be lost.
+                <Typography
+                    group="input"
+                    variant="text"
+                    token={{ textAlign: 'left' }}
+                >
+                    Are you sure you want to clear your changes? Any unsaved
+                    data will be lost.
                 </Typography>
             </CustomDialog>
             <NavActionsComponent
@@ -146,8 +149,13 @@ export const ModifyUserNav = () => {
                 type="submit"
                 form="add-user"
             >
-                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
-                    Are you sure you want to update the account with the provided information?
+                <Typography
+                    group="input"
+                    variant="text"
+                    token={{ textAlign: 'left' }}
+                >
+                    Are you sure you want to update the account with the
+                    provided information?
                 </Typography>
             </CustomDialog>
             <CustomDialog
@@ -160,7 +168,11 @@ export const ModifyUserNav = () => {
                 buttonVariant="ghost"
                 positiveButtonOnClick={handleDeleteUserFunction}
             >
-                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                <Typography
+                    group="input"
+                    variant="text"
+                    token={{ textAlign: 'left' }}
+                >
                     The user will be deleted
                 </Typography>
             </CustomDialog>

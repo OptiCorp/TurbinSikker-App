@@ -10,7 +10,7 @@ import Sidebar from '../sidebar/Sidebar'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
-    // const { setRefreshList } = apiService()
+
     const navigate = useNavigate()
     const appLocation = useLocation()
     const [activeUrl, setActiveUrl] = useState<string>('')

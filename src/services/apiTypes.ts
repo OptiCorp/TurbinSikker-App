@@ -27,6 +27,14 @@ export type UserRole = {
     id: string
     name: string
 }
+export type UserListEntity = {
+    value: string
+    label: string
+}
+export type ListEntity = {
+    value: string
+    label: string
+}
 
 export type PunchItem = {
     id: string

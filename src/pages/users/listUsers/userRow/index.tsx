@@ -2,12 +2,12 @@ import { Chip, Icon, Table } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { IUser } from '../../addUser/hooks/useAddUser/types'
 import { useHasPermission } from '../../hooks/useHasPermission'
 import { StyledTableCell, TableData } from '../styles'
+import { User } from '../../../../services/apiTypes'
 
 type Props = {
-    user: IUser
+    user: User
 }
 
 export const UserRow: FunctionComponent<Props> = ({ user }) => {
