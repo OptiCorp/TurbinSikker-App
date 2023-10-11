@@ -4,6 +4,12 @@ export enum ApiStatus {
     ERROR = 'error',
 }
 
+export enum Status {
+    PENDING = 'Pending',
+    APPROVED = 'Approved',
+    REJECTED = 'Rejected',
+}
+
 export type User = {
     id: string
     azureAdUserId: string

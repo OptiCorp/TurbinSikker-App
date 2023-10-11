@@ -1,4 +1,4 @@
-import { Status } from '../pages/punch/types'
+import { Status } from '../services/apiTypes'
 
 export function formatDate(dateString: string | '') {
     const date = new Date(dateString)
@@ -6,7 +6,7 @@ export function formatDate(dateString: string | '') {
     return date.toLocaleDateString('en-GB')
 }
 
-export function formatTimeStamp(timeStamp: string) {
+export function formatTimestamp(timeStamp: string) {
     const date = new Date(timeStamp)
     const amOrPm = date.getHours() < 12 ? 'AM' : 'PM'
     return `${date.getHours().toString().padStart(2, '0')}:${date
