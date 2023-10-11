@@ -1,24 +1,27 @@
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-
 import CustomDialog from '../../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
-
-import { useUser } from '../../context/userContextProvider'
 import { useAddUser } from '../hooks/useAddUser'
+import apiService from '../../../../services/api'
 export const ModifyUserNav = () => {
+    const api = apiService()
     const { methods, location } = useAddUser()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [addNav, setAddNav] = useState(false)
     const [editNav, setEditNav] = useState(false)
     const [negativeOpen, setNegativeOpen] = useState(false)
-    const { handleDeleteUser } = useUser()
 
-    const { id } = useParams()
-    const navigate = useNavigate()
+    const { id } = useParams() as { id: string }
     const [updateOpen, setUpdateOpen] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
+
+    const handleDeleteUser = async (id: string) => {
+        await api.softDeleteUser(id)
+
+        // setRefreshUsers((prevRefresh) => !prevRefresh)
+    }
 
     useEffect(() => {
         if (location === '/AddUser/') {
@@ -94,13 +97,8 @@ export const ModifyUserNav = () => {
                     <Dialog.Title>Create User?</Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography
-                        group="input"
-                        variant="text"
-                        token={{ textAlign: 'left' }}
-                    >
-                        Are you sure you want to create a new account with the
-                        provided information?
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        Are you sure you want to create a new account with the provided information?
                     </Typography>
                 </Dialog.CustomContent>
                 <Dialog.Actions>
@@ -124,13 +122,8 @@ export const ModifyUserNav = () => {
                 positiveButtonOnClick={handleCloseSecond}
                 positiveButtonText="Cancel"
             >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
-                >
-                    Are you sure you want to clear your changes? Any unsaved
-                    data will be lost.
+                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    Are you sure you want to clear your changes? Any unsaved data will be lost.
                 </Typography>
             </CustomDialog>
             <NavActionsComponent
@@ -153,13 +146,8 @@ export const ModifyUserNav = () => {
                 type="submit"
                 form="add-user"
             >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
-                >
-                    Are you sure you want to update the account with the
-                    provided information?
+                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    Are you sure you want to update the account with the provided information?
                 </Typography>
             </CustomDialog>
             <CustomDialog
@@ -172,11 +160,7 @@ export const ModifyUserNav = () => {
                 buttonVariant="ghost"
                 positiveButtonOnClick={handleDeleteUserFunction}
             >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
-                >
+                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
                     The user will be deleted
                 </Typography>
             </CustomDialog>

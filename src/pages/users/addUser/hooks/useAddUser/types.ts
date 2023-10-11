@@ -15,7 +15,7 @@ export type IUser = {
 export type FormValues = {
     firstName: string
     lastName: string
-    userRole: { id: string; name: string }
+    userRoleId: string
     email: string
     options: Option
     username: string

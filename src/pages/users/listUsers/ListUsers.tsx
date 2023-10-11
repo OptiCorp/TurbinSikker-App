@@ -1,28 +1,26 @@
-import { useState } from 'react'
-
+import { useEffect, useState } from 'react'
 import { Button, Table } from '@equinor/eds-core-react'
 import { Link } from 'react-router-dom'
-
-import {
-    CellSize,
-    ContainerForm,
-    ListWrapper,
-    StyledTable,
-    StyledTableCell,
-} from './styles'
+import { CellSize, ContainerForm, ListWrapper, StyledTable, StyledTableCell } from './styles'
 import { UserRow } from './userRow'
-
 import { Icon } from '@equinor/eds-core-react'
 import { visibility, visibility_off } from '@equinor/eds-icons'
-
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import { useUser } from '../context/userContextProvider'
 import { useHasPermission } from '../hooks/useHasPermission'
+import { User } from '../../../services/apiTypes'
+import apiService from '../../../services/api'
 
 export const ListUsers = () => {
-    const { result: users } = useUser()
-
+    const api = apiService()
+    const [users, setUsers] = useState<User[]>()
     const [showInactiveUsers, setShowInactiveUsers] = useState(false)
+
+    useEffect(() => {
+        ;(async () => {
+            const usersFromApi = await api.getAllUsersAdmin()
+            setUsers(usersFromApi)
+        })()
+    }, [])
 
     const handleClick = () => {
         setShowInactiveUsers(!showInactiveUsers)
@@ -30,7 +28,7 @@ export const ListUsers = () => {
 
     const filteredUsers = showInactiveUsers
         ? users
-        : users.filter((user) => user.status === 'Active')
+        : users?.filter((user) => user.status === 'Active')
     const { hasPermission } = useHasPermission()
 
     return (
@@ -92,9 +90,7 @@ export const ListUsers = () => {
                     </Table.Head>
 
                     <Table.Body>
-                        {filteredUsers.map((user) => (
-                            <UserRow user={user} key={user.id} />
-                        ))}
+                        {filteredUsers?.map((user) => <UserRow user={user} key={user.id} />)}
                     </Table.Body>
                 </StyledTable>{' '}
             </ContainerForm>
