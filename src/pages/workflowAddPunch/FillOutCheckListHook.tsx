@@ -8,14 +8,7 @@ import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
 import { UpdatingWorkFlowEntity } from './types'
 
-export type FillOutForm = {
-    checklistId: string
-    userIds: {
-        value: string
-        label: string
-    }[]
-    status: string
-}
+
 export const useFillOutCheckList = () => {
     const { accessToken } = useGlobal()
 

@@ -23,7 +23,7 @@ export const InspectorReceivedCheckLists: FunctionComponent<
 
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(WorkFlow.id)}>
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.id) }>
                 <StyledTableCellCheckL>
                     <StyledBodyTitle>
                         <Typography variant="body_short_bold">

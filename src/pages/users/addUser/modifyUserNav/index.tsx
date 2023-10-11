@@ -4,7 +4,8 @@ import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
 import apiService from '../../../../services/api'
-import { useAddUser } from '../hooks/useAddUser'
+import { useAddUser } from '../../hooks/useAddUser'
+
 export const ModifyUserNav = () => {
     const api = apiService()
     const { methods, location } = useAddUser()

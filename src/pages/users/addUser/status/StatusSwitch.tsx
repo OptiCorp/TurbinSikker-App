@@ -1,7 +1,7 @@
 import { Chip, Switch } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useAddUser } from '../hooks/useAddUser'
+import { useAddUser } from '../../hooks/useAddUser'
 
 export const StatusSwitch = () => {
     const { control, register } = useFormContext()
