@@ -212,9 +212,9 @@ const apiService = () => {
         return data
     }
 
-    const getChecklist = async (checklistId: string): Promise<Checklist> => {
-        const data = await getByFetch(`GetChecklist?id=${checklistId}`)
-        if (!checklistId) {
+    const getChecklist = async (id: string): Promise<Checklist> => {
+        const data = await getByFetch(`GetChecklist?id=${id}`)
+        if (!id) {
             throw new Error('An error occurred, please try again')
         }
         return data
@@ -303,18 +303,14 @@ const apiService = () => {
     }
 
     const createWorkflow = async (
-        workflow: Pick<Workflow, 'checklist' | 'creator'>,
-        userIds: string[]
-        /* checklistId: string,
-        userIds: [],
-        creatorId: string */
+        checklistId: string,
+        userIds: string[],
+        creatorId: string
     ): Promise<void> => {
         await postByFetch('CreateWorkflow', {
-            workflow,
+            checklistId: checklistId,
             userIds: userIds,
-            /* checklistId: checklistId,
-            userIds: userIds,
-            creatorId: creatorId, */
+            creatorId: creatorId,
         })
     }
 
@@ -429,7 +425,6 @@ const apiService = () => {
             id: id,
             checklistId: checklistId,
         })
-
     }
 
     // const addTaskToChecklist = async (

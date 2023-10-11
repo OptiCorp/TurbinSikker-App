@@ -47,13 +47,15 @@ export type Category = {
 }
 
 export type Checklist = {
-    id?: string
-    title?: string
-    status?: string
-    createdDate?: string
-    updatedDate?: null | string
-    user?: User
-    checklistTasks?: Task[]
+    id: string
+    title: string
+    status: string
+    createdDate: string
+    updatedDate: null | string
+    user: User
+    value: string
+    label: string
+    checklistTasks: Task[]
 }
 
 export type Task = {

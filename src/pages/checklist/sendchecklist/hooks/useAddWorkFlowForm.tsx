@@ -1,28 +1,33 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 
-import { API_URL } from '../../../../config'
 import { default as useGlobal } from '../../../../context/globalContextProvider'
+import apiService from '../../../../services/api'
 
 export type SendingFormValuesEntity = {
     checklistId: string
-    userIds: {
-        value: string
-        label: string
-    }[]
-    status: string
+    userIds: string[]
+    creatorId: string
 }
+
+export type ListEntity = {
+    id: string
+    title: string
+    value: string
+    label: string
+}
+
 export const useAddWorkFlowForm = () => {
     const methods = useForm<SendingFormValuesEntity>()
 
-    const { handleSubmit, control, getValues } = methods
+    const [list, setList] = useState<ListEntity[]>([])
+    const { handleSubmit, control } = methods
     const navigate = useNavigate()
-    const { accessToken } = useGlobal()
     const [positiveOpen, setPositiveOpen] = useState(false)
-    // const { setRefreshList } = apiService()
-    const { currentUser } = useGlobal()
-
+    const api = apiService()
+    const { currentUser, accessToken } = useGlobal()
+    const creatorId = currentUser?.id
     const handleOpen = () => {
         setPositiveOpen(true)
     }
@@ -30,33 +35,47 @@ export const useAddWorkFlowForm = () => {
         setPositiveOpen(false)
     }
 
-    const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (data) => {
-        const res = await fetch(`${API_URL}/CreateWorkFlow`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                checklistId: data.checklistId,
-                userIds: data.userIds,
+    useEffect(() => {
+        if (!currentUser?.id || !accessToken) return
+        ;(async (): Promise<void> => {
+            try {
+                const checklistData = await api.getAllChecklistsByUserId(
+                    currentUser.id
+                )
 
-                creatorId: currentUser?.id,
-            }),
-        })
-        // if (res.ok) setRefreshList((prev) => !prev)
+                const listData: ListEntity[] = checklistData.map(
+                    ({ id, title }) => ({
+                        id,
+                        title,
+                        value: id,
+                        label: title,
+                    })
+                )
+                setList(listData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [accessToken, currentUser?.id])
+
+    const onSubmit: SubmitHandler<SendingFormValuesEntity> = async (
+        data: SendingFormValuesEntity
+    ) => {
+        if (!creatorId || !accessToken) return
+        try {
+            await api.createWorkflow(data.checklistId, data.userIds, creatorId)
+        } catch (error) {
+            console.log(error)
+        }
         setPositiveOpen(false)
         navigate('/Checklist')
-        // if (openSnackbar) {
-        //     openSnackbar('Workflow created!')
-        // }
     }
 
     return {
         methods,
         onSubmit,
         control,
+        list,
         handleSubmit,
         handleOpen,
         clearAndClose,

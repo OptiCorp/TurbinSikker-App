@@ -21,7 +21,7 @@ export const useAddTaskForm = () => {
     const appLocation = useLocation()
     const { currentUser } = useGlobal()
     const methods = useForm<FormData>()
-    const { reset, watch, handleSubmit, register, control, setValue } = methods
+    const { handleSubmit, control } = methods
     const [selectedOption, setSelectedOption] = useState('')
     const { accessToken } = useGlobal()
     const api = apiService()
@@ -37,7 +37,7 @@ export const useAddTaskForm = () => {
 
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!accessToken || !category || !currentUser?.id) return
+            if (!accessToken || !currentUser?.id) return
             try {
                 const categoryData = await api.getAllCategories()
                 const categories: Category[] = categoryData.map(

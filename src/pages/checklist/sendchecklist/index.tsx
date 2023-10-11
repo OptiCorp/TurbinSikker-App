@@ -7,11 +7,11 @@ import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { SendBackgroundWrap } from './styles'
 
 export const SendCheckList = () => {
-    const navigate = useNavigate()
     const { methods, onSubmit, handleOpen, clearAndClose, positiveOpen } =
         useAddWorkFlowForm()
-    const { handleSubmit, getValues } = methods
 
+    const { handleSubmit } = methods
+    const navigate = useNavigate()
     return (
         <>
             <FormProvider {...methods}>
@@ -28,7 +28,7 @@ export const SendCheckList = () => {
                         type="button"
                         secondOnClick={handleOpen}
                         onClick={() => {
-                            navigate(-1)
+                            navigate('/')
                         }}
                     />
                     <Dialog open={positiveOpen}>

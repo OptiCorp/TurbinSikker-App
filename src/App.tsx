@@ -17,7 +17,6 @@ const App = () => {
                 <GlobalProvider>
                     <UserContextProvider>
                         <RoutesContainer />
-                        {/* <SnackbarComponent />  */}
                     </UserContextProvider>
                 </GlobalProvider>
             )}
