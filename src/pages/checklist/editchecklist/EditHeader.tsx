@@ -38,25 +38,25 @@ export const EditHeader = ({
         setTitle(changeTitle)
     })
     const { id } = useParams() as { id: string }
+
     const [checklist, setChecklist] = useState<Checklist>()
     const api = apiService()
     const { accessToken, currentUser } = useGlobal()
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return
 
-        const fetchChecklist = async () => {
+        const fetchChecklist = async (id: string) => {
+            if (!id) return
             try {
                 const checklistData = await api.getChecklist(id)
 
                 setChecklist(checklistData)
-                if (checklistData?.checklistTasks) {
-                }
             } catch (error) {
                 console.log(error)
             }
         }
 
-        fetchChecklist()
+        fetchChecklist(id)
     }, [accessToken, currentUser?.id, id])
 
     return (

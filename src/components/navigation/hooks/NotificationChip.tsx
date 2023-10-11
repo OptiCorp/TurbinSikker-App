@@ -10,7 +10,7 @@ export function NotificationBadge({ name }: { name: string }) {
     const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const { accessToken } = useGlobal()
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
+        if (!currentUser?.id || !accessToken || name !== 'Checklists') return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflows()

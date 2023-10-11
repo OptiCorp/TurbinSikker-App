@@ -1,8 +1,8 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { UserChip } from '../allchecklists/UserChip'
-import { ChipStatus } from '../allchecklists/chipStatus'
+import { UserChip } from '../submittedChecklists/UserChip'
+import { ChipStatus } from '../submittedChecklists/chipStatus'
 
 import { Workflow } from '../../../services/apiTypes'
 import {

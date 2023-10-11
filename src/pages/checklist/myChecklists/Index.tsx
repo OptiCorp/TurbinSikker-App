@@ -22,10 +22,8 @@ export const MyCheckLists = () => {
     const { accessToken } = useGlobal()
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
-
     const [checklists, setChecklists] = useState<Checklist[]>([])
     const { currentUser } = useGlobal()
-
     const handleClose = () => {
         setDialogShowing(false)
     }
@@ -34,16 +32,16 @@ export const MyCheckLists = () => {
     const [dialogShowing, setDialogShowing] = useState(false)
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
-    const [checklistData, setChecklistData] = useState<Checklist | string>()
 
     const handleCreateChecklist = async () => {
         try {
-            if (!currentUser) return
+            if (!currentUser || !accessToken) return
             const res = await api.addChecklist(currentUser.id, title)
-            setChecklistData(res.id)
+
             setDialogShowing(false)
+
             {
-                navigate(`/EditCheckList/${checklistData}`)
+                navigate(`/EditCheckList/${res.id}`)
             }
         } catch (error) {
             console.error('Error creating checklist:', error)

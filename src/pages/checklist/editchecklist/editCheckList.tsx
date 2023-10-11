@@ -1,13 +1,8 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
 import { AddTasks } from '../../../components/addtasks/AddTasks'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import useGlobal from '../../../context/globalContextProvider'
-import apiService from '../../../services/api'
-import { Checklist, Task } from '../../../services/apiTypes'
-
 import { EditHeader } from './EditHeader'
 import { EditList } from './EditList/EditList'
 import { useEditChecklist } from './hooks/useEditChecklist'
@@ -16,33 +11,15 @@ import { BackgroundContainer, EditWrapper, ScrollWrapper } from './styles'
 export const EditCheckList = () => {
     const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
-    const { id } = useParams() as { id: string }
-    const [checklist, setChecklist] = useState<Checklist>()
-    const [tasks, setTasks] = useState<Task[]>([])
-    const { accessToken, currentUser } = useGlobal()
 
-    const api = apiService()
-    const { handleDelete, setHeaderOpen, headerOpen, handleSave } =
-        useEditChecklist()
-
-    useEffect(() => {
-        if (!currentUser?.id || !accessToken || !id) return
-
-        const fetchChecklist = async () => {
-            try {
-                const checklistData = await api.getChecklist(id)
-
-                setChecklist(checklistData)
-                if (checklistData?.checklistTasks) {
-                    setTasks(checklistData.checklistTasks)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-        fetchChecklist()
-    }, [accessToken, currentUser?.id, id])
+    const {
+        handleDelete,
+        setHeaderOpen,
+        headerOpen,
+        checklist,
+        handleSave,
+        tasks,
+    } = useEditChecklist()
 
     const handleCloseDelete = () => {
         setDialogDelete(false)

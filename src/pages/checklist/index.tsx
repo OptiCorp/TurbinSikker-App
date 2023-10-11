@@ -6,15 +6,14 @@ import useGlobal from '../../context/globalContextProvider'
 import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
-    const [activeTab, setActiveTab] = useState(1)
+    const [activeTab, setActiveTab] = useState(0)
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
     const { currentUser } = useGlobal()
 
     return (
-        <MainWrap> 
-            
+        <MainWrap>
             <>
                 <Tabs
                     variant="minWidth"

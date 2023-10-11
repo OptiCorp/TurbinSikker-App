@@ -1,4 +1,4 @@
-import { useIsAuthenticated, useMsal } from '@azure/msal-react'
+import { useIsAuthenticated } from '@azure/msal-react'
 import { RoutesContainer } from './RoutesContainer'
 import './assets/App.css'
 import { GlobalProvider } from './context/globalContextProvider'

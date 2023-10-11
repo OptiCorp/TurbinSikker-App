@@ -4,12 +4,12 @@ import { ProtectedRoute } from './ProtectedRoute'
 import { GlobalProvider } from './context/globalContextProvider'
 import PageNotFound from './pages/PageNotFound'
 import { IndexCheckLists } from './pages/checklist'
-import { CheckList } from './pages/checklist/allchecklists/Index'
 import { CompletedChecklists } from './pages/checklist/completedChecklists/Index'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { MyCheckLists } from './pages/checklist/myChecklists/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
+import { CheckList } from './pages/checklist/submittedChecklists/Index'
 import { Profile } from './pages/profile'
 import Punch from './pages/punch/Index'
 import { AddPunch } from './pages/punch/addPunch/AddPunch'
@@ -33,14 +33,6 @@ export function RoutesContainer() {
                         }
                     >
                         <Route
-                            path="/"
-                            element={
-                                <GlobalProvider>
-                                    <CheckList />
-                                </GlobalProvider>
-                            }
-                        />
-                        <Route
                             path="/Checklist"
                             element={
                                 <GlobalProvider>
@@ -54,6 +46,14 @@ export function RoutesContainer() {
                         />
                         <Route
                             path="/MyChecklists"
+                            element={
+                                <GlobalProvider>
+                                    <MyCheckLists />
+                                </GlobalProvider>
+                            }
+                        />
+                        <Route
+                            path="/"
                             element={
                                 <GlobalProvider>
                                     <MyCheckLists />

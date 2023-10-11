@@ -6,7 +6,7 @@ import { Checklist, Task } from '../../../../services/apiTypes'
 
 export const useEditChecklist = () => {
     const navigate = useNavigate()
-    const [dialogDelete, setDialogDelete] = useState(false)
+    // const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const { id } = useParams() as { id: string }
 
@@ -20,7 +20,7 @@ export const useEditChecklist = () => {
     const [headerOpen, setHeaderOpen] = useState(false)
     const [isOpenNew, setIsOpenNew] = useState(false)
     const api = apiService()
-
+    const [tasks, setTasks] = useState<Task[]>([])
     const handleOpen = (
         taskId: string,
         taskDescription: string,
@@ -39,6 +39,9 @@ export const useEditChecklist = () => {
                 const checklistData = await api.getChecklist(id)
 
                 setChecklist(checklistData)
+                if (checklistData?.checklistTasks) {
+                    setTasks(checklistData.checklistTasks)
+                }
             } catch (error) {
                 console.log(error)
             }
@@ -116,6 +119,8 @@ export const useEditChecklist = () => {
         handleOpen,
         title,
         task,
+        tasks,
+
         setTask,
         checklist,
         headerOpen,
