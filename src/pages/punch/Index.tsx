@@ -1,9 +1,9 @@
-import { CircularProgress, Icon, Typography } from '@equinor/eds-core-react'
+import { Typography } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
-import { useNavigate } from 'react-router'
-import { formatDate, formatTimeStamp } from '../../Helpers/index'
+import { useNavigate, useParams } from 'react-router'
+import { formatDate, formatTimestamp } from '../../Helpers/index'
 import { AddPunch } from './addPunch/AddPunch'
-import { usePunchContext } from './context/PunchContextProvider'
+
 import {
     Container,
     PunchDateContainer,
@@ -14,9 +14,8 @@ import {
 } from './styles'
 import { PunchSeverity } from './types'
 import { useEffect, useState } from 'react'
-import { PunchItem, User } from '../../services/apiTypes'
+import { PunchItem } from '../../services/apiTypes'
 import apiService from '../../services/api'
-import useGlobal from '../../context/globalContextProvider'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -37,21 +36,22 @@ export const punchSeverity: PunchSeverity[] = [
 ]
 
 function Punch() {
-    const { currentUser } = useGlobal() as { currentUser: User }
     const api = apiService()
+    const { punchId } = useParams() as { punchId: string }
     const navigate = useNavigate()
     const [punch, setPunch] = useState<PunchItem>()
     const createdDate = punch && formatDate(punch.createdDate)
-    const timeStamp = punch && formatTimeStamp(punch?.createdDate)
+    const timestamp = punch && formatTimestamp(punch?.createdDate)
+
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
     }
 
     useEffect(() => {
-        ;async () => {
-            const punchFromApi = await api.getPunch(currentUser?.id)
+        ;(async () => {
+            const punchFromApi = await api.getPunch(punchId)
             setPunch(punchFromApi)
-        }
+        })()
     }, [])
     return (
         <>
@@ -67,13 +67,12 @@ function Punch() {
                             {punch && (
                                 <PunchDateContainer>
                                     <Typography>{createdDate}</Typography>
-                                    <Typography>({timeStamp})</Typography>
+                                    <Typography>({timestamp})</Typography>
                                 </PunchDateContainer>
                             )}
                         </PunchHeader>
                     </PunchHeaderWrapper>
-
-                    <AddPunch />
+                    {punch && <AddPunch punch={punch} />}
                 </Container>
             </PunchWrapper>
         </>

@@ -1,10 +1,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
-
 import { API_URL } from '../../../config'
 import { default as useGlobal } from '../../../context/globalContextProvider'
-
-import { SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import apiService from '../../../services/api'
 import { PunchItem } from '../../../services/apiTypes'
@@ -44,9 +42,8 @@ export const useAddPunch = () => {
         description: punch?.description,
         severity: punch?.severity,
     })
-    /* const [severity, setSeverity] = useState<SetStateAction<string>>(punch?.severity || 'Minor') */
     const [file, setFile] = useState<File | undefined>()
-    const [message, setMessage] = useState<SetStateAction<string>>()
+    const [message, setMessage] = useState<string>()
     const [status, setStatus] = useState('')
 
     useEffect(() => {
@@ -65,7 +62,30 @@ export const useAddPunch = () => {
         }
     }
     const updatePunch = async () => {
-        const res = await fetch(`${API_URL}/UpdatePunch?id=${punchId}`, {
+        try {
+            await api.updatePunch(punchId, workflowId, {
+                description: userInput.description,
+                severity: userInput.severity,
+                status: 'Pending',
+                message: message,
+            })
+
+            setRejectDialogOpen(false)
+            setPositiveOpen(false)
+            if (file) {
+                await api.addUpload(punchId, file)
+            }
+            navigate(`/workflow/${workflowId}/punch/${punchId}`)
+        } catch (error) {
+            console.error(error)
+        }
+        /* const res = await api.updatePunch(punchId, workflowId, {
+            description: userInput.description,
+            severity: userInput.severity,
+            status: 'Pending',
+            message: message,
+        }) */
+        /* await fetch(`${API_URL}/UpdatePunch?id=${punchId}`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -82,31 +102,18 @@ export const useAddPunch = () => {
             }),
         })
         // if (res.ok) setRefreshList((prev) => !prev)
+        setRejectDialogOpen(false)
+        setPositiveOpen(false)
         if (file) {
             await api.addUpload(punchId, file)
         }
-        setRejectDialogOpen(false)
-        setPositiveOpen(false)
-        navigate(`/workflow/${workflowId}/punch/${punchId}`)
+        navigate(`/workflow/${workflowId}/punch/${punchId}`) */
         // if (openSnackbar) openSnackbar('Punch updated!')
     }
 
     const updatePunchLeader = async () => {
-        const res = await fetch(`${API_URL}/UpdatePunch?id=${punchId}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                id: punchId,
-                workflowId: workflowId,
-                status: status,
-                message: message,
-            }),
-        })
-        // if (res.ok) setRefreshList((prev) => !prev)
+        await api.updatePunch(punchId, workflowId, { status: status, message: message })
+
         if (file) {
             await api.addUpload(punchId, file)
         }

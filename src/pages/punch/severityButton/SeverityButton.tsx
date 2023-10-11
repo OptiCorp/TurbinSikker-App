@@ -2,27 +2,23 @@ import { Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '../styles'
-import { Punch, Status } from '../types'
-import { usePunchContext } from '../context/PunchContextProvider'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import { useLocation } from 'react-router'
+import { PunchItem, Status } from '../../../services/apiTypes'
 
 function SeverityButton({
-    //severity,
-    /* setSeverity, */
+    punch,
     userInput,
     setUserInput,
     defaultValue,
 }: {
-    /* severity: SetStateAction<string>
-    setSeverity: Dispatch<SetStateAction<{ severity: string }>> */
+    punch?: PunchItem
     userInput: { severity: string | undefined; description: string | undefined }
     setUserInput: Dispatch<
         SetStateAction<{ severity: string | undefined; description: string | undefined }>
     >
     defaultValue: string | undefined
 }) {
-    const { punch } = usePunchContext()
     const { hasPermission } = useHasPermission()
     const appLocation = useLocation()
     const [activeButtonIndex, setActiveButtonIndex] = useState(0)
@@ -49,7 +45,6 @@ function SeverityButton({
     ]
     function handleChecked(index: number) {
         setActiveButtonIndex(index)
-        /* setSeverity(SeverityButtons[index].name) */
         setUserInput({
             ...userInput,
             severity: SeverityButtons[index].name,

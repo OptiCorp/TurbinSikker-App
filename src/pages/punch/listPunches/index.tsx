@@ -2,7 +2,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { formatDate, formatTimeStamp } from '../../../Helpers'
+import { formatDate, formatTimestamp } from '../../../Helpers'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import {
     CreatedByContainer,
@@ -17,14 +17,15 @@ import {
     TicketIcons,
     TicketInfo,
 } from './styles'
-import { useEffect, useState } from 'react'
-import { Status } from '../types'
-import { PunchItem, User } from '../../../services/apiTypes'
+
+import { PunchItem, Status, User } from '../../../services/apiTypes'
 import apiService from '../../../services/api'
 import useGlobal from '../../../context/globalContextProvider'
+import { useEffect, useState } from 'react'
 
 function ListPunches() {
     const { currentUser } = useGlobal() as { currentUser: User }
+    const { accessToken } = useGlobal()
     const api = apiService()
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
@@ -32,7 +33,7 @@ function ListPunches() {
     const [sorted, setSorted] = useState(false)
     const [showBadge, setShowBadge] = useState(true)
     useEffect(() => {
-        ;async () => {
+        ;(async () => {
             if (currentUser.userRole.name === 'Inspector') {
                 const punchesFromApi = await api.getPunchInspectorId(currentUser?.id)
                 setPunches(punchesFromApi)
@@ -40,8 +41,8 @@ function ListPunches() {
                 const punchesFromApi = await api.getPunchByLeaderId(currentUser?.id)
                 setPunches(punchesFromApi)
             }
-        }
-    }, [])
+        })()
+    }, [currentUser])
 
     punches?.sort((a, b) => {
         const dateA = new Date(a.createdDate)
@@ -150,7 +151,7 @@ function ListPunches() {
                                             {formatDate(punch.createdDate)}
                                         </Typography>
                                         <Typography color="disabled">
-                                            {formatTimeStamp(punch.createdDate)}
+                                            {formatTimestamp(punch.createdDate)}
                                         </Typography>
                                         <TicketIcons>
                                             <Icon data={image} />

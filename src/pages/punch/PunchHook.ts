@@ -1,25 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-
-import { API_URL } from '../../config'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
 import { Upload } from '../../services/apiTypes'
 
 export function usePunch() {
     const api = apiService()
-    const { id } = useParams() as { id: string }
+    const { punchId } = useParams() as { punchId: string }
     const methods = useForm()
-    const { getUploadByPunchId } = apiService()
     const { accessToken } = useGlobal()
-
     const [status, setStatus] = useState('')
     const [uploads, setUploads] = useState<Upload[]>([])
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const onSubmit = async () => {
+    // TODO: onSubmit function NOT IN USE?
+    /* const onSubmit = async () => {
         try {
             const res = await fetch(`${API_URL}/updatePunch?id=${id}`, {
                 method: 'POST',
@@ -40,7 +37,7 @@ export function usePunch() {
         } catch (error) {
             console.error(error)
         }
-    }
+    } */
 
     const handleOpen = () => {
         setPositiveOpen(true)
@@ -51,16 +48,16 @@ export function usePunch() {
 
     useEffect(() => {
         setLoading(true)
-        ;async () => {
-            const uploadFromApi = await api.getUploadByPunchId(id)
+        ;(async () => {
+            const uploadFromApi = await api.getUploadByPunchId(punchId)
             setUploads(uploadFromApi)
             setLoading(false)
-        }
-    }, [accessToken, id])
+        })()
+    }, [accessToken, punchId])
 
     return {
         setStatus,
-        onSubmit,
+        /* onSubmit, */
         positiveOpen,
         handleOpen,
         clearAndClose,
