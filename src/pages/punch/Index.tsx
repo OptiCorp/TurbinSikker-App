@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate, useParams } from 'react-router'
-import { formatDate, formatTimestamp } from '../../Helpers/index'
+import { formatDate, formatTimestamp } from '../../Helpers/dateFormattingHelpers'
 import { AddPunch } from './addPunch/AddPunch'
 
 import {
@@ -14,8 +14,9 @@ import {
 } from './styles'
 import { PunchSeverity } from './types'
 import { useEffect, useState } from 'react'
-import { PunchItem } from '../../services/apiTypes'
+import { ApiStatus, PunchItem } from '../../services/apiTypes'
 import apiService from '../../services/api'
+import { Loading } from '../../components/loading/Loading'
 
 export const punchSeverity: PunchSeverity[] = [
     {
@@ -42,6 +43,7 @@ function Punch() {
     const [punch, setPunch] = useState<PunchItem>()
     const createdDate = punch && formatDate(punch.createdDate)
     const timestamp = punch && formatTimestamp(punch?.createdDate)
+    const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(ApiStatus.LOADING)
 
     function clickHandler(id: string) {
         navigate(`/EditPunch/${id}`)
@@ -51,8 +53,13 @@ function Punch() {
         ;(async () => {
             const punchFromApi = await api.getPunch(punchId)
             setPunch(punchFromApi)
+            setFetchPunchStatus(ApiStatus.SUCCESS)
         })()
     }, [])
+
+    if (fetchPunchStatus === ApiStatus.LOADING) {
+        return <Loading text="Loading punch .." />
+    }
     return (
         <>
             <PunchWrapper>

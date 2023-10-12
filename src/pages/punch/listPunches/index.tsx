@@ -2,7 +2,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { formatDate, formatTimestamp } from '../../../Helpers'
+import { formatDate, formatTimestamp } from '../../../Helpers/dateFormattingHelpers'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import {
     CreatedByContainer,
@@ -18,28 +18,30 @@ import {
     TicketInfo,
 } from './styles'
 
-import { PunchItem, Status, User } from '../../../services/apiTypes'
+import { ApiStatus, PunchItem, Status, User } from '../../../services/apiTypes'
 import apiService from '../../../services/api'
 import useGlobal from '../../../context/globalContextProvider'
 import { useEffect, useState } from 'react'
+import { Loading } from '../../../components/loading/Loading'
 
 function ListPunches() {
     const { currentUser } = useGlobal() as { currentUser: User }
-    const { accessToken } = useGlobal()
     const api = apiService()
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
     const [punches, setPunches] = useState<PunchItem[]>([])
-    const [sorted, setSorted] = useState(false)
-    const [showBadge, setShowBadge] = useState(true)
+    const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+
     useEffect(() => {
         ;(async () => {
             if (currentUser.userRole.name === 'Inspector') {
                 const punchesFromApi = await api.getPunchInspectorId(currentUser?.id)
                 setPunches(punchesFromApi)
+                setFetchPunchesStatus(ApiStatus.SUCCESS)
             } else {
                 const punchesFromApi = await api.getPunchByLeaderId(currentUser?.id)
                 setPunches(punchesFromApi)
+                setFetchPunchesStatus(ApiStatus.SUCCESS)
             }
         })()
     }, [currentUser])
@@ -68,14 +70,12 @@ function ListPunches() {
         return 0
     })
 
-    const rejectedPunches = punches?.filter((punch) => punch.status === Status.REJECTED)
-
-    const filteredPunches = sorted
-        ? punches?.filter((punch) => punch.status === Status.REJECTED)
-        : punches
-
     function clickHandler(punchId: string, workFlowId: string) {
         navigate(`/workflow/${workFlowId}/punch/${punchId}`)
+    }
+
+    if (fetchPunchesStatus === ApiStatus.LOADING) {
+        return <Loading text="Loading punches .." />
     }
 
     return (
@@ -85,43 +85,16 @@ function ListPunches() {
                     <p>Punches are displayed here..</p>
                 ) : (
                     <>
-                        {/* <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                background: '#fff',
-                                padding: '20px',
-                            }}
-                        >
-                            <div>
-                                <input
-                                    id="sort"
-                                    type="checkbox"
-                                    onChange={() => setSorted((prev) => !prev)}
-                                />
-                                <label htmlFor="sort">Rejected ({rejectedPunches.length})</label>
-                            </div>
-                            <div>
-                                <input
-                                    id="show"
-                                    type="checkbox"
-                                    onChange={() => setShowBadge((prev) => !prev)}
-                                />
-                                <label htmlFor="show">Hide status badge</label>
-                            </div>
-                        </div> */}
-                        {filteredPunches?.map((punch, idx) => {
+                        {punches?.map((punch, idx) => {
                             return (
                                 <PunchListBoxContainer
                                     onClick={() => clickHandler(punch.id, punch.workflowId)}
                                     key={idx}
                                 >
                                     <StatusBadgeContainer>
-                                        {showBadge && (
-                                            <StatusBadge status={punch.status}>
-                                                {punch.status}
-                                            </StatusBadge>
-                                        )}
+                                        <StatusBadge status={punch.status}>
+                                            {punch.status}
+                                        </StatusBadge>
                                     </StatusBadgeContainer>
 
                                     <TicketInfo>

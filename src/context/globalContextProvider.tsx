@@ -1,24 +1,17 @@
 import { InteractionStatus } from '@azure/msal-browser'
 import { useAccount, useMsal } from '@azure/msal-react'
 import decode from 'jwt-decode'
-import {
-    ReactNode,
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-} from 'react'
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import apiService from '../services/api'
 import { ApiStatus, User } from '../services/apiTypes'
 import { AzureUserInfo, GlobalContextType } from './types'
+import { Progress, Typography } from '@equinor/eds-core-react'
+import PageNotFound from '../pages/PageNotFound'
+import { Loading } from '../components/loading/Loading'
 
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
 
-export function GlobalProvider({
-    children,
-}: {
-    children: ReactNode
-}): JSX.Element {
+export function GlobalProvider({ children }: { children: ReactNode }): JSX.Element {
     const { instance, inProgress, accounts } = useMsal()
     const account = useAccount(accounts[0] || {})
     const api = apiService()
@@ -36,12 +29,10 @@ export function GlobalProvider({
                 scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
                 account: accounts.at(0),
             }
-            instance
-                .acquireTokenSilent(accessTokenRequest)
-                .then((tokenResponse) => {
-                    setAccessToken(tokenResponse.accessToken)
-                    setIdToken(tokenResponse.idToken)
-                })
+            instance.acquireTokenSilent(accessTokenRequest).then((tokenResponse) => {
+                setAccessToken(tokenResponse.accessToken)
+                setIdToken(tokenResponse.idToken)
+            })
         }
     }, [account, inProgress, accounts, instance, accountname, accountUsername])
 
@@ -57,17 +48,11 @@ export function GlobalProvider({
                 username: username,
                 email: userEmail,
             })
-            console.log(
-                'User creation response status:',
-                createUserResponse.status
-            )
+            console.log('User creation response status:', createUserResponse.status)
             if (createUserResponse.status === 200) {
                 await createUserResponse.json()
             } else {
-                console.log(
-                    'Error creating user:',
-                    createUserResponse.statusText
-                )
+                console.log('Error creating user:', createUserResponse.statusText)
                 return null
             }
         } catch (error) {
@@ -94,11 +79,14 @@ export function GlobalProvider({
     }
 
     const fetchUserAndUpdateContext = async (token: string) => {
+        setStatus(ApiStatus.LOADING)
         try {
             const userInfo = getUserInfoFromIdToken(token)
             await fetchUserByEmail(userInfo.preferredUserName, userInfo.name)
+            setStatus(ApiStatus.SUCCESS)
         } catch (error) {
             console.error('Error fetching and updating user:', error)
+            setStatus(ApiStatus.ERROR)
         }
     }
     function getUserInfoFromIdToken(token: string): {
@@ -112,18 +100,20 @@ export function GlobalProvider({
             name: decodedToken.name || '',
         }
     }
-    /* if (status === ApiStatus.LOADING) {
-        return (
-            <>
-                <Loading />
-            </>
-        )
-    } */
+
     useEffect(() => {
         if (idToken) {
             fetchUserAndUpdateContext(idToken)
         }
     }, [idToken])
+
+    if (status === ApiStatus.LOADING) {
+        return <Loading text="Loading .." />
+    }
+
+    if (status === ApiStatus.ERROR) {
+        return <PageNotFound />
+    }
 
     if (accounts.length) {
         return (
