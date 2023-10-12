@@ -1,4 +1,4 @@
-import { getStatusBackgroundColor } from '../../../Helpers'
+import { getStatusBackgroundColor } from '../../../Helpers/statusBackgroundHelper'
 import styled from 'styled-components'
 
 export const PunchListItem = styled.div`

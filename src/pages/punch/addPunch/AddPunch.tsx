@@ -27,7 +27,7 @@ import { PunchUploadContainer } from '../styles'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { PunchItem, Status, Upload } from '../../../services/apiTypes'
+import { ApiStatus, PunchItem, Status, Upload } from '../../../services/apiTypes'
 
 export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
@@ -48,7 +48,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
         setStatus,
     } = useAddPunch()
     const { hasPermission } = useHasPermission()
-    const { loading, uploads: addedUploads } = usePunch()
+    const { fetchUploadStatus, loading, uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
     const [uploads, setUploads] = useState(false)
     const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
@@ -134,8 +134,8 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     </PunchAddUploadContainer>
                 ) : (
                     <PunchUploadContainer>
-                        {loading && <CircularProgress />}
-                        {!loading && addedUploads?.length > 0 ? (
+                        {fetchUploadStatus === ApiStatus.LOADING && <CircularProgress />}
+                        {fetchUploadStatus !== ApiStatus.LOADING && addedUploads?.length > 0 ? (
                             <div style={{ display: 'flex', overflowX: 'auto' }}>
                                 {addedUploads?.map((upload: Upload, idx) => {
                                     return (
