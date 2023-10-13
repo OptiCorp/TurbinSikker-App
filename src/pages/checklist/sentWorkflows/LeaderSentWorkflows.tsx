@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 
 import { StyledTableRow } from '../committedWorkflows/styles'
 
-import { formatDate } from '../../../Helpers'
+import { formatDate } from '../../../Helpers/dateFormattingHelpers'
 import useGlobal from '../../../context/globalContextProvider'
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
