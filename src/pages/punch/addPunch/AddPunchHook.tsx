@@ -22,7 +22,7 @@ type UserInput = {
 }
 
 export const useAddPunch = () => {
-    const { currentUser, accessToken } = useGlobal()
+    const { currentUser } = useGlobal()
     const api = apiService()
     const { workflowId, punchId, taskId } = useParams() as {
         workflowId: string
@@ -55,6 +55,7 @@ export const useAddPunch = () => {
             updatePunchLeader()
         } else if (punchId && !hasPermission) {
             updatePunch()
+            navigate('/')
         } else {
             postPunch()
         }
@@ -68,12 +69,12 @@ export const useAddPunch = () => {
                 message: message,
             })
 
+            navigate(`/workflow/${workflowId}/punch/${punchId}`)
             setRejectDialogOpen(false)
             setPositiveOpen(false)
             if (file) {
                 await api.addUpload(punchId, file)
             }
-            navigate(`/workflow/${workflowId}/punch/${punchId}`)
         } catch (error) {
             console.error(error)
         }
@@ -90,31 +91,26 @@ export const useAddPunch = () => {
     }
 
     const postPunch = async () => {
-        if (!accessToken) return
-
-        const res = await fetch(`${API_URL}/AddPunch`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({
-                creatorId: currentUser?.id,
+        if (!currentUser) return
+        try {
+            const res = await api.addPunch(currentUser?.id, taskId, {
                 description: userInput.description,
                 severity: userInput.severity,
-                checkListTaskId: taskId,
                 workflowId: workflowId,
-            }),
-        })
+            })
 
-        if (res.ok) {
-            const json: Promise<Punch> = res.json()
-            const id = (await json).id
-            if (file) {
-                await api.addUpload(id, file)
+            setPositiveOpen(false)
+            if (res.ok) {
+                const json: Promise<Punch> = res.json()
+                const id = (await json).id
+                if (file) {
+                    await api.addUpload(id, file)
+                }
+
+                navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
             }
-            navigate(`/workflow/${workflowId}/punch/${(await json).id}`)
+        } catch (error) {
+            console.error(error)
         }
     }
 
