@@ -80,9 +80,9 @@ export const FillOutWrap = styled.ul`
     padding-bottom: 1rem;
 `
 export const Test = styled.div`
-    display: flex;
-    max-width: 100px;
-    margin: 0;
-    min-width: 50px;
-    height: 10px;
+    display: grid;
+    grid-template-columns: 30px;
+    font-size: 1rem;
+    margin: 0px auto;
+    justify-items: end;
 `

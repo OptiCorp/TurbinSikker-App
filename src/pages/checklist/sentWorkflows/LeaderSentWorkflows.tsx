@@ -27,6 +27,8 @@ export const LeaderSentWorkflows: FunctionComponent<CheckListRowProps> = ({
     if (workflow?.creator.id !== currentUser?.id) {
         return null
     }
+
+    console.log(workflow)
     const formattedCreatedDate = formatDate(workflow.createdDate || '')
     return (
         <>

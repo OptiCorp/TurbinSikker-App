@@ -11,7 +11,6 @@ import { MyCheckLists } from './pages/checklist/committedWorkflows/Index'
 import { CompletedChecklists } from './pages/checklist/doneWorkflows/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
-
 import { Checklist } from './pages/checklist/sentWorkflows/Index'
 import { Profile } from './pages/profile'
 import Punch from './pages/punch/Index'
