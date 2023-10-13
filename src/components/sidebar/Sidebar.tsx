@@ -15,8 +15,8 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
     const navigate = useNavigate()
     const { instance } = useMsal()
     const handleSubmit = () => {
-        instance.logoutPopup()
         navigate('/')
+        instance.logoutPopup()
     }
     return (
         <>
