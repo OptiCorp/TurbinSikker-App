@@ -2,9 +2,9 @@ import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { UserChip } from '../submittedChecklists/UserChip'
-import { ChipStatus } from '../submittedChecklists/chipStatus'
-import { StyledBodyTitle } from '../submittedChecklists/styles'
+import { UserChip } from '../sentWorkflows/UserChip'
+import { ChipStatus } from '../sentWorkflows/chipStatus'
+import { StyledBodyTitle } from '../sentWorkflows/styles'
 
 import { Workflow } from '../../../services/apiTypes'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
@@ -21,7 +21,7 @@ export const InspectorPendingRow: FunctionComponent<
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    if (WorkFlow.status !== 'Committed' || !WorkFlow.checklist) return null
+    if (WorkFlow.status !== 'Committed') return null
 
     return (
         <>

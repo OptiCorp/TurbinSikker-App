@@ -5,8 +5,12 @@ import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
 import { Checklist } from '../../../services/apiTypes'
-import { StyledChip } from '../submittedChecklists/styles'
-import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
+import {
+    CellContentMyList,
+    MyCheckListCell,
+    StyledChip,
+    StyledTableRow,
+} from './styles'
 
 interface CheckListRowProps {
     checklist: Checklist
@@ -28,7 +32,6 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
 
     const navigate = useNavigate()
     const formattedCreatedDate = formatDate(checklist.createdDate || '')
-    const formattedUpdatedDate = formatDate(checklist.updatedDate || '')
 
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
@@ -59,15 +62,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                     </MyCheckListCell>
                     <MyCheckListCell>
                         <CellContentMyList>
-                            <StyledChip
-                                style={{
-                                    minWidth: '100px',
-                                    display: 'flex',
-                                    margin: '0 auto',
-                                    justifyContent: 'center',
-                                    alignContent: 'center',
-                                }}
-                            >
+                            <StyledChip>
                                 <Icon
                                     data={assignment_user}
                                     color="#243746"

@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Workflow } from '../../../services/apiTypes'
-import { HeadCell } from '../myChecklists/styles'
-import { InspectorReceivedCheckLists } from './InspectorCheckList'
-import { LeaderCheckListSend } from './LeaderCheckList'
+import { HeadCell } from '../committedWorkflows/styles'
+import { InspectorReceivedWorkflows } from './InspectorReceivedWorkflows'
+import { LeaderSentWorkflows } from './LeaderSentWorkflows'
 import {
     ListWrapperCheckL,
     StyledHeadContents,
@@ -15,7 +15,7 @@ import {
     Wrap,
 } from './styles'
 
-export const CheckList = () => {
+export const Checklist = () => {
     const { currentUser } = useGlobal()
     const { accounts } = useGlobal()
     const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
@@ -43,6 +43,7 @@ export const CheckList = () => {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
+                console.log(workflows)
                 setWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)
@@ -86,7 +87,7 @@ export const CheckList = () => {
                                     'Inspector' ? (
                                         <>
                                             {workflows?.map((workFlow) => (
-                                                <InspectorReceivedCheckLists
+                                                <InspectorReceivedWorkflows
                                                     WorkFlow={workFlow}
                                                     key={workFlow.id}
                                                 />
@@ -95,7 +96,7 @@ export const CheckList = () => {
                                     ) : (
                                         <>
                                             {allWorkflows?.map((workflow) => (
-                                                <LeaderCheckListSend
+                                                <LeaderSentWorkflows
                                                     workflow={workflow}
                                                     key={workflow.id}
                                                 />

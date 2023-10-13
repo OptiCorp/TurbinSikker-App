@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { StyledTableRow } from '../myChecklists/styles'
+import { StyledTableRow } from '../committedWorkflows/styles'
 
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
@@ -12,7 +12,7 @@ interface CheckListRowProps {
     WorkFlow: Workflow
 }
 
-export const InspectorReceivedCheckLists: FunctionComponent<
+export const InspectorReceivedWorkflows: FunctionComponent<
     CheckListRowProps
 > = ({ WorkFlow }) => {
     const navigate = useNavigate()
@@ -20,10 +20,11 @@ export const InspectorReceivedCheckLists: FunctionComponent<
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutChecklist/${id}`)
     }
+    if (WorkFlow.status !== 'Sent') return null
 
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(WorkFlow.id) }>
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.id)}>
                 <StyledTableCellCheckL>
                     <StyledBodyTitle>
                         <Typography variant="body_short_bold">

@@ -2,7 +2,7 @@ import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { StyledTableRow } from '../myChecklists/styles'
+import { StyledTableRow } from '../committedWorkflows/styles'
 
 import { formatDate } from '../../../Helpers'
 import useGlobal from '../../../context/globalContextProvider'
@@ -15,7 +15,7 @@ interface CheckListRowProps {
     workflow: Workflow
 }
 
-export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
+export const LeaderSentWorkflows: FunctionComponent<CheckListRowProps> = ({
     workflow,
 }) => {
     const navigate = useNavigate()

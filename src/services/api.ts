@@ -4,6 +4,7 @@ import {
     Category,
     Checklist,
     PunchItem,
+    
     Task,
     Upload,
     User,
@@ -380,9 +381,15 @@ const apiService = () => {
         })
     }
 
-    const updateWorkflow = async (id: string): Promise<void> => {
-        await postByFetch('Update', {
+    const updateWorkflow = async (
+        id: string,
+        status: string,
+        userId: string
+    ): Promise<void> => {
+        await putByFetch('UpdateWorkflow', {
             id: id,
+            userId: userId,
+            status: status,
         })
     }
 

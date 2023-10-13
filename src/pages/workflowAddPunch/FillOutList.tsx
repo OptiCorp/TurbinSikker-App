@@ -2,12 +2,12 @@ import { FunctionComponent, useState } from 'react'
 
 import { Card, Checkbox, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_drop_down } from '@equinor/eds-icons'
-import { Controller, useFormContext } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
+import apiService from '../../services/api'
 import {
     CustomCard,
     CustomCardContent,
@@ -16,33 +16,65 @@ import {
     FillOutWrap,
     ImageContainer,
     NotApplicableWrap,
-    StyledHeaderCard,
     StyledSwitch,
+    Test,
 } from './styles'
 import { FillOutListProps } from './types'
 
-export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks }) => {
+interface NaStatus {
+    [taskId: string]: boolean
+}
+
+interface CheckboxStatus {
+    [taskId: string]: boolean
+}
+
+export const FillOutList: FunctionComponent<FillOutListProps> = ({
+    tasks,
+    workflow,
+}) => {
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const [applicableStatuses, setApplicableStatuses] = useState<
         Record<string, boolean>
     >({})
 
-    const {
-        control,
-        formState: { errors },
-    } = useFormContext()
     const { workflowId } = useParams() as { workflowId: string }
 
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
-
-    const [checkboxChecked, setCheckboxChecked] = useState(false)
-
     const navigate = useNavigate()
-
-    const [taskId, setTaskId] = useState('')
-
     const createPunch = () => {
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
+    }
+    const [taskId, setTaskId] = useState('')
+    const [naStatus, setNaStatus] = useState<NaStatus>({})
+
+    const [checkboxStatus, setCheckboxStatus] = useState<CheckboxStatus>(
+        Object.fromEntries(tasks.map((x) => [x.id, false]))
+    )
+
+    const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(false)
+
+    const areAllCheckboxesChecked = tasks.every(
+        (task) => checkboxStatus[task.id]
+    )
+
+    const api = apiService()
+    const handleSubmit = async () => {
+        if (areAllCheckboxesChecked)
+            try {
+                await api.updateWorkflow(workflowId, 'Done', workflow.user.id)
+            } catch (error) {
+                console.log(error)
+            }
+        else {
+            setIsSubmissionAllowed(true)
+        }
+    }
+    const handleError = () => {
+        if (isSubmissionAllowed) {
+            return <span style={{ color: 'red' }}>required</span>
+        }
+        return null
     }
 
     return (
@@ -52,7 +84,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks }) => {
                     <FillOutWrap key={task.id}>
                         <div>
                             <CustomCard>
-                                <StyledHeaderCard
+                                <Card.Header
                                     style={{
                                         filter: applicableStatuses[task.id]
                                             ? 'blur(3px)'
@@ -78,46 +110,31 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks }) => {
                                     >
                                         Add punch
                                     </Typography>
-                                </StyledHeaderCard>
+                                </Card.Header>
                                 <CustomCardContent>
                                     <NotApplicableWrap>
-                                        <Controller
-                                            control={control}
-                                            name="N/A"
-                                            rules={{
-                                                required: 'Required',
+                                        <StyledSwitch
+                                            size="small"
+                                            label="N/A?"
+                                            type="checkbox"
+                                            value={[task.id] || false}
+                                            checked={
+                                                applicableStatuses[task.id] ||
+                                                false
+                                            }
+                                            onChange={(e) => {
+                                                setApplicableStatuses(
+                                                    (prev) => ({
+                                                        ...prev,
+                                                        [task.id]:
+                                                            e.target.checked,
+                                                    })
+                                                )
+
+                                                e.target.checked
+                                                    ? 'Active'
+                                                    : 'Disabled'
                                             }}
-                                            defaultValue={false}
-                                            render={({
-                                                field: { onChange },
-                                            }) => (
-                                                <StyledSwitch
-                                                    size="small"
-                                                    label="N/A?"
-                                                    type="checkbox"
-                                                    value={[task.id] || false}
-                                                    checked={
-                                                        applicableStatuses[
-                                                            task.id
-                                                        ] || false
-                                                    }
-                                                    onChange={(e) => {
-                                                        setApplicableStatuses(
-                                                            (prev) => ({
-                                                                ...prev,
-                                                                [task.id]:
-                                                                    e.target
-                                                                        .checked,
-                                                            })
-                                                        )
-                                                        onChange(
-                                                            e.target.checked
-                                                                ? 'Active'
-                                                                : 'Disabled'
-                                                        )
-                                                    }}
-                                                />
-                                            )}
                                         />
                                     </NotApplicableWrap>
                                     <CustomTaskField
@@ -155,35 +172,30 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks }) => {
                                     {applicableStatuses[task.id] ? (
                                         <ImageContainer />
                                     ) : (
-                                        <Controller
-                                            control={control}
-                                            rules={{
-                                                required: 'Required',
-                                            }}
-                                            name={`task.${task.id}`}
-                                            render={({ field }) => (
-                                                <Checkbox
-                                                    id="checkbox"
-                                                    aria-invalid={
-                                                        errors.agree
-                                                            ? 'true'
-                                                            : 'false'
-                                                    }
-                                                    aria-required
-                                                    checked={checkboxChecked}
-                                                    onChange={(e) => {
-                                                        setCheckboxChecked(
-                                                            e.target.checked
-                                                        )
-                                                        field.onChange(
-                                                            e.target.checked
-                                                                ? 'Active'
-                                                                : 'Disabled'
-                                                        )
-                                                    }}
-                                                />
-                                            )}
-                                        />
+                                        <Test>
+                                            <Checkbox
+                                                name={`task.${task.id}`}
+                                                id={`checkbox-${task.id}`}
+                                                checked={
+                                                    checkboxStatus[task.id] ||
+                                                    false
+                                                }
+                                                onChange={(e) => {
+                                                    setCheckboxStatus(
+                                                        (prev) => ({
+                                                            ...prev,
+                                                            [task.id]:
+                                                                e.target
+                                                                    .checked,
+                                                        })
+                                                    )
+                                                }}
+                                            />
+
+                                            {!checkboxStatus[task.id]
+                                                ? handleError()
+                                                : null}
+                                        </Test>
                                     )}
                                 </Card.Actions>
                             </CustomCard>
@@ -212,9 +224,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks }) => {
                         </Typography>
                     </CustomDialog>
                     <CustomDialog
-                        title="Submit form?"
-                        type="submit"
-                        form="fill-out-checklist"
+                        title={`Submit ${workflow.checklist.title}?`}
                         buttonVariant="ghost"
                         negativeButtonOnClick={() =>
                             setSubmitDialogShowing(false)
@@ -223,6 +233,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks }) => {
                         positiveButtonText="Submit"
                         positiveButtonOnClick={() => {
                             setSubmitDialogShowing(false)
+                            handleSubmit()
                         }}
                         isOpen={submitDialogShowing}
                     ></CustomDialog>
