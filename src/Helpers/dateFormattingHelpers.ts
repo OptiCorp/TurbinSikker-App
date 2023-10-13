@@ -1,5 +1,3 @@
-import { Status } from '../services/apiTypes'
-
 export function formatDate(dateString: string | '') {
     const date = new Date(dateString)
 
@@ -13,15 +11,4 @@ export function formatTimestamp(timeStamp: string) {
         .getMinutes()
         .toString()
         .padStart(2, '0')} ${amOrPm}`
-}
-
-export function getStatusBackgroundColor(status: string) {
-    switch (status) {
-        case Status.APPROVED:
-            return 'rgba(0, 137, 18, 1)'
-        case Status.REJECTED:
-            return 'rgba(255, 0, 0, 1)'
-        default:
-            return 'rgba(237, 137, 54, 1)'
-    }
 }
