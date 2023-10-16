@@ -94,6 +94,7 @@ export const useEditChecklist = () => {
             if (error) return
             console.log(error)
         } finally {
+            navigate('/Checklist')
         }
     }
 

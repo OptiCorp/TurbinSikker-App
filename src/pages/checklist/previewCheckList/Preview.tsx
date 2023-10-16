@@ -13,7 +13,6 @@ import {
     BackgroundContainer,
     EditStyledCardHeader,
     InfoHeader,
-    PreviewWrapper,
     StyledCard,
 } from './styles'
 
@@ -72,27 +71,26 @@ export const PreviewCheckList = () => {
                                 </EditStyledCardHeader>
                             </StyledCard>
                         </InfoHeader>
-                        <PreviewWrapper>
-                            {checklist?.checklistTasks?.length === 0 ? (
-                                <>
-                                    <Typography variant="body_short_bold">
-                                        No tasks added yet!
-                                    </Typography>
-                                    <Button
-                                        variant="outlined"
-                                        onClick={() => {
-                                            navigate(
-                                                `/EditCheckList/${checklist.id}`
-                                            )
-                                        }}
-                                    >
-                                        Add some tasks here!
-                                    </Button>
-                                </>
-                            ) : (
-                                <PreviewList key={checklist.id} tasks={tasks} />
-                            )}
-                        </PreviewWrapper>
+
+                        {checklist?.checklistTasks?.length === 0 ? (
+                            <>
+                                <Typography variant="body_short_bold">
+                                    No tasks added yet!
+                                </Typography>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => {
+                                        navigate(
+                                            `/EditCheckList/${checklist.id}`
+                                        )
+                                    }}
+                                >
+                                    Add some tasks here!
+                                </Button>
+                            </>
+                        ) : (
+                            <PreviewList key={checklist.id} tasks={tasks} />
+                        )}
                     </div>
                 )}
                 <>

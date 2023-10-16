@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { Workflow } from '../../services/apiTypes'
-import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 
 import { useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
@@ -48,20 +47,16 @@ export const FillOutCheckList = () => {
                             </AddPunchHeader>
                         </div>
 
-                        <PreviewWrapper>
-                            {workflow?.checklist?.checklistTasks?.map(
-                                (task) => (
-                                    <>
-                                        <FillOutList
-                                            key={task.id}
-                                            workFlow={workflow}
-                                            onUpdate={onUpdate}
-                                            task={task}
-                                        />
-                                    </>
-                                )
-                            )}
-                        </PreviewWrapper>
+                        {workflow?.checklist?.checklistTasks?.map((task) => (
+                            <>
+                                <FillOutList
+                                    key={task.id}
+                                    workFlow={workflow}
+                                    onUpdate={onUpdate}
+                                    task={task}
+                                />
+                            </>
+                        ))}
                     </div>
                 </form>
             </FormProvider>

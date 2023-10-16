@@ -10,15 +10,15 @@ export function NotificationBadge({ name }: { name: string }) {
     const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const { accessToken } = useGlobal()
     useEffect(() => {
-        if (!currentUser?.id || !accessToken || name !== 'Checklists') return
-        ;(async (): Promise<void> => {
-            try {
-                const workFlowData = await api.getAllWorkflows()
-                setAllWorkFlows(workFlowData)
-            } catch (error) {
-                console.log(error)
-            }
-        })()
+        if (!currentUser?.id || !accessToken || name !== 'Checklists')
+            (async (): Promise<void> => {
+                try {
+                    const workFlowData = await api.getAllWorkflows()
+                    setAllWorkFlows(workFlowData)
+                } catch (error) {
+                    console.log(error)
+                }
+            })()
     }, [accessToken, currentUser?.id])
 
     const committedWorkflows = allWorkflows?.filter(

@@ -28,7 +28,7 @@ export const CompletedList: FunctionComponent<CompletedRowProps> = ({
     }
 
     if (WorkFlow.status !== 'Done') return null
-    console.log(WorkFlow.checklist.title)
+
     return (
         <>
             <StyledTableRowCompleted

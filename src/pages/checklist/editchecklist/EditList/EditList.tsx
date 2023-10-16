@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
 import { Checklist, Task } from '../../../../services/apiTypes'
+import { PreviewListPoints } from '../../previewCheckList/styles'
+import { useEditChecklist } from '../hooks/useEditChecklist'
 import {
     CategoryName,
-    PreviewListPoints,
-    PreviewListWrap,
+    Container,
+    EditListPoints,
+    EditWrapper,
     StyledCard,
-} from '../../previewCheckList/styles'
-import { useEditChecklist } from '../hooks/useEditChecklist'
-import { EditListPoints } from '../styles'
+} from '../styles'
 
 type Props = {
     checklist: Checklist
@@ -28,64 +29,60 @@ export const EditList = ({ tasks }: Props) => {
 
         if (!categoryId || !taskId) return
         handleUpdateTask({
-            description: content,
-            categoryId,
             taskId,
+            categoryId,
+            description: content,
+
             checklistId: id,
         })
         setDialogShowing(false)
     }
 
+
+
     return (
-        <>
+        <EditWrapper>
             {tasks.map((task) => (
-                <>
-                    <PreviewListWrap key={task.id}>
-                        <CategoryName>{task.category.name}</CategoryName>
-                        <StyledCard
-                            style={{
-                                width: '100%',
-                            }}
-                        >
-                            <PreviewListPoints
-                                label=""
-                                key={task?.id}
-                                id="storybook-multi-readonly"
-                                placeholder={task?.description}
-                                multiline
-                                rows={3}
-                                onClick={() => {
-                                    setTask(task)
-                                    setDialogShowing(true)
-                                }}
-                            />{' '}
-                        </StyledCard>
-                    </PreviewListWrap>
-                    <CustomDialog
-                        isOpen={dialogShowing}
-                        negativeButtonOnClick={() => setDialogShowing(false)}
-                        title="Edit task"
-                        negativeButtonText="Cancel"
-                        positiveButtonText="Save"
-                        buttonVariant="ghost"
-                        positiveButtonOnClick={handleSubmit}
-                    >
-                        <EditListPoints
+                <Container key={task.id}>
+                    <CategoryName>{task.category.name}</CategoryName>
+                    <StyledCard>
+                        <PreviewListPoints
                             label=""
-                            key={task?.id ?? ''}
+                            key={task?.id}
                             id="storybook-multi-readonly"
-                            defaultValue={task?.description ?? ''}
+                            placeholder={task?.description}
                             multiline
-                            rows={5}
-                            onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                                setContent(event.target.value)
+                            rows={3}
+                            onClick={() => {
+                                setTask(task)
+                                setDialogShowing(true)
                             }}
-                        />
-                    </CustomDialog>
-                </>
+                        />{' '}
+                    </StyledCard>
+                </Container>
             ))}
-        </>
+
+            <CustomDialog
+                isOpen={dialogShowing}
+                negativeButtonOnClick={() => setDialogShowing(false)}
+                title="Edit task"
+                negativeButtonText="Cancel"
+                positiveButtonText="Save"
+                buttonVariant="ghost"
+                positiveButtonOnClick={handleSubmit}
+            >
+                <EditListPoints
+                    label=""
+                    key={task?.id ?? ''}
+                    id="storybook-multi-readonly"
+                    defaultValue={task?.description ?? ''}
+                    multiline
+                    rows={5}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setContent(event.target.value)
+                    }}
+                />
+            </CustomDialog>
+        </EditWrapper>
     )
 }

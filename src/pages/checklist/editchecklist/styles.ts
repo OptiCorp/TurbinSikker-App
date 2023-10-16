@@ -33,13 +33,10 @@ export const ScrollWrapper = styled.div`
 `
 export const EditWrapper = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 100%;
-    gap: 3rem;
-
-    margin: 1rem auto;
     flex-direction: column;
+    padding-bottom: 5rem;
+    width: 70%;
+    margin: 0 auto;
 `
 export const EditStyledCardHeader = styled(Card.Header)`
     display: flex;
@@ -55,4 +52,21 @@ export const StyledSwitch = styled(Switch)`
     flex-direction: row;
     top: 0;
     margin: 0 auto;
+`
+export const Container = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+`
+export const StyledCard = styled(Card)`
+    font-size: 1.5rem;
+    background: white;
+    margin: 0 auto;
+    text-align: center;
+`
+export const CategoryName = styled.h3`
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
 `

@@ -1,30 +1,17 @@
 import { Card, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
-export const PreviewWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 100%;
-    overflow: scroll;
-    margin: 1rem auto;
-    flex-direction: column;
-`
-
 export const InfoHeader = styled.div`
     display: flex;
     width: 100%;
     min-height: 50px;
 `
 export const PreviewListWrap = styled.ul`
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5rem;
+    width: 70%;
     margin: 0 auto;
-    display: grid;
-    grid-template-rows: 1fr;
-    padding: 0;
-    grid-template-columns: 1fr;
-    width: 40%;
-    min-width: 300px;
-    height: 70px;
 `
 export const PreviewListPoints = styled(TextField)`
     text-align: center;
@@ -46,6 +33,7 @@ export const CategoryName = styled.h3`
 
 export const Container = styled.div`
     width: 100%;
+  
     display: flex;
     flex-direction: column;
 `

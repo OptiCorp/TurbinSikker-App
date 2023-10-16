@@ -79,7 +79,7 @@ export const MyCheckLists = () => {
             }
         })()
     }, [accessToken, currentUser?.id])
-    console.log(workflow)
+   
     return (
         <>
             <BackgroundWrap>

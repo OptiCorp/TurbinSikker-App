@@ -1,18 +1,18 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent } from 'react'
 
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
-import { Checklist, Workflow } from '../../../services/apiTypes'
+import { Checklist } from '../../../services/apiTypes'
 
-import apiService from '../../../services/api'
 import {
     CellContentMyList,
     MyCheckListCell,
     StyledChip,
     StyledTableRow,
 } from './styles'
+import { useInspectorsAssigned } from './useInspectorsAssigned'
 
 interface CheckListRowProps {
     checklist: Checklist
@@ -31,24 +31,17 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
 
         return date.toLocaleDateString('en-GB')
     }
-    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
+
     const navigate = useNavigate()
     const formattedCreatedDate = formatDate(checklist.createdDate || '')
-    const api = apiService()
+    const { inspectorCounts } = useInspectorsAssigned()
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    useEffect(() => {
-        ;(async (): Promise<void> => {
-            try {
-                const workFlowData = await api.getAllWorkflows()
-                setAllWorkFlows(workFlowData)
-            } catch (error) {
-                console.log(error)
-            }
-        })()
-    }, [])
+    const inspectorCount = inspectorCounts.find(
+        (item) => item.title === checklist.title
+    )?.count
 
     return (
         <>
@@ -87,7 +80,12 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                         fontSize: '0.8rem',
                                     }}
                                 >
-                                    0 inspectors
+                                    {inspectorCount || 0}
+                                    {` ${
+                                        inspectorCount === 1
+                                            ? 'Inspector'
+                                            : 'Inspectors'
+                                    }`}
                                 </Typography>
                             </StyledChip>
                         </CellContentMyList>
