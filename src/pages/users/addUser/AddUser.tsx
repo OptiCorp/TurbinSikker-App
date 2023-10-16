@@ -15,46 +15,19 @@ export const AddUser: FC = () => {
     const { hasPermission } = useHasPermission()
 
     return (
-        <>
-            {!hasPermission ? (
-                <UserInfoWrapper>
-                    <div>
-                        <UserTitle>
-                            {user?.firstName} {user?.lastName}
-                        </UserTitle>
-                        <p>First name: {user?.firstName}</p>
-                        <p>Last name: {user?.lastName}</p>
-                        <p>Username: {user?.username}</p>
-                        <p>Role: {user?.userRole.name}</p>
-                        <p>Email: {user?.email}</p>
-                    </div>
-                    <DefaultNavigation hideNavbar={false} />
-                </UserInfoWrapper>
-            ) : (
-                <FormProvider {...methods}>
-                    <Wrapper>
-                        <FormWrapper onSubmit={handleSubmit(onSubmit)} id="add-user">
-                            <InputField name="username" label="Username" placeholder="username" />
-                            <InputField
-                                name="firstName"
-                                label="First name"
-                                placeholder="first name"
-                            />
-                            <InputField name="lastName" label="Last name" placeholder="last name" />
-                            <InputField
-                                name="email"
-                                label="email"
-                                placeholder="email"
-                                type="email"
-                            />
-                            <RoleSelector />
-                            {user && <StatusSwitch />}
-                        </FormWrapper>
-                    </Wrapper>
+        <FormProvider {...methods}>
+            <Wrapper>
+                <FormWrapper onSubmit={handleSubmit(onSubmit)} id="add-user">
+                    <InputField name="username" label="Username" placeholder="username" />
+                    <InputField name="firstName" label="First name" placeholder="first name" />
+                    <InputField name="lastName" label="Last name" placeholder="last name" />
+                    <InputField name="email" label="email" placeholder="email" type="email" />
+                    <RoleSelector />
+                    {user && <StatusSwitch />}
+                </FormWrapper>
+            </Wrapper>
 
-                    <ModifyUserNav />
-                </FormProvider>
-            )}
-        </>
+            {hasPermission && <ModifyUserNav />}
+        </FormProvider>
     )
 }
