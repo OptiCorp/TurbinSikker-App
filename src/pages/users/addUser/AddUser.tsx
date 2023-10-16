@@ -6,8 +6,7 @@ import { InputField } from './inputField'
 import { ModifyUserNav } from './modifyUserNav/modifyUserNav'
 import { RoleSelector } from './roleSelector'
 import { StatusSwitch } from './status/StatusSwitch'
-import { FormWrapper, UserInfoWrapper, UserTitle, Wrapper } from './styles'
-import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { FormWrapper, Wrapper } from './styles'
 
 export const AddUser: FC = () => {
     const { methods, onSubmit, user } = useAddUser()
