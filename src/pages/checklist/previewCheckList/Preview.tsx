@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Task } from '../../../services/apiTypes'
+import { useRoles } from '../../../services/useRoles'
 import { PreviewList } from './PreviewList'
 import {
     BackgroundContainer,
@@ -28,7 +29,7 @@ export const PreviewCheckList = () => {
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
-
+    const { isInspector } = useRoles()
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return
 
@@ -95,7 +96,7 @@ export const PreviewCheckList = () => {
                     </div>
                 )}
                 <>
-                    {currentUser?.userRole.name === 'Inspector' ? (
+                    {isInspector ? (
                         <DefaultNavigation hideNavbar={false} />
                     ) : (
                         <>

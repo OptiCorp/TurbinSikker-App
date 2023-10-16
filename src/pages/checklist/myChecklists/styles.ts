@@ -1,4 +1,4 @@
-import { Dialog, Table, TextField } from '@equinor/eds-core-react'
+import { Chip, Dialog, Table, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
 export const ListWrapperCheckMyList = styled.div`
@@ -29,7 +29,7 @@ export const HeadCell = styled(Table.Cell)`
 export const StyledHeadContents = styled.h3`
     height: 10px;
     display: inline;
-    text-align: center;
+    text-align: left;
     width: 100%;
 `
 export const StyledHeadTitle = styled.h3`
@@ -83,4 +83,12 @@ export const MakeTitleField = styled(TextField)`
     margin: 0 auto;
     color: red;
     line-height: 5px;
+`
+
+export const StyledChip = styled(Chip)`
+    min-width: 100px;
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    align-content: center;
 `

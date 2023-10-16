@@ -22,8 +22,8 @@ export const CompletedChecklists = () => {
     const { accessToken, currentUser } = useGlobal()
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
-        ;async (): Promise<void> => {
+        if (!currentUser || !accessToken) return
+        ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
@@ -32,7 +32,7 @@ export const CompletedChecklists = () => {
             } catch (error) {
                 console.log(error)
             }
-        }
+        })()
     }, [accessToken, currentUser?.id])
 
     return (
@@ -61,7 +61,7 @@ export const CompletedChecklists = () => {
                         </Table.Head>
 
                         <Table.Body>
-                            {workflows?.map((WorkFlow) => (
+                            {workflows.map((WorkFlow) => (
                                 <CompletedList
                                     WorkFlow={WorkFlow}
                                     key={WorkFlow.id}

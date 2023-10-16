@@ -1,12 +1,18 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 
 import { Chip, Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
-import { Checklist } from '../../../services/apiTypes'
-import { StyledChip } from '../submittedChecklists/styles'
-import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
+import { Checklist, Workflow } from '../../../services/apiTypes'
+
+import apiService from '../../../services/api'
+import {
+    CellContentMyList,
+    MyCheckListCell,
+    StyledChip,
+    StyledTableRow,
+} from './styles'
 
 interface CheckListRowProps {
     checklist: Checklist
@@ -25,14 +31,24 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
 
         return date.toLocaleDateString('en-GB')
     }
-
+    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const navigate = useNavigate()
     const formattedCreatedDate = formatDate(checklist.createdDate || '')
-    const formattedUpdatedDate = formatDate(checklist.updatedDate || '')
-
+    const api = apiService()
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
+
+    useEffect(() => {
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflows()
+                setAllWorkFlows(workFlowData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [])
 
     return (
         <>
@@ -59,15 +75,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                     </MyCheckListCell>
                     <MyCheckListCell>
                         <CellContentMyList>
-                            <StyledChip
-                                style={{
-                                    minWidth: '100px',
-                                    display: 'flex',
-                                    margin: '0 auto',
-                                    justifyContent: 'center',
-                                    alignContent: 'center',
-                                }}
-                            >
+                            <StyledChip>
                                 <Icon
                                     data={assignment_user}
                                     color="#243746"

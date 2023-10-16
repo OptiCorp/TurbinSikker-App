@@ -4,6 +4,7 @@ import styled from 'styled-components'
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
+    margin-bottom: 30px;
     align-items: center;
     gap: 50%;
 `
@@ -13,6 +14,7 @@ export const EditListPoints = styled(TextField)`
     padding: 0;
     margin: 0 auto;
     color: red;
+
     line-height: 5px;
 `
 
@@ -27,6 +29,7 @@ export const BackgroundContainer = styled.div`
 export const ScrollWrapper = styled.div`
     overflow: scroll;
     padding-bottom: 20px;
+    margin-bottom: 4rem;
 `
 export const EditWrapper = styled.div`
     display: flex;

@@ -28,32 +28,31 @@ export const CompletedList: FunctionComponent<CompletedRowProps> = ({
     }
 
     if (WorkFlow.status !== 'Done') return null
+    console.log(WorkFlow.checklist.title)
     return (
         <>
-            {WorkFlow && (
-                <StyledTableRowCompleted
-                    onClick={() => clickHandler(WorkFlow.checklist.id)}
-                >
-                    <CompletedCell>
-                        <StyledBodyTitleCompleted>
-                            <Typography variant="body_long_bold">
-                                {WorkFlow.checklist.title}
-                            </Typography>
-                        </StyledBodyTitleCompleted>
-                    </CompletedCell>
-                    <CompletedCell>
-                        <CellContentCompleted>
-                            <UserChip workflow={WorkFlow} />
-                        </CellContentCompleted>
-                    </CompletedCell>
+            <StyledTableRowCompleted
+                onClick={() => clickHandler(WorkFlow.checklist.id)}
+            >
+                <CompletedCell>
+                    <StyledBodyTitleCompleted>
+                        <Typography variant="body_long_bold">
+                            {WorkFlow.checklist.title}
+                        </Typography>
+                    </StyledBodyTitleCompleted>
+                </CompletedCell>
+                <CompletedCell>
+                    <CellContentCompleted>
+                        <UserChip workflow={WorkFlow} />
+                    </CellContentCompleted>
+                </CompletedCell>
 
-                    <CompletedCell>
-                        <CellContentCompleted>
-                            <ChipStatus workflow={WorkFlow} />
-                        </CellContentCompleted>
-                    </CompletedCell>
-                </StyledTableRowCompleted>
-            )}
+                <CompletedCell>
+                    <CellContentCompleted>
+                        <ChipStatus workflow={WorkFlow} />
+                    </CellContentCompleted>
+                </CompletedCell>
+            </StyledTableRowCompleted>
         </>
     )
 }

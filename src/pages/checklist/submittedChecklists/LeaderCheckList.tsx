@@ -15,7 +15,9 @@ interface CheckListRowProps {
     workflow: Workflow
 }
 
-export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({ workflow }) => {
+export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
+    workflow,
+}) => {
     const navigate = useNavigate()
     const clickHandler = (id: string | undefined) => {
         navigate(`/PreviewCheckList/${id}`)
@@ -31,12 +33,15 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({ work
             <StyledTableRow
                 onClick={() => clickHandler(workflow.checklist.id)}
                 style={{
-                    backgroundColor: workflow.status === 'Committed' ? 'lightGrey' : 'none',
+                    backgroundColor:
+                        workflow.status === 'Committed' ? 'lightGrey' : 'none',
                 }}
             >
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography variant="body_long_bold">{workflow.checklist.title}</Typography>
+                        <Typography variant="body_long_bold">
+                            {workflow.checklist.title}
+                        </Typography>
 
                         <Typography
                             variant="caption"

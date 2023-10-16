@@ -56,7 +56,7 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 <GlobalProvider>
-                                    <MyCheckLists />
+                                    <CheckList />
                                 </GlobalProvider>
                             }
                         />
