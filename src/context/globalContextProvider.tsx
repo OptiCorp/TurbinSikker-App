@@ -29,10 +29,16 @@ export function GlobalProvider({ children }: { children: ReactNode }): JSX.Eleme
                 scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
                 account: accounts.at(0),
             }
-            instance.acquireTokenSilent(accessTokenRequest).then((tokenResponse) => {
-                setAccessToken(tokenResponse.accessToken)
-                setIdToken(tokenResponse.idToken)
-            })
+            instance
+                .acquireTokenSilent(accessTokenRequest)
+                .then((tokenResponse) => {
+                    setAccessToken(tokenResponse.accessToken)
+                    setIdToken(tokenResponse.idToken)
+                })
+                .catch((err) => {
+                    console.error(err)
+                    instance.logoutRedirect()
+                })
         }
     }, [account, inProgress, accounts, instance, accountname, accountUsername])
 
