@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import apiService from '../../../../services/api'
+import { useAddUser } from '../hooks/useAddUser'
+import { useEffect, useState } from 'react'
 import { UserRole } from '../../../../services/apiTypes'
-import { useAddUser } from '../../hooks/useAddUser'
+import apiService from '../../../../services/api'
+import { useHasPermission } from '../../hooks/useHasPermission'
 
 export const RoleSelector = () => {
     const api = apiService()
     const { control, setValue } = useFormContext()
+    const { hasPermission } = useHasPermission()
     const { user } = useAddUser()
     const [userRoles, setUserRoles] = useState<UserRole[]>()
 
@@ -45,6 +47,7 @@ export const RoleSelector = () => {
                     return (
                         <Select
                             placeholder={user?.userRole.name}
+                            isDisabled={!hasPermission}
                             options={options}
                             value={options?.find((c) => c.value === value)}
                             onChange={(val) => {

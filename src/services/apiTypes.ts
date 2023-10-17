@@ -39,9 +39,9 @@ export type ListEntity = {
 export type PunchItem = {
     id: string
     workflowId: string
-    description: string
+    description?: string
     status: string
-    severity: string
+    severity?: string
     message: string
     createdDate: string
     updatedDate: null | string

@@ -49,12 +49,14 @@ export const UserRow: FunctionComponent<Props> = ({ user }) => {
                 )}
             </StyledTableCell>
             <StyledTableCell>
-                <Icon
-                    data={edit}
-                    size={16}
-                    color="#007079"
-                    onClick={() => clickHandler(user.id)}
-                />
+                {hasPermission && (
+                    <Icon
+                        data={edit}
+                        size={16}
+                        color="#007079"
+                        onClick={() => clickHandler(user.id)}
+                    />
+                )}
             </StyledTableCell>
         </Table.Row>
     )
