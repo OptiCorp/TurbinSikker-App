@@ -26,8 +26,6 @@ export const PunchHeaderWrapper = styled.div`
 `
 
 export const PunchHeader = styled.div`
-    /* min-width: 320px; */
-    /* width: 90%; */
     display: flex;
     justify-content: space-between;
     margin-top: 16px;
@@ -47,7 +45,7 @@ export const PunchUploadContainer = styled.div`
         right: 0;
         height: 100%;
         opacity: 50%;
-        /* filter: blur(1px); */
+
         background-color: transparent;
         border: none;
     }

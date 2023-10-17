@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Task } from '../../../services/apiTypes'
+import { useRoles } from '../../../services/useRoles'
 import { PreviewList } from './PreviewList'
 import {
     BackgroundContainer,
     EditStyledCardHeader,
     InfoHeader,
-    PreviewWrapper,
     StyledCard,
 } from './styles'
 
@@ -28,7 +28,7 @@ export const PreviewCheckList = () => {
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
-
+    const { isInspector } = useRoles()
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return
 
@@ -71,31 +71,30 @@ export const PreviewCheckList = () => {
                                 </EditStyledCardHeader>
                             </StyledCard>
                         </InfoHeader>
-                        <PreviewWrapper>
-                            {checklist?.checklistTasks?.length === 0 ? (
-                                <>
-                                    <Typography variant="body_short_bold">
-                                        No tasks added yet!
-                                    </Typography>
-                                    <Button
-                                        variant="outlined"
-                                        onClick={() => {
-                                            navigate(
-                                                `/EditCheckList/${checklist.id}`
-                                            )
-                                        }}
-                                    >
-                                        Add some tasks here!
-                                    </Button>
-                                </>
-                            ) : (
-                                <PreviewList key={checklist.id} tasks={tasks} />
-                            )}
-                        </PreviewWrapper>
+
+                        {checklist?.checklistTasks?.length === 0 ? (
+                            <>
+                                <Typography variant="body_short_bold">
+                                    No tasks added yet!
+                                </Typography>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => {
+                                        navigate(
+                                            `/EditCheckList/${checklist.id}`
+                                        )
+                                    }}
+                                >
+                                    Add some tasks here!
+                                </Button>
+                            </>
+                        ) : (
+                            <PreviewList key={checklist.id} tasks={tasks} />
+                        )}
                     </div>
                 )}
                 <>
-                    {currentUser?.userRole.name === 'Inspector' ? (
+                    {isInspector ? (
                         <DefaultNavigation hideNavbar={false} />
                     ) : (
                         <>

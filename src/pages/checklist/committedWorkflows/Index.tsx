@@ -1,3 +1,4 @@
+import { useMsal } from '@azure/msal-react'
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -7,6 +8,7 @@ import { NavActionsComponent } from '../../../components/navigation/hooks/useNav
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Workflow } from '../../../services/apiTypes'
+import { useRoles } from '../../../services/useRoles'
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklists } from './LeaderMyChecklists'
 import {
@@ -32,7 +34,8 @@ export const MyCheckLists = () => {
     const [dialogShowing, setDialogShowing] = useState(false)
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
-
+    const { isLeader, isInspector } = useRoles()
+    const { accounts } = useMsal()
     const handleCreateChecklist = async () => {
         try {
             if (!currentUser || !accessToken) return
@@ -64,7 +67,7 @@ export const MyCheckLists = () => {
     }, [accessToken, currentUser?.id])
 
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
+        if (!currentUser?.id) return
         ;(async (): Promise<void> => {
             try {
                 const checklistData = await api.getAllChecklistsByUserId(
@@ -77,7 +80,7 @@ export const MyCheckLists = () => {
             }
         })()
     }, [accessToken, currentUser?.id])
-
+   
     return (
         <>
             <BackgroundWrap>
@@ -103,7 +106,7 @@ export const MyCheckLists = () => {
 
                         <Table.Body>
                             <>
-                                {currentUser?.userRole.name === 'Inspector' ? (
+                                {isInspector ? (
                                     <>
                                         {workflow.map((WorkFlow) => (
                                             <InspectorPendingRow
@@ -142,7 +145,7 @@ export const MyCheckLists = () => {
                     SecondButtonMessage="Cancel"
                     isShown={true}
                 />
-            ) : currentUser?.userRole.name === 'Leader' ? (
+            ) : isLeader ? (
                 <NavActionsComponent
                     buttonVariant="outlined"
                     onClick={() => {

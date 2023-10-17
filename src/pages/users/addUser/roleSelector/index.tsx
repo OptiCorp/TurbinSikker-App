@@ -1,9 +1,10 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import { useAddUser } from '../hooks/useAddUser'
+
 import { useEffect, useState } from 'react'
-import { UserRole } from '../../../../services/apiTypes'
 import apiService from '../../../../services/api'
+import { UserRole } from '../../../../services/apiTypes'
+import { useAddUser } from '../../hooks/useAddUser'
 import { useHasPermission } from '../../hooks/useHasPermission'
 
 export const RoleSelector = () => {

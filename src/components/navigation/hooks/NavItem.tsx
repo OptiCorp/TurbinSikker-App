@@ -19,7 +19,7 @@ export const NavItem = ({
         <Link to={to} style={{ textDecoration: 'none' }}>
             <ImageContainerActive>
                 <Test>
-                    {name === 'Checklist' && isActive ? (
+                    {name === 'Checklists' && isActive ? (
                         <NotificationBadge name={name} />
                     ) : null}
                 </Test>

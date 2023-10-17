@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Task, Workflow } from '../../services/apiTypes'
-import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 
 import { useParams } from 'react-router'
 
 import apiService from '../../services/api'
+import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 import { FillOutList } from './FillOutList'
 
 export const FillOutCheckList = () => {

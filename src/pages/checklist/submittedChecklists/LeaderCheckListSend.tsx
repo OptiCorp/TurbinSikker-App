@@ -15,7 +15,7 @@ interface CheckListRowProps {
     workflow: Workflow
 }
 
-export const LeaderSentWorkflows: FunctionComponent<CheckListRowProps> = ({
+export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     workflow,
 }) => {
     const navigate = useNavigate()

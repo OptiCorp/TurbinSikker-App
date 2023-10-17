@@ -2,8 +2,7 @@ import { Icon, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { FC } from 'react'
 import { Workflow } from '../../../services/apiTypes'
-
-import useGlobal from '../../../context/globalContextProvider'
+import { useRoles } from '../../../services/useRoles'
 import { StyledChip } from './styles'
 
 type UserChip = {
@@ -11,7 +10,7 @@ type UserChip = {
 }
 
 export const UserChip: FC<UserChip> = ({ workflow }) => {
-    const { currentUser } = useGlobal()
+    const { isInspector } = useRoles()
 
     return (
         <div>
@@ -23,7 +22,7 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
                         fontSize: '0.8rem',
                     }}
                 >
-                    {currentUser?.userRole.name === 'Inspector' ? (
+                    {isInspector ? (
                         <>
                             {workflow.creator?.firstName}{' '}
                             {workflow.creator?.lastName}

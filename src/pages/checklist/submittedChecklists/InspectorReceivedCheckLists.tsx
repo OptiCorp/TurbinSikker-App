@@ -12,7 +12,7 @@ interface CheckListRowProps {
     WorkFlow: Workflow
 }
 
-export const InspectorReceivedWorkflows: FunctionComponent<
+export const InspectorReceivedCheckLists: FunctionComponent<
     CheckListRowProps
 > = ({ WorkFlow }) => {
     const navigate = useNavigate()
@@ -20,8 +20,7 @@ export const InspectorReceivedWorkflows: FunctionComponent<
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutChecklist/${id}`)
     }
-    if (WorkFlow.status !== 'Sent') return null
-
+    if (WorkFlow.status !== 'Sent' || !WorkFlow.checklist) return null
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.id)}>

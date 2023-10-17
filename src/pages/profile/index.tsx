@@ -15,7 +15,6 @@ import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
-import useGlobal from '../../context/globalContextProvider'
 
 export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
@@ -29,7 +28,8 @@ export const Profile: FunctionComponent = () => {
             console.log(URL.createObjectURL(event.target.files[0]))
         }
     }
-    const { currentUser } = useGlobal()
+
+    const { accounts } = useMsal()
 
     return (
         <>
@@ -60,7 +60,7 @@ export const Profile: FunctionComponent = () => {
                                 }}
                             />
                         </ContainerIcon>
-                    </label>{' '}
+                    </label>
                 </ImageContainer>
                 <input
                     type="file"
@@ -70,17 +70,15 @@ export const Profile: FunctionComponent = () => {
                     onChange={loadFile}
                     style={{ display: 'none' }}
                 />
-                {!currentUser ? (
+                {!accounts[0] ? (
                     <Info>
                         <p>Loading user info..</p>
                     </Info>
                 ) : (
                     <Info>
-                        <Typography variant="h5">
-                            {currentUser?.firstName} {currentUser?.lastName}
-                        </Typography>
+                        <Typography variant="h5">{accounts[0].name}</Typography>
                         <Typography variant="body_short">
-                            {currentUser?.userRole.name}
+                            {accounts[0].idTokenClaims?.roles}
                         </Typography>
                     </Info>
                 )}
