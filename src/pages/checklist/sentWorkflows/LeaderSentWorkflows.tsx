@@ -2,7 +2,7 @@ import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { StyledTableRow } from '../myChecklists/styles'
+import { StyledTableRow } from '../committedWorkflows/styles'
 
 import { formatDate } from '../../../Helpers/dateFormattingHelpers'
 import useGlobal from '../../../context/globalContextProvider'
@@ -15,7 +15,9 @@ interface CheckListRowProps {
     workflow: Workflow
 }
 
-export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({ workflow }) => {
+export const LeaderSentWorkflows: FunctionComponent<CheckListRowProps> = ({
+    workflow,
+}) => {
     const navigate = useNavigate()
     const clickHandler = (id: string | undefined) => {
         navigate(`/PreviewCheckList/${id}`)
@@ -25,18 +27,23 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({ work
     if (workflow?.creator.id !== currentUser?.id) {
         return null
     }
+
+    console.log(workflow)
     const formattedCreatedDate = formatDate(workflow.createdDate || '')
     return (
         <>
             <StyledTableRow
                 onClick={() => clickHandler(workflow.checklist.id)}
                 style={{
-                    backgroundColor: workflow.status === 'Committed' ? 'lightGrey' : 'none',
+                    backgroundColor:
+                        workflow.status === 'Committed' ? 'lightGrey' : 'none',
                 }}
             >
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography variant="body_long_bold">{workflow.checklist.title}</Typography>
+                        <Typography variant="body_long_bold">
+                            {workflow.checklist.title}
+                        </Typography>
 
                         <Typography
                             variant="caption"

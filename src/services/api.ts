@@ -1,5 +1,6 @@
 import { API_URL } from '../config'
 import { pca } from '../msalconfig'
+
 import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow } from './apiTypes'
 
 const request = {
@@ -347,9 +348,15 @@ const apiService = () => {
         })
     }
 
-    const updateWorkflow = async (id: string): Promise<void> => {
-        await postByFetch('Update', {
+    const updateWorkflow = async (
+        id: string,
+        status: string,
+        userId: string
+    ): Promise<void> => {
+        await putByFetch('UpdateWorkflow', {
             id: id,
+            userId: userId,
+            status: status,
         })
     }
 

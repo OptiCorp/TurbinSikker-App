@@ -1,8 +1,8 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { UserChip } from '../submittedChecklists/UserChip'
-import { ChipStatus } from '../submittedChecklists/chipStatus'
+import { UserChip } from '../sentWorkflows/UserChip'
+import { ChipStatus } from '../sentWorkflows/chipStatus'
 
 import { Workflow } from '../../../services/apiTypes'
 import {
@@ -26,7 +26,7 @@ export const CompletedList: FunctionComponent<CompletedRowProps> = ({
             state: { isFromCompletedList: true },
         })
     }
-
+    console.log(WorkFlow)
     if (WorkFlow.status !== 'Done') return null
     return (
         <>

@@ -20,11 +20,15 @@ export const RoleSelector = () => {
         })()
     }, [])
 
-    const currentDefaultValue = userRoles?.find((role) => role.name === user?.userRole.name)
-    const options = userRoles?.map(({ id, name }: { id: string; name: string }) => ({
-        value: id,
-        label: name,
-    }))
+    const currentDefaultValue = userRoles?.find(
+        (role) => role.name === user?.userRole.name
+    )
+    const options = userRoles?.map(
+        ({ id, name }: { id: string; name: string }) => ({
+            value: id,
+            label: name,
+        })
+    )
 
     return (
         <>

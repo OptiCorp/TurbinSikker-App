@@ -14,7 +14,7 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
             return (
                 <>
                     <Chip style={{ margin: '0 auto' }} variant="default">
-                        in progress
+                        Received
                     </Chip>
                     <Typography
                         variant="caption"
@@ -30,7 +30,7 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
         case 'Committed':
             return (
                 <Chip style={{ margin: '0 auto' }} variant="active">
-                    Ready for review
+                    Committed
                 </Chip>
             )
 
@@ -38,7 +38,7 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
             return (
                 <>
                     <Chip style={{ margin: '0 auto' }} disabled>
-                        completed
+                        Completed
                     </Chip>
                     <Typography
                         variant="caption"

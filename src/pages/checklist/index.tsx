@@ -23,7 +23,7 @@ export const IndexCheckLists = () => {
                     <Tabs.List>
                         <Tabs.Tab
                             as={Link}
-                            to="/Checklist"
+                            to="/Checklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
@@ -34,9 +34,9 @@ export const IndexCheckLists = () => {
                             }}
                         >
                             {currentUser?.userRole.name === 'Leader' ? (
-                                <> Submitted CheckLists</>
+                                <> Sent</>
                             ) : (
-                                <>In progress</>
+                                <>Received </>
                             )}
                         </Tabs.Tab>
                         <Tabs.Tab
@@ -54,12 +54,12 @@ export const IndexCheckLists = () => {
                             {currentUser?.userRole.name === 'Leader' ? (
                                 <> My checklists</>
                             ) : (
-                                <>Submitted</>
+                                <>Committed</>
                             )}
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
-                            to="/CompletedChecklist"
+                            to="/CompletedChecklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',

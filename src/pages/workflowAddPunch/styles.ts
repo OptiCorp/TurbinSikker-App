@@ -2,12 +2,6 @@ import { Card, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import NA from '../../assets/images/notApplicable.png'
 
-export const AddPunchHeader = styled.div`
-    display: flex;
-    width: 100%;
-    min-height: 50px;
-`
-
 export const NotApplicableWrap = styled.div`
     display: flex;
     flex-direction: column;
@@ -24,13 +18,6 @@ export const ImageContainer = styled.div`
     height: 50px;
     width: 30px;
     margin: 0 auto;
-`
-
-export const StyledCard = styled(Card)`
-    font-size: 1.5rem;
-    display: grid;
-
-    grid-template-columns: 1fr 1fr 1fr;
 `
 
 export const CustomCard = styled(Card)`
@@ -54,17 +41,9 @@ export const CustomCardContent = styled(Card.Content)`
     margin: 0 auto;
 `
 
-export const StyledHeaderCard = styled(Card.Header)`
-    width: min(2s00px);
+export const CustomCategoryName = styled.h3`
+    min-width: 220px;
 `
-
-export const StyledCardHeader = styled(Card.Header)`
-    grid-column: 3/3;
-    width: 150px;
-    margin: 0 auto;
-`
-
-export const CustomCategoryName = styled.h3``
 
 export const CustomTaskField = styled(TextField)`
     & textarea {
@@ -99,4 +78,11 @@ export const FillOutWrap = styled.ul`
     min-width: 300px;
 
     padding-bottom: 1rem;
+`
+export const Test = styled.div`
+    display: grid;
+    grid-template-columns: 30px;
+    font-size: 1rem;
+    margin: 0px auto;
+    justify-items: end;
 `

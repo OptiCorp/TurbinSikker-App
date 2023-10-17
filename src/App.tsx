@@ -12,7 +12,6 @@ const App = () => {
             {isAuthenticated && (
                 <GlobalProvider>
                     <RoutesContainer />
-                    {/* <SnackbarComponent />  */}
                 </GlobalProvider>
             )}
             {!isAuthenticated && <Login />}

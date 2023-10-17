@@ -7,12 +7,10 @@ import { ModifyUserNav } from './modifyUserNav/modifyUserNav'
 import { RoleSelector } from './roleSelector'
 import { StatusSwitch } from './status/StatusSwitch'
 import { FormWrapper, Wrapper } from './styles'
-
 export const AddUser: FC = () => {
     const { methods, onSubmit, user } = useAddUser()
     const { handleSubmit } = methods
     const { hasPermission } = useHasPermission()
-
     return (
         <FormProvider {...methods}>
             <Wrapper>
@@ -25,7 +23,6 @@ export const AddUser: FC = () => {
                     {user && <StatusSwitch />}
                 </FormWrapper>
             </Wrapper>
-
             {hasPermission && <ModifyUserNav />}
         </FormProvider>
     )
