@@ -1,7 +1,16 @@
 import { API_URL } from '../config'
 import { pca } from '../msalconfig'
 
-import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow } from './apiTypes'
+import {
+    Category,
+    Checklist,
+    PunchItem,
+    Task,
+    Upload,
+    User,
+    UserRole,
+    Workflow,
+} from './apiTypes'
 
 const request = {
     scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
@@ -10,7 +19,7 @@ const request = {
 
 const apiService = () => {
     // Generic function for get requests
-    const getByFetch = async (url: string): Promise<any> => {
+    const getByFetch = async (url: string) => {
         return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
             const getOperation = {
                 method: 'GET',
@@ -32,7 +41,7 @@ const apiService = () => {
     }
 
     // Generic function for post requests
-    const postByFetch = async (url: string, bodyData?: any): Promise<any> => {
+    const postByFetch = async (url: string, bodyData?: any) => {
         try {
             const tokenResponse = await pca.acquireTokenSilent(request)
             const postOperation = {
@@ -127,7 +136,7 @@ const apiService = () => {
     }
 
     // Generic function for delete requests
-    const deleteByFetch = async (url: string): Promise<any> => {
+    const deleteByFetch = async (url: string) => {
         return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
             const deleteOperation = {
                 method: 'DELETE',
@@ -139,9 +148,7 @@ const apiService = () => {
             }
             const res = await fetch(`${API_URL}/${url}`, deleteOperation)
             if (res.ok) {
-                const jsonResult = await res.json()
-                const resultObj = jsonResult
-                return resultObj
+                return (await res.json()) as string
             } else {
                 console.error('Delete by fetch failed. Url=' + url, res)
             }
@@ -310,7 +317,7 @@ const apiService = () => {
                 title: title,
             })
 
-            return response
+            return response.json()
         } catch (error) {
             console.error('Error creating checklist:', error)
             throw error
@@ -471,13 +478,15 @@ const apiService = () => {
         id: string,
         categoryId: string,
         description: string,
-        checklistId: string
+        checklistId: string,
+        estAvgCompletionTime: number
     ): Promise<void> => {
         await postByFetch('UpdateTask', {
             id: id,
             categoryId: categoryId,
             description: description,
             checklistId: checklistId,
+            estAvgCompletionTime: estAvgCompletionTime,
         })
     }
 

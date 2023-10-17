@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
 
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
 import apiService from '../../../services/api'
 import { User } from '../../../services/apiTypes'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
@@ -13,7 +14,7 @@ export const SelectComponent = () => {
     const { list } = useAddWorkFlowForm()
     const api = apiService()
     const [userList, setUserList] = useState<User[]>([])
-
+    const { id } = useParams() as { id: string }
     useEffect(() => {
         ;(async () => {
             const users = await api.getAllUsersAdmin()
@@ -27,6 +28,7 @@ export const SelectComponent = () => {
             label: username,
         })
     )
+    const defaultChecklist = list.find((item) => item.value === id)
 
     return (
         <>
@@ -50,7 +52,6 @@ export const SelectComponent = () => {
                         rules={{
                             required: 'Required',
                         }}
-                        defaultValue={list[0]}
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 options={list}

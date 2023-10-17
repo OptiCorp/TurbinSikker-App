@@ -2,7 +2,6 @@ import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
-import useGlobal from '../../context/globalContextProvider'
 import { useRoles } from '../../services/useRoles'
 import { MainWrap } from './styles'
 
@@ -11,7 +10,6 @@ export const IndexCheckLists = () => {
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-    const { currentUser } = useGlobal()
 
     const { isLeader } = useRoles()
     return (
@@ -35,11 +33,7 @@ export const IndexCheckLists = () => {
                                     activeTab === 0 ? '#007079' : '#f5f5f5',
                             }}
                         >
-                            {isLeader ? (
-                                <> Submitted CheckLists</>
-                            ) : (
-                                <>Received </>
-                            )}
+                            {isLeader ? <>Sent</> : <>Received </>}
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}

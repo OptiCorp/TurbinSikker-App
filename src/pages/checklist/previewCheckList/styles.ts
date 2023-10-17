@@ -56,3 +56,10 @@ export const EditStyledCardHeader = styled(Card.Header)`
 export const BackgroundContainer = styled.div`
     background-color: #f0f3f3;
 `
+export const NoTaskContainer = styled.div`
+    align-items: center;
+    margin: 3rem auto;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+`
