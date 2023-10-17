@@ -5,7 +5,6 @@ import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
 import { Checklist } from '../../../services/apiTypes'
-
 import {
     CellContentMyList,
     MyCheckListCell,

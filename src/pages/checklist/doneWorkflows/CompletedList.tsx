@@ -26,7 +26,7 @@ export const CompletedList: FunctionComponent<CompletedRowProps> = ({
             state: { isFromCompletedList: true },
         })
     }
-
+    console.log(WorkFlow)
     if (WorkFlow.status !== 'Done') return null
 
     return (

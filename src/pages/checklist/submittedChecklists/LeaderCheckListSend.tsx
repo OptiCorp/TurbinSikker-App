@@ -2,7 +2,7 @@ import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { StyledTableRow } from '../myChecklists/styles'
+import { StyledTableRow } from '../committedWorkflows/styles'
 
 import { formatDate } from '../../../Helpers/dateFormattingHelpers'
 import useGlobal from '../../../context/globalContextProvider'
@@ -27,6 +27,8 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
     if (workflow?.creator.id !== currentUser?.id) {
         return null
     }
+
+    console.log(workflow)
     const formattedCreatedDate = formatDate(workflow.createdDate || '')
     return (
         <>

@@ -1,6 +1,15 @@
 import { Card, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 
+export const PreviewWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    margin: 1rem auto;
+    flex-direction: column;
+`
+
 export const InfoHeader = styled.div`
     display: flex;
     width: 100%;
@@ -28,12 +37,13 @@ export const StyledCard = styled(Card)`
 export const CategoryName = styled.h3`
     text-align: left;
     font-size: 1rem;
+
     font-weight: 600;
 `
 
 export const Container = styled.div`
     width: 100%;
-  
+
     display: flex;
     flex-direction: column;
 `

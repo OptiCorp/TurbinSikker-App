@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import apiService from '../../../../../services/api'
-import { User } from '../../../../../services/apiTypes'
+import apiService from '../../../services/api'
+import { User } from '../../../services/apiTypes'
 import { FormValues } from './types'
 
 export const useAddUser = () => {

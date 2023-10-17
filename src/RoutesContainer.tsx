@@ -4,12 +4,14 @@ import { ProtectedRoute } from './ProtectedRoute'
 import { GlobalProvider } from './context/globalContextProvider'
 import PageNotFound from './pages/PageNotFound'
 import { IndexCheckLists } from './pages/checklist'
-import { CompletedChecklists } from './pages/checklist/completedChecklists/Index'
+
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
-import { MyCheckLists } from './pages/checklist/myChecklists/Index'
+
+import { MyCheckLists } from './pages/checklist/committedWorkflows/Index'
+import { CompletedChecklists } from './pages/checklist/doneWorkflows/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
-import { CheckList } from './pages/checklist/submittedChecklists/Index'
+import { Checklist } from './pages/checklist/submittedChecklists/Index'
 import { Profile } from './pages/profile'
 import Punch from './pages/punch/Index'
 import { AddPunch } from './pages/punch/addPunch/AddPunch'
@@ -33,15 +35,15 @@ export function RoutesContainer() {
                         }
                     >
                         <Route
-                            path="/Checklist"
+                            path="/Checklists"
                             element={
                                 <GlobalProvider>
-                                    <CheckList />
+                                    <Checklist />
                                 </GlobalProvider>
                             }
                         />
                         <Route
-                            path="/CompletedChecklist"
+                            path="/CompletedChecklists"
                             element={<CompletedChecklists />}
                         />
                         <Route
@@ -56,7 +58,7 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 <GlobalProvider>
-                                    <CheckList />
+                                    <Checklist />
                                 </GlobalProvider>
                             }
                         />

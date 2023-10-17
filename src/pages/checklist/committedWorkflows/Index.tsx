@@ -52,12 +52,13 @@ export const MyCheckLists = () => {
     }
 
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
+        if (!currentUser || !accessToken) return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
+                console.log(workflow)
                 setWorkFlow(workFlowData)
             } catch (error) {
                 console.log(error)

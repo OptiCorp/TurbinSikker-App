@@ -1,4 +1,4 @@
-import { ListEntity } from '../../../../../services/apiTypes'
+import { ListEntity } from '../../../services/apiTypes'
 
 export type FormValues = {
     firstName: string

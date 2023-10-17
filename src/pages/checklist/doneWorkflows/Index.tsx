@@ -28,6 +28,7 @@ export const CompletedChecklists = () => {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
+                console.log(workflows)
                 setWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)

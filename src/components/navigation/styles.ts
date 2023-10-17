@@ -52,10 +52,13 @@ export const ImageContainerActive = styled.div`
     border-bottom: none;
     color: #73b1b5;
     margin: 0 auto;
+    width: 30vw;
+
     text-decoration: none;
     display: flex;
     flex-direction: column;
     gap: 5px;
+
     align-items: center;
 `
 

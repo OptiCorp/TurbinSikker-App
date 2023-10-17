@@ -25,7 +25,7 @@ export const IndexCheckLists = () => {
                     <Tabs.List>
                         <Tabs.Tab
                             as={Link}
-                            to="/Checklist"
+                            to="/Checklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
@@ -38,7 +38,7 @@ export const IndexCheckLists = () => {
                             {isLeader ? (
                                 <> Submitted CheckLists</>
                             ) : (
-                                <>In progress</>
+                                <>Received </>
                             )}
                         </Tabs.Tab>
                         <Tabs.Tab
@@ -57,7 +57,7 @@ export const IndexCheckLists = () => {
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
-                            to="/CompletedChecklist"
+                            to="/CompletedChecklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',

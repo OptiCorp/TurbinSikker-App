@@ -6,9 +6,10 @@ import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
-import { HeadCell } from '../myChecklists/styles'
-import { InspectorReceivedCheckLists } from './InspectorCheckList'
-import { LeaderCheckListSend } from './LeaderCheckList'
+
+import { HeadCell } from '../committedWorkflows/styles'
+import { InspectorReceivedCheckLists } from './InspectorReceivedCheckLists'
+import { LeaderCheckListSend } from './LeaderCheckListSend'
 import {
     ListWrapperCheckL,
     StyledHeadContents,
@@ -16,7 +17,7 @@ import {
     Wrap,
 } from './styles'
 
-export const CheckList = () => {
+export const Checklist = () => {
     const { currentUser } = useGlobal()
     const { accounts } = useGlobal()
     const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
@@ -45,6 +46,7 @@ export const CheckList = () => {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
+                console.log(workflows)
                 setWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)
