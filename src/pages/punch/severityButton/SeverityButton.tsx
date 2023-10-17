@@ -5,6 +5,7 @@ import { Button } from '../styles'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import { useLocation } from 'react-router'
 import { PunchItem, Status } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
 
 function SeverityButton({
     punch,
@@ -30,17 +31,17 @@ function SeverityButton({
         {
             name: 'Minor',
             icon: info_circle,
-            color: '#FBCA36',
+            color: COLORS.cautionaryYellow,
         },
         {
             name: 'Major',
             icon: warning_filled,
-            color: '#ED8936',
+            color: COLORS.warningOrange,
         },
         {
             name: 'Critical',
             icon: error_filled,
-            color: '#EB0000',
+            color: COLORS.dangerRed,
         },
     ]
     function handleChecked(index: number) {
@@ -65,14 +66,14 @@ function SeverityButton({
                 const isFurthestButton = index === 0 || index === SeverityButtons.length - 1
 
                 const buttonStyle: React.CSSProperties = {
-                    backgroundColor: isActive ? '#fff' : 'transparent',
+                    backgroundColor: isActive ? COLORS.white : 'transparent',
                     boxShadow: !isActive ? 'none' : '0px 4px 4px 0px #bebebe',
                     color:
                         isActive || lastPathSegment === 'addpunch'
-                            ? '#000'
+                            ? COLORS.black
                             : Status.REJECTED !== punch?.status || hasPermission
-                            ? '#BEBEBE'
-                            : '#000' /* isActive ? '#000' : '#bebebe', */,
+                            ? COLORS.gray
+                            : COLORS.black,
                     borderRadius: 4,
                 }
 
@@ -103,11 +104,10 @@ function SeverityButton({
                             <Icon
                                 data={button.icon}
                                 color={
-                                    /* isActive ? button.color : '#BEBEBE' */ lastPathSegment ===
-                                        'addpunch' || isActive
+                                    lastPathSegment === 'addpunch' || isActive
                                         ? button.color
                                         : Status.REJECTED !== punch?.status || hasPermission
-                                        ? '#BEBEBE'
+                                        ? COLORS.gray
                                         : button.color
                                 }
                             />

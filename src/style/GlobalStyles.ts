@@ -1,5 +1,17 @@
 import { createGlobalStyle } from 'styled-components'
 
+export const COLORS = {
+    white: '#FFF',
+    black: '#000',
+    gray: '#BEBEBE',
+    lightGray: '#dcdcdc',
+    primary: '#007079',
+    secondary: '#242746',
+    cautionaryYellow: '#FBCA36',
+    warningOrange: '#ED8936',
+    dangerRed: '#EB0000',
+}
+
 const GlobalStyles = createGlobalStyle`
 
 body,
