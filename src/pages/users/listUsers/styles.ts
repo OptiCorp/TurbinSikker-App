@@ -7,9 +7,8 @@ export const StyledTable = styled(Table)`
 `
 
 export const ContainerForm = styled.div`
-    height: 60vh;
     margin: 0;
-
+    height: 60vh;
     overflow-y: scroll;
     &::-webkit-scrollbar {
         display: none;
@@ -17,8 +16,8 @@ export const ContainerForm = styled.div`
 `
 
 export const StyledTableCell = styled(Table.Cell)`
-    line-height: 1.5rem;
     padding: 0;
+    line-height: 1.5rem;
     text-align: center;
     min-width: 10vw;
     max-width: 100px;
@@ -30,14 +29,12 @@ export const CellSize = styled.div`
 `
 
 export const TableData = styled.p`
+    margin: 0;
     padding: 0;
     overflow-wrap: break-word;
     word-wrap: break-word;
     width: 100%;
-
     font-size: 0.6rem;
-
-    margin: 0;
 `
 
 export const ListWrapper = styled.div`
