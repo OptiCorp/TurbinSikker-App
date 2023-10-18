@@ -34,6 +34,15 @@ import {
     SeverityContainer,
 } from './styles'
 
+import { usePunch } from '../PunchHook'
+import { PunchUploadContainer } from '../styles'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import { ApiStatus, PunchItem, Status, Upload } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
+
+
 export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
     const {
@@ -82,7 +91,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                             >
                                 <Icon
                                     data={upload}
-                                    color={hasPermission ? '#ccc' : '#000'}
+                                    color={hasPermission ? COLORS.lightGray : COLORS.black}
                                     size={48}
                                 />
                             </PunchUploadButtonIconContainer>
@@ -109,7 +118,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                                     justifyContent: 'center',
                                     width: '100%',
                                     alignItems: 'center',
-                                    color: '#243746',
+                                    color: COLORS.secondary,
                                 }}
                                 onClick={() => setUploads((prev) => !prev)}
                             >
@@ -137,10 +146,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <Icon
-                                                    color="#73B1B5"
-                                                    data={image}
-                                                />
+
+                                                <Icon color={COLORS.primary} data={image} />
+
                                                 <Typography variant="caption">
                                                     {file?.name}
                                                 </Typography>

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { COLORS } from '../../../style/GlobalStyles'
 
 export const PunchAddContainer = styled.div`
     padding: 20px;
@@ -15,7 +16,7 @@ export const PunchUploadFileContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #deedee;
+    border-bottom: 1px solid ${COLORS.lightSteelBlue};
 `
 
 export const PunchUploadFilesContainer = styled.div`
@@ -31,7 +32,7 @@ export const SeverityContainer = styled.div`
 `
 
 export const SeverityButtonWrapper = styled.div`
-    background-color: #eaeaea;
+    background-color: ${COLORS.paleGray};
     display: flex;
     border-radius: 4px;
     padding: 5px;
@@ -44,14 +45,14 @@ export const PunchUploadButtonContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-right: #deedee solid 0.7px;
+    border-right: ${COLORS.lightSteelBlue} solid 0.7px;
     padding-right: 20px;
     gap: 8px;
     label {
         ${(props: { disabled: boolean | undefined }) =>
             props.disabled &&
             css`
-                background-color: #ccc;
+                background-color: ${COLORS.lightGray};
             `}
     }
 `
@@ -60,20 +61,20 @@ export const PunchUploadButtonIconContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 0.7px dotted #73b1b5;
+    border: 0.7px dotted ${COLORS.primary};
     border-radius: 4px;
 
     ${(props: { disabled: boolean | undefined }) =>
         props.disabled &&
         css`
-            border: 0.7px dotted #ccc;
+            border: 0.7px dotted ${COLORS.lightGray};
         `}
 `
 export const PunchUploadButtonLabel = styled.label`
     box-sizing: border-box;
-    background: #007079;
+    background: ${COLORS.primary};
     border-radius: 4px;
-    color: #fff;
+    color: ${COLORS.white};
     display: inline-block;
     margin: 0px;
     padding: 10px 16px;
