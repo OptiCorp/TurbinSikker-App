@@ -27,8 +27,6 @@ export const useAddUser = () => {
         })()
     }, [])
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        console.log('data: ', data)
-
         if (appLocation.pathname === '/AddUser/') {
             await api.addUser({ ...data, azureAdUserId: data.email })
 
