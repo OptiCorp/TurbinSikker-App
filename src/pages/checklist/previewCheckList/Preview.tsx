@@ -13,6 +13,7 @@ import {
     BackgroundContainer,
     EditStyledCardHeader,
     InfoHeader,
+    NoTaskContainer,
     StyledCard,
 } from './styles'
 
@@ -73,7 +74,7 @@ export const PreviewCheckList = () => {
                         </InfoHeader>
 
                         {checklist?.checklistTasks?.length === 0 ? (
-                            <>
+                            <NoTaskContainer>
                                 <Typography variant="body_short_bold">
                                     No tasks added yet!
                                 </Typography>
@@ -87,7 +88,7 @@ export const PreviewCheckList = () => {
                                 >
                                     Add some tasks here!
                                 </Button>
-                            </>
+                            </NoTaskContainer>
                         ) : (
                             <PreviewList key={checklist.id} tasks={tasks} />
                         )}
@@ -109,6 +110,11 @@ export const PreviewCheckList = () => {
                                     secondButtonColor="primary"
                                     buttonVariant="outlined"
                                     onClick={() => clickHandler(id)}
+                                    secondOnClick={() => {
+                                        navigate(
+                                            `/SendChecklist/${checklist.id}`
+                                        )
+                                    }}
                                     isShown={true}
                                     ButtonMessage="Edit Checklist"
                                     SecondButtonMessage="Send"

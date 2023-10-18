@@ -12,7 +12,7 @@ export const FillOutCheckList = () => {
     const [tasks, setTasks] = useState<Task[]>([])
     const { workflowId } = useParams() as { workflowId: string }
     const api = apiService()
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
+
     useEffect(() => {
         ;(async (): Promise<void> => {
             try {
@@ -27,16 +27,15 @@ export const FillOutCheckList = () => {
             }
         })()
     }, [])
-
+    console.log(workflow)
     return (
         <>
             <div style={{ backgroundColor: '#f0f3f3' }}>
                 <PreviewWrapper>
                     <>
-                        {' '}
                         {workflow && (
                             <FillOutList workflow={workflow} tasks={tasks} />
-                        )}{' '}
+                        )}
                     </>
                 </PreviewWrapper>
             </div>

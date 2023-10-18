@@ -5,9 +5,16 @@ import NA from '../../assets/images/notApplicable.png'
 export const NotApplicableWrap = styled.div`
     display: flex;
     flex-direction: column;
-
     margin: 50px auto;
     width: 50px;
+`
+
+export const Warning = styled.div`
+    font-size: 1rem;
+    font-weight: 600;
+    align-self: end;
+
+    color: red;
 `
 
 export const ImageContainer = styled.div`
@@ -26,29 +33,40 @@ export const CustomCard = styled(Card)`
     display: grid;
 
     grid-template-columns: 1fr;
-    grid-template-rows: 30px 10px;
+    grid-template-rows: 30px 20px 30px;
     row-gap: 2rem;
-
+    padding-bottom: 1rem;
     margin: 0 auto;
 `
 
 export const CustomCardContent = styled(Card.Content)`
     font-size: 1.5rem;
     display: flex;
-    flex-direction: row;
-
     width: 93%;
     margin: 0 auto;
+    align-items: baseline;
+`
+
+export const Test = styled.div`
+    margin: 0;
+    color: red;
+    min-width: 60px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    justify-self: end;
 `
 
 export const CustomCategoryName = styled.h3`
     min-width: 220px;
+    font-size: 1.2rem;
 `
 
 export const CustomTaskField = styled(TextField)`
     & textarea {
-        width: 180px;
         padding: 0;
+        max-width: 300px;
+
         padding-left: 10px;
     }
 `
@@ -78,11 +96,4 @@ export const FillOutWrap = styled.ul`
     min-width: 300px;
 
     padding-bottom: 1rem;
-`
-export const Test = styled.div`
-    display: grid;
-    grid-template-columns: 30px;
-    font-size: 1rem;
-    margin: 0px auto;
-    justify-items: end;
 `

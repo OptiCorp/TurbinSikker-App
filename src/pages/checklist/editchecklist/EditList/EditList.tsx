@@ -34,11 +34,10 @@ export const EditList = ({ tasks }: Props) => {
             description: content,
 
             checklistId: id,
+            estAvgCompletionTime: 10,
         })
         setDialogShowing(false)
     }
-
-
 
     return (
         <EditWrapper>
