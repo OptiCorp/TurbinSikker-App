@@ -1,7 +1,6 @@
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { formatDate, formatTimestamp } from '../../../helpers/dateFormattingHelpers'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import {
@@ -17,13 +16,13 @@ import {
     TicketIcons,
     TicketInfo,
 } from './styles'
-
 import { useEffect, useState } from 'react'
 import { Loading } from '../../../components/loading/Loading'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { ApiStatus, PunchItem, Status, User } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
+import { formatDate, formatTimestamp } from '../../../helpers/dateFormattingHelpers'
 
 function ListPunches() {
     const { currentUser } = useGlobal() as { currentUser: User }

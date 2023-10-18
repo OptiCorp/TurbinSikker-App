@@ -4,9 +4,9 @@ import { AddTasks } from '../../../components/addtasks/AddTasks'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { EditHeader } from './EditHeader'
-import { EditList } from './editList/EditList'
 import { useEditChecklist } from './hooks/useEditChecklist'
 import { BackgroundContainer, ScrollWrapper } from './styles'
+import { EditList } from './editList/EditList'
 
 export const EditCheckList = () => {
     const [dialogDelete, setDialogDelete] = useState(false)
