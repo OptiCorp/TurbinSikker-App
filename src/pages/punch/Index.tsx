@@ -17,21 +17,22 @@ import { useEffect, useState } from 'react'
 import { ApiStatus, PunchItem } from '../../services/apiTypes'
 import apiService from '../../services/api'
 import { Loading } from '../../components/loading/Loading'
+import { COLORS } from '../../style/GlobalStyles'
 
 export const punchSeverity: PunchSeverity[] = [
     {
         severity: 'Minor',
-        color: '#fbca36',
+        color: COLORS.cautionaryYellow,
         icon: info_circle,
     },
     {
         severity: 'Major',
-        color: '#ed8936',
+        color: COLORS.warningOrange,
         icon: warning_filled,
     },
     {
         severity: 'Critical',
-        color: '#eb0000',
+        color: COLORS.dangerRed,
         icon: error_filled,
     },
 ]
