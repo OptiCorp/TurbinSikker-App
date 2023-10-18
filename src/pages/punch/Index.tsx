@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate, useParams } from 'react-router'
-import { formatDate, formatTimestamp } from '../../Helpers/dateFormattingHelpers'
+import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
 import { AddPunch } from './addPunch/AddPunch'
 
 import {

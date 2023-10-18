@@ -1,15 +1,7 @@
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
-import {
-    arrow_forward_ios,
-    assignment_user,
-    file_description,
-    image,
-} from '@equinor/eds-icons'
+import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import {
-    formatDate,
-    formatTimestamp,
-} from '../../../Helpers/dateFormattingHelpers'
+import { formatDate, formatTimestamp } from '../../../helpers/dateFormattingHelpers'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import {
@@ -39,22 +31,16 @@ function ListPunches() {
     const { hasPermission } = useHasPermission()
     const navigate = useNavigate()
     const [punches, setPunches] = useState<PunchItem[]>([])
-    const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
+    const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const { isLeader, isInspector } = useRoles()
     useEffect(() => {
         ;(async () => {
             if (isInspector) {
-                const punchesFromApi = await api.getPunchInspectorId(
-                    currentUser?.id
-                )
+                const punchesFromApi = await api.getPunchInspectorId(currentUser?.id)
                 setPunches(punchesFromApi)
                 setFetchPunchesStatus(ApiStatus.SUCCESS)
             } else {
-                const punchesFromApi = await api.getPunchByLeaderId(
-                    currentUser?.id
-                )
+                const punchesFromApi = await api.getPunchByLeaderId(currentUser?.id)
                 setPunches(punchesFromApi)
                 setFetchPunchesStatus(ApiStatus.SUCCESS)
             }
@@ -72,19 +58,13 @@ function ListPunches() {
         if (hasPermission) {
             if (a.status === Status.PENDING && b.status !== Status.PENDING) {
                 return -1
-            } else if (
-                a.status !== Status.PENDING &&
-                b.status === Status.PENDING
-            ) {
+            } else if (a.status !== Status.PENDING && b.status === Status.PENDING) {
                 return 1
             }
         } else {
             if (a.status === Status.REJECTED && b.status !== Status.REJECTED) {
                 return -1
-            } else if (
-                a.status !== Status.REJECTED &&
-                b.status === Status.REJECTED
-            ) {
+            } else if (a.status !== Status.REJECTED && b.status === Status.REJECTED) {
                 return 1
             }
         }
@@ -109,9 +89,7 @@ function ListPunches() {
                         {punches?.map((punch, idx) => {
                             return (
                                 <PunchListBoxContainer
-                                    onClick={() =>
-                                        clickHandler(punch.id, punch.workflowId)
-                                    }
+                                    onClick={() => clickHandler(punch.id, punch.workflowId)}
                                     key={idx}
                                 >
                                     <StatusBadgeContainer>
@@ -127,24 +105,14 @@ function ListPunches() {
                                             </Typography>
 
                                             <TicketCardDescription>
-                                                {
-                                                    punch?.checklistTask
-                                                        .description
-                                                }
+                                                {punch?.checklistTask.description}
                                             </TicketCardDescription>
 
                                             {hasPermission && (
                                                 <>
-                                                    <Typography>
-                                                        Created By:
-                                                    </Typography>
+                                                    <Typography>Created By:</Typography>
                                                     <CreatedByContainer>
-                                                        <Icon
-                                                            size={18}
-                                                            data={
-                                                                assignment_user
-                                                            }
-                                                        />
+                                                        <Icon size={18} data={assignment_user} />
                                                         {punch.user.firstName}
                                                     </CreatedByContainer>
                                                 </>
@@ -171,10 +139,7 @@ function ListPunches() {
                                             >
                                                 Details
                                             </Button>
-                                            <Icon
-                                                size={16}
-                                                data={arrow_forward_ios}
-                                            />
+                                            <Icon size={16} data={arrow_forward_ios} />
                                         </TicketButtonContainer>
                                     </TicketActions>
                                 </PunchListBoxContainer>

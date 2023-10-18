@@ -1,4 +1,4 @@
-import { getStatusBackgroundColor } from '../../../Helpers/statusBackgroundHelper'
+import { getStatusBackgroundColor } from '../../../helpers/statusBackgroundHelper'
 import styled from 'styled-components'
 import { COLORS } from '../../../style/GlobalStyles'
 

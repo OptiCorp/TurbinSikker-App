@@ -1,6 +1,6 @@
 import { Chip, Typography } from '@equinor/eds-core-react'
 import { FC } from 'react'
-import { formatDate } from '../../../Helpers/dateFormattingHelpers'
+import { formatDate } from '../../../helpers/dateFormattingHelpers'
 import { Workflow } from '../../../services/apiTypes'
 
 type ChipStatusProps = {
