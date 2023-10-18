@@ -1,8 +1,8 @@
 import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-
 import { useRoles } from '../../services/useRoles'
+import { COLORS } from '../../style/GlobalStyles'
 import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
@@ -28,9 +28,11 @@ export const IndexCheckLists = () => {
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
-                                color: 'black',
+                                color: COLORS.black,
                                 backgroundColor:
-                                    activeTab === 0 ? '#007079' : '#f5f5f5',
+                                    activeTab === 0
+                                        ? COLORS.primary
+                                        : COLORS.frostyGray,
                             }}
                         >
                             {isLeader ? <>Sent</> : <>Received </>}
@@ -42,9 +44,12 @@ export const IndexCheckLists = () => {
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
-                                color: 'black',
+                                color: COLORS.black,
+
                                 backgroundColor:
-                                    activeTab === 1 ? '#007079' : '#f5f5f5',
+                                    activeTab === 1
+                                        ? COLORS.primary
+                                        : COLORS.frostyGray,
                             }}
                         >
                             {isLeader ? <> My checklists</> : <>Submitted</>}
@@ -56,9 +61,11 @@ export const IndexCheckLists = () => {
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
-                                color: 'black',
+                                color: COLORS.black,
                                 backgroundColor:
-                                    activeTab === 2 ? '#007079' : '#f5f5f5',
+                                    activeTab === 2
+                                        ? COLORS.primary
+                                        : COLORS.frostyGray,
                             }}
                         >
                             Completed

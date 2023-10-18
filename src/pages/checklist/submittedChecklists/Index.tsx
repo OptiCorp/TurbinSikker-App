@@ -7,7 +7,7 @@ import apiService from '../../../services/api'
 import { Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 
-import { HeadCell } from '../committedWorkflows/styles'
+import { HeadCell } from '../myChecklists/styles'
 import { InspectorReceivedCheckLists } from './InspectorReceivedCheckLists'
 import { LeaderCheckListSend } from './LeaderCheckListSend'
 import {
@@ -19,16 +19,16 @@ import {
 
 export const Checklist = () => {
     const { currentUser } = useGlobal()
-    const { accounts } = useGlobal()
+
     const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
 
     const api = apiService()
     const { accessToken } = useGlobal()
-    const { isLeader, isInspector } = useRoles()
+    const { isInspector } = useRoles()
 
     useEffect(() => {
-        if (!currentUser || !accessToken) return
+        if (!currentUser) return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflows()
@@ -37,10 +37,10 @@ export const Checklist = () => {
                 console.log(error)
             }
         })()
-    }, [accessToken, currentUser?.id])
+    }, [currentUser?.id])
 
     useEffect(() => {
-        if (!currentUser || !accessToken) return
+        if (!currentUser) return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflowsByUserId(
@@ -52,7 +52,7 @@ export const Checklist = () => {
                 console.log(error)
             }
         })()
-    }, [accessToken, currentUser?.id])
+    }, [currentUser?.id])
     console.log(workflows)
     return (
         <>

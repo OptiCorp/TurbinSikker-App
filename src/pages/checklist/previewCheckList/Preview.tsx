@@ -8,6 +8,7 @@ import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Task } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
+import { COLORS } from '../../../style/GlobalStyles'
 import { PreviewList } from './PreviewList'
 import {
     BackgroundContainer,
@@ -16,7 +17,6 @@ import {
     NoTaskContainer,
     StyledCard,
 } from './styles'
-
 export const PreviewCheckList = () => {
     const location = useLocation()
     const api = apiService()
@@ -66,7 +66,7 @@ export const PreviewCheckList = () => {
                                         readOnly
                                         style={{
                                             borderBottom: '1px solid #243746',
-                                            background: '#F7F7F7',
+                                            background: COLORS.white,
                                         }}
                                     />
                                 </EditStyledCardHeader>

@@ -1,6 +1,6 @@
 import { Chip, Table } from '@equinor/eds-core-react'
-
 import styled from 'styled-components'
+import { COLORS } from '../../../style/GlobalStyles'
 
 export const StyledTableCellCheckL = styled(Table.Cell)`
     padding-inline: 8px;
@@ -65,7 +65,7 @@ export const Wrap = styled.div`
     box-shadow:
         rgba(0, 0, 0, 0.12) 0px 1px 3px,
         rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    background: #007079;
+    background: ${COLORS.primary};
     align-items: left;
     flex-direction: column;
 `

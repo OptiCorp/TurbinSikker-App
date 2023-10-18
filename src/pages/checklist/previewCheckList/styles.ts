@@ -1,11 +1,11 @@
 import { Card, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
+import { COLORS } from '../../../style/GlobalStyles'
 
 export const PreviewWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-
     margin: 1rem auto;
     flex-direction: column;
 `
@@ -29,7 +29,7 @@ export const PreviewListPoints = styled(TextField)`
 
 export const StyledCard = styled(Card)`
     font-size: 1.5rem;
-    background: white;
+    background: ${COLORS.white};
     margin: 0 auto;
     text-align: center;
 `
@@ -37,13 +37,11 @@ export const StyledCard = styled(Card)`
 export const CategoryName = styled.h3`
     text-align: left;
     font-size: 1rem;
-
     font-weight: 600;
 `
 
 export const Container = styled.div`
     width: 100%;
-
     display: flex;
     flex-direction: column;
 `
@@ -54,7 +52,7 @@ export const EditStyledCardHeader = styled(Card.Header)`
     margin: 0 auto;
 `
 export const BackgroundContainer = styled.div`
-    background-color: #f0f3f3;
+    background-color: ${COLORS.frostyGray};
 `
 export const NoTaskContainer = styled.div`
     align-items: center;

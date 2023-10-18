@@ -1,19 +1,21 @@
 import { Card, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import NA from '../../assets/images/notApplicable.png'
-
+import { COLORS } from '../../style/GlobalStyles'
 export const NotApplicableWrap = styled.div`
     display: flex;
     flex-direction: column;
     margin: 50px auto;
     width: 50px;
 `
+export const BackgroundWrap = styled.div`
+    background-color: ${COLORS.frostyGray};
+`
 
-export const Warning = styled.div`
+export const Error = styled.div`
     font-size: 1rem;
     font-weight: 600;
     align-self: end;
-
     color: red;
 `
 
@@ -29,9 +31,7 @@ export const ImageContainer = styled.div`
 
 export const CustomCard = styled(Card)`
     font-size: 1.5rem;
-
     display: grid;
-
     grid-template-columns: 1fr;
     grid-template-rows: 30px 20px 30px;
     row-gap: 2rem;
@@ -47,7 +47,7 @@ export const CustomCardContent = styled(Card.Content)`
     align-items: baseline;
 `
 
-export const Test = styled.div`
+export const SubmitErrorContainer = styled.div`
     margin: 0;
     color: red;
     min-width: 60px;
@@ -65,7 +65,7 @@ export const CustomCategoryName = styled.h3`
 export const CustomTaskField = styled(TextField)`
     & textarea {
         padding: 0;
-        max-width: 300px;
+        min-width: 150px;
 
         padding-left: 10px;
     }
@@ -84,16 +84,13 @@ export const StyledSwitch = styled(Switch)`
 
 export const FillOutWrap = styled.ul`
     margin: 0 auto;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin-top: 1rem;
-
     padding: 0;
     gap: 1rem;
     width: 40%;
     min-width: 300px;
-
     padding-bottom: 1rem;
 `

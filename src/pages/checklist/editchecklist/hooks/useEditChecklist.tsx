@@ -32,7 +32,7 @@ export const useEditChecklist = () => {
     }
 
     useEffect(() => {
-        if (!currentUser?.id || !accessToken || !id) return
+        if (!currentUser?.id || !id) return
 
         const fetchChecklist = async () => {
             try {
@@ -48,7 +48,7 @@ export const useEditChecklist = () => {
         }
 
         fetchChecklist()
-    }, [accessToken, currentUser?.id, id])
+    }, [currentUser?.id, id])
 
     useEffect(() => {
         if (checklist && checklist?.checklistTasks?.length === 0) {

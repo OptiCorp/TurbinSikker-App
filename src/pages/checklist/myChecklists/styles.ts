@@ -1,6 +1,6 @@
 import { Chip, Dialog, Table, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
-
+import { COLORS } from '../../../style/GlobalStyles'
 export const ListWrapperCheckMyList = styled.div`
     background: whitesmoke;
     height: 600px;
@@ -8,12 +8,12 @@ export const ListWrapperCheckMyList = styled.div`
     padding-right: 5px;
     overflow-x: hidden;
     margin: 10px 0;
-    background: #007079;
+    background: ${COLORS.primary};
     padding-bottom: 80px;
     overflow-y: scroll;
 `
 export const BackgroundWrap = styled.div`
-    background: #007079;
+    background: ${COLORS.primary};
     display: flex;
 
     align-items: left;
@@ -59,7 +59,6 @@ export const StyledTableRow = styled(Table.Row)`
 
 export const CellContentMyList = styled.div`
     font-weight: 600;
-
     display: flex;
     flex-direction: column;
     align-items: left;

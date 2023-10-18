@@ -1,6 +1,6 @@
 import { Card, Dialog, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
-
+import { COLORS } from '../../../style/GlobalStyles'
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -23,7 +23,7 @@ export const StyledDialog = styled(Dialog.CustomContent)`
 `
 
 export const BackgroundContainer = styled.div`
-    background-color: #f0f3f3;
+    background-color: ${COLORS.frostyGray};
 `
 
 export const ScrollWrapper = styled.div`
@@ -44,7 +44,7 @@ export const EditStyledCardHeader = styled(Card.Header)`
     margin: 0 auto;
 `
 export const EditCard = styled(Card)`
-    background: white;
+    background: ${COLORS.white};
     margin: 0 auto;
 `
 export const StyledSwitch = styled(Switch)`

@@ -2,7 +2,7 @@ import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { StyledTableRow } from '../committedWorkflows/styles'
+import { StyledTableRow } from '../myChecklists/styles'
 
 import { formatDate } from '../../../Helpers/dateFormattingHelpers'
 import useGlobal from '../../../context/globalContextProvider'

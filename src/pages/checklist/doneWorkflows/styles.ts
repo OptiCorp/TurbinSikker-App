@@ -1,20 +1,20 @@
 import { Table } from '@equinor/eds-core-react'
 import styled from 'styled-components'
-
+import { COLORS } from '../../../style/GlobalStyles'
 export const ListWrapperCompletedList = styled.div`
-    background: whitesmoke;
+    background:  ${COLORS.whiteSmoke};
     height: 600px;
     padding-left: 5px;
     padding-right: 5px;
     overflow-x: hidden;
     margin: 10px 0;
-    background: #007079;
+    background:  ${COLORS.primary};
     padding-bottom: 80px;
     overflow-y: scroll;
 `
 
 export const BackgroundWrapCompleted = styled.div`
-    background: #007079;
+    background:  ${COLORS.primary};;
     display: flex;
 
     align-items: left;

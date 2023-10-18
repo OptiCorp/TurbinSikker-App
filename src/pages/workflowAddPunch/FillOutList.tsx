@@ -1,7 +1,6 @@
 import { FunctionComponent, useState } from 'react'
 
-import { Card, Checkbox, Icon, Typography } from '@equinor/eds-core-react'
-import { arrow_drop_down } from '@equinor/eds-icons'
+import { Card, Checkbox, Typography } from '@equinor/eds-core-react'
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../components/modal/useModalHook'
@@ -13,12 +12,12 @@ import {
     CustomCardContent,
     CustomCategoryName,
     CustomTaskField,
+    Error,
     FillOutWrap,
     ImageContainer,
     NotApplicableWrap,
     StyledSwitch,
-    Test,
-    Warning,
+    SubmitErrorContainer,
 } from './styles'
 import { FillOutListProps } from './types'
 
@@ -47,7 +46,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
     const [taskId, setTaskId] = useState('')
-    const [naStatus, setNaStatus] = useState<NaStatus>({})
 
     const [checkboxStatus, setCheckboxStatus] = useState<CheckboxStatus>(
         Object.fromEntries(tasks.map((x) => [x.id, false]))
@@ -63,32 +61,19 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     const handleSubmit = async () => {
         if (areAllCheckboxesChecked)
             try {
-                await api.updateWorkflow(workflowId, 'Done', workflow.user.id)
+                await api.updateWorkflow(
+                    workflowId,
+                    'Committed',
+                    workflow.user.id
+                )
+                setSubmitDialogShowing(false)
+                navigate('/Checklist')
             } catch (error) {
                 console.log(error)
             }
         else {
             setIsSubmissionAllowed(true)
         }
-    }
-    const handleError = () => {
-        if (isSubmissionAllowed) {
-            return (
-                <div
-                    style={{
-                        margin: '0',
-                        display: 'flex',
-                        color: 'red',
-                        fontSize: '1rem',
-                        height: '10px',
-                        width: '10px',
-                    }}
-                >
-                    required
-                </div>
-            )
-        }
-        return null
     }
 
     return (
@@ -158,30 +143,30 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     name="task"
                                     defaultValue={task.description}
                                     multiline
-                                    rows={3}
+                                    rows={4}
                                     readOnly
-                                    helperText={
-                                        task.description.length > 80
-                                            ? 'see more'
-                                            : '  '
-                                    }
-                                    helperIcon={
-                                        task.description.length > 100 ? (
-                                            <Icon
-                                                data={arrow_drop_down}
-                                                height={30}
-                                                color="#007079"
-                                                title="arrow_drop_down"
-                                            />
-                                        ) : null
-                                    }
-                                />{' '}
+                                    // helperText={
+                                    //     task.description.length > 80
+                                    //         ? 'see more'
+                                    //         : '  '
+                                    // }
+                                    // helperIcon={
+                                    //     task.description.length > 100 ? (
+                                    //         <Icon
+                                    //             data={arrow_drop_down}
+                                    //             height={30}
+                                    //             color="#007079"
+                                    //             title="arrow_drop_down"
+                                    //         />
+                                    //     ) : null
+                                    // }
+                                />
                             </CustomCardContent>
 
                             {applicableStatuses[task.id] ? (
                                 <ImageContainer />
                             ) : (
-                                <Test>
+                                <SubmitErrorContainer>
                                     <Checkbox
                                         label={''}
                                         name={`task.${task.id}`}
@@ -198,11 +183,11 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     />{' '}
                                     {!checkboxStatus[task.id] &&
                                     isSubmissionAllowed ? (
-                                        <Warning> required</Warning>
+                                        <Error> required</Error>
                                     ) : (
                                         ''
                                     )}
-                                </Test>
+                                </SubmitErrorContainer>
                             )}
                         </CustomCard>
                     </FillOutWrap>
