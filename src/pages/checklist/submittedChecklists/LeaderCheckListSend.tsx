@@ -7,6 +7,7 @@ import { StyledTableRow } from '../myChecklists/styles'
 import { formatDate } from '../../../Helpers/dateFormattingHelpers'
 import useGlobal from '../../../context/globalContextProvider'
 import { Workflow } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
 import { CellContent, StyledTableCellCheckL } from './styles'
@@ -36,7 +37,9 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
                 onClick={() => clickHandler(workflow.checklist.id)}
                 style={{
                     backgroundColor:
-                        workflow.status === 'Committed' ? 'lightGrey' : 'none',
+                        workflow.status === `Committed`
+                            ? COLORS.secondary
+                            : 'none',
                 }}
             >
                 <StyledTableCellCheckL>

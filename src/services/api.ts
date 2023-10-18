@@ -19,7 +19,7 @@ const request = {
 
 const apiService = () => {
     // Generic function for get requests
-    const getByFetch = async (url: string) => {
+    const getByFetch = async (url: string): Promise<any> => {
         return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
             const getOperation = {
                 method: 'GET',

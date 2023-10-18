@@ -15,6 +15,8 @@ export const COLORS = {
     warningOrange: '#ED8936',
     dangerRed: '#EB0000',
     whiteSmoke: '#f5f5f5',
+    activeNavTab: '#73b1b5',
+    styledChipColor: '#e60323',
 }
 
 const GlobalStyles = createGlobalStyle`

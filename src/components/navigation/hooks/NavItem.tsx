@@ -1,9 +1,9 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
 import { IconData } from '@equinor/eds-icons'
 import { Link } from 'react-router-dom'
-import { ImageContainerActive, Test } from '../styles'
+import { COLORS } from '../../../style/GlobalStyles'
+import { ImageContainerActive } from '../styles'
 import { NotificationBadge } from './NotificationChip'
-
 export const NavItem = ({
     isActive,
     name,
@@ -18,19 +18,18 @@ export const NavItem = ({
     return (
         <Link to={to} style={{ textDecoration: 'none' }}>
             <ImageContainerActive>
-                <Test>
-                    {name === 'Checklists' && isActive ? (
-                        <NotificationBadge name={name} />
-                    ) : null}
-                </Test>
+                {name === 'Checklists' && isActive ? (
+                    <NotificationBadge name={name} />
+                ) : null}
+
                 <Icon
                     data={icon}
                     size={24}
-                    color={isActive ? '#73b1b5' : '#fff'}
+                    color={isActive ? COLORS.activeNavTab : COLORS.white}
                 />
                 <Typography
                     variant="caption"
-                    color={isActive ? '#73b1b5' : '#fff'}
+                    color={isActive ? COLORS.activeNavTab : COLORS.white}
                 >
                     {name}
                 </Typography>

@@ -1,5 +1,7 @@
 import { Chip, Tabs } from '@equinor/eds-core-react'
 import styled from 'styled-components'
+import { COLORS } from '../../style/GlobalStyles'
+
 export const FooterContainer = styled.div`
     min-height: 64px;
     width: 100%;
@@ -10,7 +12,7 @@ export const FooterContainer = styled.div`
     bottom: 0;
     justify-content: space-evenly;
     box-sizing: border-box;
-    background: #243746;
+    background: ${COLORS.secondary};
 `
 
 export const FooterContainerHook = styled.div`
@@ -19,7 +21,7 @@ export const FooterContainerHook = styled.div`
     position: fixed;
     bottom: 0;
     box-sizing: border-box;
-    background: #243746;
+    background: ${COLORS.secondary};
 `
 
 export const Sidemenu = styled.div`
@@ -32,50 +34,44 @@ export const Sidemenu = styled.div`
     column-gap: 24px;
     grid-template-columns: auto;
     grid-template-rows: 1fr 1fr 1fr;
-    background: #243746;
+    background: ${COLORS.secondary};
 `
 
 export const ImageContainer = styled.div`
     border-bottom: none;
-    color: white;
-
+    color: ${COLORS.white};
     margin: 0 auto;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     gap: 5px;
-
     align-items: center;
 `
 
 export const ImageContainerActive = styled.div`
     border-bottom: none;
-    color: #73b1b5;
+    color: ${COLORS.activeNavTab};
     margin: 0 auto;
     width: 30vw;
-
     text-decoration: none;
     display: flex;
     flex-direction: column;
     gap: 5px;
-
     align-items: center;
 `
 
 export const StyledTab = styled(Tabs.Tab)`
     display: flex;
-    color: white;
+    color: ${COLORS.white};
     justify-content: center;
     flex-direction: column;
     text-decoration: none;
     width: 100%;
-
     border-bottom: none;
 ` as typeof Tabs.Tab
 export const NavigationMainWrap = styled.div`
     border-bottom: none;
-    color: white;
-
+    color: ${COLORS.white};
     margin: 1rem 0;
     text-decoration: none;
     display: flex;
@@ -98,14 +94,6 @@ export const StyledChip = styled(Chip)`
     border-radius: 18px;
     margin-left: 0.2rem;
     position: fixed;
-
-    background-color: #e60323;
-    color: #fff;
-`
-export const Count = styled.div``
-
-export const Test = styled.div`
-    margin: 0 auto;
-    display: flex;
-    flex-direction: row;
+    background-color: ${COLORS.styledChipColor};
+    color: ${COLORS.white};
 `

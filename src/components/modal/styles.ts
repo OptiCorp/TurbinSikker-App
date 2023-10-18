@@ -11,7 +11,6 @@ export const BtnWrap = styled.div`
 
 export const StyledContent = styled(Dialog.CustomContent)`
     display: flex;
-
     justify-content: center;
     flex-direction: column;
 `

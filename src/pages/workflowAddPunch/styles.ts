@@ -16,7 +16,7 @@ export const Error = styled.div`
     font-size: 1rem;
     font-weight: 600;
     align-self: end;
-    color: red;
+    color: ${COLORS.dangerRed};
 `
 
 export const ImageContainer = styled.div`
@@ -49,7 +49,7 @@ export const CustomCardContent = styled(Card.Content)`
 
 export const SubmitErrorContainer = styled.div`
     margin: 0;
-    color: red;
+    color: ${COLORS.dangerRed};
     min-width: 60px;
     display: flex;
     flex-direction: row-reverse;

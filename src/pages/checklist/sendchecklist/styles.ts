@@ -55,5 +55,5 @@ export const Bar = styled.div`
     flex-direction: column;
     justify-content: center;
 
-    color: white;
+    color: ${COLORS.white};
 `

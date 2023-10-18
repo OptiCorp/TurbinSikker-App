@@ -137,8 +137,8 @@ export const EditHeader = ({
                                     setChangeTitle(event.target.value)
                                 }}
                                 style={{
-                                    borderBottom: '1px solid #243746',
-                                    background: '#F7F7F7',
+                                    borderBottom: `1px solid ${COLORS.secondary}`,
+                                    background: COLORS.white,
                                 }}
                             />
                         </CustomDialog>

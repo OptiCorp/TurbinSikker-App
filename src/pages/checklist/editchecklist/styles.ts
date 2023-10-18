@@ -13,7 +13,7 @@ export const EditListPoints = styled(TextField)`
     text-align: center;
     padding: 0;
     margin: 0 auto;
-    color: red;
+    color: ${COLORS.dangerRed};
 
     line-height: 5px;
 `
