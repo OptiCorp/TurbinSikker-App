@@ -67,7 +67,7 @@ function SeverityButton({
 
                 const buttonStyle: React.CSSProperties = {
                     backgroundColor: isActive ? COLORS.white : 'transparent',
-                    boxShadow: !isActive ? 'none' : '0px 4px 4px 0px #bebebe',
+                    boxShadow: !isActive ? 'none' : `0px 4px 4px 0px ${COLORS.gray}`,
                     color:
                         isActive || lastPathSegment === 'addpunch'
                             ? COLORS.black
@@ -81,11 +81,11 @@ function SeverityButton({
                     width: '100%',
                     borderLeft:
                         isFurthestButton && !isActive && !isMiddleButton && activeButtonIndex === 0
-                            ? '1px solid #dcdcdc'
+                            ? `1px solid ${COLORS.silverGray}`
                             : 'none',
                     borderRight:
                         isFurthestButton && !isActive && !isMiddleButton && activeButtonIndex !== 0
-                            ? '1px solid #dcdcdc'
+                            ? `1px solid ${COLORS.silverGray}`
                             : 'none',
                 }
 
