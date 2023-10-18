@@ -105,3 +105,17 @@ export type Workflow = {
     user: User
     creator: User
 }
+
+export type Invoice = {
+    id: string
+    sender: string
+    receiver: string
+    status: string
+    createdDate: string
+    sentDate: string
+    updatedDate: null | string
+    amount: number
+    pdf: null | string
+    pdfBlobLink: string
+    workflows: Workflow[]
+}

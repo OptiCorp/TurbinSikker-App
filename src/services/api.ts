@@ -1,6 +1,6 @@
 import { API_URL } from '../config'
 import { pca } from '../msalconfig'
-import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow } from './apiTypes'
+import { Category, Checklist, PunchItem, Task, Upload, User, UserRole, Workflow, Invoice } from './apiTypes'
 
 const request = {
     scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
@@ -335,6 +335,11 @@ const apiService = () => {
         return data
     }
 
+    const getAllCompletedWorkflows = async (): Promise<Workflow[]> => {
+        const data = await getByFetch(`GetAllCompletedWorkflows`)
+        return data
+    }
+
     const createWorkflow = async (
         checklistId: string,
         userIds: string[],
@@ -590,6 +595,55 @@ const apiService = () => {
         await deleteByFetch(`DeleteUpload?id=${id}`)
     }
 
+    // Invoice
+
+    const getAllInvoices = async (): Promise<Invoice[]> => {
+        const data = await getByFetch('GetAllInvoices')
+        return data
+    }
+
+    // const getAllInvoicePdfs = async (): Promise<Invoice[]> => {
+    //     const data = await getByFetch('GetAllInvoicePdfs')
+    //     return data
+    // }
+
+    const getInvoice = async (id: string): Promise<Invoice> => {
+        const data = await getByFetch(`GetInvoice?id=${id}`)
+        return data
+    }
+
+    const getInvoicePdfByInvoiceId = async (id: string): Promise<Invoice> => {
+        const data = await getByFetch(`GetInvoicePdfByInvoiceId?id=${id}`)
+        return data
+    }
+
+    const addInvoice = async (
+        receiver: string,
+        workflowIds: string[],
+        hourlyRate: number
+    ): Promise<Response> => {
+        return await postByFetch('AddInvoice', {
+            receiver: receiver,
+            workflowIds: workflowIds,
+            hourlyRate: hourlyRate
+        })
+    }
+
+    const updateInvoice = async (
+        id: string,
+        status: string,
+    ): Promise<void> => {
+        await postByFetch('UpdateInvoice', {
+            id: id,
+            status: status
+        })
+    }
+
+    const deleteInvoice = async (id: string): Promise<void> => {
+        await deleteByFetch(`DeleteInvoice?id=${id}`)
+    }
+
+
     // const sdasdsa = () => {
     //     const Location = useLocation()
     //     const refreshCheckLists = Location.state
@@ -646,6 +700,7 @@ const apiService = () => {
         getAllWorkflows,
         getWorkflow,
         getAllWorkflowsByUserId,
+        getAllCompletedWorkflows,
         createWorkflow,
         updateWorkflow,
         deleteWorkflow,
@@ -653,8 +708,14 @@ const apiService = () => {
         getUploadByPunchId,
         addUpload,
         updateUpload,
-
         deleteUpload,
+        getAllInvoices,
+        // getAllInvoicePdfs,
+        getInvoice,
+        getInvoicePdfByInvoiceId,
+        addInvoice,
+        updateInvoice,
+        deleteInvoice,
     }
 }
 
