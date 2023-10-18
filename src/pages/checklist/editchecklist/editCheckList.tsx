@@ -4,7 +4,7 @@ import { AddTasks } from '../../../components/addtasks/AddTasks'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { EditHeader } from './EditHeader'
-import { EditList } from './EditList/EditList'
+import { EditList } from './editList/EditList'
 import { useEditChecklist } from './hooks/useEditChecklist'
 import { BackgroundContainer, ScrollWrapper } from './styles'
 
@@ -12,14 +12,8 @@ export const EditCheckList = () => {
     const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
 
-    const {
-        handleDelete,
-        setHeaderOpen,
-        headerOpen,
-        checklist,
-        handleSave,
-        tasks,
-    } = useEditChecklist()
+    const { handleDelete, setHeaderOpen, headerOpen, checklist, handleSave, tasks } =
+        useEditChecklist()
 
     const handleCloseDelete = () => {
         setDialogDelete(false)
@@ -60,11 +54,7 @@ export const EditCheckList = () => {
                     {headerOpen && <AddTasks />}
                     {checklist && (
                         <>
-                            <EditList
-                                key={checklist?.id}
-                                checklist={checklist}
-                                tasks={tasks}
-                            />
+                            <EditList key={checklist?.id} checklist={checklist} tasks={tasks} />
                         </>
                     )}
                 </ScrollWrapper>
