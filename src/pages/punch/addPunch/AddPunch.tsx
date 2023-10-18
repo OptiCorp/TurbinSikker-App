@@ -10,7 +10,6 @@ import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import SeverityButton from '../severityButton/SeverityButton'
-import { PunchUploadContainer } from '../styles'
 import { useAddPunch } from './AddPunchHook'
 import {
     PunchAddContainer,
