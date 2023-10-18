@@ -9,16 +9,6 @@ import {
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import {
-    ApiStatus,
-    PunchItem,
-    Status,
-    Upload,
-} from '../../../services/apiTypes'
-import { usePunch } from '../PunchHook'
 import SeverityButton from '../severityButton/SeverityButton'
 import { PunchUploadContainer } from '../styles'
 import { useAddPunch } from './AddPunchHook'
