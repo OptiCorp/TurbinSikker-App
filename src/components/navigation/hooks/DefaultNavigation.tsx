@@ -1,4 +1,4 @@
-import { assignment, checkbox, lock } from '@equinor/eds-icons'
+import { assignment, assignment_important, checkbox, credit_card, high_priority, info_circle, lock } from '@equinor/eds-icons'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { FooterContainer, StyledList, StyledTab, StyledTabs } from '../styles'
@@ -15,7 +15,7 @@ export const DefaultNavigation: React.FC<{
               path.pathname.includes('MyCheckLists') ||
               path.pathname.includes('CompletedChecklist')
             ? 1
-            : path.pathname.includes('404')
+            : path.pathname.includes('Invoice')
             ? 2
             : undefined
     )
@@ -34,7 +34,7 @@ export const DefaultNavigation: React.FC<{
                     <StyledList>
                         <StyledTab>
                             <NavItem
-                                icon={checkbox}
+                                icon={info_circle}
                                 name="Punches"
                                 isActive={activeTab === 0}
                                 to="/Punches"
@@ -50,10 +50,10 @@ export const DefaultNavigation: React.FC<{
                         </StyledTab>
                         <StyledTab>
                             <NavItem
-                                icon={lock}
-                                name="placeholder"
+                                icon={credit_card}
+                                name="Invoicing"
                                 isActive={activeTab === 2}
-                                to="/404"
+                                to="/Invoice"
                             />
                         </StyledTab>
                     </StyledList>
