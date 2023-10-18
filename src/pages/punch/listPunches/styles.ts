@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { getStatusBackgroundColor } from '../../../Helpers/statusBackgroundHelper'
 import { COLORS } from '../../../style/GlobalStyles'
+import { getStatusBackgroundColor } from '../../../helpers/statusBackgroundHelper'
 
 export const PunchListItem = styled.div`
     background-color: ${COLORS.frostyGray};

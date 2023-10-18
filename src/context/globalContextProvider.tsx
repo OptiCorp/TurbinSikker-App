@@ -6,7 +6,7 @@ import apiService from '../services/api'
 import { ApiStatus, User } from '../services/apiTypes'
 import { AzureUserInfo, GlobalContextType } from './types'
 import { Progress, Typography } from '@equinor/eds-core-react'
-import PageNotFound from '../pages/PageNotFound'
+import PageNotFound from '../pages/pageNotFound'
 import { Loading } from '../components/loading/Loading'
 
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)

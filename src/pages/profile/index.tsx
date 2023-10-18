@@ -1,20 +1,14 @@
 import React, { FunctionComponent, useState } from 'react'
 
 import { Button, Typography } from '@equinor/eds-core-react'
-import {
-    ContainerIcon,
-    Image,
-    ImageContainer,
-    Info,
-    Placeholder,
-    Wrapper,
-} from './styles'
+import { ContainerIcon, Image, ImageContainer, Info, Placeholder, Wrapper } from './styles'
 
 import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
+import { COLORS } from '../../style/GlobalStyles'
 
 export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
@@ -46,9 +40,7 @@ export const Profile: FunctionComponent = () => {
                             style={{ borderRadius: '50%' }}
                         />
                     ) : (
-                        <Placeholder
-                            style={{ display: state ? 'null' : 'block' }}
-                        />
+                        <Placeholder style={{ display: state ? 'null' : 'block' }} />
                     )}
                     <label htmlFor="file" style={{ cursor: 'pointer' }}>
                         <ContainerIcon>
@@ -56,7 +48,7 @@ export const Profile: FunctionComponent = () => {
                                 data={state ? edit : add}
                                 size={24}
                                 style={{
-                                    color: 'white',
+                                    color: COLORS.white,
                                 }}
                             />
                         </ContainerIcon>
