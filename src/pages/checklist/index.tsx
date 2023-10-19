@@ -1,16 +1,17 @@
 import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import { useUserContext } from '../users/context/userContextProvider'
+import { useRoles } from '../../services/useRoles'
+import { COLORS } from '../../style/GlobalStyles'
 import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
-    const [activeTab, setActiveTab] = useState(1)
+    const [activeTab, setActiveTab] = useState(0)
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-    const { currentUser } = useUserContext()
 
+    const { isLeader } = useRoles()
     return (
         <MainWrap>
             <>
@@ -22,21 +23,19 @@ export const IndexCheckLists = () => {
                     <Tabs.List>
                         <Tabs.Tab
                             as={Link}
-                            to="/CheckList"
+                            to="/Checklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
-                                color: 'black',
+                                color: COLORS.black,
                                 backgroundColor:
-                                    activeTab === 0 ? '#007079' : '#f5f5f5',
+                                    activeTab === 0
+                                        ? COLORS.primary
+                                        : COLORS.frostyGray,
                             }}
                         >
-                            {currentUser?.userRole.name === 'Leader' ? (
-                                <> Submitted CheckLists</>
-                            ) : (
-                                <>In progress</>
-                            )}
+                            {isLeader ? <>Sent</> : <>Received </>}
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
@@ -45,27 +44,28 @@ export const IndexCheckLists = () => {
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
-                                color: 'black',
+                                color: COLORS.black,
+
                                 backgroundColor:
-                                    activeTab === 1 ? '#007079' : '#f5f5f5',
+                                    activeTab === 1
+                                        ? COLORS.primary
+                                        : COLORS.frostyGray,
                             }}
                         >
-                            {currentUser?.userRole.name === 'Leader' ? (
-                                <> My checklists</>
-                            ) : (
-                                <>Submitted</>
-                            )}
+                            {isLeader ? <> My checklists</> : <>Submitted</>}
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
-                            to="/CompletedCheckList"
+                            to="/CompletedChecklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
                                 borderTopLeftRadius: '10px',
-                                color: 'black',
+                                color: COLORS.black,
                                 backgroundColor:
-                                    activeTab === 2 ? '#007079' : '#f5f5f5',
+                                    activeTab === 2
+                                        ? COLORS.primary
+                                        : COLORS.frostyGray,
                             }}
                         >
                             Completed

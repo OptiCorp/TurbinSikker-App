@@ -1,80 +1,80 @@
-import { CircularProgress, Icon } from '@equinor/eds-core-react'
+import { Typography } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
-import { useNavigate } from 'react-router'
-import { formatDate } from '../../Helpers/index'
+import { useNavigate, useParams } from 'react-router'
 import { AddPunch } from './addPunch/AddPunch'
-import { usePunchContext } from './context/PunchContextProvider'
 import {
     Container,
     PunchDateContainer,
     PunchHeader,
+    PunchHeaderWrapper,
     PunchWrapper,
     SeverityIconContainer,
 } from './styles'
 import { PunchSeverity } from './types'
+import { useEffect, useState } from 'react'
+import { ApiStatus, PunchItem } from '../../services/apiTypes'
+import apiService from '../../services/api'
+import { Loading } from '../../components/loading/Loading'
+import { COLORS } from '../../style/GlobalStyles'
+import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
 
 export const punchSeverity: PunchSeverity[] = [
     {
         severity: 'Minor',
-        color: '#fbca36',
+        color: COLORS.cautionaryYellow,
         icon: info_circle,
     },
     {
         severity: 'Major',
-        color: '#ed8936',
+        color: COLORS.warningOrange,
         icon: warning_filled,
     },
     {
         severity: 'Critical',
-        color: '#eb0000',
+        color: COLORS.dangerRed,
         icon: error_filled,
     },
 ]
 
 function Punch() {
-    const navigate = useNavigate()
-    const { punch } = usePunchContext()
+    const api = apiService()
+    const { punchId } = useParams() as { punchId: string }
+    const [punch, setPunch] = useState<PunchItem>()
     const createdDate = punch && formatDate(punch.createdDate)
-    const updatedDate = punch?.updatedDate && formatDate(punch.updatedDate)
+    const timestamp = punch && formatTimestamp(punch?.createdDate)
+    const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(ApiStatus.LOADING)
 
-    function clickHandler(id: string) {
-        navigate(`/EditPunch/${id}`)
+    useEffect(() => {
+        ;(async () => {
+            const punchFromApi = await api.getPunch(punchId)
+            setPunch(punchFromApi)
+            setFetchPunchStatus(ApiStatus.SUCCESS)
+        })()
+    }, [])
+
+    if (fetchPunchStatus === ApiStatus.LOADING) {
+        return <Loading text="Loading punch .." />
     }
-
     return (
         <>
             <PunchWrapper>
                 <Container>
-                    <PunchHeader>
-                        <SeverityIconContainer>
-                            {punchSeverity.map((severityItem, idx) => {
-                                if (punch?.severity === severityItem.severity) {
-                                    return (
-                                        <Icon
-                                            key={idx}
-                                            data={severityItem.icon}
-                                            style={{
-                                                color: severityItem.color,
-                                            }}
-                                        />
-                                    )
-                                }
-                            })}
-
-                            <h4>Ticket-{punch?.id.split('-')[0]}</h4>
-                        </SeverityIconContainer>
-                        <PunchDateContainer>
-                            <p>{createdDate}</p>
-                            {createdDate == updatedDate && (
-                                <p style={{ fontSize: '10px' }}>
-                                    <span style={{ fontWeight: 'bold' }}>modified:</span>
-                                    {updatedDate}
-                                </p>
+                    <PunchHeaderWrapper>
+                        <PunchHeader>
+                            <SeverityIconContainer>
+                                <Typography variant="h4">
+                                    Ticket-{punch?.id.split('-')[0]}
+                                </Typography>
+                            </SeverityIconContainer>
+                            {punch && (
+                                <PunchDateContainer>
+                                    <Typography>{createdDate}</Typography>
+                                    <Typography>({timestamp})</Typography>
+                                </PunchDateContainer>
                             )}
-                        </PunchDateContainer>
-                    </PunchHeader>
-
-                    <AddPunch />
+                        </PunchHeader>
+                    </PunchHeaderWrapper>
+                    {punch && <AddPunch punch={punch} />}
                 </Container>
             </PunchWrapper>
         </>

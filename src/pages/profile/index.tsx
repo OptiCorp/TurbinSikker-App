@@ -1,21 +1,14 @@
 import React, { FunctionComponent, useState } from 'react'
 
 import { Button, Typography } from '@equinor/eds-core-react'
-import {
-    ContainerIcon,
-    Image,
-    ImageContainer,
-    Info,
-    Placeholder,
-    Wrapper,
-} from './styles'
+import { ContainerIcon, Image, ImageContainer, Info, Placeholder, Wrapper } from './styles'
 
 import { Icon } from '@equinor/eds-core-react'
 import { add, edit } from '@equinor/eds-icons'
 
 import { useMsal } from '@azure/msal-react'
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { useUserContext } from '../users/context/userContextProvider'
+import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
+import { COLORS } from '../../style/GlobalStyles'
 
 export const Profile: FunctionComponent = () => {
     const [state, setstate] = useState('')
@@ -29,7 +22,8 @@ export const Profile: FunctionComponent = () => {
             console.log(URL.createObjectURL(event.target.files[0]))
         }
     }
-    const { currentUser } = useUserContext()
+
+    const { accounts } = useMsal()
 
     return (
         <>
@@ -46,9 +40,7 @@ export const Profile: FunctionComponent = () => {
                             style={{ borderRadius: '50%' }}
                         />
                     ) : (
-                        <Placeholder
-                            style={{ display: state ? 'null' : 'block' }}
-                        />
+                        <Placeholder style={{ display: state ? 'null' : 'block' }} />
                     )}
                     <label htmlFor="file" style={{ cursor: 'pointer' }}>
                         <ContainerIcon>
@@ -56,11 +48,11 @@ export const Profile: FunctionComponent = () => {
                                 data={state ? edit : add}
                                 size={24}
                                 style={{
-                                    color: 'white',
+                                    color: COLORS.white,
                                 }}
                             />
                         </ContainerIcon>
-                    </label>{' '}
+                    </label>
                 </ImageContainer>
                 <input
                     type="file"
@@ -70,17 +62,15 @@ export const Profile: FunctionComponent = () => {
                     onChange={loadFile}
                     style={{ display: 'none' }}
                 />
-                {!currentUser ? (
+                {!accounts[0] ? (
                     <Info>
                         <p>Loading user info..</p>
                     </Info>
                 ) : (
                     <Info>
-                        <Typography variant="h5">
-                            {currentUser?.firstName} {currentUser?.lastName}
-                        </Typography>
+                        <Typography variant="h5">{accounts[0].name}</Typography>
                         <Typography variant="body_short">
-                            {currentUser?.userRole.name}
+                            {accounts[0].idTokenClaims?.roles}
                         </Typography>
                     </Info>
                 )}

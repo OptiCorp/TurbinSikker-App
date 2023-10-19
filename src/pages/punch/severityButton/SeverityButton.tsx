@@ -2,49 +2,50 @@ import { Icon } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button } from '../styles'
-import { Punch, Status } from '../types'
-import { usePunchContext } from '../context/PunchContextProvider'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import { useLocation } from 'react-router'
+import { PunchItem, Status } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
 
 function SeverityButton({
-    //severity,
-    /* setSeverity, */
+    punch,
     userInput,
     setUserInput,
     defaultValue,
 }: {
-    /* severity: SetStateAction<string>
-    setSeverity: Dispatch<SetStateAction<{ severity: string }>> */
+    punch?: PunchItem
     userInput: { severity: string | undefined; description: string | undefined }
     setUserInput: Dispatch<
         SetStateAction<{ severity: string | undefined; description: string | undefined }>
     >
     defaultValue: string | undefined
 }) {
-    const { punch } = usePunchContext()
     const { hasPermission } = useHasPermission()
+    const appLocation = useLocation()
     const [activeButtonIndex, setActiveButtonIndex] = useState(0)
+
+    const path = appLocation.pathname.split('/')
+    const lastPathSegment = path[path.length - 1]
 
     const SeverityButtons = [
         {
             name: 'Minor',
             icon: info_circle,
-            color: '#FBCA36',
+            color: COLORS.cautionaryYellow,
         },
         {
             name: 'Major',
             icon: warning_filled,
-            color: '#ED8936',
+            color: COLORS.warningOrange,
         },
         {
             name: 'Critical',
             icon: error_filled,
-            color: '#EB0000',
+            color: COLORS.dangerRed,
         },
     ]
     function handleChecked(index: number) {
         setActiveButtonIndex(index)
-        /* setSeverity(SeverityButtons[index].name) */
         setUserInput({
             ...userInput,
             severity: SeverityButtons[index].name,
@@ -65,13 +66,14 @@ function SeverityButton({
                 const isFurthestButton = index === 0 || index === SeverityButtons.length - 1
 
                 const buttonStyle: React.CSSProperties = {
-                    backgroundColor: isActive ? '#fff' : 'transparent',
-                    boxShadow: !isActive ? 'none' : '0px 4px 4px 0px #bebebe',
-                    color: isActive
-                        ? '#000'
-                        : Status.APPROVED === punch?.status || hasPermission
-                        ? '#BEBEBE'
-                        : '#000' /* isActive ? '#000' : '#bebebe', */,
+                    backgroundColor: isActive ? COLORS.white : 'transparent',
+                    boxShadow: !isActive ? 'none' : `0px 4px 4px 0px ${COLORS.gray}`,
+                    color:
+                        isActive || lastPathSegment === 'addpunch'
+                            ? COLORS.black
+                            : Status.REJECTED !== punch?.status || hasPermission
+                            ? COLORS.gray
+                            : COLORS.black,
                     borderRadius: 4,
                 }
 
@@ -79,11 +81,11 @@ function SeverityButton({
                     width: '100%',
                     borderLeft:
                         isFurthestButton && !isActive && !isMiddleButton && activeButtonIndex === 0
-                            ? '1px solid #dcdcdc'
+                            ? `1px solid ${COLORS.silverGray}`
                             : 'none',
                     borderRight:
                         isFurthestButton && !isActive && !isMiddleButton && activeButtonIndex !== 0
-                            ? '1px solid #dcdcdc'
+                            ? `1px solid ${COLORS.silverGray}`
                             : 'none',
                 }
 
@@ -93,15 +95,19 @@ function SeverityButton({
                             style={buttonStyle}
                             type="button"
                             onClick={() => handleChecked(index)}
-                            disabled={punch?.status === Status.APPROVED || hasPermission}
+                            disabled={
+                                (punch?.status !== Status.REJECTED &&
+                                    lastPathSegment !== 'addpunch') ||
+                                hasPermission
+                            }
                         >
                             <Icon
                                 data={button.icon}
                                 color={
-                                    /* isActive ? button.color : '#BEBEBE' */ isActive
+                                    lastPathSegment === 'addpunch' || isActive
                                         ? button.color
-                                        : Status.APPROVED === punch?.status || hasPermission
-                                        ? '#BEBEBE'
+                                        : Status.REJECTED !== punch?.status || hasPermission
+                                        ? COLORS.gray
                                         : button.color
                                 }
                             />

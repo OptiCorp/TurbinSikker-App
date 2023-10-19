@@ -1,5 +1,4 @@
-import { TaskEntity } from '@components/addtasks/context/models/TaskEntity'
-import type { CheckListEntity } from 'src/pages/context/models/CheckListEntity'
+import { Task } from '../../../services/apiTypes'
 import {
     CategoryName,
     Container,
@@ -9,44 +8,28 @@ import {
 } from './styles'
 
 type Props = {
-    tasks: CheckListEntity
-    sortedTasks: TaskEntity[]
+    tasks: Task[]
 }
 
-export const PreviewList = ({ sortedTasks }: Props) => {
-    let lastCategoryName = ''
-
+export const PreviewList = ({ tasks }: Props) => {
     return (
         <PreviewListWrap>
-            {sortedTasks.map((task) => {
-                const categoryName =
-                    task.category.name !== lastCategoryName
-                        ? task.category.name
-                        : ''
-
-                lastCategoryName = task.category.name
-
-                return (
-                    <Container key={task.id}>
-                        <CategoryName>{categoryName}</CategoryName>
-                        <StyledCard
-                            style={{
-                                width: '100%',
-                            }}
-                        >
-                            <PreviewListPoints
-                                label=""
-                                key={task.id}
-                                id="storybook-multi-readonly"
-                                defaultValue={task.description}
-                                multiline
-                                readOnly
-                                rows={3}
-                            />
-                        </StyledCard>
-                    </Container>
-                )
-            })}
+            {tasks.map((task) => (
+                <Container key={task.id}>
+                    <CategoryName>{task.category.name}</CategoryName>
+                    <StyledCard>
+                        <PreviewListPoints
+                            label=""
+                            key={task.id}
+                            id="storybook-multi-readonly"
+                            defaultValue={task.description}
+                            multiline
+                            readOnly
+                            rows={3}
+                        />
+                    </StyledCard>
+                </Container>
+            ))}
         </PreviewListWrap>
     )
 }

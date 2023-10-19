@@ -1,47 +1,36 @@
 import { Card, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
+import { COLORS } from '../../../style/GlobalStyles'
 
-export const Wrapper = styled.div`
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: max-content;
-    justify-content: center;
-    min-width: 300px;
-    min-height: 500px;
-
+export const PreviewWrapper = styled.div`
+    display: flex;
     align-items: center;
+    justify-content: space-evenly;
+    margin: 1rem auto;
+    flex-direction: column;
 `
+
 export const InfoHeader = styled.div`
     display: flex;
     width: 100%;
     min-height: 50px;
 `
 export const PreviewListWrap = styled.ul`
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5rem;
+    width: 70%;
     margin: 0 auto;
-    margin-bottom: 5rem;
-    display: grid;
-    grid-template-rows: 1fr;
-    padding: 2rem;
-    grid-template-columns: 1fr;
-    width: 40%;
-    min-width: 300px;
-    min-height: 100px;
 `
 export const PreviewListPoints = styled(TextField)`
     text-align: center;
-
     padding: 0;
-`
-
-export const TitleH1 = styled.h1`
-    text-align: left;
-    width: 0;
-    font-size: 1.2rem;
-    height: 0px;
 `
 
 export const StyledCard = styled(Card)`
     font-size: 1.5rem;
+    background: ${COLORS.white};
+    margin: 0 auto;
     text-align: center;
 `
 
@@ -54,5 +43,21 @@ export const CategoryName = styled.h3`
 export const Container = styled.div`
     width: 100%;
     display: flex;
+    flex-direction: column;
+`
+
+export const EditStyledCardHeader = styled(Card.Header)`
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+`
+export const BackgroundContainer = styled.div`
+    background-color: ${COLORS.frostyGray};
+`
+export const NoTaskContainer = styled.div`
+    align-items: center;
+    margin: 3rem auto;
+    display: flex;
+    gap: 1rem;
     flex-direction: column;
 `

@@ -1,65 +1,46 @@
-import { useContext } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import { TaskCategoryContext } from './context/addTaskCategoryContextProvider'
+import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 
 export const CategorySelector = () => {
-    const { handleCategorySelect, category, tasks, handleTaskSelect } =
-        useContext(TaskCategoryContext)
-
+    const { category, tasks, setSelectedOption } = useAddTaskForm()
     const { control } = useFormContext()
 
     return (
         <>
             <ControllerWrap>
-                <Controller
-                    control={control}
-                    name="category"
-                    rules={{
-                        required: 'Required',
+                <Select
+                    styles={customStyles}
+                    isClearable
+                    options={category}
+                    onChange={(val) => {
+                        if (val === null) return
+                        setSelectedOption(val.value)
                     }}
-                    defaultValue={category[0]}
-                    render={({ field: { onChange, value } }) => (
-                        <Select
-                            styles={customStyles}
-                            isClearable
-                            options={category}
-                            value={category.find((c) => c.value === value)}
-                            onChange={(val) => {
-                                if (val === null) {
-                                    onChange(null)
-                                } else {
-                                    onChange(val.value)
-                                    handleCategorySelect(val.value)
-                                }
-                            }}
-                        />
-                    )}
                 />
+
                 <Controller
                     control={control}
-                    name="task"
+                    name="id"
                     rules={{
                         required: 'Required',
                     }}
-                    defaultValue={[tasks[0]]}
-                    render={({ field: { onChange, value } }) => (
-                        <Select
-                            styles={customStyles}
-                            options={tasks}
-                            isClearable
-                            value={tasks.find((c) => c.id === value)}
-                            onChange={(val) => {
-                                if (val === null) {
-                                    onChange(null)
-                                } else {
-                                    onChange(val.value)
-                                    handleTaskSelect(val.value)
-                                }
-                            }}
-                        />
-                    )}
+                    render={({ field: { onChange, value } }) => {
+                        return (
+                            <Select
+                                styles={customStyles}
+                                options={tasks}
+                                isClearable
+                                value={tasks.find((c) => c.id === value)}
+                                getOptionLabel={(task) => task.description}
+                                onChange={(val) => {
+                                    if (val === null) return onChange(null)
+                                    onChange(val.id)
+                                }}
+                            />
+                        )
+                    }}
                 />
             </ControllerWrap>
         </>

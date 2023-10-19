@@ -1,14 +1,32 @@
 import { Typography } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-import { useUserContext } from '../../../pages/users/context/userContextProvider'
-import { useCheckListContext } from '../../context/CheckListContextProvider'
+import apiService from '../../../services/api'
+import { User } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
+import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 
 export const SelectComponent = () => {
-    const { userList } = useUserContext()
-    const { list } = useCheckListContext()
     const { control, register } = useFormContext()
+    const { list } = useAddWorkFlowForm()
+    const api = apiService()
+    const [userList, setUserList] = useState<User[]>([])
+
+    useEffect(() => {
+        ;(async () => {
+            const users = await api.getAllUsersAdmin()
+            setUserList(users)
+        })()
+    }, [])
+
+    const options = userList?.map(
+        ({ id, username }: { id: string; username: string }) => ({
+            value: id,
+            label: username,
+        })
+    )
 
     return (
         <>
@@ -19,7 +37,7 @@ export const SelectComponent = () => {
                         token={{
                             textAlign: 'center',
                             fontSize: '1.4rem',
-                            color: 'white',
+                            color: COLORS.white,
                         }}
                     >
                         Choose checklist
@@ -32,11 +50,10 @@ export const SelectComponent = () => {
                         rules={{
                             required: 'Required',
                         }}
-                        defaultValue={list[0]}
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 options={list}
-                                value={list.find((c) => c.value === value)}
+                                value={list.find((c) => c.id === value)}
                                 onChange={(val) => onChange(val?.value)}
                             />
                         )}
@@ -49,7 +66,7 @@ export const SelectComponent = () => {
                         token={{
                             textAlign: 'center',
                             fontSize: '1.4rem',
-                            color: 'white',
+                            color: COLORS.white,
                         }}
                     >
                         Choose recipients
@@ -62,12 +79,14 @@ export const SelectComponent = () => {
                         rules={{
                             required: 'Required',
                         }}
-                        defaultValue={userList[0]}
+                        defaultValue={options[0]}
                         render={({ field: { onChange, value } }) => (
                             <Select
-                                options={userList}
+                                options={options}
                                 isMulti={true}
-                                value={userList.find((c) => c.value === value)}
+                                value={options.find(
+                                    (c: { value: string }) => c.value === value
+                                )}
                                 onChange={(val) =>
                                     onChange(val.map((x) => x.value))
                                 }

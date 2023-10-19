@@ -1,4 +1,3 @@
-import { NavActionsComponent } from '@components/navigation/hooks/useNavActionBtn'
 import {
     Button,
     CircularProgress,
@@ -10,8 +9,6 @@ import {
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
-
-import { usePunchContext } from '../context/PunchContextProvider'
 import SeverityButton from '../severityButton/SeverityButton'
 import { useAddPunch } from './AddPunchHook'
 import {
@@ -25,14 +22,16 @@ import {
     SeverityButtonWrapper,
     SeverityContainer,
 } from './styles'
-import { Upload } from 'src/types/Upload'
-import { PunchUploadContainer } from '../styles'
-import { usePunch } from '../PunchHook'
-import { DefaultNavigation } from '@components/navigation/hooks/DefaultNavigation'
-import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { Status } from '../types'
 
-export function AddPunch() {
+import { usePunch } from '../PunchHook'
+import { PunchUploadContainer } from '../styles'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
+import { ApiStatus, PunchItem, Status, Upload } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
+
+export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
     const {
         onSubmit,
@@ -51,18 +50,16 @@ export function AddPunch() {
         setStatus,
     } = useAddPunch()
     const { hasPermission } = useHasPermission()
-    const { workflowId, punchId } = useParams()
-    const { loading, uploads: addedUploads } = usePunch()
+    const { fetchUploadStatus, uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
-    const { punch } = usePunchContext()
     const [uploads, setUploads] = useState(false)
-    const [open, setOpen] = useState(true)
+    const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
             setFile(e.target.files[0])
         }
     }
-
+    const disabled = hasPermission || (!hasPermission && punch?.status === 'Pending')
     const path = appLocation.pathname.split('/')
     const lastPathSegment = path[path.length - 1]
     return (
@@ -70,21 +67,23 @@ export function AddPunch() {
             <PunchAddContainer>
                 {!(addedUploads?.length > 0) ? (
                     <PunchAddUploadContainer>
-                        <PunchUploadButtonContainer disabled={hasPermission}>
-                            <PunchUploadButtonIconContainer disabled={hasPermission}>
+                        <PunchUploadButtonContainer disabled={disabled}>
+                            <PunchUploadButtonIconContainer disabled={disabled}>
                                 <Icon
                                     data={upload}
-                                    color={hasPermission ? '#ccc' : '#000'}
+                                    color={hasPermission ? COLORS.lightGray : COLORS.black}
                                     size={48}
                                 />
                             </PunchUploadButtonIconContainer>
 
-                            <PunchUploadButtonLabel htmlFor="file">Upload</PunchUploadButtonLabel>
+                            <PunchUploadButtonLabel disabled={disabled} htmlFor="file">
+                                Upload
+                            </PunchUploadButtonLabel>
 
                             <input
                                 id="file"
                                 type="file"
-                                disabled={hasPermission}
+                                disabled={disabled}
                                 accept="image/*"
                                 name="image"
                                 onChange={loadFile}
@@ -99,7 +98,7 @@ export function AddPunch() {
                                     justifyContent: 'center',
                                     width: '100%',
                                     alignItems: 'center',
-                                    color: '#243746',
+                                    color: COLORS.secondary,
                                 }}
                                 onClick={() => setUploads((prev) => !prev)}
                             >
@@ -125,27 +124,22 @@ export function AddPunch() {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <Icon color="#73B1B5" data={image} />
+                                                <Icon color={COLORS.primary} data={image} />
+
                                                 <Typography variant="caption">
                                                     {file?.name}
                                                 </Typography>
                                             </div>
                                         </div>
                                     )}
-                                    {/* <Icon
-                                    onClick={(e) => console.log(e.currentTarget)}
-                                    data={close}
-                                    color="#243746"
-                                    size={16}
-                                /> */}
                                 </PunchUploadFileContainer>
                             </PunchUploadFilesContainer>
                         )}
                     </PunchAddUploadContainer>
                 ) : (
                     <PunchUploadContainer>
-                        {loading && <CircularProgress />}
-                        {!loading && addedUploads?.length > 0 ? (
+                        {fetchUploadStatus === ApiStatus.LOADING && <CircularProgress />}
+                        {fetchUploadStatus !== ApiStatus.LOADING && addedUploads?.length > 0 ? (
                             <div style={{ display: 'flex', overflowX: 'auto' }}>
                                 {addedUploads?.map((upload: Upload, idx) => {
                                     return (
@@ -186,7 +180,10 @@ export function AddPunch() {
                     <TextField
                         id=""
                         multiline
-                        disabled={Status.APPROVED === punch?.status || hasPermission}
+                        disabled={
+                            (Status.REJECTED !== punch?.status && lastPathSegment !== 'addpunch') ||
+                            hasPermission
+                        }
                         key={punch?.id ?? ''}
                         required
                         defaultValue={punch?.description}
@@ -206,6 +203,7 @@ export function AddPunch() {
                             defaultValue={(punch?.severity as string) || 'Minor'}
                             userInput={userInput}
                             setUserInput={setUserInput}
+                            punch={punch}
                         />
                     </SeverityButtonWrapper>
                 </SeverityContainer>
@@ -252,12 +250,17 @@ export function AddPunch() {
                 </Dialog.Actions>
             </Dialog>
             {punch?.status === Status.REJECTED && !hasPermission && (
-                <Dialog open={open}>
+                <Dialog open={rejectMessageDialog}>
                     <Dialog.Header>
                         <Dialog.Title>Punch Message</Dialog.Title>
                     </Dialog.Header>
                     <Dialog.CustomContent style={{ maxHeight: '50px', overflowY: 'auto' }}>
-                        <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                        <Typography
+                            group="input"
+                            color="disabled"
+                            variant="text"
+                            token={{ textAlign: 'left' }}
+                        >
                             {punch.message}
                         </Typography>
                     </Dialog.CustomContent>
@@ -266,7 +269,7 @@ export function AddPunch() {
                             <Button variant="ghost" onClick={() => navigate(-1)}>
                                 Back
                             </Button>
-                            <Button onClick={() => setOpen(false)}>Update</Button>
+                            <Button onClick={() => setRejectMessageDialog(false)}>Update</Button>
                         </div>
                     </Dialog.Actions>
                 </Dialog>
@@ -314,7 +317,10 @@ export function AddPunch() {
                     </div>
                 </Dialog.Actions>
             </Dialog>
-            {!hasPermission && (
+
+            {lastPathSegment !== 'addpunch' && punch?.status !== Status.REJECTED ? (
+                <DefaultNavigation hideNavbar={false} />
+            ) : !hasPermission ? (
                 <NavActionsComponent
                     ButtonMessage="Cancel"
                     SecondButtonMessage={
@@ -324,31 +330,29 @@ export function AddPunch() {
                     buttonVariant="outlined"
                     secondOnClick={handleOpen}
                     onClick={() => {
-                        navigate(`/ListPunches`)
+                        navigate(`/Punches`)
                     }}
                     primaryType="button"
                     type="button"
                     isShown={true}
                 />
+            ) : (
+                <DefaultNavigation hideNavbar={false} />
             )}
 
-            {punch?.status !== 'Pending' && (hasPermission || punch?.status === Status.APPROVED) ? (
-                <DefaultNavigation hideNavbar={false} />
-            ) : (
-                hasPermission && (
-                    <NavActionsComponent
-                        ButtonMessage="Reject"
-                        SecondButtonMessage={'Approve'}
-                        secondButtonColor="primary"
-                        buttonVariant="outlined"
-                        buttonColor="danger"
-                        secondOnClick={handleOpen}
-                        onClick={handleRejectOpen}
-                        type="button"
-                        primaryType="button"
-                        isShown={true}
-                    />
-                )
+            {punch?.status === Status.PENDING && hasPermission && (
+                <NavActionsComponent
+                    ButtonMessage="Reject"
+                    SecondButtonMessage={'Approve'}
+                    secondButtonColor="primary"
+                    buttonVariant="outlined"
+                    buttonColor="danger"
+                    secondOnClick={handleOpen}
+                    onClick={handleRejectOpen}
+                    type="button"
+                    primaryType="button"
+                    isShown={true}
+                />
             )}
         </form>
     )

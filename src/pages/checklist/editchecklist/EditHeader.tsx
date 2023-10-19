@@ -1,24 +1,20 @@
-import { useAddTaskForm } from '@components/addtasks/hooks/useAddTaskForm'
-import {
-    Button,
-    Card,
-    Switch,
-    TextField,
-    Typography,
-} from '@equinor/eds-core-react'
-
+import { Button, TextField, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-
-import CustomDialog from '@components/modal/useModalHook'
-import { MakeTitleField } from '../checkListID/styles'
+import { useParams } from 'react-router'
+import CustomDialog from '../../../components/modal/useModalHook'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Checklist } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
+import { MakeTitleField } from '../myChecklists/styles'
 import { InfoHeader } from '../previewCheckList/styles'
-
+import { EditCard, EditStyledCardHeader, StyledSwitch } from './styles'
 type Props = {
     dialogShowing: boolean
     setDialogShowing: (dialogShowing: boolean) => void
     handleClose: () => void
-    isOpenn: boolean
-    setIsOpenn: (isOpenn: boolean) => void
+    headerOpen: boolean
+    setHeaderOpen: (headerOpen: boolean) => void
     setTitle: (title: string) => void
     title: string
     checked: any
@@ -28,45 +24,51 @@ type Props = {
 export const EditHeader = ({
     setDialogShowing,
     dialogShowing,
-    isOpenn,
-    setIsOpenn,
+    headerOpen,
+    setHeaderOpen,
     handleClose,
     title,
     setTitle,
     checked,
     setChecked,
 }: Props) => {
-    const { checkListById } = useAddTaskForm()
-
     const [changeTitle, setChangeTitle] = useState('')
 
     useEffect(() => {
         setTitle(changeTitle)
     })
+    const { id } = useParams() as { id: string }
+
+    const [checklist, setChecklist] = useState<Checklist>()
+    const api = apiService()
+    const { accessToken, currentUser } = useGlobal()
+    useEffect(() => {
+        if (!currentUser?.id || !id) return
+
+        const fetchChecklist = async (id: string) => {
+            if (!id) return
+            try {
+                const checklistData = await api.getChecklist(id)
+
+                setChecklist(checklistData)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        fetchChecklist(id)
+    }, [currentUser?.id, id])
 
     return (
         <>
-            {checkListById && (
+            {checklist && (
                 <>
                     <InfoHeader>
-                        <Card style={{ background: 'white' }}>
-                            <Card.Header
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    margin: '0 auto',
-                                }}
-                            >
-                                <Switch
+                        <EditCard>
+                            <EditStyledCardHeader>
+                                <StyledSwitch
                                     checked={checked}
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        margin: '0 auto',
-
-                                        top: '0',
-                                    }}
-                                    value={checkListById.status}
+                                    value={checklist?.status}
                                     onChange={(e) => {
                                         setChecked(e.target.checked)
 
@@ -79,34 +81,35 @@ export const EditHeader = ({
 
                                 <TextField
                                     id="storybook-readonly"
-                                    value={title || checkListById.title}
-                                    key={checkListById.id}
+                                    value={title || checklist?.title}
+                                    key={checklist?.id}
                                     label=""
                                     readOnly
                                     style={{
-                                        borderBottom: '1px solid #243746',
-                                        background: '#F7F7F7',
+                                        borderBottom: `1px solid ${COLORS.secondary}`,
+                                        background: COLORS.white,
                                     }}
                                     onClick={() => setDialogShowing(true)}
                                 />
                                 <Button
                                     color="secondary"
+                                    as="button"
                                     onClick={() => {
-                                        setIsOpenn(!isOpenn)
+                                        setHeaderOpen(!headerOpen)
                                     }}
                                 >
                                     <Typography
                                         variant="caption"
                                         token={{
                                             textAlign: 'center',
-                                            color: 'white',
+                                            color: COLORS.white,
                                         }}
                                     >
                                         Add Task
                                     </Typography>
                                 </Button>
-                            </Card.Header>
-                        </Card>
+                            </EditStyledCardHeader>
+                        </EditCard>
                     </InfoHeader>
                     <>
                         <CustomDialog
@@ -126,9 +129,7 @@ export const EditHeader = ({
                             <MakeTitleField
                                 id="storybook-readonly"
                                 placeholder="name"
-                                defaultValue={
-                                    changeTitle || checkListById.title
-                                }
+                                defaultValue={changeTitle || checklist?.title}
                                 label=""
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
@@ -136,8 +137,8 @@ export const EditHeader = ({
                                     setChangeTitle(event.target.value)
                                 }}
                                 style={{
-                                    borderBottom: '1px solid #243746',
-                                    background: '#F7F7F7',
+                                    borderBottom: `1px solid ${COLORS.secondary}`,
+                                    background: COLORS.white,
                                 }}
                             />
                         </CustomDialog>

@@ -21,12 +21,6 @@ export interface Punch {
     uploads: string[] | null
 }
 
-export enum Status {
-    PENDING = 'Pending',
-    APPROVED = 'Approved',
-    REJECTED = 'Rejected',
-}
-
 export interface ChecklistTask {
     id: string
     categoryId: string

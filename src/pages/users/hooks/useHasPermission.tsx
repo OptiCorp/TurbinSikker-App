@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useUserContext } from '../context/userContextProvider'
+import useGlobal from '../../../context/globalContextProvider'
 
 export function useHasPermission() {
-    const { currentUser } = useUserContext()
+    const { currentUser } = useGlobal()
     const [hasPermission, setHasPermission] = useState<boolean | undefined>(
         false
     )

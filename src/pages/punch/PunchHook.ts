@@ -1,26 +1,22 @@
-import { SnackbarContext } from '@components/snackbar/SnackBarContext'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router'
-import { getUploadByPunchId } from '../../Upload'
-import { API_URL } from '../../config'
-import { useCheckListContext } from '../context/CheckListContextProvider'
-import useAuth from '../landingPage/context/LandingPageContextProvider'
-import { usePunchContext } from './context/PunchContextProvider'
+import apiService from '../../services/api'
+import { ApiStatus, Upload } from '../../services/apiTypes'
+import { Loading } from '../../components/loading/Loading'
 
 export function usePunch() {
-    const { id } = useParams()
-    const { punch } = usePunchContext()
+    const api = apiService()
+    const { punchId } = useParams() as { punchId: string }
     const methods = useForm()
-    const { accessToken } = useAuth()
-    const { setRefreshList } = useCheckListContext()
-    const { openSnackbar } = useContext(SnackbarContext)
     const [status, setStatus] = useState('')
-    const [uploads, setUploads] = useState([])
+    const [uploads, setUploads] = useState<Upload[]>([])
     const [positiveOpen, setPositiveOpen] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [fetchUploadStatus, setFetchUploadStatus] = useState<ApiStatus>(ApiStatus.LOADING)
 
-    const onSubmit = async () => {
+    // TODO: onSubmit function NOT IN USE?
+    /* const onSubmit = async () => {
         try {
             const res = await fetch(`${API_URL}/updatePunch?id=${id}`, {
                 method: 'POST',
@@ -35,13 +31,13 @@ export function usePunch() {
                     workflowId: '95b927b4-1e8d-48c3-a254-7ca1b8f501c2',
                 }),
             })
-            if (res.ok) setRefreshList((prev) => !prev)
+            // if (res.ok) setRefreshList((prev) => !prev)
             setPositiveOpen(false)
-            if (openSnackbar) openSnackbar(`Punch ${status}`)
+            // if (openSnackbar) openSnackbar(`Punch ${status}`)
         } catch (error) {
             console.error(error)
         }
-    }
+    } */
 
     const handleOpen = () => {
         setPositiveOpen(true)
@@ -52,20 +48,22 @@ export function usePunch() {
 
     useEffect(() => {
         setLoading(true)
-        const uploads = getUploadByPunchId(punch?.id ?? '', accessToken)
-        uploads.then((data) => {
-            setUploads(data)
-            setLoading(false)
-        })
-    }, [accessToken, punch?.id])
+        if (!punchId) return
+        ;(async () => {
+            const uploadFromApi = await api.getUploadByPunchId(punchId)
+            setUploads(uploadFromApi)
+            setFetchUploadStatus(ApiStatus.SUCCESS)
+        })()
+    }, [])
 
     return {
         setStatus,
-        onSubmit,
+        /* onSubmit, */
         positiveOpen,
         handleOpen,
         clearAndClose,
         loading,
+        fetchUploadStatus,
         uploads,
         methods,
     }
