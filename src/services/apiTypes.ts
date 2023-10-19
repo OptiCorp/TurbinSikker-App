@@ -108,6 +108,7 @@ export type Workflow = {
 
 export type Invoice = {
     id: string
+    number: number
     sender: string
     receiver: string
     status: string

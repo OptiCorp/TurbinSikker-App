@@ -101,10 +101,11 @@ function ListInvoices() {
         <Table.Head>
             <Table.Row>
                 <Table.Cell>Receiver</Table.Cell>
+                <Table.Cell>#</Table.Cell>
                 <Table.Cell>Status</Table.Cell>
                 <Table.Cell>
                 <Button aria-haspopup="dialog" onClick={handleSendOpen}>
-                            Send new invoice
+                            New invoice
                         </Button>
                 </Table.Cell>
             </Table.Row>
@@ -117,6 +118,11 @@ function ListInvoices() {
                               {invoice.receiver}
                               </TextWrapper>
                               </Table.Cell>
+
+                              <Table.Cell onClick={() => handleInfoOpen(invoice)}>
+                              {invoice.number}
+                              </Table.Cell>
+
                             <Table.Cell onClick={() => handleInfoOpen(invoice)}>
 
                             {invoice.status == "Paid" ?  (
@@ -142,7 +148,7 @@ function ListInvoices() {
             </Dialog.CustomContent>
             <Dialog.Actions>
                 <Button style={{marginRight: "10px"}} onClick={() => updateStatus("Paid")}>Paid</Button>
-                <Button style={{marginRight: "10px"}} color="danger" onClick={() => updateStatus("Unpaid")}>Unpaid</Button>
+                <Button style={{marginRight: "10px"}} variant="outlined" color="danger" onClick={() => updateStatus("Unpaid")}>Unpaid</Button>
                 <Button onClick={handleStatusClose} variant="ghost">
                   Cancel
                 </Button>
@@ -174,7 +180,7 @@ function ListInvoices() {
       
       <Dialog open={isInfoOpen} isDismissable onClose={handleInfoClose}>
         <Dialog.Header>
-          <Dialog.Title>{activeInvoice?.id}</Dialog.Title>
+          <Dialog.Title>Info</Dialog.Title>
         </Dialog.Header>
         <Dialog.CustomContent>
           <Typography variant="body_short">
@@ -214,7 +220,7 @@ function ListInvoices() {
           </Typography>
         </Dialog.CustomContent>
         <Dialog.Actions>
-            <Button onClick={handleInfoClose}>OK</Button>
+            <Button onClick={handleInfoClose}>Close</Button>
         </Dialog.Actions>
       </Dialog>
 
