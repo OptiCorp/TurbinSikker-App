@@ -22,7 +22,7 @@ export const CellContent = styled.div`
     flex-direction: column;
     align-items: left;
     min-height: 50px;
-
+    width: 100px;
     justify-content: space-around;
     margin: 10px 0;
 `
@@ -48,7 +48,7 @@ export const ListWrapperCheckL = styled.div`
 export const StyledHeadContents = styled.h3`
     height: 10px;
     display: inline;
-    text-align: center;
+    text-align: left;
     width: 100%;
 `
 

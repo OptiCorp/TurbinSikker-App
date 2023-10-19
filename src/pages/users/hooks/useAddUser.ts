@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import apiService from '../../../../../services/api'
-import { User } from '../../../../../services/apiTypes'
+import apiService from '../../../services/api'
+import { User } from '../../../services/apiTypes'
 import { FormValues } from './types'
 
 export const useAddUser = () => {
@@ -27,8 +27,6 @@ export const useAddUser = () => {
         })()
     }, [])
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        console.log('data: ', data)
-
         if (appLocation.pathname === '/AddUser/') {
             await api.addUser({ ...data, azureAdUserId: data.email })
 

@@ -1,8 +1,7 @@
-import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { Button, Icon, Typography } from '@equinor/eds-core-react'
 import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
-import { formatDate, formatTimestamp } from '../../../Helpers/dateFormattingHelpers'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import {
     CreatedByContainer,
@@ -17,12 +16,13 @@ import {
     TicketIcons,
     TicketInfo,
 } from './styles'
-
-import { ApiStatus, PunchItem, Status, User } from '../../../services/apiTypes'
-import apiService from '../../../services/api'
-import useGlobal from '../../../context/globalContextProvider'
 import { useEffect, useState } from 'react'
 import { Loading } from '../../../components/loading/Loading'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { ApiStatus, PunchItem, Status, User } from '../../../services/apiTypes'
+import { useRoles } from '../../../services/useRoles'
+import { formatDate, formatTimestamp } from '../../../helpers/dateFormattingHelpers'
 
 function ListPunches() {
     const { currentUser } = useGlobal() as { currentUser: User }
@@ -31,10 +31,10 @@ function ListPunches() {
     const navigate = useNavigate()
     const [punches, setPunches] = useState<PunchItem[]>([])
     const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(ApiStatus.LOADING)
-
+    const { isLeader, isInspector } = useRoles()
     useEffect(() => {
         ;(async () => {
-            if (currentUser.userRole.name === 'Inspector') {
+            if (isInspector) {
                 const punchesFromApi = await api.getPunchInspectorId(currentUser?.id)
                 setPunches(punchesFromApi)
                 setFetchPunchesStatus(ApiStatus.SUCCESS)

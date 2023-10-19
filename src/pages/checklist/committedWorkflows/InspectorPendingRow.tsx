@@ -22,7 +22,7 @@ export const InspectorPendingRow: FunctionComponent<
     }
 
     if (WorkFlow.status !== 'Committed' || !WorkFlow.checklist) return null
-
+    console.log(WorkFlow)
     return (
         <>
             <StyledTableRow

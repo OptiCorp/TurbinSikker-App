@@ -2,14 +2,13 @@ import { Navigate, Route, Routes } from 'react-router'
 import Layout from './Layout'
 import { ProtectedRoute } from './ProtectedRoute'
 import { GlobalProvider } from './context/globalContextProvider'
-import PageNotFound from './pages/PageNotFound'
 import { IndexCheckLists } from './pages/checklist'
-import { CompletedChecklists } from './pages/checklist/completedChecklists/Index'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
-import { MyCheckLists } from './pages/checklist/myChecklists/Index'
+import { MyCheckLists } from './pages/checklist/committedWorkflows/Index'
+import { CompletedChecklists } from './pages/checklist/doneWorkflows/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
-import { CheckList } from './pages/checklist/submittedChecklists/Index'
+import { Checklist } from './pages/checklist/submittedChecklists/Index'
 import { Profile } from './pages/profile'
 import Punch from './pages/punch/Index'
 import { AddPunch } from './pages/punch/addPunch/AddPunch'
@@ -18,6 +17,7 @@ import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
 import { FillOutCheckList } from './pages/workflowAddPunch'
 import  ListInvoices  from './pages/invoice'
+import PageNotFound from './pages/pageNotFound'
 
 export function RoutesContainer() {
     return (
@@ -34,17 +34,14 @@ export function RoutesContainer() {
                         }
                     >
                         <Route
-                            path="/Checklist"
+                            path="/Checklists"
                             element={
                                 <GlobalProvider>
-                                    <CheckList />
+                                    <Checklist />
                                 </GlobalProvider>
                             }
                         />
-                        <Route
-                            path="/CompletedChecklist"
-                            element={<CompletedChecklists />}
-                        />
+                        <Route path="/CompletedChecklists" element={<CompletedChecklists />} />
                         <Route
                             path="/MyChecklists"
                             element={
@@ -57,29 +54,17 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 <GlobalProvider>
-                                    <MyCheckLists />
+                                    <Checklist />
                                 </GlobalProvider>
                             }
                         />
                     </Route>
-                    <Route
-                        path="/PreviewCheckList/:id"
-                        element={<PreviewCheckList />}
-                    />
+                    <Route path="/PreviewCheckList/:id" element={<PreviewCheckList />} />
 
-                    <Route
-                        path="/FillOutChecklist/:workflowId"
-                        element={<FillOutCheckList />}
-                    />
-                    <Route
-                        path="/EditCheckList/:id"
-                        element={<EditCheckList />}
-                    />
+                    <Route path="/FillOutChecklist/:workflowId" element={<FillOutCheckList />} />
+                    <Route path="/EditCheckList/:id" element={<EditCheckList />} />
                     <Route path="/SendCheckList" element={<SendCheckList />} />
-                    <Route
-                        path="/SendCheckList/:id"
-                        element={<SendCheckList />}
-                    />
+                    <Route path="/SendCheckList/:id" element={<SendCheckList />} />
 
                     <Route path="/ListUsers" element={<ListUsers />} />
                     <Route
@@ -93,22 +78,13 @@ export function RoutesContainer() {
                     <Route path="/AddUser" element={<AddUser />} />
 
                     <Route path="/Punches" element={<ListPunches />} />
-                    <Route
-                        path="/workflow/:workflowId/punch"
-                        element={<Punch />}
-                    />
-                    <Route
-                        path="/workflow/:workflowId/punch/:punchId"
-                        element={<Punch />}
-                    />
+                    <Route path="/workflow/:workflowId/punch" element={<Punch />} />
+                    <Route path="/workflow/:workflowId/punch/:punchId" element={<Punch />} />
                     <Route
                         path="/workflow/:workflowId/EditPunch/:punchId/"
                         element={<AddPunch />}
                     />
-                    <Route
-                        path="/workflow/:workflowId/:taskId/AddPunch/"
-                        element={<AddPunch />}
-                    />
+                    <Route path="/workflow/:workflowId/:taskId/AddPunch/" element={<AddPunch />} />
 
                     <Route
                         path="/invoice"

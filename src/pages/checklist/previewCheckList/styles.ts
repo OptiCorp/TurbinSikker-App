@@ -5,8 +5,7 @@ export const PreviewWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 100%;
-    height: 100px;
+
     margin: 1rem auto;
     flex-direction: column;
 `
@@ -17,14 +16,11 @@ export const InfoHeader = styled.div`
     min-height: 50px;
 `
 export const PreviewListWrap = styled.ul`
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5rem;
+    width: 70%;
     margin: 0 auto;
-    display: grid;
-    grid-template-rows: 1fr;
-    padding: 0;
-    grid-template-columns: 1fr;
-    width: 40%;
-    min-width: 300px;
-    height: 70px;
 `
 export const PreviewListPoints = styled(TextField)`
     text-align: center;
@@ -41,11 +37,13 @@ export const StyledCard = styled(Card)`
 export const CategoryName = styled.h3`
     text-align: left;
     font-size: 1rem;
+
     font-weight: 600;
 `
 
 export const Container = styled.div`
     width: 100%;
+
     display: flex;
     flex-direction: column;
 `
@@ -57,4 +55,11 @@ export const EditStyledCardHeader = styled(Card.Header)`
 `
 export const BackgroundContainer = styled.div`
     background-color: #f0f3f3;
+`
+export const NoTaskContainer = styled.div`
+    align-items: center;
+    margin: 3rem auto;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
 `

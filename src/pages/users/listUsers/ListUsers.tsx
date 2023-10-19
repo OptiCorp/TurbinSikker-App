@@ -56,7 +56,6 @@ export const ListUsers = () => {
                                                 margin: '0 auto',
                                                 width: '80px',
                                                 height: '25px',
-
                                                 fontSize: '0.7rem',
                                             }}
                                             onClick={handleClick}

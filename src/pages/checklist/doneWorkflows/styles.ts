@@ -27,7 +27,7 @@ export const BackgroundWrapCompleted = styled.div`
 export const StyledHeadContentsCompleted = styled.h3`
     height: 10px;
     display: inline;
-    text-align: center;
+    text-align: left;
     width: 100%;
 `
 export const StyledHeadTitleCompleted = styled.h3`
@@ -40,8 +40,6 @@ export const StyledHeadTitleCompleted = styled.h3`
 export const HeadCellCompleted = styled(Table.Cell)`
     width: 300px;
 `
-
-///
 
 export const StyledTableRowCompleted = styled(Table.Row)`
     cursor: pointer;

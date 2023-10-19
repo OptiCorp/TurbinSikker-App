@@ -11,9 +11,9 @@ export const DefaultNavigation: React.FC<{
     const [activeTab, setActiveTab] = useState<number | undefined>(
         path.pathname.includes('Punches') || path.pathname.includes('punch')
             ? 0
-            : path.pathname.includes('Checklist') ||
+            : path.pathname.includes('Checklists') ||
               path.pathname.includes('MyCheckLists') ||
-              path.pathname.includes('CompletedChecklist')
+              path.pathname.includes('CompletedChecklists')
             ? 1
             : path.pathname.includes('Invoice')
             ? 2
@@ -45,7 +45,7 @@ export const DefaultNavigation: React.FC<{
                                 icon={assignment}
                                 name="Checklists"
                                 isActive={activeTab === 1}
-                                to="/Checklist"
+                                to="/Checklists"
                             />
                         </StyledTab>
                         <StyledTab>

@@ -1,7 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { StyledTableRow } from '../myChecklists/styles'
+import { StyledTableRow } from '../committedWorkflows/styles'
 
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
@@ -20,7 +20,7 @@ export const InspectorReceivedCheckLists: FunctionComponent<
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutChecklist/${id}`)
     }
-
+    if (WorkFlow.status !== 'Sent' || !WorkFlow.checklist) return null
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.id)}>
