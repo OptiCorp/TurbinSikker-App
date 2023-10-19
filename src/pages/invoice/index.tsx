@@ -99,13 +99,13 @@ function ListInvoices() {
         </Table.Head>
         <Table.Body>
             {invoices?.map((invoice, key) => 
-                            <Table.Row>
-                            <Table.Cell key={key} >
+                            <Table.Row key={key}>
+                            <Table.Cell >
                               <TextWrapper>
                               {invoice.receiver}
                               </TextWrapper>
                               </Table.Cell>
-                            <Table.Cell key={key} >
+                            <Table.Cell>
 
                             {invoice.status == "Paid" ?  (
                                     <Chip variant="active">{invoice.status}</Chip>
@@ -114,7 +114,7 @@ function ListInvoices() {
                                 }
 
                             </Table.Cell>
-                            <Table.Cell key={key}> 
+                            <Table.Cell> 
                             <Button variant='outlined' aria-haspopup="dialog" onClick={() => handleStatusOpen(invoices[key].id)}>
                             Change status
                         </Button>
