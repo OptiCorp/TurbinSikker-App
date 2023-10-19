@@ -39,15 +39,10 @@ export const punchSeverity: PunchSeverity[] = [
 function Punch() {
     const api = apiService()
     const { punchId } = useParams() as { punchId: string }
-    const navigate = useNavigate()
     const [punch, setPunch] = useState<PunchItem>()
     const createdDate = punch && formatDate(punch.createdDate)
     const timestamp = punch && formatTimestamp(punch?.createdDate)
     const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(ApiStatus.LOADING)
-
-    function clickHandler(id: string) {
-        navigate(`/EditPunch/${id}`)
-    }
 
     useEffect(() => {
         ;(async () => {
