@@ -194,7 +194,7 @@ function ListInvoices() {
           variant="small"
         />
           <Typography variant="body_short">
-            Sent: {formatTimestamp(activeInvoice!.sentDate)} {formatDate(activeInvoice!.sentDate)}
+            Sent: {formatTimestamp(activeInvoice!?.sentDate)} {formatDate(activeInvoice!?.sentDate)}
           </Typography>
           <Divider
           color="medium"
