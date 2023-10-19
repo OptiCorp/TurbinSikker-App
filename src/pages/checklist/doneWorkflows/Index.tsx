@@ -5,6 +5,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Workflow } from '../../../services/apiTypes'
+import { useRoles } from '../../../services/useRoles'
 import { CompletedList } from './CompletedList'
 import {
     BackgroundWrapCompleted,
@@ -20,7 +21,9 @@ export const CompletedChecklists = () => {
     const location = useLocation()
     const state = location.state
     const { accessToken, currentUser } = useGlobal()
+    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
+    const { isInspector } = useRoles()
     useEffect(() => {
         if (!currentUser) return
         ;(async (): Promise<void> => {
@@ -30,6 +33,18 @@ export const CompletedChecklists = () => {
                 )
 
                 setWorkFlows(workFlowData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [currentUser?.id])
+
+    useEffect(() => {
+        if (!currentUser) return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflows()
+                setAllWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)
             }
@@ -62,12 +77,18 @@ export const CompletedChecklists = () => {
                         </Table.Head>
 
                         <Table.Body>
-                            {workflows.map((WorkFlow) => (
-                                <CompletedList
-                                    WorkFlow={WorkFlow}
-                                    key={WorkFlow.id}
-                                />
-                            ))}
+                            <>
+                                
+                                    <>
+                                        {allWorkflows?.map((workflow) => (
+                                            <CompletedList
+                                                WorkFlow={workflow}
+                                                key={workflow.id}
+                                            />
+                                        ))}
+                                    </>
+                                
+                            </>
                         </Table.Body>
                     </Table>
                 </ListWrapperCompletedList>

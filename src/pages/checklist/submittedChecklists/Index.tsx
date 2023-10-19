@@ -24,7 +24,7 @@ export const Checklist = () => {
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
 
     const api = apiService()
-    const { accessToken } = useGlobal()
+   
     const { isInspector } = useRoles()
 
     useEffect(() => {
@@ -46,14 +46,14 @@ export const Checklist = () => {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
-                console.log(workflows)
+
                 setWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)
             }
         })()
     }, [currentUser?.id])
-    console.log(workflows)
+
     return (
         <>
             <Wrap>

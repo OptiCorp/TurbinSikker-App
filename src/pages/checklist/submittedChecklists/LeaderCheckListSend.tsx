@@ -1,48 +1,51 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { StyledTableRow } from '../myChecklists/styles'
 import useGlobal from '../../../context/globalContextProvider'
+import { formatDate } from '../../../helpers/dateFormattingHelpers'
 import { Workflow } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
+import { StyledTableRow } from '../myChecklists/styles'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
 import { CellContent, StyledTableCellCheckL } from './styles'
-import { formatDate } from '../../../helpers/dateFormattingHelpers'
 
 interface CheckListRowProps {
     workflow: Workflow
 }
 
-export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({ workflow }) => {
+export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
+    workflow,
+}) => {
     const navigate = useNavigate()
     const clickHandler = (id: string | undefined) => {
         navigate(`/PreviewCheckList/${id}`)
     }
     const { currentUser } = useGlobal()
+    const formattedCreatedDate = formatDate(workflow.createdDate || '')
 
     if (workflow?.creator.id !== currentUser?.id) {
         return null
     }
 
-    console.log(workflow)
-    const formattedCreatedDate = formatDate(workflow.createdDate || '')
+    if (workflow.status === 'Done') return null
+
     return (
         <>
             <StyledTableRow
                 onClick={() => clickHandler(workflow.checklist.id)}
                 style={{
-
                     backgroundColor:
                         workflow.status === `Committed`
                             ? COLORS.secondary
                             : 'none',
-
                 }}
             >
                 <StyledTableCellCheckL>
                     <CellContent>
-                        <Typography variant="body_long_bold">{workflow.checklist.title}</Typography>
+                        <Typography variant="body_long_bold">
+                            {workflow.checklist.title}
+                        </Typography>
 
                         <Typography
                             variant="caption"

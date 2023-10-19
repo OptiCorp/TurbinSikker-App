@@ -20,8 +20,8 @@ export const InspectorPendingRow: FunctionComponent<
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
-
-    if (WorkFlow.status !== 'Committed' || !WorkFlow.checklist) return null
+//incomming
+    if (WorkFlow.status !== 'Committed' || !WorkFlow) return null
 
     return (
         <>

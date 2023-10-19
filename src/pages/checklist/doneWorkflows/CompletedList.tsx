@@ -11,6 +11,7 @@ import {
     StyledBodyTitleCompleted,
     StyledTableRowCompleted,
 } from './styles'
+import useGlobal from '../../../context/globalContextProvider'
 
 interface CompletedRowProps {
     WorkFlow: Workflow
@@ -20,13 +21,15 @@ export const CompletedList: FunctionComponent<CompletedRowProps> = ({
     WorkFlow,
 }) => {
     const navigate = useNavigate()
-
+    const { currentUser } = useGlobal()
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`, {
             state: { isFromCompletedList: true },
         })
     }
-    
+    if (WorkFlow?.creator.id !== currentUser?.id) {
+        return null
+    }
     if (WorkFlow.status !== 'Done') return null
 
     return (
