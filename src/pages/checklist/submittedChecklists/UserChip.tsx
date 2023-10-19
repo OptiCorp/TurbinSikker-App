@@ -3,8 +3,8 @@ import { assignment_user } from '@equinor/eds-icons'
 import { FC } from 'react'
 import { Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
+import { COLORS } from '../../../style/GlobalStyles'
 import { StyledChip } from './styles'
-
 type UserChip = {
     workflow: Workflow
 }
@@ -15,7 +15,7 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
     return (
         <div>
             <StyledChip variant="default">
-                <Icon data={assignment_user} color="#243746" />
+                <Icon data={assignment_user} color={COLORS.primary} />
                 <Typography
                     variant="caption"
                     token={{

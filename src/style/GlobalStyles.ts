@@ -14,6 +14,9 @@ export const COLORS = {
     cautionaryYellow: '#FBCA36',
     warningOrange: '#ED8936',
     dangerRed: '#EB0000',
+    whiteSmoke: '#f5f5f5',
+    activeNavTab: '#73b1b5',
+    styledChipColor: '#e60323',
 }
 
 const GlobalStyles = createGlobalStyle`
@@ -35,12 +38,18 @@ body,
     overflow-x: hidden;
   }
 
-  body::-webkit-scrollbar,
-  .wrapper::-webkit-scrollbar,
-  html::-webkit-scrollbar {
+  
+body::-webkit-scrollbar {
     display: none;
-  }
-    
+}
+
+.wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
 
 `
 

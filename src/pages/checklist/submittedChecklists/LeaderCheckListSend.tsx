@@ -1,9 +1,10 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { StyledTableRow } from '../committedWorkflows/styles'
+import { StyledTableRow } from '../myChecklists/styles'
 import useGlobal from '../../../context/globalContextProvider'
 import { Workflow } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
 import { CellContent, StyledTableCellCheckL } from './styles'
@@ -31,7 +32,12 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({ work
             <StyledTableRow
                 onClick={() => clickHandler(workflow.checklist.id)}
                 style={{
-                    backgroundColor: workflow.status === 'Committed' ? 'lightGrey' : 'none',
+
+                    backgroundColor:
+                        workflow.status === `Committed`
+                            ? COLORS.secondary
+                            : 'none',
+
                 }}
             >
                 <StyledTableCellCheckL>

@@ -1,11 +1,10 @@
 import { Typography } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select from 'react-select'
-
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
 import apiService from '../../../services/api'
 import { User } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { Bar, FormContainer, RecipientsContainer, SendBox } from './styles'
 
@@ -14,7 +13,7 @@ export const SelectComponent = () => {
     const { list } = useAddWorkFlowForm()
     const api = apiService()
     const [userList, setUserList] = useState<User[]>([])
-    const { id } = useParams() as { id: string }
+
     useEffect(() => {
         ;(async () => {
             const users = await api.getAllUsersAdmin()
@@ -28,7 +27,6 @@ export const SelectComponent = () => {
             label: username,
         })
     )
-    const defaultChecklist = list.find((item) => item.value === id)
 
     return (
         <>
@@ -39,7 +37,7 @@ export const SelectComponent = () => {
                         token={{
                             textAlign: 'center',
                             fontSize: '1.4rem',
-                            color: 'white',
+                            color: COLORS.white,
                         }}
                     >
                         Choose checklist
@@ -68,7 +66,7 @@ export const SelectComponent = () => {
                         token={{
                             textAlign: 'center',
                             fontSize: '1.4rem',
-                            color: 'white',
+                            color: COLORS.white,
                         }}
                     >
                         Choose recipients

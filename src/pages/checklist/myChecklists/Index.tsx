@@ -1,4 +1,3 @@
-import { useMsal } from '@azure/msal-react'
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -9,6 +8,7 @@ import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
+import { COLORS } from '../../../style/GlobalStyles'
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklists } from './LeaderMyChecklists'
 import {
@@ -35,7 +35,7 @@ export const MyCheckLists = () => {
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
     const { isLeader, isInspector } = useRoles()
-    const { accounts } = useMsal()
+
     const handleCreateChecklist = async () => {
         try {
             if (!currentUser || !accessToken) return
@@ -53,19 +53,19 @@ export const MyCheckLists = () => {
     }
 
     useEffect(() => {
-        if (!currentUser || !accessToken) return
+        if (!currentUser) return
         ;(async (): Promise<void> => {
             try {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
-                console.log(workflow)
+
                 setWorkFlow(workFlowData)
             } catch (error) {
                 console.log(error)
             }
         })()
-    }, [accessToken, currentUser?.id])
+    }, [currentUser?.id])
 
     useEffect(() => {
         if (!currentUser?.id) return
@@ -80,7 +80,7 @@ export const MyCheckLists = () => {
                 console.log(error)
             }
         })()
-    }, [accessToken, currentUser?.id])
+    }, [currentUser?.id])
 
     return (
         <>
@@ -181,8 +181,8 @@ export const MyCheckLists = () => {
                         setTitle(event.target.value)
                     }}
                     style={{
-                        borderBottom: '1px solid #243746',
-                        background: '#F7F7F7',
+                        borderBottom: `1px solid ${COLORS.secondary}`,
+                        background: COLORS.white,
                     }}
                 />
             </CustomDialog>

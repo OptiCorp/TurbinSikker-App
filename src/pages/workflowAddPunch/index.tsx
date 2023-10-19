@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Task, Workflow } from '../../services/apiTypes'
-
 import { useParams } from 'react-router'
-
 import apiService from '../../services/api'
 import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 import { FillOutList } from './FillOutList'
+import { BackgroundWrap } from './styles'
 
 export const FillOutCheckList = () => {
     const [workflow, setWorkFlow] = useState<Workflow>()
@@ -27,10 +26,10 @@ export const FillOutCheckList = () => {
             }
         })()
     }, [])
-    console.log(workflow)
+
     return (
         <>
-            <div style={{ backgroundColor: '#f0f3f3' }}>
+            <BackgroundWrap>
                 <PreviewWrapper>
                     <>
                         {workflow && (
@@ -38,7 +37,7 @@ export const FillOutCheckList = () => {
                         )}
                     </>
                 </PreviewWrapper>
-            </div>
+            </BackgroundWrap>
         </>
     )
 }

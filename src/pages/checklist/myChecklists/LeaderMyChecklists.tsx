@@ -5,6 +5,7 @@ import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
 import { Checklist } from '../../../services/apiTypes'
+import { COLORS } from '../../../style/GlobalStyles'
 import {
     CellContentMyList,
     MyCheckListCell,
@@ -12,7 +13,6 @@ import {
     StyledTableRow,
 } from './styles'
 import { useInspectorsAssigned } from './useInspectorsAssigned'
-
 interface CheckListRowProps {
     checklist: Checklist
     activeRow: boolean
@@ -70,7 +70,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                             <StyledChip>
                                 <Icon
                                     data={assignment_user}
-                                    color="#243746"
+                                    color={COLORS.secondary}
                                     style={{ height: '15px' }}
                                 />
                                 <Typography

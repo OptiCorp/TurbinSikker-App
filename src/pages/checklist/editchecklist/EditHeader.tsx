@@ -5,10 +5,10 @@ import CustomDialog from '../../../components/modal/useModalHook'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist } from '../../../services/apiTypes'
-import { MakeTitleField } from '../committedWorkflows/styles'
+import { COLORS } from '../../../style/GlobalStyles'
+import { MakeTitleField } from '../myChecklists/styles'
 import { InfoHeader } from '../previewCheckList/styles'
 import { EditCard, EditStyledCardHeader, StyledSwitch } from './styles'
-
 type Props = {
     dialogShowing: boolean
     setDialogShowing: (dialogShowing: boolean) => void
@@ -43,7 +43,7 @@ export const EditHeader = ({
     const api = apiService()
     const { accessToken, currentUser } = useGlobal()
     useEffect(() => {
-        if (!currentUser?.id || !accessToken || !id) return
+        if (!currentUser?.id || !id) return
 
         const fetchChecklist = async (id: string) => {
             if (!id) return
@@ -57,7 +57,7 @@ export const EditHeader = ({
         }
 
         fetchChecklist(id)
-    }, [accessToken, currentUser?.id, id])
+    }, [currentUser?.id, id])
 
     return (
         <>
@@ -86,8 +86,8 @@ export const EditHeader = ({
                                     label=""
                                     readOnly
                                     style={{
-                                        borderBottom: '1px solid #243746',
-                                        background: '#F7F7F7',
+                                        borderBottom: `1px solid ${COLORS.secondary}`,
+                                        background: COLORS.white,
                                     }}
                                     onClick={() => setDialogShowing(true)}
                                 />
@@ -102,7 +102,7 @@ export const EditHeader = ({
                                         variant="caption"
                                         token={{
                                             textAlign: 'center',
-                                            color: 'white',
+                                            color: COLORS.white,
                                         }}
                                     >
                                         Add Task
@@ -137,8 +137,8 @@ export const EditHeader = ({
                                     setChangeTitle(event.target.value)
                                 }}
                                 style={{
-                                    borderBottom: '1px solid #243746',
-                                    background: '#F7F7F7',
+                                    borderBottom: `1px solid ${COLORS.secondary}`,
+                                    background: COLORS.white,
                                 }}
                             />
                         </CustomDialog>

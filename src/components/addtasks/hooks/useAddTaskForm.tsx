@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'react-router'
 import useGlobal from '../../../context/globalContextProvider'
-
 import apiService from '../../../services/api'
 import { Category, Task } from '../../../services/apiTypes'
 
@@ -37,7 +36,7 @@ export const useAddTaskForm = () => {
 
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!accessToken || !currentUser?.id) return
+            if (!currentUser?.id) return
             try {
                 const categoryData = await api.getAllCategories()
                 const categories: Category[] = categoryData.map(
@@ -53,11 +52,11 @@ export const useAddTaskForm = () => {
                 console.log(error)
             }
         })()
-    }, [accessToken, currentUser?.id])
+    }, [currentUser?.id])
 
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!accessToken || !selectedOption || !currentUser?.id) return
+            if (!selectedOption || !currentUser?.id) return
             try {
                 const taskData =
                     await api.getAllTasksByCategoryId(selectedOption)
@@ -70,7 +69,7 @@ export const useAddTaskForm = () => {
                 console.log(error)
             }
         })()
-    }, [selectedOption, accessToken, currentUser?.id])
+    }, [selectedOption, currentUser?.id])
 
     return {
         methods,
