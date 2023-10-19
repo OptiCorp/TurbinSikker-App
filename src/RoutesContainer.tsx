@@ -16,6 +16,7 @@ import ListPunches from './pages/punch/listPunches/index'
 import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
 import { FillOutCheckList } from './pages/workflowAddPunch'
+import  ListInvoices  from './pages/invoice'
 import PageNotFound from './pages/pageNotFound'
 
 export function RoutesContainer() {
@@ -84,6 +85,11 @@ export function RoutesContainer() {
                         element={<AddPunch />}
                     />
                     <Route path="/workflow/:workflowId/:taskId/AddPunch/" element={<AddPunch />} />
+
+                    <Route
+                        path="/invoice"
+                        element={<ListInvoices />}
+                    />
 
                     <Route path="/EditUser/:id" element={<AddUser />} />
                     <Route path="/User/:id" element={<AddUser />} />
