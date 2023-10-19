@@ -6,7 +6,7 @@ import apiService from '../services/api'
 import { ApiStatus, User } from '../services/apiTypes'
 import { AzureUserInfo, GlobalContextType } from './types'
 import { Progress, Typography } from '@equinor/eds-core-react'
-import PageNotFound from '../pages/PageNotFound'
+import PageNotFound from '../pages/pageNotFound'
 import { Loading } from '../components/loading/Loading'
 
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
@@ -29,10 +29,16 @@ export function GlobalProvider({ children }: { children: ReactNode }): JSX.Eleme
                 scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
                 account: accounts.at(0),
             }
-            instance.acquireTokenSilent(accessTokenRequest).then((tokenResponse) => {
-                setAccessToken(tokenResponse.accessToken)
-                setIdToken(tokenResponse.idToken)
-            })
+            instance
+                .acquireTokenSilent(accessTokenRequest)
+                .then((tokenResponse) => {
+                    setAccessToken(tokenResponse.accessToken)
+                    setIdToken(tokenResponse.idToken)
+                })
+                .catch((err) => {
+                    console.error(err)
+                    instance.logoutRedirect()
+                })
         }
     }, [account, inProgress, accounts, instance, accountname, accountUsername])
 

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { COLORS } from '../../style/GlobalStyles'
 
 export const PunchWrapper = styled.div`
     margin: 0;
@@ -15,7 +16,7 @@ export const PunchWrapper = styled.div`
     }
 
     span {
-        color: #243746;
+        color: ${COLORS.secondary};
     }
 `
 
@@ -26,8 +27,6 @@ export const PunchHeaderWrapper = styled.div`
 `
 
 export const PunchHeader = styled.div`
-    /* min-width: 320px; */
-    /* width: 90%; */
     display: flex;
     justify-content: space-between;
     margin-top: 16px;
@@ -47,7 +46,7 @@ export const PunchUploadContainer = styled.div`
         right: 0;
         height: 100%;
         opacity: 50%;
-        /* filter: blur(1px); */
+
         background-color: transparent;
         border: none;
     }
@@ -63,27 +62,28 @@ export const SeverityIconContainer = styled.div`
     /* padding-left: 2rem; */
     gap: 4;
 `
+//TODO: Remove? Not in use?
+// export const PunchDescriptionContainer = styled.div`
+//     width: 100%;
+//     margin: 0 auto;
+//     padding-left: 2rem;
+//     margin-top: 15px;
+//     p {
+//         margin-bottom: 48px;
+//     }
+// `
 
-export const PunchDescriptionContainer = styled.div`
-    width: 100%;
-    margin: 0 auto;
-    padding-left: 2rem;
-    margin-top: 15px;
-    p {
-        margin-bottom: 48px;
-    }
-`
-
-export const PunchButton = styled.button`
-    color: #007079;
-    border: none;
-    background-color: transparent;
-    font-size: 12px;
-    line-height: 150%;
-`
+//TODO: Remove? Not in use?
+// export const PunchButton = styled.button`
+//     color: #007079;
+//     border: none;
+//     background-color: transparent;
+//     font-size: 12px;
+//     line-height: 150%;
+// `
 
 export const Button = styled.button`
-    background-color: #fff;
+    background-color: ${COLORS.white};
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -92,15 +92,16 @@ export const Button = styled.button`
     border-radius: 4px;
     width: 100%;
     border: none;
-    box-shadow: 0px 4px 4px 0px #bebebe;
+    box-shadow: 0px 4px 4px 0px ${COLORS.gray};
     min-height: 70px;
 `
 
-export const InputWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`
+//TODO: Remove? Not in use?
+// export const InputWrapper = styled.div`
+//     display: flex;
+//     flex-direction: column;
+//     width: 100%;
+// `
 
 export const PunchDateContainer = styled.div`
     text-align: right;

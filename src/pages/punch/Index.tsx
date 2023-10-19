@@ -1,9 +1,7 @@
 import { Typography } from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate, useParams } from 'react-router'
-import { formatDate, formatTimestamp } from '../../Helpers/dateFormattingHelpers'
 import { AddPunch } from './addPunch/AddPunch'
-
 import {
     Container,
     PunchDateContainer,
@@ -17,21 +15,23 @@ import { useEffect, useState } from 'react'
 import { ApiStatus, PunchItem } from '../../services/apiTypes'
 import apiService from '../../services/api'
 import { Loading } from '../../components/loading/Loading'
+import { COLORS } from '../../style/GlobalStyles'
+import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
 
 export const punchSeverity: PunchSeverity[] = [
     {
         severity: 'Minor',
-        color: '#fbca36',
+        color: COLORS.cautionaryYellow,
         icon: info_circle,
     },
     {
         severity: 'Major',
-        color: '#ed8936',
+        color: COLORS.warningOrange,
         icon: warning_filled,
     },
     {
         severity: 'Critical',
-        color: '#eb0000',
+        color: COLORS.dangerRed,
         icon: error_filled,
     },
 ]

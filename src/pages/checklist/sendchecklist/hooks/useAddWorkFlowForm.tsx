@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { default as useGlobal } from '../../../../context/globalContextProvider'
 import apiService from '../../../../services/api'
@@ -22,6 +22,9 @@ export const useAddWorkFlowForm = () => {
     const methods = useForm<SendingFormValuesEntity>()
 
     const [list, setList] = useState<ListEntity[]>([])
+    const { id } = useParams() as { id: string }
+    const defaultChecklist = list.find((item) => item.value === id)
+
     const { handleSubmit, control } = methods
     const navigate = useNavigate()
     const [positiveOpen, setPositiveOpen] = useState(false)
@@ -34,6 +37,11 @@ export const useAddWorkFlowForm = () => {
     const clearAndClose = () => {
         setPositiveOpen(false)
     }
+
+    useEffect(() => {
+        if (!defaultChecklist) return
+        methods.setValue('checklistId', defaultChecklist.id)
+    }, [defaultChecklist])
 
     useEffect(() => {
         if (!currentUser?.id || !accessToken) return
@@ -51,6 +59,7 @@ export const useAddWorkFlowForm = () => {
                         label: title,
                     })
                 )
+
                 setList(listData)
             } catch (error) {
                 console.log(error)

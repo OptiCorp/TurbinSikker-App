@@ -2,7 +2,7 @@ import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
-import useGlobal from '../../context/globalContextProvider'
+import { useRoles } from '../../services/useRoles'
 import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
@@ -10,8 +10,8 @@ export const IndexCheckLists = () => {
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
-    const { currentUser } = useGlobal()
 
+    const { isLeader } = useRoles()
     return (
         <MainWrap>
             <>
@@ -23,7 +23,7 @@ export const IndexCheckLists = () => {
                     <Tabs.List>
                         <Tabs.Tab
                             as={Link}
-                            to="/Checklist"
+                            to="/Checklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',
@@ -33,11 +33,7 @@ export const IndexCheckLists = () => {
                                     activeTab === 0 ? '#007079' : '#f5f5f5',
                             }}
                         >
-                            {currentUser?.userRole.name === 'Leader' ? (
-                                <> Submitted CheckLists</>
-                            ) : (
-                                <>In progress</>
-                            )}
+                            {isLeader ? <>Sent</> : <>Received </>}
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
@@ -51,15 +47,11 @@ export const IndexCheckLists = () => {
                                     activeTab === 1 ? '#007079' : '#f5f5f5',
                             }}
                         >
-                            {currentUser?.userRole.name === 'Leader' ? (
-                                <> My checklists</>
-                            ) : (
-                                <>Submitted</>
-                            )}
+                            {isLeader ? <> My checklists</> : <>Submitted</>}
                         </Tabs.Tab>
                         <Tabs.Tab
                             as={Link}
-                            to="/CompletedChecklist"
+                            to="/CompletedChecklists"
                             style={{
                                 borderBottom: 'none',
                                 borderTopRightRadius: '10px',

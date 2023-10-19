@@ -5,7 +5,7 @@ import CustomDialog from '../../../components/modal/useModalHook'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist } from '../../../services/apiTypes'
-import { MakeTitleField } from '../myChecklists/styles'
+import { MakeTitleField } from '../committedWorkflows/styles'
 import { InfoHeader } from '../previewCheckList/styles'
 import { EditCard, EditStyledCardHeader, StyledSwitch } from './styles'
 

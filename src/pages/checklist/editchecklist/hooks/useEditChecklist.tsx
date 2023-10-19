@@ -69,6 +69,7 @@ export const useEditChecklist = () => {
         categoryId: string
         taskId: string
         checklistId: string
+        estAvgCompletionTime: number
     }) => {
         try {
             if (!currentUser) return
@@ -76,7 +77,8 @@ export const useEditChecklist = () => {
                 data.taskId,
                 data.categoryId,
                 data.description,
-                data.checklistId
+                data.checklistId,
+                data.estAvgCompletionTime
             )
 
             setDialogShowing(false)
@@ -94,6 +96,7 @@ export const useEditChecklist = () => {
             if (error) return
             console.log(error)
         } finally {
+            navigate('/Checklists')
         }
     }
 
@@ -106,7 +109,7 @@ export const useEditChecklist = () => {
             if (error) return
             console.log(error)
         } finally {
-            navigate('/MyChecklists')
+            navigate('/Checklists')
         }
     }
 

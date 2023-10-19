@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { useHasPermission } from '../../hooks/useHasPermission'
 import { StyledTableCell, TableData } from '../styles'
 import { User } from '../../../../services/apiTypes'
+import { COLORS } from '../../../../style/GlobalStyles'
 
 type Props = {
     user: User
@@ -49,12 +50,14 @@ export const UserRow: FunctionComponent<Props> = ({ user }) => {
                 )}
             </StyledTableCell>
             <StyledTableCell>
-                <Icon
-                    data={edit}
-                    size={16}
-                    color="#007079"
-                    onClick={() => clickHandler(user.id)}
-                />
+                {hasPermission && (
+                    <Icon
+                        data={edit}
+                        size={16}
+                        color={COLORS.primary}
+                        onClick={() => clickHandler(user.id)}
+                    />
+                )}
             </StyledTableCell>
         </Table.Row>
     )

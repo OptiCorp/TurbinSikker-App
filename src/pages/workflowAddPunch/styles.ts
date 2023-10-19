@@ -2,18 +2,19 @@ import { Card, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import NA from '../../assets/images/notApplicable.png'
 
-export const AddPunchHeader = styled.div`
-    display: flex;
-    width: 100%;
-    min-height: 50px;
-`
-
 export const NotApplicableWrap = styled.div`
     display: flex;
     flex-direction: column;
-
     margin: 50px auto;
     width: 50px;
+`
+
+export const Warning = styled.div`
+    font-size: 1rem;
+    font-weight: 600;
+    align-self: end;
+
+    color: red;
 `
 
 export const ImageContainer = styled.div`
@@ -26,50 +27,46 @@ export const ImageContainer = styled.div`
     margin: 0 auto;
 `
 
-export const StyledCard = styled(Card)`
-    font-size: 1.5rem;
-    display: grid;
-
-    grid-template-columns: 1fr 1fr 1fr;
-`
-
 export const CustomCard = styled(Card)`
     font-size: 1.5rem;
 
     display: grid;
 
     grid-template-columns: 1fr;
-    grid-template-rows: 30px 10px;
+    grid-template-rows: 30px 20px 30px;
     row-gap: 2rem;
-
+    padding-bottom: 1rem;
     margin: 0 auto;
 `
 
 export const CustomCardContent = styled(Card.Content)`
     font-size: 1.5rem;
     display: flex;
-    flex-direction: row;
-
     width: 93%;
     margin: 0 auto;
+    align-items: baseline;
 `
 
-export const StyledHeaderCard = styled(Card.Header)`
-    width: min(2s00px);
+export const Test = styled.div`
+    margin: 0;
+    color: red;
+    min-width: 60px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    justify-self: end;
 `
 
-export const StyledCardHeader = styled(Card.Header)`
-    grid-column: 3/3;
-    width: 150px;
-    margin: 0 auto;
+export const CustomCategoryName = styled.h3`
+    min-width: 220px;
+    font-size: 1.2rem;
 `
-
-export const CustomCategoryName = styled.h3``
 
 export const CustomTaskField = styled(TextField)`
     & textarea {
-        width: 180px;
         padding: 0;
+        max-width: 300px;
+
         padding-left: 10px;
     }
 `
