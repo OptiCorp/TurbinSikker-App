@@ -1,6 +1,7 @@
-import { Typography, Table, Button, Dialog, Input, Label, Chip, Popover, Icon} from '@equinor/eds-core-react'
+import { Typography, Table, Button, Dialog, Input, Label, Chip, Popover, Icon, Divider} from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate, useParams } from 'react-router'
+import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
 
 import {
     TableWrapper, InvoiceListItem, TextWrapper
@@ -15,7 +16,7 @@ function ListInvoices() {
     const api = apiService()
     const navigate = useNavigate()
     const [invoices, setInvoices] = useState<Invoice[]>()
-    const [activeInvoiceId, setActiveInvoiceId] = useState<string>("")
+    const [activeInvoice, setActiveInvoice] = useState<Invoice>()
     const [completedWorkflows, setCompletedWorkflows] = useState<Workflow[]>()
     const [receiver, setReceiver] = useState<string>("")
     const [hourlyRate, setHourlyRate] = useState<number>(0)
@@ -32,15 +33,25 @@ function ListInvoices() {
         };
 
       const [isStatusOpen, setIsStatusOpen] = useState(false);
-      
-      const handleStatusOpen = (invoiceId: string) => {
+      const handleStatusOpen = (invoice: Invoice) => {
         setIsStatusOpen(true);
-        setActiveInvoiceId(invoiceId);
-
+        setActiveInvoice(invoice);
       };
+
       const handleStatusClose = () => {
         setIsStatusOpen(false);
       };
+
+      const [isInfoOpen, setIsInfoOpen] = useState(false);
+      const handleInfoOpen = (invoice: Invoice) => {
+        setIsInfoOpen(true);
+        setActiveInvoice(invoice);
+
+      };
+
+      const handleInfoClose = () => {
+        setIsInfoOpen(false);
+      }
 
         const getAllInvoices = async () => {
           const invoicesFromApi = await api.getAllInvoices();
@@ -53,7 +64,7 @@ function ListInvoices() {
         }
 
         const updateStatus = async (status: string) => {
-          await api.updateInvoice(activeInvoiceId, status);
+          await api.updateInvoice(activeInvoice!.id, status);
           await getAllInvoices();
           setIsStatusOpen(false);
         }
@@ -62,6 +73,7 @@ function ListInvoices() {
           const workflowIds =  completedWorkflows!.map((workflow) => workflow.id);
           await api.addInvoice(receiver, workflowIds, hourlyRate);
           setIsSendOpen(false);
+          getAllInvoices();
         }
 
         const handleChangeEmail = async (event: React.FormEvent<HTMLInputElement>) => {
@@ -99,13 +111,13 @@ function ListInvoices() {
         </Table.Head>
         <Table.Body>
             {invoices?.map((invoice, key) => 
-                            <Table.Row>
-                            <Table.Cell key={key} >
+                            <Table.Row key={key}>
+                            <Table.Cell onClick={() => handleInfoOpen(invoice)}>
                               <TextWrapper>
                               {invoice.receiver}
                               </TextWrapper>
                               </Table.Cell>
-                            <Table.Cell key={key} >
+                            <Table.Cell onClick={() => handleInfoOpen(invoice)}>
 
                             {invoice.status == "Paid" ?  (
                                     <Chip variant="active">{invoice.status}</Chip>
@@ -114,8 +126,8 @@ function ListInvoices() {
                                 }
 
                             </Table.Cell>
-                            <Table.Cell key={key}> 
-                            <Button variant='outlined' aria-haspopup="dialog" onClick={() => handleStatusOpen(invoices[key].id)}>
+                            <Table.Cell> 
+                            <Button variant='outlined' aria-haspopup="dialog" onClick={() => handleStatusOpen(invoices[key])}>
                             Change status
                         </Button>
                                 </Table.Cell>
@@ -124,7 +136,7 @@ function ListInvoices() {
                         </Table>
                         </TableWrapper>
                         
-          <Dialog open={isStatusOpen}>
+          <Dialog open={isStatusOpen} isDismissable onClose={handleStatusClose}>
             <Dialog.CustomContent>
               <Typography variant="body_short">Update the status for this invoice.</Typography>
             </Dialog.CustomContent>
@@ -137,7 +149,7 @@ function ListInvoices() {
             </Dialog.Actions>
           </Dialog>
                        
-            <Dialog open={isSendOpen}>
+            <Dialog open={isSendOpen} isDismissable onClose={handleSendClose}>
             <Dialog.Header>
             <Dialog.Title>Send new invoice</Dialog.Title>
           </Dialog.Header>
@@ -158,6 +170,57 @@ function ListInvoices() {
                     </Button>
                 </Dialog.Actions>
             </Dialog>
+
+      
+      <Dialog open={isInfoOpen} isDismissable onClose={handleInfoClose}>
+        <Dialog.Header>
+          <Dialog.Title>{activeInvoice?.id}</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.CustomContent>
+          <Typography variant="body_short">
+            From: {activeInvoice?.sender}
+          </Typography>
+          <Divider
+          color="medium"
+          size="1"
+          variant="small"
+        />
+          <Typography variant="body_short">
+            To: {activeInvoice?.receiver}
+          </Typography>
+          <Divider
+          color="medium"
+          size="1"
+          variant="small"
+        />
+          <Typography variant="body_short">
+            Sent: {formatTimestamp(activeInvoice!.sentDate)} {formatDate(activeInvoice!.sentDate)}
+          </Typography>
+          <Divider
+          color="medium"
+          size="1"
+          variant="small"
+            />
+          <Typography variant="body_short">
+            Amount: $ {activeInvoice?.amount}
+          </Typography>
+          <Divider
+          color="medium"
+          size="1"
+          variant="small"
+        />
+        <Typography variant="body_short">
+            Status {activeInvoice?.status}
+          </Typography>
+        </Dialog.CustomContent>
+        <Dialog.Actions>
+            <Button onClick={handleInfoClose}>OK</Button>
+        </Dialog.Actions>
+      </Dialog>
+
+
+
+
     </InvoiceListItem>
 <DefaultNavigation hideNavbar={false}/>
 </>
