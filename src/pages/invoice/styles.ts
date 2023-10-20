@@ -22,6 +22,6 @@ export const TextWrapper = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     @media only screen and (max-width: 400px) {
-        max-width: 90px;
+        max-width: 50px;
     }
 `

@@ -5,7 +5,6 @@ export const PunchWrapper = styled.div`
     margin: 0;
     position: relative;
     display: flex;
-
     flex-direction: column;
     max-width: 768px;
     /* padding: 20px; */
@@ -13,10 +12,6 @@ export const PunchWrapper = styled.div`
     h4 {
         font-weight: normal;
         margin: 0;
-    }
-
-    span {
-        color: ${COLORS.secondary};
     }
 `
 
@@ -62,25 +57,6 @@ export const SeverityIconContainer = styled.div`
     /* padding-left: 2rem; */
     gap: 4;
 `
-//TODO: Remove? Not in use?
-// export const PunchDescriptionContainer = styled.div`
-//     width: 100%;
-//     margin: 0 auto;
-//     padding-left: 2rem;
-//     margin-top: 15px;
-//     p {
-//         margin-bottom: 48px;
-//     }
-// `
-
-//TODO: Remove? Not in use?
-// export const PunchButton = styled.button`
-//     color: #007079;
-//     border: none;
-//     background-color: transparent;
-//     font-size: 12px;
-//     line-height: 150%;
-// `
 
 export const Button = styled.button`
     background-color: ${COLORS.white};
@@ -95,13 +71,6 @@ export const Button = styled.button`
     box-shadow: 0px 4px 4px 0px ${COLORS.gray};
     min-height: 70px;
 `
-
-//TODO: Remove? Not in use?
-// export const InputWrapper = styled.div`
-//     display: flex;
-//     flex-direction: column;
-//     width: 100%;
-// `
 
 export const PunchDateContainer = styled.div`
     text-align: right;

@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { getStatusBackgroundColor } from '../../../helpers/statusBackgroundHelper'
-import { COLORS } from '../../../style/GlobalStyles'
+
+import { COLORS, SHADOW } from '../../../style/GlobalStyles'
+
 
 export const PunchListItem = styled.div`
     background-color: ${COLORS.frostyGray};
@@ -20,7 +22,7 @@ export const PunchListBoxContainer = styled.div`
     padding: 12px 16px;
     cursor: pointer;
     border-radius: 4px;
-    box-shadow: 0px 4px 4px 2px ${COLORS.gray};
+    box-shadow: ${SHADOW};
     font-size: 12px;
     color: ${COLORS.primary};
     background-color: ${COLORS.white};
@@ -84,13 +86,14 @@ export const StatusBadge = styled.span`
     gap: 4;
     padding: 5px;
     border-radius: 4px;
-    background: ${(props: { status: string }) =>
-        getStatusBackgroundColor(props.status)};
+    background: ${(props: { status: string }) => getStatusBackgroundColor(props.status)};
 `
 export const TicketCardDescription = styled.p`
-    max-width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     color: ${COLORS.gray};
+    @media only screen and (max-width: 400px) {
+        max-width: 200px;
+    }
 `

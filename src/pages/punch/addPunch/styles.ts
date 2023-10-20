@@ -79,4 +79,10 @@ export const PunchUploadButtonLabel = styled.label`
     margin: 0px;
     padding: 10px 16px;
     text-align: center;
+
+    ${(props: { disabled: boolean | undefined }) =>
+        props.disabled &&
+        css`
+            background: ${COLORS.gray};
+        `}
 `
