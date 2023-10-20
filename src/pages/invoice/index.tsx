@@ -1,4 +1,4 @@
-import { Typography, Table, Button, Dialog, Input, Label, Chip, Popover, Icon, Divider} from '@equinor/eds-core-react'
+import { Typography, Table, Button, Dialog, Input, Label, Chip, Popover, Icon, Divider, Autocomplete, AutocompleteChanges} from '@equinor/eds-core-react'
 import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
 import { useNavigate, useParams } from 'react-router'
 import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
@@ -70,8 +70,8 @@ function ListInvoices() {
         }
 
         const sendInvoice = async () => {
-          const workflowIds =  completedWorkflows!.map((workflow) => workflow.id);
-          await api.addInvoice(receiver, workflowIds, hourlyRate);
+          // const workflowIds =  completedWorkflows!.map((workflow) => workflow.id);
+          await api.addInvoice(receiver, selectedWorkflows, hourlyRate);
           setIsSendOpen(false);
           getAllInvoices();
         }
@@ -84,6 +84,11 @@ function ListInvoices() {
           const hourlyRate = event.currentTarget.value;
           setHourlyRate(parseInt(hourlyRate));
         }
+
+        const [selectedWorkflows, setSelectedWorkflows] = useState<string[]>([]);
+        const onChange = (changes: AutocompleteChanges<string>) => {
+        setSelectedWorkflows(changes.selectedItems);
+        };
         
     useEffect(() => {
         getAllInvoices();
@@ -164,10 +169,11 @@ function ListInvoices() {
                 <Label htmlFor="textfield-normal" label="Email" />
                 <Input id="textfield-normal" autoComplete="off" onChange={handleChangeEmail}/>
                 </div>
-                <div>
+                <div style={{marginBottom: '10px'}}>
                 <Label htmlFor="textfield-normal" label="Hourly rate" />
                 <Input id="textfield-normal" autoComplete="off" onChange={handleChangeHourlyRate} />
                 </div>
+                <Autocomplete label="Checklists" options={completedWorkflows!?.map((workflow) => workflow.id) } onOptionsChange={onChange} selectedOptions={selectedWorkflows} multiple />
                 </Dialog.CustomContent>
                 <Dialog.Actions>
                     <Button style={{marginRight: "10px"}} onClick={sendInvoice}>Send</Button>
