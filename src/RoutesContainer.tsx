@@ -3,12 +3,12 @@ import Layout from './Layout'
 import { ProtectedRoute } from './ProtectedRoute'
 import { GlobalProvider } from './context/globalContextProvider'
 import { IndexCheckLists } from './pages/checklist'
-import { CompletedChecklists } from './pages/checklist/doneWorkflows/Index'
+import { ForReviewChecklists } from './pages/checklist/forReview/Index'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
+import { Checklist } from './pages/checklist/inprogressChecklists/Index'
 import { MyCheckLists } from './pages/checklist/myChecklists/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
-import { Checklist } from './pages/checklist/submittedChecklists/Index'
 import ListInvoices from './pages/invoice'
 import PageNotFound from './pages/pageNotFound'
 import { Profile } from './pages/profile'
@@ -17,7 +17,9 @@ import { AddPunch } from './pages/punch/addPunch/AddPunch'
 import ListPunches from './pages/punch/listPunches/index'
 import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
-import { FillOutCheckList } from './pages/workflowAddPunch'
+import { FillOutCheckList } from './pages/fillOutChecklist/Index'
+
+
 
 export function RoutesContainer() {
     return (
@@ -43,7 +45,7 @@ export function RoutesContainer() {
                         />
                         <Route
                             path="/CompletedChecklists"
-                            element={<CompletedChecklists />}
+                            element={<ForReviewChecklists />}
                         />
                         <Route
                             path="/MyChecklists"
@@ -57,7 +59,7 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 <GlobalProvider>
-                                    <Checklist />
+                                    <MyCheckLists />
                                 </GlobalProvider>
                             }
                         />
@@ -66,6 +68,8 @@ export function RoutesContainer() {
                         path="/PreviewCheckList/:id"
                         element={<PreviewCheckList />}
                     />
+
+
 
                     <Route
                         path="/FillOutChecklist/:workflowId"

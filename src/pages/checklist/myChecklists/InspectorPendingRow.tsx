@@ -2,9 +2,9 @@ import { Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
-import { UserChip } from '../submittedChecklists/UserChip'
-import { ChipStatus } from '../submittedChecklists/chipStatus'
-import { StyledBodyTitle } from '../submittedChecklists/styles'
+import { UserChip } from '../inprogressChecklists/UserChip'
+import { ChipStatus } from '../inprogressChecklists/chipStatus'
+import { StyledBodyTitle } from '../inprogressChecklists/styles'
 
 import { Workflow } from '../../../services/apiTypes'
 import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
@@ -17,17 +17,15 @@ export const InspectorPendingRow: FunctionComponent<
     PendingCheckListRowProps
 > = ({ WorkFlow }) => {
     const navigate = useNavigate()
-    const clickHandler = (id: string) => {
-        navigate(`/PreviewCheckList/${id}`)
+    const clickHandler = (id: string | undefined) => {
+        navigate(`/FillOutChecklist/${id}`)
     }
-//incomming
-    if (WorkFlow.status !== 'Committed' || !WorkFlow) return null
+    
+    if (WorkFlow.status !== 'Sent' || !WorkFlow) return null
 
     return (
         <>
-            <StyledTableRow
-                onClick={() => clickHandler(WorkFlow.checklist.id || '')}
-            >
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.id || '')}>
                 <MyCheckListCell>
                     <StyledBodyTitle>
                         <Typography variant="body_long_bold">

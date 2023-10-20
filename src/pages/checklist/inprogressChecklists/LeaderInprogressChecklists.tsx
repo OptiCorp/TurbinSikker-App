@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router'
 import useGlobal from '../../../context/globalContextProvider'
 import { formatDate } from '../../../helpers/dateFormattingHelpers'
 import { Workflow } from '../../../services/apiTypes'
-import { COLORS } from '../../../style/GlobalStyles'
 import { StyledTableRow } from '../myChecklists/styles'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
@@ -14,9 +13,9 @@ interface CheckListRowProps {
     workflow: Workflow
 }
 
-export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
-    workflow,
-}) => {
+export const LeaderInprogressChecklists: FunctionComponent<
+    CheckListRowProps
+> = ({ workflow }) => {
     const navigate = useNavigate()
     const clickHandler = (id: string | undefined) => {
         navigate(`/PreviewCheckList/${id}`)
@@ -28,19 +27,11 @@ export const LeaderCheckListSend: FunctionComponent<CheckListRowProps> = ({
         return null
     }
 
-    if (workflow.status === 'Done') return null
+    if (workflow.status !== 'Sent') return null
 
     return (
         <>
-            <StyledTableRow
-                onClick={() => clickHandler(workflow.checklist.id)}
-                style={{
-                    backgroundColor:
-                        workflow.status === `Committed`
-                            ? COLORS.secondary
-                            : 'none',
-                }}
-            >
+            <StyledTableRow onClick={() => clickHandler(workflow.checklist.id)}>
                 <StyledTableCellCheckL>
                     <CellContent>
                         <Typography variant="body_long_bold">

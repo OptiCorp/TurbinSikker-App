@@ -77,7 +77,7 @@ export const useAddWorkFlowForm = () => {
             console.log(error)
         }
         setPositiveOpen(false)
-        navigate('/Checklist')
+        navigate('/Checklists')
     }
 
     return {

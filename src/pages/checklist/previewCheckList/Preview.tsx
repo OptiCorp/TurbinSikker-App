@@ -6,7 +6,7 @@ import { NavActionsComponent } from '../../../components/navigation/hooks/useNav
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Checklist, Task } from '../../../services/apiTypes'
+import { Checklist, Task, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
 import { PreviewList } from './PreviewList'
@@ -24,12 +24,30 @@ export const PreviewCheckList = () => {
     const state = location.state
     const [checklist, setChecklist] = useState<Checklist>()
     const [tasks, setTasks] = useState<Task[]>([])
-
-    const { id } = useParams() as { id: string }
+    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
+    const { id } = useParams() as { id: string}
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
-    const { isInspector } = useRoles()
+    const { isInspector, isLeader } = useRoles()
+
+    // useEffect(() => {
+     
+    //  if (state?.isFromCompletedList) return
+        
+    //     ;async (): Promise<void> => {
+    //         try {
+    //             const workFlowData = await api.getWorkflow(workflowId)
+
+    //             setWorkFlow(workFlowData)
+    //             if (workFlowData.checklist.checklistTasks){  setTasks(workFlowData.checklist.checklistTasks)}
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }, [accessToken, currentUser?.id])
+
+
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return
 
@@ -78,16 +96,18 @@ export const PreviewCheckList = () => {
                                 <Typography variant="body_short_bold">
                                     No tasks added yet!
                                 </Typography>
-                                <Button
-                                    variant="outlined"
-                                    onClick={() => {
-                                        navigate(
-                                            `/EditCheckList/${checklist.id}`
-                                        )
-                                    }}
-                                >
-                                    Add some tasks here!
-                                </Button>
+                                {isLeader && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            navigate(
+                                                `/EditCheckList/${checklist.id}`
+                                            )
+                                        }}
+                                    >
+                                        Add some tasks here!
+                                    </Button>
+                                )}
                             </NoTaskContainer>
                         ) : (
                             <PreviewList key={checklist.id} tasks={tasks} />
@@ -95,17 +115,12 @@ export const PreviewCheckList = () => {
                     </div>
                 )}
                 <>
-                    {isInspector ? (
+                    {state?.isFromCompletedList ? (
                         <DefaultNavigation hideNavbar={false} />
                     ) : (
                         <>
                             {checklist && (
                                 <NavActionsComponent
-                                    disabled={
-                                        state?.isFromCompletedList
-                                            ? true
-                                            : false
-                                    }
                                     buttonColor="primary"
                                     secondButtonColor="primary"
                                     buttonVariant="outlined"
