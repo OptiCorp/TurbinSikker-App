@@ -76,6 +76,8 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
             }
         else {
             setIsSubmissionAllowed(true)
+            openSnackbar &&
+                openSnackbar('all tasks must be checked to committ checklist')
         }
     }
 
@@ -225,7 +227,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                     handleSubmit()
                 }}
                 isOpen={submitDialogShowing}
-            ></CustomDialog>
+            > this will committ {workflow.checklist.title} to {workflow.creator.username}</CustomDialog>
         </>
     )
 }

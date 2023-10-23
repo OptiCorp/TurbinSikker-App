@@ -13,6 +13,7 @@ export const SnackBarComponent = () => {
 
     return (
         <Snackbar
+            style={{ top: '80%', height: '40px' }}
             autoHideDuration={3000}
             onClose={() => {
                 closeSnackbar

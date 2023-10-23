@@ -9,7 +9,6 @@ import { useEditChecklist } from './hooks/useEditChecklist'
 import { BackgroundContainer, ScrollWrapper } from './styles'
 
 export const EditCheckList = () => {
-  
     const [dialogShowing, setDialogShowing] = useState(false)
 
     const {

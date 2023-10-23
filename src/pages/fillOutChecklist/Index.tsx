@@ -5,11 +5,13 @@ import { formatDate } from '../../helpers/dateFormattingHelpers'
 import apiService from '../../services/api'
 import { Task, Workflow } from '../../services/apiTypes'
 import { useRoles } from '../../services/useRoles'
+import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 import { FillOutList } from './FillOutList'
 import { ReviewList } from './ReviewList'
 import {
     BackgroundWrap,
+    Container,
     EditStyledCardHeader,
     InfoHeader,
     List,
@@ -41,23 +43,28 @@ export const FillOutCheckList = () => {
     return (
         <>
             <BackgroundWrap>
-                {isLeader && (
+                {workflow && isLeader && (
                     <InfoHeader>
                         {' '}
                         <StyledCard>
                             <EditStyledCardHeader>
                                 {workflow?.checklist.title}{' '}
                             </EditStyledCardHeader>
+
                             <List>
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '1rem',
-                                    }}
-                                >
-                                    {' '}
-                                    Delivered by {workflow?.user.username}
-                                </Typography>
+                                <Container>
+                                    <Typography
+                                        variant="caption"
+                                        token={{
+                                            fontSize: '1rem',
+                                        }}
+                                    >
+                                        {' '}
+                                        Delivered by{' '}
+                                    </Typography>
+                                    <UserChip workflow={workflow} />
+                                </Container>
+
                                 <Typography
                                     variant="caption"
                                     token={{

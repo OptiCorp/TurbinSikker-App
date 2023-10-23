@@ -219,8 +219,8 @@ const apiService = () => {
         email: string,
         userRoleId: string,
         status: string
-    ): Promise<void> => {
-        await postByFetch('UpdateUser', {
+    ) => {
+        return postByFetch('UpdateUser', {
             id: id,
             username: username,
             firstName: firstName,
@@ -231,12 +231,12 @@ const apiService = () => {
         })
     }
 
-    const softDeleteUser = async (id: string): Promise<void> => {
-        await deleteByFetch(`SoftDeleteUser?id=${id}`)
+    const softDeleteUser = async (id: string) => {
+        return deleteByFetch(`SoftDeleteUser?id=${id}`)
     }
 
-    const hardDeleteUser = async (id: string): Promise<void> => {
-        await deleteByFetch(`HardDeleteUser?id=${id}`)
+    const hardDeleteUser = async (id: string) => {
+        return deleteByFetch(`HardDeleteUser?id=${id}`)
     }
 
     // user role

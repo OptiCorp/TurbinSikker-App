@@ -19,8 +19,10 @@ import { AddPunch } from './pages/punch/addPunch/AddPunch'
 import ListPunches from './pages/punch/listPunches/index'
 import { AddUser } from './pages/users/addUser/AddUser'
 import { ListUsers } from './pages/users/listUsers/ListUsers'
+import { useRoles } from './services/useRoles'
 
 export function RoutesContainer() {
+    const { isInspector, isLeader } = useRoles()
     return (
         <>
             <Routes>
@@ -57,9 +59,7 @@ export function RoutesContainer() {
                         <Route
                             path="/"
                             element={
-                                <GlobalProvider>
-                                    <MyCheckLists />
-                                </GlobalProvider>
+                                isInspector ? <MyCheckLists /> : <Checklist />
                             }
                         />
                     </Route>

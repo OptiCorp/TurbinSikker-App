@@ -1,7 +1,7 @@
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { default as useGlobal } from '../../../context/globalContextProvider'
-import { useEffect, useState } from 'react'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import apiService from '../../../services/api'
 import { PunchItem } from '../../../services/apiTypes'
@@ -61,16 +61,17 @@ export const useAddPunch = () => {
     }
     const updatePunch = async () => {
         try {
-            await api.updatePunch(punchId, workflowId, {
+            const res = await api.updatePunch(punchId, workflowId, {
                 description: userInput.description,
                 severity: userInput.severity,
                 status: 'Pending',
                 message: message,
             })
-
-            navigate(`/workflow/${workflowId}/punch/${punchId}`)
-            setRejectDialogOpen(false)
-            setPositiveOpen(false)
+            {
+                navigate(`/workflow/${workflowId}/punch/${punchId}`)
+                setRejectDialogOpen(false)
+                setPositiveOpen(false)
+            }
             if (file) {
                 await api.addUpload(punchId, file)
             }
@@ -80,13 +81,19 @@ export const useAddPunch = () => {
     }
 
     const updatePunchLeader = async () => {
-        await api.updatePunch(punchId, workflowId, { status: status, message: message })
+        await api.updatePunch(punchId, workflowId, {
+            status: status,
+            message: message,
+        })
 
         if (file) {
             await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
-        navigate(`/workflow/${workflowId}/punch/${punchId}`)
+        if (status === 'Rejected' && openSnackbar)
+            openSnackbar('Punch rejected')
+        if (status === 'Approved' && openSnackbar)
+            navigate(`/workflow/${workflowId}/punch/${punchId}`)
     }
 
     const postPunch = async () => {
@@ -100,7 +107,7 @@ export const useAddPunch = () => {
 
             setPositiveOpen(false)
             if (res.ok) {
-              if (openSnackbar) openSnackbar('Punch added')
+                if (openSnackbar) openSnackbar('Punch added')
                 const json: Promise<Punch> = res.json()
                 const id = (await json).id
                 if (file) {
