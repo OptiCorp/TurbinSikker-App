@@ -2,6 +2,47 @@ import { Card, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import NA from '../../assets/images/notApplicable.png'
 import { COLORS } from '../../style/GlobalStyles'
+
+export const InfoHeader = styled.div`
+    display: flex;
+    width: 100%;
+    min-height: 50px;
+    background-color: ${COLORS.white};
+`
+
+export const StyledCard = styled(Card)`
+    font-size: 1.5rem;
+    background: ${COLORS.white};
+    margin: 0 auto;
+    text-align: center;
+`
+
+export const EditStyledCardHeader = styled(Card.Header)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 auto;
+    height: 1rem;
+`
+
+export const ReviewCardHeader = styled(Card.Header)`
+    display: flex;
+    gap: 30px;
+    flex-direction: row;
+    justify-content: left;
+`
+
+export const List = styled.ul`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 0;
+    justify-content: space-evenly;
+    list-style: none;
+`
+
+export const ListInfo = styled.li``
+
 export const NotApplicableWrap = styled.div`
     display: flex;
     flex-direction: column;
@@ -39,9 +80,16 @@ export const CustomCard = styled(Card)`
     margin: 0 auto;
 `
 
+export const StyledReviewCard = styled(Card)`
+    font-size: 1.5rem;
+    align-items: flex-start;
+    display: flex;
+`
+
 export const CustomCardContent = styled(Card.Content)`
     font-size: 1.5rem;
     display: flex;
+    height: 60px;
     width: 93%;
     margin: 0 auto;
     align-items: baseline;
@@ -58,7 +106,6 @@ export const SubmitErrorContainer = styled.div`
 `
 
 export const CustomCategoryName = styled.h3`
-    min-width: 220px;
     font-size: 1.2rem;
 `
 
@@ -93,4 +140,25 @@ export const FillOutWrap = styled.ul`
     width: 40%;
     min-width: 300px;
     padding-bottom: 1rem;
+`
+
+export const ReviewWrap = styled.ul`
+    margin: 0 auto;
+
+    margin-top: 1rem;
+    padding: 0;
+    gap: 1rem;
+    width: 40%;
+    min-width: 300px;
+    padding-bottom: 1rem;
+`
+
+export const RejectWrap = styled.div`
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: left;
+    gap: 1rem;
+    align-items: flex-start;
+    width: 100%;
 `

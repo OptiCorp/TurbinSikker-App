@@ -13,7 +13,7 @@ export const COLORS = {
     frostyGray: '#F0F3F3',
     lightSteelBlue: '#DEEDEE',
     primary: '#007079',
-    secondary: '#242746',
+    secondary: '#243746',
     cautionaryYellow: '#FBCA36',
     warningOrange: '#ED8936',
     dangerRed: '#EB0000',

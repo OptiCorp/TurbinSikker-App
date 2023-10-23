@@ -7,6 +7,7 @@ import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
 import apiService from '../../services/api'
+import { useRoles } from '../../services/useRoles'
 import {
     CustomCard,
     CustomCardContent,
@@ -92,44 +93,52 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                 <CustomCategoryName>
                                     {task.category.name}
                                 </CustomCategoryName>
-                                <Typography
-                                    onClick={() => {
-                                        setTaskId(task.id)
-                                        setPunchDialogShowing(true)
-                                    }}
-                                    token={{
-                                        textAlign: 'center',
-                                        fontWeight: 600,
-                                        fontSize: '0.8rem',
-                                        color: 'red',
-                                    }}
-                                    link
-                                    href="#"
-                                >
-                                    Add punch
-                                </Typography>
+                               
+                                    <Typography
+                                        onClick={() => {
+                                            setTaskId(task.id)
+                                            setPunchDialogShowing(true)
+                                        }}
+                                        token={{
+                                            textAlign: 'center',
+                                            fontWeight: 600,
+                                            fontSize: '0.8rem',
+                                            color: 'red',
+                                        }}
+                                        link
+                                        href="#"
+                                    >
+                                        Add punch
+                                    </Typography>
+                                
                             </Card.Header>
                             <CustomCardContent>
                                 <NotApplicableWrap>
-                                    <StyledSwitch
-                                        size="small"
-                                        label="N/A?"
-                                        type="checkbox"
-                                        value={[task.id] || false}
-                                        checked={
-                                            applicableStatuses[task.id] || false
-                                        }
-                                        onChange={(e) => {
-                                            setApplicableStatuses((prev) => ({
-                                                ...prev,
-                                                [task.id]: e.target.checked,
-                                            }))
+                                 
+                                        <StyledSwitch
+                                            size="small"
+                                            label="N/A?"
+                                            type="checkbox"
+                                            value={[task.id] || false}
+                                            checked={
+                                                applicableStatuses[task.id] ||
+                                                false
+                                            }
+                                            onChange={(e) => {
+                                                setApplicableStatuses(
+                                                    (prev) => ({
+                                                        ...prev,
+                                                        [task.id]:
+                                                            e.target.checked,
+                                                    })
+                                                )
 
-                                            e.target.checked
-                                                ? 'Active'
-                                                : 'Disabled'
-                                        }}
-                                    />
+                                                e.target.checked
+                                                    ? 'Active'
+                                                    : 'Disabled'
+                                            }}
+                                        />
+                                    ) 
                                 </NotApplicableWrap>
                                 <CustomTaskField
                                     style={{
@@ -145,27 +154,13 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     multiline
                                     rows={4}
                                     readOnly
-                                    // helperText={
-                                    //     task.description.length > 80
-                                    //         ? 'see more'
-                                    //         : '  '
-                                    // }
-                                    // helperIcon={
-                                    //     task.description.length > 100 ? (
-                                    //         <Icon
-                                    //             data={arrow_drop_down}
-                                    //             height={30}
-                                    //             color="#007079"
-                                    //             title="arrow_drop_down"
-                                    //         />
-                                    //     ) : null
-                                    // }
                                 />
                             </CustomCardContent>
 
                             {applicableStatuses[task.id] ? (
                                 <ImageContainer />
                             ) : (
+                                
                                 <SubmitErrorContainer>
                                     <Checkbox
                                         label={''}
@@ -188,7 +183,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         ''
                                     )}
                                 </SubmitErrorContainer>
-                            )}
+                            )} 
                         </CustomCard>
                     </FillOutWrap>
 

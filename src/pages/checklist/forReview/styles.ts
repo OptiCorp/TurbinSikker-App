@@ -56,14 +56,14 @@ export const CompletedCell = styled(Table.Cell)`
 `
 
 export const CellContentCompleted = styled.div`
-    font-weight: 600;
-
+      font-weight: 600;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-align: center;
     min-height: 50px;
-    justify-content: space-around;
-    margin: 10px 0;
+    margin: 10px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
 `
 export const StyledBodyTitleCompleted = styled.div`
     height: 10px;

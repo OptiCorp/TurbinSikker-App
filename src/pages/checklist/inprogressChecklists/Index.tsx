@@ -8,8 +8,8 @@ import { Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 
 import { HeadCell } from '../myChecklists/styles'
-import { InspectorReceivedCheckLists } from './InspectorReceivedCheckLists'
-import { LeaderCheckListSend } from './LeaderCheckListSend'
+import { InspectorOutgoingCheckLists } from './inspectorOutgoingChecklists'
+import { LeaderInprogressChecklists } from './LeaderInprogressChecklists'
 import {
     ListWrapperCheckL,
     StyledHeadContents,
@@ -24,7 +24,7 @@ export const Checklist = () => {
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
 
     const api = apiService()
-    const { accessToken } = useGlobal()
+
     const { isInspector } = useRoles()
 
     useEffect(() => {
@@ -46,14 +46,14 @@ export const Checklist = () => {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
-                console.log(workflows)
+
                 setWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)
             }
         })()
     }, [currentUser?.id])
-    console.log(workflows)
+
     return (
         <>
             <Wrap>
@@ -85,7 +85,7 @@ export const Checklist = () => {
                                 {isInspector ? (
                                     <>
                                         {workflows?.map((workFlow) => (
-                                            <InspectorReceivedCheckLists
+                                            <InspectorOutgoingCheckLists
                                                 WorkFlow={workFlow}
                                                 key={workFlow.id}
                                             />
@@ -94,7 +94,7 @@ export const Checklist = () => {
                                 ) : (
                                     <>
                                         {allWorkflows?.map((workflow) => (
-                                            <LeaderCheckListSend
+                                            <LeaderInprogressChecklists
                                                 workflow={workflow}
                                                 key={workflow.id}
                                             />
