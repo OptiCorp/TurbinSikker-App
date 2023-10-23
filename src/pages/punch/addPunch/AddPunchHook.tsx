@@ -21,7 +21,7 @@ type UserInput = {
 }
 
 export const useAddPunch = () => {
-    const { currentUser } = useGlobal()
+    const { currentUser, openSnackbar } = useGlobal()
     const api = apiService()
     const { workflowId, punchId, taskId } = useParams() as {
         workflowId: string
@@ -100,6 +100,7 @@ export const useAddPunch = () => {
 
             setPositiveOpen(false)
             if (res.ok) {
+              if (openSnackbar) openSnackbar('Punch added')
                 const json: Promise<Punch> = res.json()
                 const id = (await json).id
                 if (file) {

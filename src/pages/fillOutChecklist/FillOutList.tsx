@@ -6,8 +6,8 @@ import { useNavigate, useParams } from 'react-router'
 import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
+import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { useRoles } from '../../services/useRoles'
 import {
     CustomCard,
     CustomCardContent,
@@ -51,7 +51,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     const [checkboxStatus, setCheckboxStatus] = useState<CheckboxStatus>(
         Object.fromEntries(tasks.map((x) => [x.id, false]))
     )
-
+    const { openSnackbar } = useGlobal()
     const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(false)
 
     const areAllCheckboxesChecked = tasks.every(
@@ -62,13 +62,15 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     const handleSubmit = async () => {
         if (areAllCheckboxesChecked)
             try {
-                await api.updateWorkflow(
+                const res = await api.updateWorkflow(
                     workflowId,
                     'Committed',
                     workflow.user.id
                 )
                 setSubmitDialogShowing(false)
-                navigate('/Checklist')
+
+                if (res.ok && openSnackbar) openSnackbar('Checklist committed')
+                navigate('/Checklists')
             } catch (error) {
                 console.log(error)
             }
@@ -93,52 +95,45 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                 <CustomCategoryName>
                                     {task.category.name}
                                 </CustomCategoryName>
-                               
-                                    <Typography
-                                        onClick={() => {
-                                            setTaskId(task.id)
-                                            setPunchDialogShowing(true)
-                                        }}
-                                        token={{
-                                            textAlign: 'center',
-                                            fontWeight: 600,
-                                            fontSize: '0.8rem',
-                                            color: 'red',
-                                        }}
-                                        link
-                                        href="#"
-                                    >
-                                        Add punch
-                                    </Typography>
-                                
+
+                                <Typography
+                                    onClick={() => {
+                                        setTaskId(task.id)
+                                        setPunchDialogShowing(true)
+                                    }}
+                                    token={{
+                                        textAlign: 'center',
+                                        fontWeight: 600,
+                                        fontSize: '0.8rem',
+                                        color: 'red',
+                                    }}
+                                    link
+                                    href="#"
+                                >
+                                    Add punch
+                                </Typography>
                             </Card.Header>
                             <CustomCardContent>
                                 <NotApplicableWrap>
-                                 
-                                        <StyledSwitch
-                                            size="small"
-                                            label="N/A?"
-                                            type="checkbox"
-                                            value={[task.id] || false}
-                                            checked={
-                                                applicableStatuses[task.id] ||
-                                                false
-                                            }
-                                            onChange={(e) => {
-                                                setApplicableStatuses(
-                                                    (prev) => ({
-                                                        ...prev,
-                                                        [task.id]:
-                                                            e.target.checked,
-                                                    })
-                                                )
+                                    <StyledSwitch
+                                        size="small"
+                                        label="N/A?"
+                                        type="checkbox"
+                                        value={[task.id] || false}
+                                        checked={
+                                            applicableStatuses[task.id] || false
+                                        }
+                                        onChange={(e) => {
+                                            setApplicableStatuses((prev) => ({
+                                                ...prev,
+                                                [task.id]: e.target.checked,
+                                            }))
 
-                                                e.target.checked
-                                                    ? 'Active'
-                                                    : 'Disabled'
-                                            }}
-                                        />
-                                    ) 
+                                            e.target.checked
+                                                ? 'Active'
+                                                : 'Disabled'
+                                        }}
+                                    />
                                 </NotApplicableWrap>
                                 <CustomTaskField
                                     style={{
@@ -160,7 +155,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                             {applicableStatuses[task.id] ? (
                                 <ImageContainer />
                             ) : (
-                                
                                 <SubmitErrorContainer>
                                     <Checkbox
                                         label={''}
@@ -183,7 +177,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         ''
                                     )}
                                 </SubmitErrorContainer>
-                            )} 
+                            )}
                         </CustomCard>
                     </FillOutWrap>
 

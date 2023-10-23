@@ -21,11 +21,10 @@ import {
 } from './styles'
 
 export const MyCheckLists = () => {
-    const { accessToken } = useGlobal()
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
     const [checklists, setChecklists] = useState<Checklist[]>([])
-    const { currentUser } = useGlobal()
+    const { currentUser, openSnackbar } = useGlobal()
     const handleClose = () => {
         setDialogShowing(false)
     }
@@ -38,14 +37,13 @@ export const MyCheckLists = () => {
 
     const handleCreateChecklist = async () => {
         try {
-            if (!currentUser || !accessToken) return
+            if (!currentUser) return
             const res = await api.addChecklist(currentUser.id, title)
 
-            setDialogShowing(false)
+            if (res.id) setDialogShowing(false)
 
-            {
-                navigate(`/EditCheckList/${res.id}`)
-            }
+            if (res.id) navigate(`/EditCheckList/${res.id}`)
+            if (res.id && openSnackbar) openSnackbar('Checklist created')
         } catch (error) {
             console.error('Error creating checklist:', error)
         }

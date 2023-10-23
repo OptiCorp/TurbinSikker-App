@@ -113,8 +113,9 @@ const apiService = () => {
     }
 
     // Generic function for put requests
-    const putByFetch = async (url: string, bodyData: any): Promise<any> => {
-        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+    const putByFetch = async (url: string, bodyData: any) => {
+        try {
+            const tokenResponse = await pca.acquireTokenSilent(request)
             const putOperations = {
                 method: 'PUT',
                 headers: {
@@ -125,14 +126,12 @@ const apiService = () => {
                 body: JSON.stringify(bodyData),
             }
             const res = await fetch(`${API_URL}/${url}`, putOperations)
-            if (res.ok) {
-                const jsonResult = await res.json()
-                const resultObj = jsonResult
-                return resultObj
-            } else {
-                console.error('Put by fetch failed. Url=' + url, res)
-            }
-        })
+
+            return res
+        } catch (error) {
+            console.error('An error occurred:', error)
+            throw error
+        }
     }
 
     // Generic function for delete requests
@@ -308,10 +307,7 @@ const apiService = () => {
         return data
     }
 
-    const addChecklist = async (
-        creatorId: string,
-        title: string
-    ): Promise<{ id: string }> => {
+    const addChecklist = async (creatorId: string, title: string) => {
         try {
             const response = await postByFetch('AddChecklist', {
                 creatorId: creatorId,
@@ -389,8 +385,8 @@ const apiService = () => {
         id: string,
         status: string,
         userId: string
-    ): Promise<void> => {
-        await putByFetch('UpdateWorkflow', {
+    ) => {
+        return putByFetch('UpdateWorkflow', {
             id: id,
             userId: userId,
             status: status,
