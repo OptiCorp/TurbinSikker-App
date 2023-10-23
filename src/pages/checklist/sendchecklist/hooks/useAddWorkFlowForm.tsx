@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
+import useSnackBar from '../../../../components/snackbar/useSnackBar'
 import { default as useGlobal } from '../../../../context/globalContextProvider'
 import apiService from '../../../../services/api'
 
@@ -29,7 +30,7 @@ export const useAddWorkFlowForm = () => {
     const navigate = useNavigate()
     const [positiveOpen, setPositiveOpen] = useState(false)
     const api = apiService()
-    const { currentUser, accessToken } = useGlobal()
+    const { currentUser, accessToken, openSnackbar } = useGlobal()
     const creatorId = currentUser?.id
     const handleOpen = () => {
         setPositiveOpen(true)
@@ -72,12 +73,19 @@ export const useAddWorkFlowForm = () => {
     ) => {
         if (!creatorId || !accessToken) return
         try {
-            await api.createWorkflow(data.checklistId, data.userIds, creatorId)
+            const test = await api.createWorkflow(
+                data.checklistId,
+                data.userIds,
+                creatorId
+            )
+
+            if (test.ok) setPositiveOpen(false)
+
+            if (test.ok && openSnackbar) openSnackbar('Checklist sent')
+            navigate('/Checklists')
         } catch (error) {
             console.log(error)
         }
-        setPositiveOpen(false)
-        navigate('/Checklists')
     }
 
     return {
@@ -88,6 +96,7 @@ export const useAddWorkFlowForm = () => {
         handleSubmit,
         handleOpen,
         clearAndClose,
+
         positiveOpen,
     }
 }

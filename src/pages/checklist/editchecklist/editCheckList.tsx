@@ -4,16 +4,24 @@ import { AddTasks } from '../../../components/addtasks/AddTasks'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { EditHeader } from './EditHeader'
+import { EditList } from './editList/EditList'
 import { useEditChecklist } from './hooks/useEditChecklist'
 import { BackgroundContainer, ScrollWrapper } from './styles'
-import { EditList } from './editList/EditList'
 
 export const EditCheckList = () => {
-    const [dialogDelete, setDialogDelete] = useState(false)
+  
     const [dialogShowing, setDialogShowing] = useState(false)
 
-    const { handleDelete, setHeaderOpen, headerOpen, checklist, handleSave, tasks } =
-        useEditChecklist()
+    const {
+        handleDelete,
+        setDialogDelete,
+        setHeaderOpen,
+        headerOpen,
+        checklist,
+        handleSave,
+        tasks,
+        dialogDelete,
+    } = useEditChecklist()
 
     const handleCloseDelete = () => {
         setDialogDelete(false)
@@ -22,9 +30,7 @@ export const EditCheckList = () => {
     const handleClose = () => {
         setDialogShowing(false)
     }
-
     const [title, setTitle] = useState('')
-
     const [checked, setChecked] = useState(!!checklist?.status)
 
     useEffect(() => {
@@ -45,16 +51,20 @@ export const EditCheckList = () => {
                         headerOpen={headerOpen}
                         setHeaderOpen={setHeaderOpen}
                         handleClose={handleClose}
-                        title={title}
-                        setTitle={setTitle}
                         checked={checked}
                         setChecked={setChecked}
+                        title={title}
+                        setTitle={setTitle}
                     />
 
                     {headerOpen && <AddTasks />}
                     {checklist && (
                         <>
-                            <EditList key={checklist?.id} checklist={checklist} tasks={tasks} />
+                            <EditList
+                                key={checklist?.id}
+                                checklist={checklist}
+                                tasks={tasks}
+                            />
                         </>
                     )}
                 </ScrollWrapper>

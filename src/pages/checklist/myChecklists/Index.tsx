@@ -40,7 +40,6 @@ export const MyCheckLists = () => {
         try {
             if (!currentUser || !accessToken) return
             const res = await api.addChecklist(currentUser.id, title)
-            console.log(res)
 
             setDialogShowing(false)
 

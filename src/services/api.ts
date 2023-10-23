@@ -3,13 +3,13 @@ import { pca } from '../msalconfig'
 import {
     Category,
     Checklist,
+    Invoice,
     PunchItem,
     Task,
     Upload,
     User,
     UserRole,
     Workflow,
-    Invoice
 } from './apiTypes'
 
 const request = {
@@ -137,7 +137,8 @@ const apiService = () => {
 
     // Generic function for delete requests
     const deleteByFetch = async (url: string) => {
-        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+        try {
+            const tokenResponse = await pca.acquireTokenSilent(request)
             const deleteOperation = {
                 method: 'DELETE',
                 headers: {
@@ -147,12 +148,12 @@ const apiService = () => {
                 },
             }
             const res = await fetch(`${API_URL}/${url}`, deleteOperation)
-            if (res.ok) {
-                return (await res.json()) as string
-            } else {
-                console.error('Delete by fetch failed. Url=' + url, res)
-            }
-        })
+
+            return res
+        } catch (error) {
+            console.error('An error occurred:', error)
+            throw error
+        }
     }
 
     // User
@@ -329,16 +330,16 @@ const apiService = () => {
         id: string,
         title: string,
         status: string
-    ): Promise<void> => {
-        await postByFetch('UpdateChecklist', {
+    ) => {
+        return postByFetch('UpdateChecklist', {
             id: id,
             title: title,
             status: status,
         })
     }
 
-    const deleteChecklist = async (id: string): Promise<void> => {
-        await deleteByFetch(`DeleteChecklist?id=${id}`)
+    const deleteChecklist = async (id: string) => {
+        return deleteByFetch(`DeleteChecklist?id=${id}`)
     }
 
     // Workflow
@@ -376,8 +377,8 @@ const apiService = () => {
         checklistId: string,
         userIds: string[],
         creatorId: string
-    ): Promise<void> => {
-        await postByFetch('CreateWorkflow', {
+    ) => {
+        return postByFetch('CreateWorkflow', {
             checklistId: checklistId,
             userIds: userIds,
             creatorId: creatorId,
@@ -495,11 +496,8 @@ const apiService = () => {
         })
     }
 
-    const addTaskToChecklist = async (
-        id: string,
-        checklistId: string
-    ): Promise<void> => {
-        await postByFetch('AddTaskToChecklist', {
+    const addTaskToChecklist = async (id: string, checklistId: string) => {
+        return postByFetch('AddTaskToChecklist', {
             id: id,
             checklistId: checklistId,
         })
@@ -684,24 +682,20 @@ const apiService = () => {
         return await postByFetch('AddInvoice', {
             receiver: receiver,
             workflowIds: workflowIds,
-            hourlyRate: hourlyRate
+            hourlyRate: hourlyRate,
         })
     }
 
-    const updateInvoice = async (
-        id: string,
-        status: string,
-    ): Promise<void> => {
+    const updateInvoice = async (id: string, status: string): Promise<void> => {
         await postByFetch('UpdateInvoice', {
             id: id,
-            status: status
+            status: status,
         })
     }
 
     const deleteInvoice = async (id: string): Promise<void> => {
         await deleteByFetch(`DeleteInvoice?id=${id}`)
     }
-
 
     // const sdasdsa = () => {
     //     const Location = useLocation()

@@ -1,6 +1,7 @@
-import { assignment, assignment_important, checkbox, credit_card, high_priority, info_circle, lock } from '@equinor/eds-icons'
+import { assignment, credit_card, info_circle } from '@equinor/eds-icons'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useRoles } from '../../../services/useRoles'
 import { FooterContainer, StyledList, StyledTab, StyledTabs } from '../styles'
 import { NavItem } from './NavItem'
 
@@ -23,6 +24,8 @@ export const DefaultNavigation: React.FC<{
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
+
+    const { isInspector } = useRoles()
     return (
         <FooterContainer>
             {!hideNavbar && (
@@ -45,7 +48,11 @@ export const DefaultNavigation: React.FC<{
                                 icon={assignment}
                                 name="Checklists"
                                 isActive={activeTab === 1}
-                                to="/Checklists"
+                                to={
+                                    isInspector
+                                        ? '/MyChecklists'
+                                        : '/Checklists'
+                                }
                             />
                         </StyledTab>
                         <StyledTab>

@@ -22,13 +22,14 @@ export const useAddTaskForm = () => {
     const methods = useForm<FormData>()
     const { handleSubmit, control } = methods
     const [selectedOption, setSelectedOption] = useState('')
-    const { accessToken } = useGlobal()
+    const { openSnackbar } = useGlobal()
     const api = apiService()
     const [category, setCategory] = useState<Category[]>([])
 
     const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         try {
-            await api.addTaskToChecklist(data.id, checklistId)
+            const res = await api.addTaskToChecklist(data.id, checklistId)
+            if (res.ok && openSnackbar) openSnackbar('Task added')
         } catch (error) {
             console.log(error)
         }

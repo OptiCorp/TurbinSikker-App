@@ -1,6 +1,7 @@
 import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import useSnackBar from '../../components/snackbar/useSnackBar'
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import { MainWrap } from './styles'
@@ -16,11 +17,13 @@ export const IndexCheckLists = () => {
     const handleInspectorChange = (index: number) => {
         setActiveInspectorTab(index)
     }
+ 
 
     const { isLeader } = useRoles()
 
     return (
         <MainWrap>
+         
             <>
                 {isLeader ? (
                     <Tabs

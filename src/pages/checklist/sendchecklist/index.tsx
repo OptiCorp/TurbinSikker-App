@@ -2,6 +2,7 @@ import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import useSnackBar from '../../../components/snackbar/useSnackBar'
 import { SelectComponent } from './SelectComponent'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { SendBackgroundWrap } from './styles'
@@ -12,6 +13,8 @@ export const SendCheckList = () => {
 
     const { handleSubmit } = methods
     const navigate = useNavigate()
+    const { snackbar, setSnackbarText } = useSnackBar()
+
     return (
         <>
             <FormProvider {...methods}>
@@ -57,6 +60,7 @@ export const SendCheckList = () => {
                     </Dialog>
                 </form>
             </FormProvider>
+            {snackbar}
         </>
     )
 }
