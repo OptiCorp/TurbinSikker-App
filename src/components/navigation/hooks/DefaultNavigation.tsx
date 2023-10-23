@@ -50,8 +50,8 @@ export const DefaultNavigation: React.FC<{
                                 isActive={activeTab === 1}
                                 to={
                                     isInspector
-                                        ? '/MyChecklists'
-                                        : '/Checklists'
+                                        ? '/Checklists'
+                                        : '/MyCheckLists'
                                 }
                             />
                         </StyledTab>

@@ -29,7 +29,11 @@ export const useAddTaskForm = () => {
     const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         try {
             const res = await api.addTaskToChecklist(data.id, checklistId)
-            if (res.ok && openSnackbar) openSnackbar('Task added')
+            if (res.ok) { 
+                
+                if (openSnackbar) openSnackbar('Task added')
+        
+        }
         } catch (error) {
             console.log(error)
         }

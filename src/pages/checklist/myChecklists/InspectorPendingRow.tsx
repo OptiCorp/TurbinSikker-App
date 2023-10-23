@@ -20,7 +20,7 @@ export const InspectorPendingRow: FunctionComponent<
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutChecklist/${id}`)
     }
-    
+
     if (WorkFlow.status !== 'Sent' || !WorkFlow) return null
 
     return (

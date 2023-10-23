@@ -604,8 +604,8 @@ const apiService = () => {
                 | 'checklistTask'
             >
         >
-    ): Promise<void> => {
-        await postByFetch('UpdatePunch', {
+    ) => {
+        return postByFetch('UpdatePunch', {
             ...update,
             id: id,
             workflowId: workflowId,

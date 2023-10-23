@@ -1,6 +1,7 @@
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { BannerComponent } from '../../../components/banner/useBanner'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
@@ -83,6 +84,7 @@ export const MyCheckLists = () => {
         <>
             <BackgroundWrap>
                 <ListWrapperCheckMyList>
+                    <BannerComponent />
                     <Table>
                         <Table.Head sticky>
                             <Table.Row>

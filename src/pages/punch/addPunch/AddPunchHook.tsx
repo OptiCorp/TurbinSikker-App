@@ -81,7 +81,7 @@ export const useAddPunch = () => {
     }
 
     const updatePunchLeader = async () => {
-        await api.updatePunch(punchId, workflowId, {
+        const res = await api.updatePunch(punchId, workflowId, {
             status: status,
             message: message,
         })
@@ -90,9 +90,9 @@ export const useAddPunch = () => {
             await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
-        if (status === 'Rejected' && openSnackbar)
+        if (res.ok && status === 'Rejected' && openSnackbar)
             openSnackbar('Punch rejected')
-        if (status === 'Approved' && openSnackbar)
+        if (res.ok && status === 'Approved' && openSnackbar)
             navigate(`/workflow/${workflowId}/punch/${punchId}`)
     }
 
@@ -138,6 +138,7 @@ export const useAddPunch = () => {
         setFile,
         file,
         methods,
+        status,
         onSubmit,
         control,
         handleSubmit,
