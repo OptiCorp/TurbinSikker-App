@@ -42,6 +42,7 @@ export const EditHeader = ({
     const [checklist, setChecklist] = useState<Checklist>()
     const api = apiService()
     const { accessToken, currentUser } = useGlobal()
+
     useEffect(() => {
         if (!currentUser?.id || !id) return
 

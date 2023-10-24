@@ -38,9 +38,16 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    // const inspectorCount = inspectorCounts.find(
-    //     (item) => item.title === checklist.title
-    // )?.count
+    const count = () => {
+        const length = checklist.workflows.length
+        if (checklist.workflows.length > 1) {
+            return `${length} Inspectors`
+        } else if (checklist.workflows.length === 1) {
+            return `${length} Inspector`
+        } else {
+            return 'none'
+        }
+    }
 
     return (
         <>
@@ -79,12 +86,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                         fontSize: '0.8rem',
                                     }}
                                 >
-                                    {/* {inspectorCount || 0}
-                                    {` ${
-                                        inspectorCount === 1
-                                            ? 'Inspector'
-                                            : 'Inspectors'
-                                    }`} */}
+                                    {count()}
                                 </Typography>
                             </StyledChip>
                         </CellContentMyList>

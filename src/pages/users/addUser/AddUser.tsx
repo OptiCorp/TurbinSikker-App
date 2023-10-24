@@ -4,6 +4,7 @@ import { useHasPermission } from '../hooks/useHasPermission'
 
 import { InputField } from './inputField'
 
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useAddUser } from '../hooks/useAddUser'
 import { ModifyUserNav } from './modifyUserNav'
 import { RoleSelector } from './roleSelector'
@@ -43,6 +44,8 @@ export const AddUser: FC = () => {
                 </FormWrapper>
             </Wrapper>
             {hasPermission && <ModifyUserNav />}
+
+            <DefaultNavigation hideNavbar={false} />
         </FormProvider>
     )
 }

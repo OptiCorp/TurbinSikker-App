@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router'
+import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { User } from '../../../services/apiTypes'
 import { FormValues } from './types'
@@ -13,8 +14,9 @@ export const useAddUser = () => {
     const methods = useForm<FormValues>()
     const { reset } = methods
     const { id } = useParams() as { id: string }
-    const [user, setUser] = useState<User>()
-
+    const [users, setUsers] = useState<User[]>([])
+    const user = users.find((x) => x.id === id)
+    const { openSnackbar } = useGlobal()
     useEffect(() => {
         if (!user) return
         reset(user)
@@ -22,19 +24,23 @@ export const useAddUser = () => {
 
     useEffect(() => {
         ;(async () => {
-            const userFromApi = await api.getUser(id)
-            setUser(userFromApi)
+            const usersFromApi = await api.getAllUsersAdmin()
+            setUsers(usersFromApi)
         })()
     }, [])
+
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         if (appLocation.pathname === '/AddUser/') {
-            await api.addUser({ ...data, azureAdUserId: data.email })
+            const res = await api.addUser({
+                ...data,
+                azureAdUserId: data.email,
+            })
 
             reset()
-
+            if (res.ok && openSnackbar) openSnackbar('User added')
             navigate('/ListUsers', { state: { newUser: data.email } })
         } else {
-            await api.updateUser(
+            const res = await api.updateUser(
                 id,
                 data.username,
                 data.firstName,
@@ -43,7 +49,7 @@ export const useAddUser = () => {
                 data.userRoleId,
                 data.status
             )
-
+            if (res.ok && openSnackbar) openSnackbar('User updated')
             navigate('/ListUsers', { state: { newUser: data.email } })
         }
     }

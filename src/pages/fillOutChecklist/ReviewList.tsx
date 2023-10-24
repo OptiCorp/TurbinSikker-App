@@ -8,6 +8,7 @@ import { NavActionsComponent } from '../../components/navigation/hooks/useNavAct
 
 import apiService from '../../services/api'
 
+import useGlobal from '../../context/globalContextProvider'
 import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import {
     CustomCardContent,
@@ -33,26 +34,42 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
     >({})
 
     const { workflowId } = useParams() as { workflowId: string }
-
+    const { currentUser, openSnackbar } = useGlobal()
     const [rejectDialogShowing, setRejectDialogShowing] = useState(false)
     const navigate = useNavigate()
 
     const api = apiService()
     const handleSubmit = async () => {
+        if (!currentUser) return
         try {
-            await api.updateWorkflow(workflowId, 'Done', workflow.user.id)
+            const res = await api.updateWorkflow(
+                workflowId,
+                'Done',
+                workflow.user.id
+            )
             setSubmitDialogShowing(false)
-            navigate('/Checklist')
+            if (res.ok) {
+                if (openSnackbar) openSnackbar('Checklist approved')
+                navigate('/Checklists')
+            }
         } catch (error) {
             console.log(error)
         }
     }
 
     const handleReject = async () => {
+        if (!currentUser) return
         try {
-            await api.updateWorkflow(workflowId, 'Sent', workflow.user.id)
+            const res = await api.updateWorkflow(
+                workflowId,
+                'Sent',
+                workflow.user.id
+            )
             setRejectDialogShowing(false)
-            navigate('/Checklist')
+            if (res.ok) {
+                if (openSnackbar) openSnackbar('Checklist rejected')
+                navigate('/Checklists')
+            }
         } catch (error) {
             console.log(error)
         }

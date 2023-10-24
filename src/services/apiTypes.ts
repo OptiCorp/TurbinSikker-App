@@ -70,6 +70,7 @@ export type Checklist = {
     value: string
     label: string
     checklistTasks: Task[]
+    workflows: Workflow[]
 }
 
 export type Task = {

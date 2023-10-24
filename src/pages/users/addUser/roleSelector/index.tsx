@@ -42,7 +42,7 @@ export const RoleSelector = () => {
                 defaultValue={currentDefaultValue}
                 render={({ field: { onChange, value } }) => {
                     if (!value && currentDefaultValue) {
-                        setValue('userRoleId', currentDefaultValue.name)
+                        setValue('userRoleId', currentDefaultValue.id)
                     }
 
                     return (

@@ -31,22 +31,6 @@ export const PreviewCheckList = () => {
     }
     const { isInspector, isLeader } = useRoles()
 
-    // useEffect(() => {
-     
-    //  if (state?.isFromCompletedList) return
-        
-    //     ;async (): Promise<void> => {
-    //         try {
-    //             const workFlowData = await api.getWorkflow(workflowId)
-
-    //             setWorkFlow(workFlowData)
-    //             if (workFlowData.checklist.checklistTasks){  setTasks(workFlowData.checklist.checklistTasks)}
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    // }, [accessToken, currentUser?.id])
-
 
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return

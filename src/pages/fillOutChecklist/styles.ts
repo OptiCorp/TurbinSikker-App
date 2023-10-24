@@ -7,6 +7,7 @@ export const InfoHeader = styled.div`
     display: flex;
     width: 100%;
     min-height: 50px;
+
     background-color: ${COLORS.white};
 `
 
@@ -35,13 +36,19 @@ export const ReviewCardHeader = styled(Card.Header)`
 export const List = styled.ul`
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    margin: 0;
+    align-items: center;
+    margin: 10px 0;
     justify-content: space-evenly;
     list-style: none;
 `
 
-export const ListInfo = styled.li``
+export const Container = styled.div`
+    margin: 0;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
 
 export const NotApplicableWrap = styled.div`
     display: flex;
