@@ -677,11 +677,13 @@ const apiService = () => {
     }
 
     const addInvoice = async (
+        title: string,
         receiver: string,
         workflowIds: string[],
         hourlyRate: number
     ): Promise<Response> => {
         return await postByFetch('AddInvoice', {
+            title: title,
             receiver: receiver,
             workflowIds: workflowIds,
             hourlyRate: hourlyRate
@@ -691,10 +693,12 @@ const apiService = () => {
     const updateInvoice = async (
         id: string,
         status: string,
+        message: string
     ): Promise<void> => {
         await postByFetch('UpdateInvoice', {
             id: id,
-            status: status
+            status: status,
+            message: message
         })
     }
 

@@ -108,6 +108,7 @@ export type Workflow = {
 
 export type Invoice = {
     id: string
+    title: string
     number: number
     sender: string
     receiver: string
@@ -119,4 +120,5 @@ export type Invoice = {
     pdf: null | string
     pdfBlobLink: string
     workflows: Workflow[]
+    message: string
 }
