@@ -29,6 +29,21 @@ export function GlobalProvider({
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+    const [snackbarText, setSnackbarText] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
+
+    const openSnackbar = (message: string) => {
+        setSnackbarText(message)
+        setIsOpen(true)
+    }
+
+    const closeSnackbar = () => {
+        setIsOpen(false)
+    }
+    //   useEffect(() => {
+    //         if (snackbarText.length < 1) return
+    //         setIsOpen(true)
+    //     }, [snackbarText])
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
@@ -151,6 +166,10 @@ export function GlobalProvider({
                     accounts,
                     instance,
                     currentUser,
+                    openSnackbar,
+                    closeSnackbar,
+                    snackbarText,
+                    isOpen,
                 }}
             >
                 {children}

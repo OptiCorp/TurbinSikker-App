@@ -17,9 +17,6 @@ export const InspectorOutgoingCheckLists: FunctionComponent<
 > = ({ WorkFlow }) => {
     const navigate = useNavigate()
 
-    const clickHandler = (id: string | undefined) => {
-        navigate(`/FillOutChecklist/${id}`)
-    }
     if (WorkFlow.status !== 'Committed' || !WorkFlow.checklist) return null
     return (
         <>

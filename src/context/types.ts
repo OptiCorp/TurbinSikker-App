@@ -12,4 +12,8 @@ export interface GlobalContextType {
     accounts: any
     currentUser: User | null
     instance: any
+    isOpen: boolean
+    snackbarText: string
+    openSnackbar?: (message: string) => void
+    closeSnackbar?: () => void
 }

@@ -2,19 +2,29 @@ import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import useSnackBar from '../../../components/snackbar/useSnackBar'
 import { SelectComponent } from './SelectComponent'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
 import { SendBackgroundWrap } from './styles'
 
 export const SendCheckList = () => {
-    const { methods, onSubmit, handleOpen, clearAndClose, positiveOpen } =
-        useAddWorkFlowForm()
+    const {
+        methods,
+        onSubmit,
+        handleOpen,
+        clearAndClose,
+        positiveOpen,
+        checklistAlreadySent,
+    } = useAddWorkFlowForm()
 
     const { handleSubmit } = methods
     const navigate = useNavigate()
+    const { snackbar, setSnackbarText } = useSnackBar()
+
     return (
         <>
             <FormProvider {...methods}>
+                {snackbar}
                 <form onSubmit={handleSubmit(onSubmit)} id="send-checklist">
                     <SendBackgroundWrap>
                         <SelectComponent />
@@ -31,6 +41,7 @@ export const SendCheckList = () => {
                             navigate('/')
                         }}
                     />
+                    {checklistAlreadySent ? <span>error</span> : null}
                     <Dialog open={positiveOpen}>
                         <Dialog.Header>
                             <Dialog.Title>Send checklist?</Dialog.Title>

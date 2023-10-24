@@ -6,30 +6,17 @@ import { Checklist, Task } from '../../../../services/apiTypes'
 
 export const useEditChecklist = () => {
     const navigate = useNavigate()
-    // const [dialogDelete, setDialogDelete] = useState(false)
+    const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const { id } = useParams() as { id: string }
 
     const [task, setTask] = useState<Task | undefined>()
-    const [taskId, setTaskId] = useState('')
-    const [categoryId, setCategoryId] = useState('')
-    const [taskDescription, setTaskDescription] = useState('')
-    const [title, setTitle] = useState<Checklist | string>()
+
     const [checklist, setChecklist] = useState<Checklist>()
-    const { accessToken, currentUser } = useGlobal()
+    const { currentUser, openSnackbar } = useGlobal()
     const [headerOpen, setHeaderOpen] = useState(false)
-    const [isOpenNew, setIsOpenNew] = useState(false)
     const api = apiService()
     const [tasks, setTasks] = useState<Task[]>([])
-    const handleOpen = (
-        taskId: string,
-        taskDescription: string,
-        categoryId: string
-    ) => {
-        setTaskId(taskId)
-        setCategoryId(categoryId)
-        setTaskDescription(taskDescription)
-    }
 
     useEffect(() => {
         if (!currentUser?.id || !id) return
@@ -55,14 +42,6 @@ export const useEditChecklist = () => {
             setHeaderOpen(true)
         }
     }, [checklist])
-
-    const handleTitleChange = (title: string) => {
-        setTitle(title)
-    }
-
-    const handleCloseNewCheckList = () => {
-        setIsOpenNew(false)
-    }
 
     const handleUpdateTask = async (data: {
         description: string
@@ -91,12 +70,13 @@ export const useEditChecklist = () => {
 
     const handleDelete = async () => {
         try {
-            await api.deleteChecklist(id)
+            const res = await api.deleteChecklist(id)
+            if (res.ok) setDialogDelete(false)
+            if (res.ok && openSnackbar) openSnackbar('Checklist deleted')
+            if (res.ok) navigate('/Checklists')
         } catch (error) {
             if (error) return
             console.log(error)
-        } finally {
-            navigate('/Checklists')
         }
     }
 
@@ -104,12 +84,13 @@ export const useEditChecklist = () => {
         if (!currentUser) return
 
         try {
-            await api.updateChecklist(id, data.title, data.status)
+            const res = await api.updateChecklist(id, data.title, data.status)
+
+            if (res.ok && openSnackbar) openSnackbar('Checklist updated')
+            if (res.ok) navigate('/Checklists')
         } catch (error) {
             if (error) return
             console.log(error)
-        } finally {
-            navigate('/Checklists')
         }
     }
 
@@ -117,16 +98,14 @@ export const useEditChecklist = () => {
         handleSave,
         handleDelete,
         handleUpdateTask,
-        handleCloseNewCheckList,
-        handleTitleChange,
-        handleOpen,
-        title,
+
         task,
         tasks,
-
         setTask,
         checklist,
         headerOpen,
         setHeaderOpen,
+        dialogDelete,
+        setDialogDelete,
     }
 }
