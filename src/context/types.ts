@@ -16,4 +16,6 @@ export interface GlobalContextType {
     snackbarText: string
     openSnackbar?: (message: string) => void
     closeSnackbar?: () => void
+    refreshList: boolean
+    setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
 }

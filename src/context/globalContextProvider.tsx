@@ -31,7 +31,7 @@ export function GlobalProvider({
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [snackbarText, setSnackbarText] = useState('')
     const [isOpen, setIsOpen] = useState(false)
-
+    const [refreshList, setRefreshList] = useState<boolean>(false)
     const openSnackbar = (message: string) => {
         setSnackbarText(message)
         setIsOpen(true)
@@ -40,10 +40,6 @@ export function GlobalProvider({
     const closeSnackbar = () => {
         setIsOpen(false)
     }
-    //   useEffect(() => {
-    //         if (snackbarText.length < 1) return
-    //         setIsOpen(true)
-    //     }, [snackbarText])
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
@@ -170,6 +166,8 @@ export function GlobalProvider({
                     closeSnackbar,
                     snackbarText,
                     isOpen,
+                    refreshList,
+                    setRefreshList,
                 }}
             >
                 {children}
