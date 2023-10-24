@@ -671,21 +671,28 @@ const apiService = () => {
     }
 
     const addInvoice = async (
+        title: string,
         receiver: string,
         workflowIds: string[],
         hourlyRate: number
     ): Promise<Response> => {
         return await postByFetch('AddInvoice', {
+            title: title,
             receiver: receiver,
             workflowIds: workflowIds,
             hourlyRate: hourlyRate,
         })
     }
 
-    const updateInvoice = async (id: string, status: string): Promise<void> => {
+    const updateInvoice = async (
+        id: string,
+        status: string,
+        message: string
+    ): Promise<void> => {
         await postByFetch('UpdateInvoice', {
             id: id,
             status: status,
+            message: message
         })
     }
 
