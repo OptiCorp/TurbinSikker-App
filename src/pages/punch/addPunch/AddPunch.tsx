@@ -8,21 +8,23 @@ import {
 } from '@equinor/eds-core-react'
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import SeverityButton from '../severityButton/SeverityButton'
 import { useAddPunch } from './AddPunchHook'
 import {
     PunchAddContainer,
     PunchAddUploadContainer,
+    PunchNoUploadContainer,
+    PunchRejectMessageContainer,
     PunchUploadButtonContainer,
     PunchUploadButtonIconContainer,
     PunchUploadButtonLabel,
     PunchUploadFileContainer,
     PunchUploadFilesContainer,
+    PunchUploadItemsContainer,
     SeverityButtonWrapper,
     SeverityContainer,
 } from './styles'
-
 import { usePunch } from '../PunchHook'
 import { PunchUploadContainer } from '../styles'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
@@ -52,13 +54,14 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
     const { hasPermission } = useHasPermission()
     const { fetchUploadStatus, uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
-    const [uploads, setUploads] = useState(false)
+
     const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
             setFile(e.target.files[0])
         }
     }
+
     const disabled = hasPermission || (!hasPermission && punch?.status === 'Pending')
     const path = appLocation.pathname.split('/')
     const lastPathSegment = path[path.length - 1]
@@ -92,45 +95,20 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         </PunchUploadButtonContainer>
 
                         {!file ? (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    width: '100%',
-                                    alignItems: 'center',
-                                    color: COLORS.secondary,
-                                }}
-                                onClick={() => setUploads((prev) => !prev)}
-                            >
-                                <span>No Uploads</span>
-                            </div>
+                            <PunchNoUploadContainer>
+                                <Typography>No Uploads</Typography>
+                            </PunchNoUploadContainer>
                         ) : (
                             <PunchUploadFilesContainer>
                                 <Typography variant="h5">Upload Files</Typography>
 
-                                <PunchUploadFileContainer
-                                    onClick={() => setUploads((prev) => !prev)}
-                                >
+                                <PunchUploadFileContainer>
                                     {file?.name && (
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                }}
-                                            >
-                                                <Icon color={COLORS.primary} data={image} />
+                                        <PunchUploadItemsContainer>
+                                            <Icon color={COLORS.primary} data={image} />
 
-                                                <Typography variant="caption">
-                                                    {file?.name}
-                                                </Typography>
-                                            </div>
-                                        </div>
+                                            <Typography variant="caption">{file?.name}</Typography>
+                                        </PunchUploadItemsContainer>
                                     )}
                                 </PunchUploadFileContainer>
                             </PunchUploadFilesContainer>
@@ -139,8 +117,8 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                 ) : (
                     <PunchUploadContainer>
                         {fetchUploadStatus === ApiStatus.LOADING && <CircularProgress />}
-                        {fetchUploadStatus !== ApiStatus.LOADING && addedUploads?.length > 0 ? (
-                            <div style={{ display: 'flex', overflowX: 'auto' }}>
+                        {fetchUploadStatus !== ApiStatus.LOADING && (
+                            <PunchUploadContainer>
                                 {addedUploads?.map((upload: Upload, idx) => {
                                     return (
                                         <img
@@ -149,9 +127,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                                         />
                                     )
                                 })}
-                            </div>
-                        ) : (
-                            <p>No uploads available.</p>
+                            </PunchUploadContainer>
                         )}
                     </PunchUploadContainer>
                 )}
@@ -217,7 +193,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
                         Request will be rejected and returned to sender.
                     </Typography>
-                    <div style={{ marginTop: '10px' }}>
+                    <PunchRejectMessageContainer>
                         <label htmlFor="comment">Add Message</label>
                         <TextField
                             id="comment"
@@ -227,26 +203,24 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                                 setMessage(e.target.value)
                             }
                         />
-                    </div>
+                    </PunchRejectMessageContainer>
                 </Dialog.CustomContent>
 
                 <Dialog.Actions>
-                    <div>
-                        <Button variant="ghost" color="danger" onClick={handleRejectClose}>
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setStatus('Rejected')
-                                navigate(-1)
-                            }}
-                            type="submit"
-                            form="punchForm"
-                            color="danger"
-                        >
-                            OK
-                        </Button>
-                    </div>
+                    <Button variant="ghost" color="danger" onClick={handleRejectClose}>
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setStatus('Rejected')
+                            navigate(-1)
+                        }}
+                        type="submit"
+                        form="punchForm"
+                        color="danger"
+                    >
+                        OK
+                    </Button>
                 </Dialog.Actions>
             </Dialog>
             {punch?.status === Status.REJECTED && !hasPermission && (
@@ -265,12 +239,10 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         </Typography>
                     </Dialog.CustomContent>
                     <Dialog.Actions>
-                        <div>
-                            <Button variant="ghost" onClick={() => navigate(-1)}>
-                                Back
-                            </Button>
-                            <Button onClick={() => setRejectMessageDialog(false)}>Update</Button>
-                        </div>
+                        <Button variant="ghost" onClick={() => navigate(-1)}>
+                            Back
+                        </Button>
+                        <Button onClick={() => setRejectMessageDialog(false)}>Update</Button>
                     </Dialog.Actions>
                 </Dialog>
             )}
@@ -293,28 +265,26 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     </Typography>
                 </Dialog.CustomContent>
                 <Dialog.Actions>
-                    <div>
-                        <Button variant="ghost" onClick={clearAndClose}>
-                            Cancel
+                    <Button variant="ghost" onClick={clearAndClose}>
+                        Cancel
+                    </Button>
+                    {!hasPermission && (
+                        <Button type="submit" form="punchForm">
+                            {lastPathSegment === 'addpunch' ? 'Send Punch' : 'Update Punch'}
                         </Button>
-                        {!hasPermission && (
-                            <Button type="submit" form="punchForm">
-                                {lastPathSegment === 'addpunch' ? 'Send Punch' : 'Update Punch'}
-                            </Button>
-                        )}
-                        {hasPermission && (
-                            <Button
-                                onClick={() => {
-                                    setStatus('Approved')
-                                    navigate(-1)
-                                }}
-                                type="submit"
-                                form="punchForm"
-                            >
-                                Approve
-                            </Button>
-                        )}
-                    </div>
+                    )}
+                    {hasPermission && (
+                        <Button
+                            onClick={() => {
+                                setStatus('Approved')
+                                navigate(-1)
+                            }}
+                            type="submit"
+                            form="punchForm"
+                        >
+                            Approve
+                        </Button>
+                    )}
                 </Dialog.Actions>
             </Dialog>
 

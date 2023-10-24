@@ -86,3 +86,22 @@ export const PunchUploadButtonLabel = styled.label`
             background: ${COLORS.gray};
         `}
 `
+export const PunchNoUploadContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    color: ${COLORS.secondary};
+`
+export const PunchUploadItemsContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+export const PunchUploadContainer = styled.div`
+    display: flex;
+    overflow-x: auto;
+`
+export const PunchRejectMessageContainer = styled.div`
+    margin-top: 10px;
+`
