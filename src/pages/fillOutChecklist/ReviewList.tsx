@@ -111,7 +111,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                                 />
                                 {/* {applicableStatuses[task.id] ? (
                                 <ImageContainer />
-                            ) : ( */}{' '}
+                            ) : ( */}
                             </CustomCardContent>
                             <Error>
                                 <Checkbox label="" checked={checked} disabled />{' '}
