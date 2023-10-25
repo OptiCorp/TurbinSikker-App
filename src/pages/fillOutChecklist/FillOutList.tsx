@@ -30,33 +30,24 @@ interface CheckboxStatus {
     [taskId: string]: boolean
 }
 
-export const FillOutList: FunctionComponent<FillOutListProps> = ({
-    tasks,
-    workflow,
-}) => {
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const [applicableStatuses, setApplicableStatuses] = useState<
-        Record<string, boolean>
-    >({})
-
+export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks, workflow }) => {
+    const { openSnackbar, setRefreshList } = useGlobal()
     const { workflowId } = useParams() as { workflowId: string }
-
-    const [punchDialogShowing, setPunchDialogShowing] = useState(false)
     const navigate = useNavigate()
-    const createPunch = () => {
-        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
-    }
+    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
+    const [applicableStatuses, setApplicableStatuses] = useState<Record<string, boolean>>({})
+    const [punchDialogShowing, setPunchDialogShowing] = useState(false)
     const [taskId, setTaskId] = useState('')
-
     const [checkboxStatus, setCheckboxStatus] = useState<CheckboxStatus>(
         Object.fromEntries(tasks.map((x) => [x.id, false]))
     )
-    const { openSnackbar, setRefreshList } = useGlobal()
     const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(false)
+    const [completionTime, setCompletionTime] = useState<number>()
+    const areAllCheckboxesChecked = tasks.every((task) => checkboxStatus[task.id])
 
-    const areAllCheckboxesChecked = tasks.every(
-        (task) => checkboxStatus[task.id]
-    )
+    const createPunch = () => {
+        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
+    }
 
     const api = apiService()
     const handleSubmit = async () => {
@@ -65,7 +56,8 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                 const res = await api.updateWorkflow(
                     workflowId,
                     'Committed',
-                    workflow.user.id
+                    workflow.user.id,
+                    completionTime
                 )
                 setSubmitDialogShowing(false)
 
@@ -77,8 +69,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
             }
         else {
             setIsSubmissionAllowed(true)
-            openSnackbar &&
-                openSnackbar('all tasks must be checked to committ checklist')
+            openSnackbar && openSnackbar('all tasks must be checked to committ checklist')
         }
     }
 
@@ -90,14 +81,10 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                         <CustomCard>
                             <Card.Header
                                 style={{
-                                    filter: applicableStatuses[task.id]
-                                        ? 'blur(3px)'
-                                        : 'none',
+                                    filter: applicableStatuses[task.id] ? 'blur(3px)' : 'none',
                                 }}
                             >
-                                <CustomCategoryName>
-                                    {task.category.name}
-                                </CustomCategoryName>
+                                <CustomCategoryName>{task.category.name}</CustomCategoryName>
 
                                 <Typography
                                     onClick={() => {
@@ -124,26 +111,20 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         label="N/A?"
                                         type="checkbox"
                                         value={[task.id] || false}
-                                        checked={
-                                            applicableStatuses[task.id] || false
-                                        }
+                                        checked={applicableStatuses[task.id] || false}
                                         onChange={(e) => {
                                             setApplicableStatuses((prev) => ({
                                                 ...prev,
                                                 [task.id]: e.target.checked,
                                             }))
 
-                                            e.target.checked
-                                                ? 'Active'
-                                                : 'Disabled'
+                                            e.target.checked ? 'Active' : 'Disabled'
                                         }}
                                     />
                                 </NotApplicableWrap>
                                 <CustomTaskField
                                     style={{
-                                        filter: applicableStatuses[task.id]
-                                            ? 'blur(3px)'
-                                            : 'none',
+                                        filter: applicableStatuses[task.id] ? 'blur(3px)' : 'none',
                                     }}
                                     label={''}
                                     key={task.id}
@@ -164,9 +145,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         label={''}
                                         name={`task.${task.id}`}
                                         id={`checkbox-${task.id}`}
-                                        checked={
-                                            checkboxStatus[task.id] || false
-                                        }
+                                        checked={checkboxStatus[task.id] || false}
                                         onChange={(e) => {
                                             setCheckboxStatus((prev) => ({
                                                 ...prev,
@@ -174,8 +153,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                             }))
                                         }}
                                     />{' '}
-                                    {!checkboxStatus[task.id] &&
-                                    isSubmissionAllowed ? (
+                                    {!checkboxStatus[task.id] && isSubmissionAllowed ? (
                                         <Error> required</Error>
                                     ) : (
                                         ''
@@ -209,13 +187,9 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                 }}
                 isOpen={punchDialogShowing}
             >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
-                >
-                    You will be forwarded to Punch form. You will be able to
-                    continue this form where you left after.
+                <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    You will be forwarded to Punch form. You will be able to continue this form
+                    where you left after.
                 </Typography>
             </CustomDialog>
             <CustomDialog
@@ -231,8 +205,29 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                 isOpen={submitDialogShowing}
             >
                 {' '}
-                this will committ {workflow.checklist.title} to{' '}
-                {workflow.creator.username}
+                this will committ {workflow.checklist.title} to {workflow.creator.username}
+                {/* <CustomTaskField
+                    label={'Completion time'}
+                    key={''}
+                    id="storybook-multi-readonly"
+                    name="completionTime"
+                    defaultValue={''}
+                    type="number"
+                    multiline
+                    onChange={(e) => {
+                        console.log(e.target.valueAsNumber)
+                        setCompletionTime(e.target.valueAsNumber)
+                    }}
+                /> */}
+                <label htmlFor="completionTime">Completion time:</label>
+                <input
+                    id="completionTime"
+                    type="number"
+                    // value={completionTime}
+                    onChange={(e) => {
+                        setCompletionTime(e.target.valueAsNumber)
+                    }}
+                />
             </CustomDialog>
         </>
     )
