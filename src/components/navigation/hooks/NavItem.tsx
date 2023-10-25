@@ -1,9 +1,12 @@
 import { Icon, Typography } from '@equinor/eds-core-react'
 import { IconData } from '@equinor/eds-icons'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import useGlobal from '../../../context/globalContextProvider'
+import apiService from '../../../services/api'
+import { Workflow } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
 import { ImageContainerActive } from '../styles'
-import { NotificationBadge } from './NotificationChip'
 export const NavItem = ({
     isActive,
     name,
@@ -15,13 +18,42 @@ export const NavItem = ({
     icon: IconData
     to: string
 }) => {
+    const [workFlows, setWorkFlow] = useState<Workflow[]>([])
+    const api = apiService()
+    const { currentUser } = useGlobal()
+
+    useEffect(() => {
+        if (!currentUser) return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflowsByUserId(
+                    currentUser.id
+                )
+
+                setWorkFlow(workFlowData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [currentUser?.id])
+
+    const countCommittedWorkflows = (userId: string) => {
+        const userWorkflows = workFlows.filter(
+            (workflow) => workflow.user.id === userId
+        )
+        return userWorkflows.filter(
+            (workflow) => workflow.status === 'Committed'
+        ).length
+    }
+
     return (
         <Link to={to} style={{ textDecoration: 'none' }}>
             <ImageContainerActive>
-                {name === 'Checklists' && isActive ? (
-                    <NotificationBadge name={name} />
-                ) : null}
-
+                {/* {currentUser && (
+                    <NotificationBadge
+                        count={countCommittedWorkflows(currentUser.id)}
+                    />
+                )} */}
                 <Icon
                     data={icon}
                     size={24}

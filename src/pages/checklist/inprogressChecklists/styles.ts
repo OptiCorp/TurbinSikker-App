@@ -8,6 +8,7 @@ export const StyledTableCellCheckL = styled(Table.Cell)`
 
 export const StyledChip = styled(Chip)`
     min-width: 120px;
+    align-items: center;
 
     display: flex;
     justify-content: left;
@@ -17,14 +18,13 @@ export const StyledChip = styled(Chip)`
 
 export const CellContent = styled.div`
     font-weight: 600;
-
     display: flex;
-    flex-direction: column;
-    align-items: left;
+    -webkit-box-align: center;
     min-height: 50px;
-    width: 100px;
-    justify-content: space-around;
-    margin: 10px 0;
+    margin: 10px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
 `
 
 export const StyledBodyTitle = styled.div`

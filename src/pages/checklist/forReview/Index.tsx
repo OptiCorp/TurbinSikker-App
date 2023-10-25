@@ -5,7 +5,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Workflow } from '../../../services/apiTypes'
-import { CompletedList } from './CompletedList'
+import {  ForReviewList } from './forReviewList'
 import {
     BackgroundWrapCompleted,
     HeadCellCompleted,
@@ -14,13 +14,16 @@ import {
     StyledHeadTitleCompleted,
 } from './styles'
 
-export const CompletedChecklists = () => {
+export const ForReviewChecklists = () => {
     const api = apiService()
 
     const location = useLocation()
     const state = location.state
     const { accessToken, currentUser } = useGlobal()
+    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
+
+    
     useEffect(() => {
         if (!currentUser) return
         ;(async (): Promise<void> => {
@@ -35,6 +38,22 @@ export const CompletedChecklists = () => {
             }
         })()
     }, [currentUser?.id])
+
+    useEffect(() => {
+        if (!currentUser) return
+        ;(async (): Promise<void> => {
+            try {
+                const workFlowData = await api.getAllWorkflows()
+                setAllWorkFlows(workFlowData)
+                
+           
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [currentUser?.id])
+
+ 
 
     return (
         <>
@@ -62,12 +81,14 @@ export const CompletedChecklists = () => {
                         </Table.Head>
 
                         <Table.Body>
-                            {workflows.map((WorkFlow) => (
-                                <CompletedList
-                                    WorkFlow={WorkFlow}
-                                    key={WorkFlow.id}
-                                />
-                            ))}
+                            <>
+                                {allWorkflows?.map((workflow) => (
+                                    <ForReviewList
+                                        WorkFlow={workflow}
+                                        key={workflow.id}
+                                    />
+                                ))}
+                            </>
                         </Table.Body>
                     </Table>
                 </ListWrapperCompletedList>

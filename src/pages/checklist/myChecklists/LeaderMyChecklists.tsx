@@ -12,7 +12,7 @@ import {
     StyledChip,
     StyledTableRow,
 } from './styles'
-import { useInspectorsAssigned } from './useInspectorsAssigned'
+
 interface CheckListRowProps {
     checklist: Checklist
     activeRow: boolean
@@ -33,14 +33,21 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
 
     const navigate = useNavigate()
     const formattedCreatedDate = formatDate(checklist.createdDate || '')
-    const { inspectorCounts } = useInspectorsAssigned()
+
     const clickHandler = (id: string) => {
         navigate(`/PreviewCheckList/${id}`)
     }
 
-    const inspectorCount = inspectorCounts.find(
-        (item) => item.title === checklist.title
-    )?.count
+    const count = () => {
+        const length = checklist.workflows.length
+        if (checklist.workflows.length > 1) {
+            return `${length} Inspectors`
+        } else if (checklist.workflows.length === 1) {
+            return `${length} Inspector`
+        } else {
+            return 'none'
+        }
+    }
 
     return (
         <>
@@ -79,12 +86,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                         fontSize: '0.8rem',
                                     }}
                                 >
-                                    {inspectorCount || 0}
-                                    {` ${
-                                        inspectorCount === 1
-                                            ? 'Inspector'
-                                            : 'Inspectors'
-                                    }`}
+                                    {count()}
                                 </Typography>
                             </StyledChip>
                         </CellContentMyList>

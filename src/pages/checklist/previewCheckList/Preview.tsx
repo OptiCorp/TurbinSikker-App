@@ -6,7 +6,7 @@ import { NavActionsComponent } from '../../../components/navigation/hooks/useNav
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Checklist, Task } from '../../../services/apiTypes'
+import { Checklist, Task, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
 import { PreviewList } from './PreviewList'
@@ -20,16 +20,17 @@ import {
 export const PreviewCheckList = () => {
     const location = useLocation()
     const api = apiService()
-    const { accessToken, currentUser } = useGlobal()
+    const { accessToken, currentUser, refreshList } = useGlobal()
     const state = location.state
     const [checklist, setChecklist] = useState<Checklist>()
     const [tasks, setTasks] = useState<Task[]>([])
-
+    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
     const { id } = useParams() as { id: string }
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
-    const { isInspector } = useRoles()
+    const { isInspector, isLeader } = useRoles()
+
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return
 
@@ -47,7 +48,7 @@ export const PreviewCheckList = () => {
         }
 
         fetchChecklist()
-    }, [accessToken, currentUser?.id, id])
+    }, [accessToken, currentUser?.id, id, refreshList])
 
     const navigate = useNavigate()
 
@@ -78,16 +79,18 @@ export const PreviewCheckList = () => {
                                 <Typography variant="body_short_bold">
                                     No tasks added yet!
                                 </Typography>
-                                <Button
-                                    variant="outlined"
-                                    onClick={() => {
-                                        navigate(
-                                            `/EditCheckList/${checklist.id}`
-                                        )
-                                    }}
-                                >
-                                    Add some tasks here!
-                                </Button>
+                                {isLeader && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            navigate(
+                                                `/EditCheckList/${checklist.id}`
+                                            )
+                                        }}
+                                    >
+                                        Add some tasks here!
+                                    </Button>
+                                )}
                             </NoTaskContainer>
                         ) : (
                             <PreviewList key={checklist.id} tasks={tasks} />
@@ -95,17 +98,12 @@ export const PreviewCheckList = () => {
                     </div>
                 )}
                 <>
-                    {isInspector ? (
+                    {state?.isFromCompletedList ? (
                         <DefaultNavigation hideNavbar={false} />
                     ) : (
                         <>
                             {checklist && (
                                 <NavActionsComponent
-                                    disabled={
-                                        state?.isFromCompletedList
-                                            ? true
-                                            : false
-                                    }
                                     buttonColor="primary"
                                     secondButtonColor="primary"
                                     buttonVariant="outlined"

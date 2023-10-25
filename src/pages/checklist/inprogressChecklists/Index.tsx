@@ -4,12 +4,12 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Workflow } from '../../../services/apiTypes'
+import { Checklist, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 
 import { HeadCell } from '../myChecklists/styles'
-import { InspectorReceivedCheckLists } from './InspectorReceivedCheckLists'
-import { LeaderCheckListSend } from './LeaderCheckListSend'
+import { InspectorOutgoingCheckLists } from './inspectorOutgoingChecklists'
+import { LeaderInprogressChecklists } from './LeaderInprogressChecklists'
 import {
     ListWrapperCheckL,
     StyledHeadContents,
@@ -17,27 +17,30 @@ import {
     Wrap,
 } from './styles'
 
-export const Checklist = () => {
-    const { currentUser } = useGlobal()
+export const ChecklistComponent = () => {
+    const { currentUser, refreshList } = useGlobal()
 
-    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
+    const [checklists, setChecklists] = useState<Checklist[]>([])
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
 
     const api = apiService()
-    const { accessToken } = useGlobal()
+
     const { isInspector } = useRoles()
 
     useEffect(() => {
-        if (!currentUser) return
+        if (!currentUser?.id) return
         ;(async (): Promise<void> => {
             try {
-                const workFlowData = await api.getAllWorkflows()
-                setAllWorkFlows(workFlowData)
+                const checklistData = await api.getAllChecklistsByUserId(
+                    currentUser.id
+                )
+
+                setChecklists(checklistData)
             } catch (error) {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
+    }, [currentUser?.id, refreshList])
 
     useEffect(() => {
         if (!currentUser) return
@@ -46,14 +49,14 @@ export const Checklist = () => {
                 const workFlowData = await api.getAllWorkflowsByUserId(
                     currentUser.id
                 )
-                console.log(workflows)
+
                 setWorkFlows(workFlowData)
             } catch (error) {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
-    console.log(workflows)
+    }, [currentUser?.id, refreshList])
+
     return (
         <>
             <Wrap>
@@ -85,7 +88,7 @@ export const Checklist = () => {
                                 {isInspector ? (
                                     <>
                                         {workflows?.map((workFlow) => (
-                                            <InspectorReceivedCheckLists
+                                            <InspectorOutgoingCheckLists
                                                 WorkFlow={workFlow}
                                                 key={workFlow.id}
                                             />
@@ -93,10 +96,10 @@ export const Checklist = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {allWorkflows?.map((workflow) => (
-                                            <LeaderCheckListSend
-                                                workflow={workflow}
-                                                key={workflow.id}
+                                        {checklists?.map((checklist) => (
+                                            <LeaderInprogressChecklists
+                                                workflow={checklist}
+                                                key={checklist.id}
                                             />
                                         ))}
                                     </>

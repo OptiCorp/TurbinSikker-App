@@ -70,6 +70,7 @@ export type Checklist = {
     value: string
     label: string
     checklistTasks: Task[]
+    workflows: Workflow[]
 }
 
 export type Task = {
@@ -108,6 +109,8 @@ export type Workflow = {
 
 export type Invoice = {
     id: string
+    title: string
+    number: number
     sender: string
     receiver: string
     status: string
@@ -118,4 +121,5 @@ export type Invoice = {
     pdf: null | string
     pdfBlobLink: string
     workflows: Workflow[]
+    message: string
 }

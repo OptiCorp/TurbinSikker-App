@@ -1,8 +1,9 @@
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../../components/navigation/hooks/useNavActionBtn'
+import useGlobal from '../../../../context/globalContextProvider'
 import apiService from '../../../../services/api'
 import { useAddUser } from '../../hooks/useAddUser'
 
@@ -13,13 +14,17 @@ export const ModifyUserNav = () => {
     const [addNav, setAddNav] = useState(false)
     const [editNav, setEditNav] = useState(false)
     const [negativeOpen, setNegativeOpen] = useState(false)
-
+    const navigate = useNavigate()
     const { id } = useParams() as { id: string }
     const [updateOpen, setUpdateOpen] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
 
+    const { openSnackbar } = useGlobal()
+
     const handleDeleteUser = async (id: string) => {
-        await api.softDeleteUser(id)
+        const res = await api.softDeleteUser(id)
+        if (res.ok && openSnackbar) openSnackbar('User deleted')
+        navigate('/ListUsers', { state: { newUser: id } })
     }
 
     useEffect(() => {

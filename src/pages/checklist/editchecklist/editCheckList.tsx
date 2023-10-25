@@ -4,16 +4,23 @@ import { AddTasks } from '../../../components/addtasks/AddTasks'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { EditHeader } from './EditHeader'
+import { EditList } from './editList/EditList'
 import { useEditChecklist } from './hooks/useEditChecklist'
 import { BackgroundContainer, ScrollWrapper } from './styles'
-import { EditList } from './editList/EditList'
 
 export const EditCheckList = () => {
-    const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
 
-    const { handleDelete, setHeaderOpen, headerOpen, checklist, handleSave, tasks } =
-        useEditChecklist()
+    const {
+        handleDelete,
+        setDialogDelete,
+        setHeaderOpen,
+        headerOpen,
+        checklist,
+        handleSave,
+        tasks,
+        dialogDelete,
+    } = useEditChecklist()
 
     const handleCloseDelete = () => {
         setDialogDelete(false)
@@ -22,10 +29,14 @@ export const EditCheckList = () => {
     const handleClose = () => {
         setDialogShowing(false)
     }
-
     const [title, setTitle] = useState('')
-
     const [checked, setChecked] = useState(!!checklist?.status)
+
+    useEffect(() => {
+        if (checklist) {
+            setTitle(checklist.title)
+        }
+    }, [checklist])
 
     useEffect(() => {
         setChecked(checklist?.status === 'Active')
@@ -34,30 +45,39 @@ export const EditCheckList = () => {
     function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
         return status ? 'Active' : 'Inactive'
     }
-
+    
     return (
         <BackgroundContainer>
             <>
-                <ScrollWrapper key={checklist?.id}>
-                    <EditHeader
-                        dialogShowing={dialogShowing}
-                        setDialogShowing={setDialogShowing}
-                        headerOpen={headerOpen}
-                        setHeaderOpen={setHeaderOpen}
-                        handleClose={handleClose}
-                        title={title}
-                        setTitle={setTitle}
-                        checked={checked}
-                        setChecked={setChecked}
-                    />
+                {checklist && (
+                    <>
+                        <ScrollWrapper key={checklist?.id}>
+                            <EditHeader
+                                dialogShowing={dialogShowing}
+                                setDialogShowing={setDialogShowing}
+                                headerOpen={headerOpen}
+                                setHeaderOpen={setHeaderOpen}
+                                handleClose={handleClose}
+                                checked={checked}
+                                setChecked={setChecked}
+                                title={title}
+                                checklist={checklist}
+                                setTitle={setTitle}
+                            />
 
-                    {headerOpen && <AddTasks />}
-                    {checklist && (
-                        <>
-                            <EditList key={checklist?.id} checklist={checklist} tasks={tasks} />
-                        </>
-                    )}
-                </ScrollWrapper>
+                            {headerOpen && <AddTasks />}
+                            {checklist && (
+                                <>
+                                    <EditList
+                                        key={checklist?.id}
+                                        checklist={checklist}
+                                        tasks={tasks}
+                                    />
+                                </>
+                            )}
+                        </ScrollWrapper>{' '}
+                    </>
+                )}
 
                 <CustomDialog
                     title="Delete checklist?"

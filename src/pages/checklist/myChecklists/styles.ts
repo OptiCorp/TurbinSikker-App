@@ -56,16 +56,16 @@ export const StyledTableRow = styled(Table.Row)`
         transform: scale(0.98);
     }
 `
-
+//sent
 export const CellContentMyList = styled.div`
     font-weight: 600;
     display: flex;
-    flex-direction: column;
-    align-items: left;
-    width: 100px;
+    -webkit-box-align: center;
     min-height: 50px;
-    justify-content: space-around;
-    margin: 10px 0;
+    margin: 10px 0px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
 `
 export const ButtonWrap = styled.div`
     display: flex;

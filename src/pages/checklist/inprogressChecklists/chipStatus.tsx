@@ -1,7 +1,7 @@
 import { Chip, Typography } from '@equinor/eds-core-react'
 import { FC } from 'react'
-import { Workflow } from '../../../services/apiTypes'
 import { formatDate } from '../../../helpers/dateFormattingHelpers'
+import { Workflow } from '../../../services/apiTypes'
 
 type ChipStatusProps = {
     workflow: Workflow
@@ -13,9 +13,7 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
         case 'Sent':
             return (
                 <>
-                    <Chip style={{ margin: '0 auto' }} variant="default">
-                        Received
-                    </Chip>
+                    <Chip variant="default">Sent</Chip>
                     <Typography
                         variant="caption"
                         token={{
@@ -28,18 +26,12 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                 </>
             )
         case 'Committed':
-            return (
-                <Chip style={{ margin: '0 auto' }} variant="active">
-                    Committed
-                </Chip>
-            )
+            return <Chip variant="active">Committed</Chip>
 
         case 'Done':
             return (
                 <>
-                    <Chip style={{ margin: '0 auto' }} disabled>
-                        Completed
-                    </Chip>
+                    <Chip disabled>Completed </Chip>
                     <Typography
                         variant="caption"
                         token={{
@@ -55,15 +47,14 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
         default:
             return (
                 <>
-                    <Chip style={{ margin: '0 auto' }} variant="error">
-                        pending
-                    </Chip>
+                    <Chip variant="error">pending</Chip>
                     <Typography
                         variant="caption"
                         token={{
                             textAlign: 'center',
                             fontSize: '0.7rem',
                         }}
+                        style={{ margin: '10px' }}
                     >
                         {formattedUpdateDate}
                     </Typography>

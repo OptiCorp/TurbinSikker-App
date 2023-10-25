@@ -1,6 +1,7 @@
 import { Table } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { BannerComponent } from '../../../components/banner/useBanner'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
@@ -21,11 +22,10 @@ import {
 } from './styles'
 
 export const MyCheckLists = () => {
-    const { accessToken } = useGlobal()
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
     const [checklists, setChecklists] = useState<Checklist[]>([])
-    const { currentUser } = useGlobal()
+    const { currentUser, openSnackbar, setRefreshList, refreshList } = useGlobal()
     const handleClose = () => {
         setDialogShowing(false)
     }
@@ -38,15 +38,13 @@ export const MyCheckLists = () => {
 
     const handleCreateChecklist = async () => {
         try {
-            if (!currentUser || !accessToken) return
+            if (!currentUser) return
             const res = await api.addChecklist(currentUser.id, title)
-            console.log(res)
 
-            setDialogShowing(false)
+            if (res.id) setDialogShowing(false)
 
-            {
-                navigate(`/EditCheckList/${res.id}`)
-            }
+            if (res.id) navigate(`/EditCheckList/${res.id}`)
+            if (res.id && openSnackbar) openSnackbar('Checklist created')
         } catch (error) {
             console.error('Error creating checklist:', error)
         }
@@ -80,12 +78,13 @@ export const MyCheckLists = () => {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
+    }, [currentUser?.id, refreshList])
 
     return (
         <>
             <BackgroundWrap>
                 <ListWrapperCheckMyList>
+                    <BannerComponent />
                     <Table>
                         <Table.Head sticky>
                             <Table.Row>

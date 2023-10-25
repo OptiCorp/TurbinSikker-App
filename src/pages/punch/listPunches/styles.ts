@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { getStatusBackgroundColor } from '../../../helpers/statusBackgroundHelper'
+
 import { COLORS, SHADOW } from '../../../style/GlobalStyles'
 
 export const PunchListItem = styled.div`
@@ -15,6 +16,7 @@ export const PunchListItem = styled.div`
 export const PunchListBoxContainer = styled.div`
     position: relative;
     display: flex;
+
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
@@ -84,7 +86,8 @@ export const StatusBadge = styled.span`
     gap: 4;
     padding: 5px;
     border-radius: 4px;
-    background: ${(props: { status: string }) => getStatusBackgroundColor(props.status)};
+    background: ${(props: { status: string }) =>
+        getStatusBackgroundColor(props.status)};
 `
 export const TicketCardDescription = styled.p`
     white-space: nowrap;
