@@ -24,14 +24,9 @@ import {
 } from './styles'
 import { FillOutListProps } from './types'
 
-export const ReviewList: FunctionComponent<FillOutListProps> = ({
-    tasks,
-    workflow,
-}) => {
+export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflow }) => {
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const [applicableStatuses, setApplicableStatuses] = useState<
-        Record<string, boolean>
-    >({})
+    const [applicableStatuses, setApplicableStatuses] = useState<Record<string, boolean>>({})
 
     const { workflowId } = useParams() as { workflowId: string }
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
@@ -42,11 +37,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
     const handleSubmit = async () => {
         if (!currentUser) return
         try {
-            const res = await api.updateWorkflow(
-                workflowId,
-                'Done',
-                workflow.user.id
-            )
+            const res = await api.updateWorkflow(workflowId, 'Done', workflow.user.id)
             setSubmitDialogShowing(false)
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Checklist approved')
@@ -61,11 +52,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
     const handleReject = async () => {
         if (!currentUser) return
         try {
-            const res = await api.updateWorkflow(
-                workflowId,
-                'Sent',
-                workflow.user.id
-            )
+            const res = await api.updateWorkflow(workflowId, 'Sent', workflow.user.id)
             setRejectDialogShowing(false)
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Checklist rejected')
@@ -86,14 +73,10 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
                         <StyledReviewCard>
                             <ReviewCardHeader
                                 style={{
-                                    filter: applicableStatuses[task.id]
-                                        ? 'blur(3px)'
-                                        : 'none',
+                                    filter: applicableStatuses[task.id] ? 'blur(3px)' : 'none',
                                 }}
                             >
-                                <CustomCategoryName>
-                                    {task.category.name}{' '}
-                                </CustomCategoryName>
+                                <CustomCategoryName>{task.category.name} </CustomCategoryName>
 
                                 <Typography
                                     token={{
@@ -128,7 +111,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
                                 />
                                 {/* {applicableStatuses[task.id] ? (
                                 <ImageContainer />
-                            ) : ( */}{' '}
+                            ) : ( */}
                             </CustomCardContent>
                             <Error>
                                 <Checkbox label="" checked={checked} disabled />{' '}
@@ -144,7 +127,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
                         secondOnClick={() => setSubmitDialogShowing(true)}
                         isShown={true}
                         onClick={() => setRejectDialogShowing(true)}
-                        ButtonMessage="Redject"
+                        ButtonMessage="Reject"
                         type="button"
                         SecondButtonMessage="Approve"
                     />
@@ -162,11 +145,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
                 isOpen={rejectDialogShowing}
             >
                 <RejectWrap>
-                    <Typography
-                        group="input"
-                        variant="text"
-                        token={{ textAlign: 'left' }}
-                    >
+                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
                         {workflow.checklist.title} will be send back to{' '}
                     </Typography>
 
