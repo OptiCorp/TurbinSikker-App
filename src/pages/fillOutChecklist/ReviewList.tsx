@@ -34,7 +34,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
     >({})
 
     const { workflowId } = useParams() as { workflowId: string }
-    const { currentUser, openSnackbar } = useGlobal()
+    const { currentUser, openSnackbar, setRefreshList } = useGlobal()
     const [rejectDialogShowing, setRejectDialogShowing] = useState(false)
     const navigate = useNavigate()
 
@@ -51,6 +51,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Checklist approved')
                 navigate('/Checklists')
+                setRefreshList((prev) => !prev)
             }
         } catch (error) {
             console.log(error)
@@ -69,6 +70,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Checklist rejected')
                 navigate('/Checklists')
+                setRefreshList((prev) => !prev)
             }
         } catch (error) {
             console.log(error)

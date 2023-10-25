@@ -4,7 +4,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Workflow } from '../../../services/apiTypes'
+import { Checklist, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 
 import { HeadCell } from '../myChecklists/styles'
@@ -17,10 +17,10 @@ import {
     Wrap,
 } from './styles'
 
-export const Checklist = () => {
-    const { currentUser } = useGlobal()
+export const ChecklistComponent = () => {
+    const { currentUser, refreshList } = useGlobal()
 
-    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
+    const [checklists, setChecklists] = useState<Checklist[]>([])
     const [workflows, setWorkFlows] = useState<Workflow[]>([])
 
     const api = apiService()
@@ -28,16 +28,19 @@ export const Checklist = () => {
     const { isInspector } = useRoles()
 
     useEffect(() => {
-        if (!currentUser) return
+        if (!currentUser?.id) return
         ;(async (): Promise<void> => {
             try {
-                const workFlowData = await api.getAllWorkflows()
-                setAllWorkFlows(workFlowData)
+                const checklistData = await api.getAllChecklistsByUserId(
+                    currentUser.id
+                )
+
+                setChecklists(checklistData)
             } catch (error) {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
+    }, [currentUser?.id, refreshList])
 
     useEffect(() => {
         if (!currentUser) return
@@ -52,7 +55,7 @@ export const Checklist = () => {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
+    }, [currentUser?.id, refreshList])
 
     return (
         <>
@@ -93,10 +96,10 @@ export const Checklist = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {allWorkflows?.map((workflow) => (
+                                        {checklists?.map((checklist) => (
                                             <LeaderInprogressChecklists
-                                                workflow={workflow}
-                                                key={workflow.id}
+                                                workflow={checklist}
+                                                key={checklist.id}
                                             />
                                         ))}
                                     </>

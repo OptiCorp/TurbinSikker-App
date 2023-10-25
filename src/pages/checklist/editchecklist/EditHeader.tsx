@@ -19,6 +19,7 @@ type Props = {
     title: string
     checked: any
     setChecked: any
+    checklist: Checklist
 }
 
 export const EditHeader = ({
@@ -30,35 +31,41 @@ export const EditHeader = ({
     title,
     setTitle,
     checked,
+    checklist,
     setChecked,
 }: Props) => {
     const [changeTitle, setChangeTitle] = useState('')
+    const [defaultTitle, setDefaultTitle] = useState('')
 
-    useEffect(() => {
-        setTitle(changeTitle)
-    })
     const { id } = useParams() as { id: string }
 
-    const [checklist, setChecklist] = useState<Checklist>()
+    // const [checklist, setChecklist] = useState<Checklist>()
     const api = apiService()
-    const { accessToken, currentUser } = useGlobal()
+    const { currentUser, refreshList } = useGlobal()
 
     useEffect(() => {
-        if (!currentUser?.id || !id) return
-
-        const fetchChecklist = async (id: string) => {
-            if (!id) return
-            try {
-                const checklistData = await api.getChecklist(id)
-
-                setChecklist(checklistData)
-            } catch (error) {
-                console.log(error)
-            }
+        if (checklist) {
+            setDefaultTitle(checklist.title)
         }
+        setTitle(changeTitle)
+    }, [checklist])
 
-        fetchChecklist(id)
-    }, [currentUser?.id, id])
+    // useEffect(() => {
+    //     if (!currentUser?.id || !id) return
+
+    //     const fetchChecklist = async (id: string) => {
+    //         if (!id) return
+    //         try {
+    //             const checklistData = await api.getChecklist(id)
+
+    //             setChecklist(checklistData)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+
+    //     fetchChecklist(id)
+    // }, [currentUser?.id, id, refreshList])
 
     return (
         <>
@@ -122,6 +129,8 @@ export const EditHeader = ({
                             positiveButtonOnClick={() => {
                                 if (changeTitle) {
                                     setTitle(changeTitle)
+                                } else {
+                                    setTitle(defaultTitle)
                                 }
                                 setDialogShowing(false)
                             }}
@@ -130,7 +139,7 @@ export const EditHeader = ({
                             <MakeTitleField
                                 id="storybook-readonly"
                                 placeholder="name"
-                                defaultValue={changeTitle || checklist?.title}
+                                defaultValue={changeTitle || defaultTitle}
                                 label=""
                                 onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>

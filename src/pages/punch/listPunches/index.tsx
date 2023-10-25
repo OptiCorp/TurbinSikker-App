@@ -42,6 +42,7 @@ function ListPunches() {
                 const punchesFromApi = await api.getPunchByLeaderId(currentUser?.id)
                 setPunches(punchesFromApi)
                 setFetchPunchesStatus(ApiStatus.SUCCESS)
+                
             }
         })()
     }, [currentUser])

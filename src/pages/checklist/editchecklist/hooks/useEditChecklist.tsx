@@ -13,7 +13,8 @@ export const useEditChecklist = () => {
     const [task, setTask] = useState<Task | undefined>()
 
     const [checklist, setChecklist] = useState<Checklist>()
-    const { currentUser, openSnackbar } = useGlobal()
+    const { currentUser, openSnackbar, refreshList, setRefreshList } =
+        useGlobal()
     const [headerOpen, setHeaderOpen] = useState(false)
     const api = apiService()
     const [tasks, setTasks] = useState<Task[]>([])
@@ -35,7 +36,7 @@ export const useEditChecklist = () => {
         }
 
         fetchChecklist()
-    }, [currentUser?.id, id])
+    }, [currentUser?.id, id, refreshList])
 
     useEffect(() => {
         if (checklist && checklist?.checklistTasks?.length === 0) {
@@ -61,19 +62,24 @@ export const useEditChecklist = () => {
             )
 
             setDialogShowing(false)
+            if (openSnackbar) openSnackbar('Task updated')
+            setRefreshList((prev) => !prev)
         } catch (error) {
             if (error) return
             console.log(error)
-        } finally {
         }
     }
 
     const handleDelete = async () => {
         try {
             const res = await api.deleteChecklist(id)
-            if (res.ok) setDialogDelete(false)
-            if (res.ok && openSnackbar) openSnackbar('Checklist deleted')
-            if (res.ok) navigate('/Checklists')
+
+            if (res.ok) {
+                setDialogDelete(false)
+                if (openSnackbar) openSnackbar('Checklist deleted')
+                navigate('/Checklists')
+                setRefreshList((prev) => !prev)
+            }
         } catch (error) {
             if (error) return
             console.log(error)
@@ -85,9 +91,11 @@ export const useEditChecklist = () => {
 
         try {
             const res = await api.updateChecklist(id, data.title, data.status)
-
-            if (res.ok && openSnackbar) openSnackbar('Checklist updated')
-            if (res.ok) navigate('/Checklists')
+            if (res.ok) {
+                if (openSnackbar) openSnackbar('Checklist updated')
+                navigate('/Checklists')
+                setRefreshList((prev) => !prev)
+            }
         } catch (error) {
             if (error) return
             console.log(error)

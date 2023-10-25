@@ -22,18 +22,17 @@ export const useAddTaskForm = () => {
     const methods = useForm<FormData>()
     const { handleSubmit, control } = methods
     const [selectedOption, setSelectedOption] = useState('')
-    const { openSnackbar } = useGlobal()
+    const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const api = apiService()
     const [category, setCategory] = useState<Category[]>([])
 
     const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
         try {
             const res = await api.addTaskToChecklist(data.id, checklistId)
-            if (res.ok) { 
-                
+            if (res.ok) {
                 if (openSnackbar) openSnackbar('Task added')
-        
-        }
+                if (res.ok) setRefreshList((prev) => !prev)
+            }
         } catch (error) {
             console.log(error)
         }
@@ -74,7 +73,7 @@ export const useAddTaskForm = () => {
                 console.log(error)
             }
         })()
-    }, [selectedOption, currentUser?.id])
+    }, [selectedOption, currentUser?.id, refreshList])
 
     return {
         methods,

@@ -33,6 +33,7 @@ export const BannerComponent: React.FC = () => {
             }
         })()
     }, [currentUser])
+    
 
     const navigate = useNavigate()
     function resubmitPunch(punchId: string, workFlowId: string) {

@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from 'react'
 
-import { Card, Checkbox, Typography } from '@equinor/eds-core-react'
+import { Card, Checkbox, Chip, Typography } from '@equinor/eds-core-react'
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../components/modal/useModalHook'
@@ -51,7 +51,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     const [checkboxStatus, setCheckboxStatus] = useState<CheckboxStatus>(
         Object.fromEntries(tasks.map((x) => [x.id, false]))
     )
-    const { openSnackbar } = useGlobal()
+    const { openSnackbar, setRefreshList } = useGlobal()
     const [isSubmissionAllowed, setIsSubmissionAllowed] = useState(false)
 
     const areAllCheckboxesChecked = tasks.every(
@@ -70,7 +70,8 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                 setSubmitDialogShowing(false)
 
                 if (res.ok && openSnackbar) openSnackbar('Checklist committed')
-                navigate('/Checklists')
+                navigate('/MyChecklists')
+                if (res.ok) setRefreshList((prev) => !prev)
             } catch (error) {
                 console.log(error)
             }
@@ -106,13 +107,14 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     token={{
                                         textAlign: 'center',
                                         fontWeight: 600,
-                                        fontSize: '0.8rem',
+                                        fontSize: '1rem',
                                         color: 'red',
+                                        textDecoration: 'none',
                                     }}
                                     link
                                     href="#"
                                 >
-                                    Add punch
+                                    <Chip variant="error">Add punch</Chip>
                                 </Typography>
                             </Card.Header>
                             <CustomCardContent>
@@ -227,7 +229,11 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                     handleSubmit()
                 }}
                 isOpen={submitDialogShowing}
-            > this will committ {workflow.checklist.title} to {workflow.creator.username}</CustomDialog>
+            >
+                {' '}
+                this will committ {workflow.checklist.title} to{' '}
+                {workflow.creator.username}
+            </CustomDialog>
         </>
     )
 }

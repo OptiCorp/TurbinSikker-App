@@ -6,7 +6,7 @@ import { GlobalProvider } from './context/globalContextProvider'
 import { IndexCheckLists } from './pages/checklist'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { ForReviewChecklists } from './pages/checklist/forReview/Index'
-import { Checklist } from './pages/checklist/inprogressChecklists/Index'
+import { ChecklistComponent } from './pages/checklist/inprogressChecklists/Index'
 import { MyCheckLists } from './pages/checklist/myChecklists/Index'
 import { PreviewCheckList } from './pages/checklist/previewCheckList/Preview'
 import { SendCheckList } from './pages/checklist/sendchecklist'
@@ -40,7 +40,7 @@ export function RoutesContainer() {
                             path="/Checklists"
                             element={
                                 <GlobalProvider>
-                                    <Checklist />
+                                    <ChecklistComponent />
                                 </GlobalProvider>
                             }
                         />
@@ -59,7 +59,11 @@ export function RoutesContainer() {
                         <Route
                             path="/"
                             element={
-                                isInspector ? <MyCheckLists /> : <Checklist />
+                                isInspector ? (
+                                    <MyCheckLists />
+                                ) : (
+                                    <ChecklistComponent />
+                                )
                             }
                         />
                     </Route>

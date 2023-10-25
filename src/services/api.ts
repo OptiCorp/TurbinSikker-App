@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { API_URL } from '../config'
 import { pca } from '../msalconfig'
 import {
@@ -296,8 +295,6 @@ const apiService = () => {
         return data
     }
 
- 
-
     const getChecklistByName = async (
         searchString: string
     ): Promise<Checklist> => {
@@ -502,8 +499,8 @@ const apiService = () => {
         })
     }
 
-    const deleteTask = async (id: string): Promise<void> => {
-        await deleteByFetch(`DeleteTask?id=${id}`)
+    const deleteTask = async (id: string) => {
+        return deleteByFetch(`DeleteTask?id=${id}`)
     }
 
     // Category

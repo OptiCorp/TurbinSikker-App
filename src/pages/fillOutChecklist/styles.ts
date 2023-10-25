@@ -28,9 +28,11 @@ export const EditStyledCardHeader = styled(Card.Header)`
 
 export const ReviewCardHeader = styled(Card.Header)`
     display: flex;
-    gap: 30px;
+    align-items: baseline;
+    width: 90%;
+    justify-content: space-between;
+    align-content: flex-start;
     flex-direction: row;
-    justify-content: left;
 `
 
 export const List = styled.ul`

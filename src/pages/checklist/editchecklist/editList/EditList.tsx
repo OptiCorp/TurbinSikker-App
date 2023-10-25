@@ -1,12 +1,16 @@
+import { Chip } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
+import useGlobal from '../../../../context/globalContextProvider'
+import apiService from '../../../../services/api'
 import { Checklist, Task } from '../../../../services/apiTypes'
 import { PreviewListPoints } from '../../previewCheckList/styles'
 import { useEditChecklist } from '../hooks/useEditChecklist'
 import {
     CategoryName,
     Container,
+    Delete,
     EditListPoints,
     EditWrapper,
     StyledCard,
@@ -21,22 +25,42 @@ export const EditList = ({ tasks }: Props) => {
     const [content, setContent] = useState('')
     const [dialogShowing, setDialogShowing] = useState(false)
     const { handleUpdateTask } = useEditChecklist()
+    const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const { id } = useParams() as { id: string }
     const [task, setTask] = useState<Task>()
+    const api = apiService()
     const handleSubmit = () => {
         const categoryId = task?.category.id
         const taskId = task?.id
 
         if (!categoryId || !taskId) return
         handleUpdateTask({
-            taskId,
             categoryId,
+            checklistId: id,
+
             description: content,
 
-            checklistId: id,
             estAvgCompletionTime: 10,
+            taskId,
         })
         setDialogShowing(false)
+    }
+
+    const deleteTask = async () => {
+        const taskId = task?.id
+        if (!taskId) return
+        try {
+            const res = await api.deleteTask(taskId)
+
+            if (res.ok) {
+                if (openSnackbar) openSnackbar('Task deleted')
+                setDialogShowing(false)
+                setRefreshList((prev) => !prev)
+            }
+        } catch (error) {
+            if (error) return
+            console.log(error)
+        }
     }
 
     return (
@@ -70,6 +94,17 @@ export const EditList = ({ tasks }: Props) => {
                 buttonVariant="ghost"
                 positiveButtonOnClick={handleSubmit}
             >
+                <Delete>
+                    {' '}
+                    <Chip
+                        variant="error"
+                        onClick={() => {
+                            deleteTask()
+                        }}
+                    >
+                        delete task{' '}
+                    </Chip>
+                </Delete>
                 <EditListPoints
                     label=""
                     key={task?.id ?? ''}
