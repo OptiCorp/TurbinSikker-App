@@ -44,16 +44,21 @@ export const DefaultNavigation: React.FC<{
                             />
                         </StyledTab>
                         <StyledTab>
-                            <NavItem
-                                icon={assignment}
-                                name="Checklists"
-                                isActive={activeTab === 1}
-                                to={
-                                    isInspector
-                                        ? '/Checklists'
-                                        : '/MyCheckLists'
-                                }
-                            />
+                            {isInspector ? (
+                                <NavItem
+                                    icon={assignment}
+                                    name="Checklists"
+                                    isActive={activeTab === 1}
+                                    to="/MyCheckLists"
+                                />
+                            ) : (
+                                <NavItem
+                                    icon={assignment}
+                                    name="Checklists"
+                                    isActive={activeTab === 1}
+                                    to="/CheckLists"
+                                />
+                            )}
                         </StyledTab>
                         <StyledTab>
                             <NavItem

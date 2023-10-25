@@ -32,7 +32,8 @@ export const useAddWorkFlowForm = () => {
     const [checklistAlreadySent, setChecklistAlreadySent] = useState(false)
     const [positiveOpen, setPositiveOpen] = useState(false)
     const api = apiService()
-    const { currentUser, accessToken, openSnackbar } = useGlobal()
+    const { currentUser, accessToken, openSnackbar, setRefreshList } =
+        useGlobal()
     const creatorId = currentUser?.id
     const handleOpen = () => {
         setPositiveOpen(true)
@@ -105,6 +106,7 @@ export const useAddWorkFlowForm = () => {
                 if (openSnackbar) openSnackbar('Checklist sent')
 
                 navigate('/Checklists')
+                setRefreshList((prev) => !prev)
             }
         } catch (error) {
             console.log(error)

@@ -68,7 +68,7 @@ export const useAddPunch = () => {
                 message: message,
             })
             {
-                navigate(`/workflow/${workflowId}/punch/${punchId}`)
+                navigate(`/Punches`)
                 setRejectDialogOpen(false)
                 setPositiveOpen(false)
             }
@@ -90,10 +90,13 @@ export const useAddPunch = () => {
             await api.addUpload(punchId, file)
         }
         setRejectDialogOpen(false)
-        if (res.ok && status === 'Rejected' && openSnackbar)
+        if (res.ok && status === 'Rejected' && openSnackbar) {
             openSnackbar('Punch rejected')
-        if (res.ok && status === 'Approved' && openSnackbar)
-            navigate(`/workflow/${workflowId}/punch/${punchId}`)
+        }
+        if (res.ok && status === 'Approved' && openSnackbar) {
+            openSnackbar('Punch approved')
+        }
+        if (res.ok) navigate('/Punches')
     }
 
     const postPunch = async () => {

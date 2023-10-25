@@ -43,9 +43,11 @@ export const AddUser: FC = () => {
                     {user && <StatusSwitch />}
                 </FormWrapper>
             </Wrapper>
-            {hasPermission && <ModifyUserNav />}
-
-            <DefaultNavigation hideNavbar={false} />
+            {hasPermission ? (
+                <ModifyUserNav />
+            ) : (
+                <DefaultNavigation hideNavbar={false} />
+            )}
         </FormProvider>
     )
 }

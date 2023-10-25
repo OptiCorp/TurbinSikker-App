@@ -20,17 +20,16 @@ import {
 export const PreviewCheckList = () => {
     const location = useLocation()
     const api = apiService()
-    const { accessToken, currentUser } = useGlobal()
+    const { accessToken, currentUser, refreshList } = useGlobal()
     const state = location.state
     const [checklist, setChecklist] = useState<Checklist>()
     const [tasks, setTasks] = useState<Task[]>([])
     const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
-    const { id } = useParams() as { id: string}
+    const { id } = useParams() as { id: string }
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
     }
     const { isInspector, isLeader } = useRoles()
-
 
     useEffect(() => {
         if (!currentUser?.id || !accessToken || !id) return
@@ -49,7 +48,7 @@ export const PreviewCheckList = () => {
         }
 
         fetchChecklist()
-    }, [accessToken, currentUser?.id, id])
+    }, [accessToken, currentUser?.id, id, refreshList])
 
     const navigate = useNavigate()
 

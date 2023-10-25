@@ -70,3 +70,11 @@ export const CategoryName = styled.h3`
     font-size: 1rem;
     font-weight: 600;
 `
+export const Delete = styled.div`
+    color: red;
+
+    justify-content: flex-end;
+
+    display: flex;
+    margin: 0;
+`
