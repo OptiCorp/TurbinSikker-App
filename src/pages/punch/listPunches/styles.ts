@@ -86,8 +86,7 @@ export const StatusBadge = styled.span`
     gap: 4;
     padding: 5px;
     border-radius: 4px;
-    background: ${(props: { status: string }) =>
-        getStatusBackgroundColor(props.status)};
+    background: ${(props: { status: string }) => getStatusBackgroundColor(props.status)};
 `
 export const TicketCardDescription = styled.p`
     white-space: nowrap;
@@ -96,5 +95,24 @@ export const TicketCardDescription = styled.p`
     color: ${COLORS.gray};
     @media only screen and (max-width: 400px) {
         max-width: 200px;
+    }
+`
+
+export const TableWrapper = styled.div`
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-bottom: 15%;
+    white-space: nowrap;
+`
+export const TextWrapper = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media only screen and (max-width: 520px) {
+        max-width: 160px;
+    }
+    @media only screen and (max-width: 400px) {
+        max-width: 88px;
     }
 `

@@ -1,6 +1,15 @@
-import { FunctionComponent, useState } from 'react'
+import { FormEvent, FunctionComponent, useState } from 'react'
 
-import { Card, Checkbox, Chip, Typography } from '@equinor/eds-core-react'
+import {
+    Button,
+    Card,
+    Checkbox,
+    Chip,
+    Dialog,
+    Input,
+    Label,
+    Typography,
+} from '@equinor/eds-core-react'
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../components/modal/useModalHook'
@@ -31,6 +40,7 @@ interface CheckboxStatus {
 }
 
 export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks, workflow }) => {
+    const api = apiService()
     const { openSnackbar, setRefreshList } = useGlobal()
     const { workflowId } = useParams() as { workflowId: string }
     const navigate = useNavigate()
@@ -49,7 +59,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks, workfl
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
 
-    const api = apiService()
     const handleSubmit = async () => {
         if (areAllCheckboxesChecked)
             try {
@@ -69,7 +78,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks, workfl
             }
         else {
             setIsSubmissionAllowed(true)
-            openSnackbar && openSnackbar('all tasks must be checked to committ checklist')
+            openSnackbar && openSnackbar('all tasks must be checked to commit checklist')
         }
     }
 
@@ -192,43 +201,47 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({ tasks, workfl
                     where you left after.
                 </Typography>
             </CustomDialog>
-            <CustomDialog
-                title={`Submit ${workflow.checklist.title}?`}
-                buttonVariant="ghost"
-                negativeButtonOnClick={() => setSubmitDialogShowing(false)}
-                negativeButtonText="Cancel"
-                positiveButtonText="Submit"
-                positiveButtonOnClick={() => {
-                    setSubmitDialogShowing(false)
-                    handleSubmit()
-                }}
-                isOpen={submitDialogShowing}
+
+            <Dialog
+                open={submitDialogShowing}
+                onClose={() => setSubmitDialogShowing(false)}
+                isDismissable
             >
-                {' '}
-                this will committ {workflow.checklist.title} to {workflow.creator.username}
-                {/* <CustomTaskField
-                    label={'Completion time'}
-                    key={''}
-                    id="storybook-multi-readonly"
-                    name="completionTime"
-                    defaultValue={''}
-                    type="number"
-                    multiline
-                    onChange={(e) => {
-                        console.log(e.target.valueAsNumber)
-                        setCompletionTime(e.target.valueAsNumber)
-                    }}
-                /> */}
-                <label htmlFor="completionTime">Completion time:</label>
-                <input
-                    id="completionTime"
-                    type="number"
-                    // value={completionTime}
-                    onChange={(e) => {
-                        setCompletionTime(e.target.valueAsNumber)
-                    }}
-                />
-            </CustomDialog>
+                <Dialog.Header>
+                    <Dialog.Title>Submit {workflow.checklist.title}?</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.CustomContent>
+                    <Typography style={{ marginBottom: '10px' }}>
+                        This will commit {workflow.checklist.title} to {workflow.creator.username}
+                    </Typography>
+                    <div>
+                        <Label htmlFor="textfield-normal" label="Completion time (minutes):" />
+                        <Input
+                            id="textfield-normal"
+                            type="number"
+                            autoComplete="off"
+                            onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                                const inputElement = e.target as HTMLInputElement
+                                setCompletionTime(inputElement.valueAsNumber)
+                            }}
+                        />
+                    </div>
+                </Dialog.CustomContent>
+                <Dialog.Actions>
+                    <Button
+                        style={{ marginRight: '10px' }}
+                        onClick={() => {
+                            handleSubmit()
+                            setSubmitDialogShowing(false)
+                        }}
+                    >
+                        Submit
+                    </Button>
+                    <Button variant="ghost" onClick={() => setSubmitDialogShowing(false)}>
+                        Cancel
+                    </Button>
+                </Dialog.Actions>
+            </Dialog>
         </>
     )
 }

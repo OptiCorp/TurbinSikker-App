@@ -1,28 +1,15 @@
-import { Button, Icon, Typography } from '@equinor/eds-core-react'
-import { arrow_forward_ios, assignment_user, file_description, image } from '@equinor/eds-icons'
+import { Chip, Table } from '@equinor/eds-core-react'
 import { useNavigate } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import {
-    CreatedByContainer,
-    PunchListBoxContainer,
-    PunchListItem,
-    StatusBadge,
-    StatusBadgeContainer,
-    TicketActions,
-    TicketButtonContainer,
-    TicketCardDescription,
-    TicketDetails,
-    TicketIcons,
-    TicketInfo,
-} from './styles'
+import { PunchListItem, TableWrapper, TextWrapper } from './styles'
 import { useEffect, useState } from 'react'
 import { Loading } from '../../../components/loading/Loading'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { ApiStatus, PunchItem, Status, User } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
-import { formatDate, formatTimestamp } from '../../../helpers/dateFormattingHelpers'
+import { formatDate } from '../../../helpers/dateFormattingHelpers'
 
 function ListPunches() {
     const { currentUser } = useGlobal() as { currentUser: User }
@@ -31,7 +18,8 @@ function ListPunches() {
     const navigate = useNavigate()
     const [punches, setPunches] = useState<PunchItem[]>([])
     const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(ApiStatus.LOADING)
-    const { isLeader, isInspector } = useRoles()
+    const { isInspector } = useRoles()
+
     useEffect(() => {
         ;(async () => {
             if (isInspector) {
@@ -42,10 +30,13 @@ function ListPunches() {
                 const punchesFromApi = await api.getPunchByLeaderId(currentUser?.id)
                 setPunches(punchesFromApi)
                 setFetchPunchesStatus(ApiStatus.SUCCESS)
-                
             }
         })()
     }, [currentUser])
+
+    const navigateToClickedPunch = (punchId: string, workFlowId: string) => {
+        navigate(`/workflow/${workFlowId}/punch/${punchId}`)
+    }
 
     punches?.sort((a, b) => {
         const dateA = new Date(a.createdDate)
@@ -71,10 +62,6 @@ function ListPunches() {
         return 0
     })
 
-    function clickHandler(punchId: string, workFlowId: string) {
-        navigate(`/workflow/${workFlowId}/punch/${punchId}`)
-    }
-
     if (fetchPunchesStatus === ApiStatus.LOADING) {
         return <Loading text="Loading punches .." />
     }
@@ -82,72 +69,45 @@ function ListPunches() {
     return (
         <>
             <PunchListItem>
-                {punches && punches?.length < 1 ? (
-                    <p>Punches are displayed here..</p>
-                ) : (
-                    <>
-                        {punches?.map((punch, idx) => {
-                            return (
-                                <PunchListBoxContainer
-                                    onClick={() => clickHandler(punch.id, punch.workflowId)}
+                <TableWrapper>
+                    <Table style={{ width: '100%' }}>
+                        <Table.Head>
+                            <Table.Row>
+                                <Table.Cell>Title</Table.Cell>
+                                <Table.Cell>Status</Table.Cell>
+                                <Table.Cell>Date</Table.Cell>
+                            </Table.Row>
+                        </Table.Head>
+                        <Table.Body>
+                            {punches.map((punch, idx) => (
+                                <Table.Row
                                     key={idx}
+                                    onClick={() =>
+                                        navigateToClickedPunch(punch.id, punch.workflowId)
+                                    }
                                 >
-                                    <StatusBadgeContainer>
-                                        <StatusBadge status={punch.status}>
-                                            {punch.status}
-                                        </StatusBadge>
-                                    </StatusBadgeContainer>
-
-                                    <TicketInfo>
-                                        <TicketDetails>
-                                            <Typography>
-                                                Ticket-{punch?.id.split('-')[0]}
-                                            </Typography>
-
-                                            <TicketCardDescription>
-                                                {punch?.checklistTask.description}
-                                            </TicketCardDescription>
-
-                                            {hasPermission && (
-                                                <>
-                                                    <Typography>Created By:</Typography>
-                                                    <CreatedByContainer>
-                                                        <Icon size={18} data={assignment_user} />
-                                                        {punch.user.firstName}
-                                                    </CreatedByContainer>
-                                                </>
-                                            )}
-                                        </TicketDetails>
-                                    </TicketInfo>
-
-                                    <TicketActions>
-                                        <Typography color="disabled">
-                                            {formatDate(punch.createdDate)}
-                                        </Typography>
-                                        <Typography color="disabled">
-                                            {formatTimestamp(punch.createdDate)}
-                                        </Typography>
-                                        <TicketIcons>
-                                            <Icon data={image} />
-                                            <Icon data={file_description} />
-                                        </TicketIcons>
-                                        <TicketButtonContainer>
-                                            <Button
-                                                style={{ padding: '0' }}
-                                                variant="ghost"
-                                                color="primary"
-                                            >
-                                                Details
-                                            </Button>
-                                            <Icon size={16} data={arrow_forward_ios} />
-                                        </TicketButtonContainer>
-                                    </TicketActions>
-                                </PunchListBoxContainer>
-                            )
-                        })}
-                    </>
-                )}
+                                    <Table.Cell>
+                                        <TextWrapper>Ticket-{punch.id}</TextWrapper>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {punch.status === 'Pending' && (
+                                            <Chip variant="default">{punch.status}</Chip>
+                                        )}
+                                        {punch.status === 'Approved' && (
+                                            <Chip variant="active">{punch.status}</Chip>
+                                        )}
+                                        {punch.status === 'Rejected' && (
+                                            <Chip variant="error">{punch.status}</Chip>
+                                        )}
+                                    </Table.Cell>
+                                    <Table.Cell>{formatDate(punch.createdDate)}</Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table>
+                </TableWrapper>
             </PunchListItem>
+
             <>
                 <DefaultNavigation hideNavbar={false} />
             </>
