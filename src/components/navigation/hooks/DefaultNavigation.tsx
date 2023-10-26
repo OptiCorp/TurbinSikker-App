@@ -14,10 +14,10 @@ export const DefaultNavigation: React.FC<{
         path.pathname.includes('Punches') || path.pathname.includes('punch')
             ? 0
             : path.pathname.includes('Checklists') ||
-                path.pathname.includes('MyCheckLists') ||
+                path.pathname.includes('MyChecklists') ||
                 path.pathname.includes('CompletedChecklists')
                 ? 1
-                : path.pathname.includes('Invoice')
+                : path.pathname.includes('Invoices')
                     ? 2
                     : undefined
     )
@@ -58,7 +58,7 @@ export const DefaultNavigation: React.FC<{
                                     icon={assignment}
                                     name="Checklists"
                                     isActive={activeTab === 1}
-                                    to="/CheckLists"
+                                    to="/Checklists"
                                 />
                             )}
                         </StyledTab>
@@ -67,7 +67,7 @@ export const DefaultNavigation: React.FC<{
                             <StyledTab>
                                 <NavItem
                                     icon={credit_card}
-                                    name="Invoicing"
+                                    name="Invoices"
                                     isActive={activeTab === 2}
                                     to="/Invoice"
                                 />
