@@ -80,8 +80,7 @@ export const NavigationMainWrap = styled.div`
     align-items: center;
 `
 export const StyledList = styled(Tabs.List)`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
     width: 100vw;
     height: 100%;
 `
