@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { useRoles } from '../../../services/useRoles'
 import { FooterContainer, StyledList, StyledTab, StyledTabs } from '../styles'
 import { NavItem } from './NavItem'
+import useGlobal from '../../../context/globalContextProvider'
 
 export const DefaultNavigation: React.FC<{
     hideNavbar: boolean
@@ -13,12 +14,12 @@ export const DefaultNavigation: React.FC<{
         path.pathname.includes('Punches') || path.pathname.includes('punch')
             ? 0
             : path.pathname.includes('Checklists') ||
-              path.pathname.includes('MyCheckLists') ||
-              path.pathname.includes('CompletedChecklists')
-            ? 1
-            : path.pathname.includes('Invoice')
-            ? 2
-            : undefined
+                path.pathname.includes('MyChecklists') ||
+                path.pathname.includes('CompletedChecklists')
+                ? 1
+                : path.pathname.includes('Invoices')
+                    ? 2
+                    : undefined
     )
 
     const handleChange = (index: number) => {
@@ -26,6 +27,7 @@ export const DefaultNavigation: React.FC<{
     }
 
     const { isInspector } = useRoles()
+    const { currentUser } = useGlobal()
     return (
         <FooterContainer>
             {!hideNavbar && (
@@ -56,18 +58,27 @@ export const DefaultNavigation: React.FC<{
                                     icon={assignment}
                                     name="Checklists"
                                     isActive={activeTab === 1}
-                                    to="/CheckLists"
+                                    to="/Checklists"
                                 />
                             )}
                         </StyledTab>
-                        <StyledTab>
-                            <NavItem
-                                icon={credit_card}
-                                name="Invoicing"
-                                isActive={activeTab === 2}
-                                to="/Invoice"
-                            />
-                        </StyledTab>
+
+                        {currentUser?.userRole.name === "Leader" ? (
+                            <StyledTab>
+                                <NavItem
+                                    icon={credit_card}
+                                    name="Invoices"
+                                    isActive={activeTab === 2}
+                                    to="/Invoice"
+                                />
+                            </StyledTab>
+                        ) : <></>
+                        }
+
+
+
+
+
                     </StyledList>
                 </StyledTabs>
             )}
