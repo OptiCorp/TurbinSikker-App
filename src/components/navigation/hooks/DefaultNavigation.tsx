@@ -17,7 +17,7 @@ export const DefaultNavigation: React.FC<{
                 path.pathname.includes('MyChecklists') ||
                 path.pathname.includes('CompletedChecklists')
                 ? 1
-                : path.pathname.includes('Invoices')
+                : path.pathname.includes('Invoice')
                     ? 2
                     : undefined
     )
