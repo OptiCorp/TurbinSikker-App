@@ -1,11 +1,4 @@
-import {
-    Button,
-    CircularProgress,
-    Dialog,
-    Icon,
-    TextField,
-    Typography,
-} from '@equinor/eds-core-react'
+import { Button, Dialog, Icon, TextField, Typography } from '@equinor/eds-core-react'
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
@@ -30,7 +23,7 @@ import { PunchUploadContainer } from '../styles'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { ApiStatus, PunchItem, Status, Upload } from '../../../services/apiTypes'
+import { PunchItem, Status, Upload } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
 
 export function AddPunch({ punch }: { punch?: PunchItem }) {
@@ -52,7 +45,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
         setStatus,
     } = useAddPunch()
     const { hasPermission } = useHasPermission()
-    const { fetchUploadStatus, uploads: addedUploads } = usePunch()
+    const { uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
 
     const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
@@ -66,7 +59,7 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
     const path = appLocation.pathname.split('/')
     const lastPathSegment = path[path.length - 1]
     return (
-        <form id="punchForm" style={{ position: 'relative' }} onSubmit={handleSubmit(onSubmit)}>
+        <form id="punchForm" onSubmit={handleSubmit(onSubmit)}>
             <PunchAddContainer>
                 {!(addedUploads?.length > 0) ? (
                     <PunchAddUploadContainer>
@@ -116,19 +109,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     </PunchAddUploadContainer>
                 ) : (
                     <PunchUploadContainer>
-                        {fetchUploadStatus === ApiStatus.LOADING && <CircularProgress />}
-                        {fetchUploadStatus !== ApiStatus.LOADING && (
-                            <PunchUploadContainer>
-                                {addedUploads?.map((upload: Upload, idx) => {
-                                    return (
-                                        <img
-                                            key={idx}
-                                            src={`data:image/png;base64, ${upload.bytes}`}
-                                        />
-                                    )
-                                })}
-                            </PunchUploadContainer>
-                        )}
+                        {addedUploads?.map((upload: Upload, idx) => {
+                            return <img key={idx} src={`data:image/png;base64, ${upload.bytes}`} />
+                        })}
                     </PunchUploadContainer>
                 )}
                 {punch?.checklistTask && (
