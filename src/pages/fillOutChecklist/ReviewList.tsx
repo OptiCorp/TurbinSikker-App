@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from 'react'
 
-import { Checkbox, Typography } from '@equinor/eds-core-react'
+import { Checkbox, Chip, Typography } from '@equinor/eds-core-react'
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../components/modal/useModalHook'
@@ -94,17 +94,18 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
                                 <CustomCategoryName>
                                     {task.category.name}{' '}
                                 </CustomCategoryName>
-
-                                <Typography
-                                    token={{
-                                        textAlign: 'center',
-                                        fontWeight: 600,
-                                        fontSize: '0.8rem',
-                                        color: 'red',
-                                    }}
-                                >
-                                    marked as completed
-                                </Typography>
+                                <Chip variant="active">
+                                    <Typography
+                                        variant="caption"
+                                        token={{
+                                            textAlign: 'center',
+                                            fontWeight: 600,
+                                            fontSize: '0.7rem',
+                                        }}
+                                    >
+                                        marked as completed
+                                    </Typography>
+                                </Chip>
                             </ReviewCardHeader>
                             <CustomCardContent>
                                 <NotApplicableWrap>
@@ -129,10 +130,14 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({
                                 {/* {applicableStatuses[task.id] ? (
                                 <ImageContainer />
                             ) : ( */}{' '}
+                                <Error>
+                                    <Checkbox
+                                        label=""
+                                        checked={checked}
+                                        disabled
+                                    />{' '}
+                                </Error>
                             </CustomCardContent>
-                            <Error>
-                                <Checkbox label="" checked={checked} disabled />{' '}
-                            </Error>
                         </StyledReviewCard>
                     </ReviewWrap>
 

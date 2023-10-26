@@ -14,6 +14,7 @@ export const HeaderContents = styled.div``
 
 export const HeaderLocation = styled.p`
     margin: 0;
+  
     color: ${COLORS.white};
     font-size: 1rem;
 `
