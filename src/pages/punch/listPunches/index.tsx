@@ -1,4 +1,4 @@
-import { Button, Chip, Dialog, Divider, Icon, Table, Typography } from '@equinor/eds-core-react'
+import { Chip, Table } from '@equinor/eds-core-react'
 import { useNavigate } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
@@ -9,7 +9,7 @@ import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { ApiStatus, PunchItem, Status, User } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
-import { formatDate, formatTimestamp } from '../../../helpers/dateFormattingHelpers'
+import { formatDate } from '../../../helpers/dateFormattingHelpers'
 
 function ListPunches() {
     const { currentUser } = useGlobal() as { currentUser: User }
@@ -19,8 +19,7 @@ function ListPunches() {
     const [punches, setPunches] = useState<PunchItem[]>([])
     const [fetchPunchesStatus, setFetchPunchesStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const { isInspector } = useRoles()
-    const [isInfoOpen, setIsInfoOpen] = useState(false)
-    const [activePunch, setActivePunch] = useState<PunchItem>()
+
     useEffect(() => {
         ;(async () => {
             if (isInspector) {
@@ -35,15 +34,7 @@ function ListPunches() {
         })()
     }, [currentUser])
 
-    const handleInfoOpen = (punch: PunchItem) => {
-        setIsInfoOpen(true)
-        setActivePunch(punch)
-    }
-    const handleInfoClose = () => {
-        setIsInfoOpen(false)
-    }
-
-    const clickHandler = (punchId: string, workFlowId: string) => {
+    const navigateToClickedPunch = (punchId: string, workFlowId: string) => {
         navigate(`/workflow/${workFlowId}/punch/${punchId}`)
     }
 
@@ -89,7 +80,12 @@ function ListPunches() {
                         </Table.Head>
                         <Table.Body>
                             {punches.map((punch, idx) => (
-                                <Table.Row key={idx} onClick={() => handleInfoOpen(punch)}>
+                                <Table.Row
+                                    key={idx}
+                                    onClick={() =>
+                                        navigateToClickedPunch(punch.id, punch.workflowId)
+                                    }
+                                >
                                     <Table.Cell>
                                         <TextWrapper>Ticket-{punch.id}</TextWrapper>
                                     </Table.Cell>
@@ -111,38 +107,7 @@ function ListPunches() {
                     </Table>
                 </TableWrapper>
             </PunchListItem>
-            <Dialog open={isInfoOpen} isDismissable onClose={handleInfoClose}>
-                <Dialog.Header>
-                    <Dialog.Title>Info</Dialog.Title>
-                </Dialog.Header>
-                {activePunch && (
-                    <Dialog.CustomContent>
-                        <Typography variant="body_short">
-                            Title: Ticket-{activePunch.id.split('-')[0]}
-                        </Typography>
-                        <Divider color="medium" size="1" variant="small" />
-                        <Typography variant="body_short">Status: {activePunch.status}</Typography>
-                        <Divider color="medium" size="1" variant="small" />
-                        <Typography variant="body_short">
-                            Description: {activePunch.checklistTask.description}
-                        </Typography>
-                        <Divider color="medium" size="1" variant="small" />
-                        <Typography variant="body_short">
-                            Date: {formatDate(activePunch.createdDate)}
-                            {' / '}
-                            {formatTimestamp(activePunch.createdDate)}
-                        </Typography>
-                    </Dialog.CustomContent>
-                )}
-                <Dialog.Actions>
-                    <Button onClick={() => clickHandler(activePunch!.id, activePunch!.workflowId)}>
-                        View
-                    </Button>
-                    <Button variant="ghost" onClick={handleInfoClose}>
-                        Close
-                    </Button>
-                </Dialog.Actions>
-            </Dialog>
+
             <>
                 <DefaultNavigation hideNavbar={false} />
             </>
