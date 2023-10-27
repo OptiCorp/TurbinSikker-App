@@ -116,12 +116,18 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                 )}
                 {punch?.checklistTask && (
                     <>
-                        <Typography variant="h4">Report name</Typography>
-                        <p>{punch?.checklistTask.description}</p>
+                        <Typography style={{ marginTop: '5px' }} variant="h4">
+                            Report name
+                        </Typography>
+                        <Typography variant="body_short">
+                            {punch?.checklistTask.description}
+                        </Typography>
                     </>
                 )}
 
-                <Typography variant="h4">Description</Typography>
+                <Typography style={{ marginTop: '10px' }} variant="h4">
+                    Description
+                </Typography>
                 {appLocation.pathname === '/AddPunch' ? (
                     <TextField
                         id=""
