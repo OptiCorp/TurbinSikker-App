@@ -1,20 +1,16 @@
-import { Typography, Table, Button, Dialog, Input, Label, Chip, Popover, Icon, Divider, Autocomplete, AutocompleteChanges, Radio, } from '@equinor/eds-core-react'
-import { error_filled, info_circle, warning_filled } from '@equinor/eds-icons'
-import { useNavigate, useParams } from 'react-router'
+import { Typography, Table, Button, Dialog, Input, Label, Chip, Divider, Autocomplete, AutocompleteChanges, Radio, } from '@equinor/eds-core-react'
 import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
 
 import {
   TableWrapper, InvoiceListItem, TextWrapper
 } from './styles'
-import { useEffect, useState, useRef } from 'react'
-import { ApiStatus, PunchItem, Invoice, Workflow } from '../../services/apiTypes'
+import { useEffect, useState } from 'react'
+import { Invoice, Workflow } from '../../services/apiTypes'
 import apiService from '../../services/api'
-import { Loading } from '../../components/loading/Loading'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
 
 function ListInvoices() {
   const api = apiService()
-  const navigate = useNavigate()
   const [invoices, setInvoices] = useState<Invoice[]>()
   const [activeInvoice, setActiveInvoice] = useState<Invoice>()
   const [completedWorkflows, setCompletedWorkflows] = useState<Workflow[]>()
@@ -22,9 +18,6 @@ function ListInvoices() {
   const [title, setTitle] = useState<string>("")
   const [hourlyRate, setHourlyRate] = useState<number>(0)
   const [message, setMessage] = useState<string>("")
-  // const createdDate = punch && formatDate(punch.createdDate)
-  // const timestamp = punch && formatTimestamp(punch?.createdDate)
-  const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(ApiStatus.LOADING)
 
   const [isSendOpen, setIsSendOpen] = useState(false);
   const handleSendOpen = () => {
@@ -40,6 +33,7 @@ function ListInvoices() {
     setIsStatusOpen(true);
     setStatus(invoice.status);
     setActiveInvoice(invoice);
+    setMessage(invoice.message);
   };
 
   const handleStatusClose = () => {
@@ -76,7 +70,6 @@ function ListInvoices() {
   }
 
   const sendInvoice = async () => {
-    // const workflowIds =  completedWorkflows!.map((workflow) => workflow.id);
     await api.addInvoice(title, receiver, selectedWorkflows, hourlyRate);
     handleSendClose();
     getAllInvoices();
@@ -100,7 +93,7 @@ function ListInvoices() {
   }
 
   const [selectedWorkflows, setSelectedWorkflows] = useState<string[]>([]);
-  const onChange = (changes: AutocompleteChanges<string>) => {
+  const onChangeOptions = (changes: AutocompleteChanges<string>) => {
     setSelectedWorkflows(changes.selectedItems);
   };
 
@@ -108,6 +101,16 @@ function ListInvoices() {
   const onChangeStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(event.target.value);
   };
+
+  const downloadPDF = async () => {
+    const invoice = await api.getInvoicePdfByInvoiceId(activeInvoice!?.id);
+    const linkSource = `data:application/pdf;base64,${invoice.pdf}`;
+    const downloadLink = document.createElement("a");
+    const fileName = "invoice.pdf";
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
 
   useEffect(() => {
     getAllInvoices();
@@ -172,7 +175,7 @@ function ListInvoices() {
           <Dialog.Actions>
             <div style={{ marginBottom: '10px' }}>
               <Label htmlFor="textfield-normal" label="Message" />
-              <Input id="textfield-normal" autoComplete="off" onChange={handleChangeMessage} />
+              <Input id="textfield-normal" autoComplete="off" value={message} onChange={handleChangeMessage} />
             </div>
             <div>
               <Radio label="Paid" name="group" value="Paid" checked={status === 'Paid'} onChange={onChangeStatus} />
@@ -181,8 +184,6 @@ function ListInvoices() {
               <Radio label="Unpaid" name="group" value="Unpaid" checked={status === 'Unpaid'} onChange={onChangeStatus} />
             </div>
             <Button style={{ marginRight: "10px" }} onClick={() => updateStatus()}>Confirm</Button>
-            {/* <Button style={{ marginRight: "10px" }} onClick={() => updateStatus("Paid")}>Paid</Button>
-            <Button style={{ marginRight: "10px" }} variant="outlined" color="danger" onClick={() => updateStatus("Unpaid")}>Unpaid</Button> */}
             <Button onClick={handleStatusClose} variant="ghost">
               Cancel
             </Button>
@@ -206,7 +207,9 @@ function ListInvoices() {
               <Label htmlFor="textfield-normal" label="Hourly rate ($)" />
               <Input id="textfield-normal" autoComplete="off" onChange={handleChangeHourlyRate} />
             </div>
-            <Autocomplete label="Checklists" options={completedWorkflows!?.map((workflow) => workflow.id)} onOptionsChange={onChange} selectedOptions={selectedWorkflows} multiple />
+            <Autocomplete label="Checklists" options={completedWorkflows!?.map((workflow) => workflow.id)} onOptionsChange={onChangeOptions} selectedOptions={selectedWorkflows} multiple />
+
+
           </Dialog.CustomContent>
           <Dialog.Actions>
             <Button style={{ marginRight: "10px" }} onClick={sendInvoice}>Send</Button>
@@ -270,26 +273,26 @@ function ListInvoices() {
               size="1"
               variant="small"
             />
+            {activeInvoice?.message ? (
+              <>
+                <Typography variant="body_short">
+                  Message: {activeInvoice?.message}
+                </Typography>
+                <Divider
+                  color="medium"
+                  size="1"
+                  variant="small"
+                />
+              </>) : <></>
+            }
             <Typography variant="body_short">
-              Message: {activeInvoice?.message}
-            </Typography>
-            <Divider
-              color="medium"
-              size="1"
-              variant="small"
-            />
-            <Typography variant="body_short">
-              Download PDF: {activeInvoice?.message}
+              <a href="javascript:void(0);" target='_blank' onClick={downloadPDF}>Download PDF</a>
             </Typography>
           </Dialog.CustomContent>
           <Dialog.Actions>
             <Button onClick={handleInfoClose}>Close</Button>
           </Dialog.Actions>
         </Dialog>
-
-
-
-
       </InvoiceListItem>
       <DefaultNavigation hideNavbar={false} />
     </>
