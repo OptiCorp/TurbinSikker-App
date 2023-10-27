@@ -40,7 +40,7 @@ export const Modal = ({ onOpen, onClose, fullscreenIcon, isDismissable, children
                 document.removeEventListener('click', handleOutsideClick)
             }
         }
-    }, [])
+    }, [isDismissable, onClose])
     return (
         <ImageContainer ref={modalRef} onClick={onOpen}>
             {children}
