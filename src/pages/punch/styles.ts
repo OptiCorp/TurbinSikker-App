@@ -38,14 +38,13 @@ export const PunchUploadContainer = styled.div`
         right: 0;
         height: 100%;
         opacity: 50%;
-
         background-color: transparent;
         border: none;
     }
     img {
         width: 100%;
-        height: auto;
-        max-width: 600px;
+        max-height: 200px;
+        object-fit: contain;
     }
 `
 
