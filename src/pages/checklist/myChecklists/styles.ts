@@ -30,13 +30,13 @@ export const StyledHeadContents = styled.h3`
     height: 10px;
     display: inline;
     text-align: left;
-    width: 100%;
+  
 `
 export const StyledHeadTitle = styled.h3`
     height: 10px;
     display: inline;
     text-align: left;
-    width: 100%;
+   
 `
 
 export const MyCheckListCell = styled(Table.Cell)`

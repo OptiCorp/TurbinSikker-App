@@ -22,8 +22,8 @@ import { ListUsers } from './pages/users/listUsers/ListUsers'
 import { useRoles } from './services/useRoles'
 
 export function RoutesContainer() {
-    const { isInspector, isLeader } = useRoles();
-    const { currentUser } = useGlobal();
+    const { isInspector, isLeader } = useRoles()
+    const { currentUser } = useGlobal()
     return (
         <>
             <Routes>
@@ -46,7 +46,7 @@ export function RoutesContainer() {
                             }
                         />
                         <Route
-                            path="/CompletedChecklists"
+                            path="/ForReviewChecklists"
                             element={<ForReviewChecklists />}
                         />
                         <Route
@@ -61,7 +61,7 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 isInspector ? (
-                                    <MyCheckLists />
+                                    <Navigate replace to="MyCheckLists" />
                                 ) : (
                                     <ChecklistComponent />
                                 )
@@ -119,7 +119,7 @@ export function RoutesContainer() {
                     <Route
                         path="/invoice"
                         element={
-                            currentUser?.userRole.name === "Leader" ? (
+                            isLeader ? (
                                 <ListInvoices />
                             ) : (
                                 <Navigate to="/MyChecklists" />

@@ -25,7 +25,8 @@ export const MyCheckLists = () => {
     const api = apiService()
     const [workflow, setWorkFlow] = useState<Workflow[]>([])
     const [checklists, setChecklists] = useState<Checklist[]>([])
-    const { currentUser, openSnackbar, setRefreshList, refreshList } = useGlobal()
+    const { currentUser, openSnackbar, setRefreshList, refreshList } =
+        useGlobal()
     const handleClose = () => {
         setDialogShowing(false)
     }
