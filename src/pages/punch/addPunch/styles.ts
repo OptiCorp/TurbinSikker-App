@@ -28,7 +28,7 @@ export const SeverityContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: start;
-    margin-top: 20px;
+    margin-top: 10px;
 `
 
 export const SeverityButtonWrapper = styled.div`
