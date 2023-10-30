@@ -1,13 +1,12 @@
-import { Typography } from '@equinor/eds-core-react'
+import { Table, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 
 import { UserChip } from '../inprogressChecklists/UserChip'
 import { ChipStatus } from '../inprogressChecklists/chipStatus'
-import { StyledBodyTitle } from '../inprogressChecklists/styles'
 
 import { Workflow } from '../../../services/apiTypes'
-import { CellContentMyList, MyCheckListCell, StyledTableRow } from './styles'
+import { CellContentMyList, StyledTableRow, TitleCellContent } from './styles'
 
 interface PendingCheckListRowProps {
     WorkFlow: Workflow
@@ -26,24 +25,24 @@ export const InspectorPendingRow: FunctionComponent<
     return (
         <>
             <StyledTableRow onClick={() => clickHandler(WorkFlow.id || '')}>
-                <MyCheckListCell>
-                    <StyledBodyTitle>
+                <Table.Cell>
+                    <TitleCellContent>
                         <Typography variant="body_long_bold">
                             {WorkFlow.checklist.title}
                         </Typography>
-                    </StyledBodyTitle>
-                </MyCheckListCell>
-                <MyCheckListCell>
+                    </TitleCellContent>
+                </Table.Cell>
+                <Table.Cell>
                     <CellContentMyList>
                         <UserChip workflow={WorkFlow} />
                     </CellContentMyList>
-                </MyCheckListCell>
+                </Table.Cell>
 
-                <MyCheckListCell>
+                <Table.Cell>
                     <CellContentMyList>
                         <ChipStatus workflow={WorkFlow} />
                     </CellContentMyList>
-                </MyCheckListCell>
+                </Table.Cell>
             </StyledTableRow>
         </>
     )

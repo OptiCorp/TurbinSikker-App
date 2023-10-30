@@ -15,6 +15,7 @@ export const AddTasks = () => {
                 <TitleHeader>
                     <StyledCard>
                         <Card.Content>
+                      
                             <CategorySelector />
                         </Card.Content>
                         <Button id="addTask" type="submit" form="addTask">

@@ -63,13 +63,24 @@ export const StyledCard = styled(Card)`
     font-size: 1.5rem;
     background: white;
     margin: 0 auto;
+    height: min-content;
+    display: flex;
+    position: relative;
     text-align: center;
 `
+
 export const CategoryName = styled.h3`
     text-align: left;
     font-size: 1rem;
     font-weight: 600;
 `
+export const ActionHeader = styled.div`
+    color: red;
+    display: flex;
+
+    flex-direction: row-reverse;
+`
+
 export const Delete = styled.div`
     color: red;
 

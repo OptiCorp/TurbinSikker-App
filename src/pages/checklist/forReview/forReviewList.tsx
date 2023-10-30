@@ -1,4 +1,4 @@
-import { Typography } from '@equinor/eds-core-react'
+import { Table, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 import { UserChip } from '../inprogressChecklists/UserChip'
@@ -6,12 +6,8 @@ import { ChipStatus } from '../inprogressChecklists/chipStatus'
 
 import useGlobal from '../../../context/globalContextProvider'
 import { Workflow } from '../../../services/apiTypes'
-import {
-    CellContentCompleted,
-    CompletedCell,
-    StyledBodyTitleCompleted,
-    StyledTableRowCompleted,
-} from './styles'
+import { CellStatus } from '../inprogressChecklists/styles'
+import { CellContentCompleted, StyledTableRowCompleted } from './styles'
 
 interface CompletedRowProps {
     WorkFlow: Workflow
@@ -35,24 +31,24 @@ export const ForReviewList: FunctionComponent<CompletedRowProps> = ({
     return (
         <>
             <StyledTableRowCompleted onClick={() => clickHandler(WorkFlow.id)}>
-                <CompletedCell>
-                    <StyledBodyTitleCompleted>
+                <Table.Cell>
+                    <CellContentCompleted>
                         <Typography variant="body_long_bold">
                             {WorkFlow.checklist.title}
                         </Typography>
-                    </StyledBodyTitleCompleted>
-                </CompletedCell>
-                <CompletedCell>
+                    </CellContentCompleted>
+                </Table.Cell>
+                <Table.Cell>
                     <CellContentCompleted>
                         <UserChip workflow={WorkFlow} />
                     </CellContentCompleted>
-                </CompletedCell>
+                </Table.Cell>
 
-                <CompletedCell>
-                    <CellContentCompleted>
+                <Table.Cell>
+                    <CellStatus>
                         <ChipStatus workflow={WorkFlow} />
-                    </CellContentCompleted>
-                </CompletedCell>
+                    </CellStatus>
+                </Table.Cell>
             </StyledTableRowCompleted>
         </>
     )
