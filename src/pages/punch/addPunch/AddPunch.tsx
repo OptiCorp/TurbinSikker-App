@@ -111,17 +111,15 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         )}
                     </PunchAddUploadContainer>
                 ) : (
-                    <PunchUploadContainer>
+                    <>
                         {addedUploads?.map((upload: Upload, idx) => {
                             const image = `data:image/png;base64, ${upload.bytes}`
-
                             return (
-                                <>
+                                <PunchUploadContainer key={idx}>
                                     <Modal
                                         onClose={() => setIsOpen(false)}
                                         isDismissable
                                         onOpen={showModal}
-                                        key={idx}
                                     >
                                         <img src={image} alt="Punch image." />
                                     </Modal>
@@ -130,10 +128,10 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                                             <img src={image} alt="Punch image." />
                                         </ModalContent>
                                     )}
-                                </>
+                                </PunchUploadContainer>
                             )
                         })}
-                    </PunchUploadContainer>
+                    </>
                 )}
                 {punch?.checklistTask && (
                     <>
