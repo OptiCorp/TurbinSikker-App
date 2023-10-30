@@ -5,7 +5,6 @@ import { default as useGlobal } from '../../../context/globalContextProvider'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import apiService from '../../../services/api'
 import { PunchItem } from '../../../services/apiTypes'
-import { Punch } from '../types'
 
 type FormValuesPunchEntity = {
     creatorId: string
@@ -111,7 +110,7 @@ export const useAddPunch = () => {
             setPositiveOpen(false)
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Punch added')
-                const json: Promise<Punch> = res.json()
+                const json: Promise<PunchItem> = res.json()
                 const id = (await json).id
                 if (file) {
                     await api.addUpload(id, file)
