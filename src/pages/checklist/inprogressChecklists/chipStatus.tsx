@@ -5,21 +5,31 @@ import { Workflow } from '../../../services/apiTypes'
 
 type ChipStatusProps = {
     workflow: Workflow
-    
 }
 
 export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
     const formattedUpdateDate = formatDate(workflow?.updatedDate ?? '')
+    const createdDate = formatDate(workflow?.createdDate ?? '')
 
     switch (workflow.status) {
         case 'Sent':
             return (
                 <>
-                    <Chip variant="default">Sent</Chip>
+                    <Chip
+                        style={{
+                            margin: '0',
+
+                            textAlign: 'center',
+                        }}
+                        variant="default"
+                    >
+                        Sent
+                    </Chip>
                     <Typography
                         variant="caption"
+                        style={{ margin: '0', paddingLeft: '10px' }}
                         token={{
-                            textAlign: 'center',
+                            lineHeight: '2rem',
                             fontSize: '0.7rem',
                         }}
                     >
@@ -28,16 +38,48 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                 </>
             )
         case 'Committed':
-            return <Chip variant="active">Committed</Chip>
+            return (
+                <>
+                    <Chip
+                        variant="active"
+                        style={{
+                            margin: '0',
+
+                            textAlign: 'center',
+                        }}
+                    >
+                        Committed
+                    </Chip>
+                    <Typography
+                        variant="caption"
+                        style={{ margin: '0', paddingLeft: '10px'}}
+                        token={{
+                            lineHeight: '2rem',
+                            fontSize: '0.7rem',
+                        }}
+                    >
+                        {formattedUpdateDate}
+                    </Typography>
+                </>
+            )
 
         case 'Done':
             return (
                 <>
-                    <Chip disabled>Completed </Chip>
+                    <Chip
+                        disabled
+                        style={{
+                            margin: '0',
+
+                            textAlign: 'center',
+                        }}
+                    >
+                        Completed{' '}
+                    </Chip>
                     <Typography
+                        style={{ margin: '0' }}
                         variant="caption"
                         token={{
-                            textAlign: 'center',
                             fontSize: '0.7rem',
                         }}
                     >
@@ -51,12 +93,11 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                 <>
                     <Chip variant="error">pending</Chip>
                     <Typography
+                        style={{ margin: '0' }}
                         variant="caption"
                         token={{
-                            textAlign: 'center',
                             fontSize: '0.7rem',
                         }}
-                        style={{ margin: '10px' }}
                     >
                         {formattedUpdateDate}
                     </Typography>

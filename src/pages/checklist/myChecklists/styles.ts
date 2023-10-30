@@ -1,44 +1,20 @@
 import { Chip, Dialog, Table, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import { COLORS } from '../../../style/GlobalStyles'
-export const ListWrapperCheckMyList = styled.div`
-    background: whitesmoke;
-    height: 600px;
-    padding-left: 5px;
-    padding-right: 5px;
-    overflow-x: hidden;
-    margin: 10px 0;
-    background: ${COLORS.primary};
-    padding-bottom: 80px;
-    overflow-y: scroll;
-`
-export const BackgroundWrap = styled.div`
-    background: ${COLORS.primary};
-    display: flex;
 
-    align-items: left;
+export const BackgroundWrap = styled.div`
+    display: flex;
+    height: 100%;
     box-shadow:
         rgba(0, 0, 0, 0.12) 0px 1px 3px,
         rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    background: ${COLORS.primary};
+    align-items: left;
     flex-direction: column;
+    padding: 1rem 1rem;
+    padding-bottom: 5rem;
+    overflow-y: scroll;
 `
-
-export const StyledTable = styled(Table)`
-    width: 90%;
-
-    margin: 0 auto;
-`
-
-export const HeadCell = styled(Table.Cell)``
-
-export const StyledHeadContents = styled.h3``
-export const StyledHeadTitle = styled.h3``
-
-export const MyCheckListCell = styled(Table.Cell)`
-    align-items: center;
-`
-
-export const StyledTableBody = styled(Table.Body)``
 
 export const StyledTableRow = styled(Table.Row)`
     cursor: pointer;
@@ -49,17 +25,22 @@ export const StyledTableRow = styled(Table.Row)`
         transform: scale(0.98);
     }
 `
-//sent
+
 export const CellContentMyList = styled.div`
     font-weight: 600;
-    display: flex;
-
+    -webkit-box-align: center;
     min-height: 50px;
-
     margin: 10px 0px;
-    flex-direction: column;
+    width: 100%;
+    display: flex;
     align-items: flex-start;
+
     justify-content: space-evenly;
+    flex-direction: column;
+`
+
+export const TitleCellContent = styled.div`
+    text-indent: -5px;
 `
 export const ButtonWrap = styled.div`
     display: flex;
@@ -80,9 +61,10 @@ export const MakeTitleField = styled(TextField)`
 `
 
 export const StyledChip = styled(Chip)`
-    min-width: 100px;
+    align-items: center;
+
     display: flex;
-    margin: 0;
-    justify-content: center;
+    justify-content: left;
     align-content: center;
+    margin: 0;
 `

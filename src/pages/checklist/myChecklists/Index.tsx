@@ -12,12 +12,7 @@ import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklist } from './LeaderMyChecklists'
-import {
-    BackgroundWrap,
-    ListWrapperCheckMyList,
-    MakeTitleField,
-    StyledTable,
-} from './styles'
+import { BackgroundWrap, MakeTitleField } from './styles'
 
 export const MyCheckLists = () => {
     const api = apiService()
@@ -82,63 +77,54 @@ export const MyCheckLists = () => {
     return (
         <>
             <BackgroundWrap>
-                <ListWrapperCheckMyList>
-                    <BannerComponent />
-                    <StyledTable>
-                        <Table.Head sticky>
-                            <Table.Row>
-                                <Table.Cell>
-                                    <Typography
-                                        group="table"
-                                        variant="cell_header"
-                                        token={{
-                                            fontSize: '1.2rem',  lineHeight: '2em'
-                                         
-                                        }}
-                                    >
-                                        Title
-                                    </Typography>
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <Typography variant="body_long_bold">
-                                        Assigned
-                                    </Typography>
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <Typography variant="body_long_bold">
-                                        Status
-                                    </Typography>
-                                </Table.Cell>
-                            </Table.Row>
-                        </Table.Head>
+                <BannerComponent />
+                <Table>
+                    <Table.Head sticky>
+                        <Table.Row>
+                            <Table.Cell>
+                                <Typography variant="body_long_bold">
+                                    Title
+                                </Typography>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <Typography variant="body_long_bold">
+                                    Assigned
+                                </Typography>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <Typography variant="body_long_bold">
+                                    Status
+                                </Typography>
+                            </Table.Cell>
+                        </Table.Row>
+                    </Table.Head>
 
-                        <Table.Body>
-                            <>
-                                {isInspector ? (
-                                    <>
-                                        {workflow.map((WorkFlow) => (
-                                            <InspectorPendingRow
-                                                WorkFlow={WorkFlow}
-                                                key={WorkFlow.id}
-                                            />
-                                        ))}
-                                    </>
-                                ) : (
-                                    <>
-                                        {checklists?.map((checklist) => (
-                                            <LeaderMyChecklist
-                                                checklist={checklist}
-                                                key={checklist.id}
-                                                setActiveRow={setActiveRow}
-                                                activeRow={activeRow}
-                                            />
-                                        ))}
-                                    </>
-                                )}
-                            </>
-                        </Table.Body>
-                    </StyledTable>
-                </ListWrapperCheckMyList>
+                    <Table.Body>
+                        <>
+                            {isInspector ? (
+                                <>
+                                    {workflow.map((WorkFlow) => (
+                                        <InspectorPendingRow
+                                            WorkFlow={WorkFlow}
+                                            key={WorkFlow.id}
+                                        />
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    {checklists?.map((checklist) => (
+                                        <LeaderMyChecklist
+                                            checklist={checklist}
+                                            key={checklist.id}
+                                            setActiveRow={setActiveRow}
+                                            activeRow={activeRow}
+                                        />
+                                    ))}
+                                </>
+                            )}
+                        </>
+                    </Table.Body>
+                </Table>
             </BackgroundWrap>
 
             {activeRow === true ? (

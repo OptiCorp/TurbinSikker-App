@@ -42,9 +42,8 @@ export const IndexCheckLists = () => {
                             variant="minWidth"
                             onChange={handleChange}
                             activeTab={activeTab}
-                           
                         >
-                            <Tabs.List  style={{marginLeft:'20px'}}>
+                            <Tabs.List>
                                 <Tabs.Tab
                                     as={Link}
                                     to="/MyCheckLists"
@@ -66,7 +65,6 @@ export const IndexCheckLists = () => {
                                     as={Link}
                                     to="/Checklists"
                                     style={{
-                                        
                                         borderBottom: 'none',
                                         borderTopRightRadius: '10px',
                                         borderTopLeftRadius: '10px',

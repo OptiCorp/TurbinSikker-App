@@ -6,12 +6,7 @@ import { useNavigate } from 'react-router'
 
 import { Checklist } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
-import {
-    CellContentMyList,
-    MyCheckListCell,
-    StyledChip,
-    StyledTableRow,
-} from './styles'
+import { CellContentMyList, StyledChip, StyledTableRow } from './styles'
 
 interface CheckListRowProps {
     checklist: Checklist
@@ -55,7 +50,7 @@ export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
                 <StyledTableRow
                     onClick={() => clickHandler(checklist.id || '')}
                 >
-                    <MyCheckListCell>
+                    <Table.Cell>
                         <CellContentMyList>
                             <Typography variant="body_long_bold">
                                 {checklist.title}
@@ -66,13 +61,13 @@ export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
                                 token={{
                                     fontSize: '0.8rem',
                                 }}
-                                style={{ height: '0px', minWidth: '100px' }}
+                                style={{ height: '1rem' }}
                             >
                                 Created {formattedCreatedDate}
                             </Typography>
                         </CellContentMyList>
-                    </MyCheckListCell>
-                    <MyCheckListCell>
+                    </Table.Cell>
+                    <Table.Cell>
                         <CellContentMyList>
                             <StyledChip>
                                 <Icon
@@ -90,10 +85,11 @@ export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
                                 </Typography>
                             </StyledChip>
                         </CellContentMyList>
-                    </MyCheckListCell>
+                    </Table.Cell>
 
                     <Table.Cell>
-                        <Chip> {checklist.status} </Chip>
+                        {' '}
+                        <Chip> {checklist.status} </Chip>{' '}
                     </Table.Cell>
                 </StyledTableRow>
             )}

@@ -25,7 +25,8 @@ export const TabCompletedWrap = styled.div`
 `
 
 export const MainWrap = styled.div`
-    margin: 1rem auto;
-
+    margin: 0;
+    background-color: ${COLORS.whiteSmoke};
     width: 100%;
+    height: 100%;
 `
