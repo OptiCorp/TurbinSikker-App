@@ -5,10 +5,12 @@ import { Workflow } from '../../../services/apiTypes'
 
 type ChipStatusProps = {
     workflow: Workflow
+    
 }
 
 export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
     const formattedUpdateDate = formatDate(workflow?.updatedDate ?? '')
+
     switch (workflow.status) {
         case 'Sent':
             return (

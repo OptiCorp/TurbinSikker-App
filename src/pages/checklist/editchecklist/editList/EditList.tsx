@@ -1,4 +1,5 @@
-import { Chip } from '@equinor/eds-core-react'
+import { Button, Chip, Icon } from '@equinor/eds-core-react'
+import { remove_outlined } from '@equinor/eds-icons'
 import { useState } from 'react'
 import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
@@ -8,6 +9,7 @@ import { Checklist, Task } from '../../../../services/apiTypes'
 import { PreviewListPoints } from '../../previewCheckList/styles'
 import { useEditChecklist } from '../hooks/useEditChecklist'
 import {
+    ActionHeader,
     CategoryName,
     Container,
     Delete,
@@ -69,6 +71,21 @@ export const EditList = ({ tasks }: Props) => {
                 <Container key={task.id}>
                     <CategoryName>{task.category.name}</CategoryName>
                     <StyledCard>
+                        {' '}
+                        <ActionHeader>
+                            <Button
+                                style={{ color: 'red' }}
+                                variant="ghost_icon"
+                                color="danger"
+                                aria-label="add action"
+                            >
+                                <Icon
+                                    color="danger"
+                                    data={remove_outlined}
+                                    size={24}
+                                ></Icon>
+                            </Button>
+                        </ActionHeader>
                         <PreviewListPoints
                             label=""
                             key={task?.id}

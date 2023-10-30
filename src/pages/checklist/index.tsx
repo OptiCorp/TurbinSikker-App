@@ -19,9 +19,10 @@ export const IndexCheckLists = () => {
     //     path.pathname.includes('MyCheckLists')? 0 : 1
     // )
     const [activeTab, setActiveTab] = useState<number | undefined>(
-        path.pathname.includes('MyChecklists') 
+        path.pathname.includes('MyChecklists')
             ? 0
-            : path.pathname.includes('Checklists')|| path.pathname.includes('/')
+            : path.pathname.includes('Checklists') ||
+              path.pathname.includes('/')
             ? 1
             : path.pathname.includes('ForReviewChecklists')
             ? 2
@@ -41,8 +42,9 @@ export const IndexCheckLists = () => {
                             variant="minWidth"
                             onChange={handleChange}
                             activeTab={activeTab}
+                           
                         >
-                            <Tabs.List>
+                            <Tabs.List  style={{marginLeft:'20px'}}>
                                 <Tabs.Tab
                                     as={Link}
                                     to="/MyCheckLists"
@@ -64,6 +66,7 @@ export const IndexCheckLists = () => {
                                     as={Link}
                                     to="/Checklists"
                                     style={{
+                                        
                                         borderBottom: 'none',
                                         borderTopRightRadius: '10px',
                                         borderTopLeftRadius: '10px',

@@ -92,7 +92,8 @@ export const SelectComponent = () => {
                                 }
                             />
                         )}
-                    />
+                 />{' '}
+               
                 </RecipientsContainer>
             </SendBox>
         </>

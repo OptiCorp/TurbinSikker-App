@@ -7,7 +7,7 @@ import apiService from '../../../services/api'
 import { Checklist, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 
-import { HeadCell } from '../myChecklists/styles'
+import { HeadCell, StyledTable } from '../myChecklists/styles'
 import { InspectorOutgoingCheckLists } from './inspectorOutgoingChecklists'
 import { LeaderInprogressChecklists } from './LeaderInprogressChecklists'
 import {
@@ -61,7 +61,7 @@ export const ChecklistComponent = () => {
         <>
             <Wrap>
                 <ListWrapperCheckL>
-                    <Table>
+                    <StyledTable>
                         <Table.Head sticky>
                             <Table.Row>
                                 <HeadCell>
@@ -106,7 +106,7 @@ export const ChecklistComponent = () => {
                                 )}
                             </>
                         </Table.Body>
-                    </Table>
+                    </StyledTable>
                 </ListWrapperCheckL>
             </Wrap>
             <DefaultNavigation hideNavbar={false} />

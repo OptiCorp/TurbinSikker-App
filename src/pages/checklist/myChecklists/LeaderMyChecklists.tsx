@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
 
-import { Chip, Icon, Typography } from '@equinor/eds-core-react'
+import { Chip, Icon, Table, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
@@ -19,7 +19,7 @@ interface CheckListRowProps {
     setActiveRow: (open: boolean) => void
 }
 
-export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
+export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
     checklist,
 }) => {
     const formatDate = (dateString: string | null) => {
@@ -92,13 +92,9 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                         </CellContentMyList>
                     </MyCheckListCell>
 
-                    <MyCheckListCell>
-                        <CellContentMyList>
-                            <Chip variant="active" style={{ margin: '0 auto' }}>
-                                {checklist.status}
-                            </Chip>
-                        </CellContentMyList>
-                    </MyCheckListCell>
+                    <Table.Cell>
+                        <Chip> {checklist.status} </Chip>
+                    </Table.Cell>
                 </StyledTableRow>
             )}
         </>

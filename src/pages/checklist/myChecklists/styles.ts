@@ -22,30 +22,23 @@ export const BackgroundWrap = styled.div`
         rgba(0, 0, 0, 0.24) 0px 1px 2px;
     flex-direction: column;
 `
-export const HeadCell = styled(Table.Cell)`
-    width: 300px;
+
+export const StyledTable = styled(Table)`
+    width: 90%;
+
+    margin: 0 auto;
 `
 
-export const StyledHeadContents = styled.h3`
-    height: 10px;
-    display: inline;
-    text-align: left;
-  
-`
-export const StyledHeadTitle = styled.h3`
-    height: 10px;
-    display: inline;
-    text-align: left;
-   
-`
+export const HeadCell = styled(Table.Cell)``
+
+export const StyledHeadContents = styled.h3``
+export const StyledHeadTitle = styled.h3``
 
 export const MyCheckListCell = styled(Table.Cell)`
-    padding-inline: 8px;
+    align-items: center;
 `
 
-export const StyledTableBody = styled(Table.Body)`
-    padding-right: 0;
-`
+export const StyledTableBody = styled(Table.Body)``
 
 export const StyledTableRow = styled(Table.Row)`
     cursor: pointer;
@@ -60,8 +53,9 @@ export const StyledTableRow = styled(Table.Row)`
 export const CellContentMyList = styled.div`
     font-weight: 600;
     display: flex;
-    -webkit-box-align: center;
+
     min-height: 50px;
+
     margin: 10px 0px;
     flex-direction: column;
     align-items: flex-start;
@@ -88,7 +82,7 @@ export const MakeTitleField = styled(TextField)`
 export const StyledChip = styled(Chip)`
     min-width: 100px;
     display: flex;
-    margin: 0 auto;
+    margin: 0;
     justify-content: center;
     align-content: center;
 `

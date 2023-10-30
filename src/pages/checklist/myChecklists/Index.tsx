@@ -1,4 +1,4 @@
-import { Table } from '@equinor/eds-core-react'
+import { Table, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { BannerComponent } from '../../../components/banner/useBanner'
@@ -11,14 +11,12 @@ import { Checklist, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
 import { InspectorPendingRow } from './InspectorPendingRow'
-import { LeaderMyChecklists } from './LeaderMyChecklists'
+import { LeaderMyChecklist } from './LeaderMyChecklists'
 import {
     BackgroundWrap,
-    HeadCell,
     ListWrapperCheckMyList,
     MakeTitleField,
-    StyledHeadContents,
-    StyledHeadTitle,
+    StyledTable,
 } from './styles'
 
 export const MyCheckLists = () => {
@@ -86,22 +84,31 @@ export const MyCheckLists = () => {
             <BackgroundWrap>
                 <ListWrapperCheckMyList>
                     <BannerComponent />
-                    <Table>
+                    <StyledTable>
                         <Table.Head sticky>
                             <Table.Row>
-                                <HeadCell>
-                                    <StyledHeadTitle>Title</StyledHeadTitle>
-                                </HeadCell>
-                                <HeadCell>
-                                    <StyledHeadContents>
+                                <Table.Cell>
+                                    <Typography
+                                        group="table"
+                                        variant="cell_header"
+                                        token={{
+                                            fontSize: '1.2rem',  lineHeight: '2em'
+                                         
+                                        }}
+                                    >
+                                        Title
+                                    </Typography>
+                                </Table.Cell>
+                                <Table.Cell>
+                                    <Typography variant="body_long_bold">
                                         Assigned
-                                    </StyledHeadContents>
-                                </HeadCell>
-                                <HeadCell>
-                                    <StyledHeadContents>
+                                    </Typography>
+                                </Table.Cell>
+                                <Table.Cell>
+                                    <Typography variant="body_long_bold">
                                         Status
-                                    </StyledHeadContents>
-                                </HeadCell>
+                                    </Typography>
+                                </Table.Cell>
                             </Table.Row>
                         </Table.Head>
 
@@ -119,7 +126,7 @@ export const MyCheckLists = () => {
                                 ) : (
                                     <>
                                         {checklists?.map((checklist) => (
-                                            <LeaderMyChecklists
+                                            <LeaderMyChecklist
                                                 checklist={checklist}
                                                 key={checklist.id}
                                                 setActiveRow={setActiveRow}
@@ -130,7 +137,7 @@ export const MyCheckLists = () => {
                                 )}
                             </>
                         </Table.Body>
-                    </Table>
+                    </StyledTable>
                 </ListWrapperCheckMyList>
             </BackgroundWrap>
 
