@@ -22,11 +22,16 @@ import {
     StyledReviewCard,
     StyledSwitch,
 } from './styles'
-import { FillOutListProps } from './types'
+import { ReviewProps } from './types'
 
-export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflow }) => {
+export const ReviewList: FunctionComponent<ReviewProps> = ({
+    tasks,
+    workflow,
+}) => {
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-    const [applicableStatuses, setApplicableStatuses] = useState<Record<string, boolean>>({})
+    const [applicableStatuses, setApplicableStatuses] = useState<
+        Record<string, boolean>
+    >({})
 
     const { workflowId } = useParams() as { workflowId: string }
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
@@ -34,35 +39,35 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
     const navigate = useNavigate()
 
     const api = apiService()
-    const handleSubmit = async () => {
-        if (!currentUser) return
-        try {
-            const res = await api.updateWorkflow(workflowId, 'Done', workflow.user.id)
-            setSubmitDialogShowing(false)
-            if (res.ok) {
-                if (openSnackbar) openSnackbar('Checklist approved')
-                navigate('/Checklists')
-                setRefreshList((prev) => !prev)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const handleSubmit = async () => {
+    //     if (!currentUser) return
+    //     try {
+    //         const res = await api.updateWorkflow(workflowId, 'Done', workflow.user.id)
+    //         setSubmitDialogShowing(false)
+    //         if (res.ok) {
+    //             if (openSnackbar) openSnackbar('Checklist approved')
+    //             navigate('/Checklists')
+    //             setRefreshList((prev) => !prev)
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
-    const handleReject = async () => {
-        if (!currentUser) return
-        try {
-            const res = await api.updateWorkflow(workflowId, 'Sent', workflow.user.id)
-            setRejectDialogShowing(false)
-            if (res.ok) {
-                if (openSnackbar) openSnackbar('Checklist rejected')
-                navigate('/Checklists')
-                setRefreshList((prev) => !prev)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const handleReject = async () => {
+    //     if (!currentUser) return
+    //     try {
+    //         const res = await api.updateWorkflow(workflowId, 'Sent', workflow.user.id)
+    //         setRejectDialogShowing(false)
+    //         if (res.ok) {
+    //             if (openSnackbar) openSnackbar('Checklist rejected')
+    //             navigate('/Checklists')
+    //             setRefreshList((prev) => !prev)
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     const [checked, updateChecked] = useState(true)
     return (
@@ -73,10 +78,11 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                         <StyledReviewCard>
                             <ReviewCardHeader
                                 style={{
-                                    filter: applicableStatuses[task.id] ? 'blur(3px)' : 'none',
+                                    filter: applicableStatuses[task.id]
+                                        ? 'blur(3px)'
+                                        : 'none',
                                 }}
                             >
-
                                 <CustomCategoryName>
                                     {task.category.name}{' '}
                                 </CustomCategoryName>
@@ -92,7 +98,6 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                                         marked as completed
                                     </Typography>
                                 </Chip>
-
                             </ReviewCardHeader>
                             <CustomCardContent>
                                 <NotApplicableWrap>
@@ -114,7 +119,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                                     rows={4}
                                     readOnly
                                 />
-                              
+
                                 <Error>
                                     <Checkbox
                                         label=""
@@ -122,9 +127,6 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                                         disabled
                                     />{' '}
                                 </Error>
-
-                        
-    
                             </CustomCardContent>
                         </StyledReviewCard>
                     </ReviewWrap>
@@ -150,12 +152,16 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                 negativeButtonText="Cancel"
                 positiveButtonText="OK"
                 positiveButtonOnClick={() => {
-                    handleReject()
+                    // handleReject()
                 }}
                 isOpen={rejectDialogShowing}
             >
                 <RejectWrap>
-                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    <Typography
+                        group="input"
+                        variant="text"
+                        token={{ textAlign: 'left' }}
+                    >
                         {workflow.checklist.title} will be send back to{' '}
                     </Typography>
 
@@ -180,7 +186,7 @@ export const ReviewList: FunctionComponent<FillOutListProps> = ({ tasks, workflo
                 positiveButtonText="Submit"
                 positiveButtonOnClick={() => {
                     setSubmitDialogShowing(false)
-                    handleSubmit()
+                    // handleSubmit()
                 }}
                 isOpen={submitDialogShowing}
             ></CustomDialog>

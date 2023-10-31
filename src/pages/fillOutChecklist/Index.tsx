@@ -1,6 +1,8 @@
 import { Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
+import { FormProvider } from 'react-hook-form'
 import { useParams } from 'react-router'
+import useSnackBar from '../../components/snackbar/useSnackBar'
 import { formatDate } from '../../helpers/dateFormattingHelpers'
 import apiService from '../../services/api'
 import { Task, Workflow } from '../../services/apiTypes'
@@ -9,6 +11,7 @@ import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 import { FillOutList } from './FillOutList'
 import { ReviewList } from './ReviewList'
+import { useFillChecklistForm } from './hooks/useFillChecklist'
 import {
     BackgroundWrap,
     Container,
@@ -18,13 +21,13 @@ import {
     StyledCard,
 } from './styles'
 
+export type TaskInfoD = {
+    taskInfos: {
+        taskId: string
+        status: number
+    }
+}
 export const FillOutCheckList = () => {
-    const [workflow, setWorkFlow] = useState<Workflow>()
-    const [tasks, setTasks] = useState<Task[]>([])
-    const { workflowId } = useParams() as { workflowId: string }
-    const api = apiService()
-    const formattedUpdateDate = formatDate(workflow?.updatedDate || '')
-    const { isInspector, isLeader } = useRoles()
     useEffect(() => {
         ;(async (): Promise<void> => {
             try {
@@ -34,25 +37,64 @@ export const FillOutCheckList = () => {
                 if (workFlowData?.checklist.checklistTasks) {
                     setTasks(workFlowData.checklist.checklistTasks)
                 }
+                if (workflow?.taskInfos) {
+                    setTaskInfos(workFlowData.taskInfos)
+                }
             } catch (error) {
                 console.log(error)
             }
         })()
     }, [])
 
-    return (
-        <>
-            <BackgroundWrap>
-                {workflow && isLeader && (
-                    <InfoHeader>
-                        {' '}
-                        <StyledCard>
-                            <EditStyledCardHeader>
-                                {workflow?.checklist.title}{' '}
-                            </EditStyledCardHeader>
+    const { methods, onSubmit } = useFillChecklistForm()
 
-                            <List>
-                                <Container>
+    const { handleSubmit } = methods
+    const { workflowId } = useParams() as { workflowId: string }
+    const api = apiService()
+
+    const { isInspector, isLeader } = useRoles()
+    const { snackbar, setSnackbarText } = useSnackBar()
+
+    const [workflow, setWorkFlow] = useState<Workflow>()
+    const [tasks, setTasks] = useState<Task[]>([])
+    const [taskInfos, setTaskInfos] = useState<TaskInfoD>([{}])
+
+    const formattedUpdateDate = formatDate(workflow?.updatedDate || '')
+    return (
+        <FormProvider {...methods}>
+            {snackbar}
+            <form onSubmit={handleSubmit(onSubmit)} id="fill-checklist">
+                <BackgroundWrap>
+                    {workflow && isLeader && (
+                        <InfoHeader>
+                            {' '}
+                            <StyledCard>
+                                <EditStyledCardHeader>
+                                    {workflow?.checklist.title}{' '}
+                                </EditStyledCardHeader>
+
+                                <List>
+                                    <Container>
+                                        <Typography
+                                            variant="caption"
+                                            token={{
+                                                fontSize: '1rem',
+                                            }}
+                                        >
+                                            {' '}
+                                            Delivered by{' '}
+                                        </Typography>
+                                        <UserChip workflow={workflow} />
+                                    </Container>
+
+                                    <Typography
+                                        variant="caption"
+                                        token={{
+                                            fontSize: '1rem',
+                                        }}
+                                    >
+                                        at {formattedUpdateDate}{' '}
+                                    </Typography>
                                     <Typography
                                         variant="caption"
                                         token={{
@@ -60,51 +102,43 @@ export const FillOutCheckList = () => {
                                         }}
                                     >
                                         {' '}
-                                        Delivered by{' '}
                                     </Typography>
-                                    <UserChip workflow={workflow} />
-                                </Container>
-
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '1rem',
-                                    }}
-                                >
-                                    at {formattedUpdateDate}{' '}
-                                </Typography>
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '1rem',
-                                    }}
-                                >
-                                    {' '}
-                                </Typography>
-                            </List>
-                        </StyledCard>
-                    </InfoHeader>
-                )}
-                <PreviewWrapper>
+                                </List>
+                            </StyledCard>
+                        </InfoHeader>
+                    )}
                     <>
-                        {workflow && isInspector ? (
-                            <FillOutList
-                                workflow={workflow}
-                                tasks={tasks}
-                                key={workflow.id}
-                            />
-                        ) : (
-                            workflow && (
-                                <ReviewList
-                                    workflow={workflow}
-                                    tasks={tasks}
-                                    key={workflow.id}
-                                />
-                            )
-                        )}
+                        <PreviewWrapper>
+                            <>
+                                {workflow && isInspector ? (
+                                    <>
+                                        {taskInfos.map((taskInfo) => (
+                                            <FillOutList
+                                                workflow={workflow}
+                                                tasks={tasks}
+                                                key={workflow.id}
+                                                taskInfo={taskInfo}
+                                            />
+                                        ))}
+                                    </>
+                                ) : (
+                                    <>
+                                        {workflow && (
+                                            <>
+                                                <ReviewList
+                                                    workflow={workflow}
+                                                    tasks={tasks}
+                                                    key={workflow.id}
+                                                />
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        </PreviewWrapper>
                     </>
-                </PreviewWrapper>
-            </BackgroundWrap>
-        </>
+                </BackgroundWrap>
+            </form>
+        </FormProvider>
     )
 }

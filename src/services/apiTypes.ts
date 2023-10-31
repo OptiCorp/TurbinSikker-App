@@ -104,8 +104,14 @@ export type Workflow = {
     updatedDate: null | string
     checklist: Checklist
     user: User
+    completionTimeMinutes: string
+    taskInfos: TaskInfos[]
     creator: User
 }
+
+export type TaskInfo = {}
+
+export type TaskInfos = { id?: string; taskId?: string; status?: number }
 
 export type Invoice = {
     id: string
