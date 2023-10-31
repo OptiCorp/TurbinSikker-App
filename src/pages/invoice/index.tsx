@@ -5,7 +5,7 @@ import {
   TableWrapper, InvoiceListItem, TextWrapper
 } from './styles'
 import { useEffect, useState } from 'react'
-import { Invoice, Workflow } from '../../services/apiTypes'
+import { ApiStatus, Invoice, Workflow } from '../../services/apiTypes'
 import apiService from '../../services/api'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
 import useGlobal from '../../context/globalContextProvider'
