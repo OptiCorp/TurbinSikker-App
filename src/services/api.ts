@@ -626,7 +626,7 @@ const apiService = () => {
         receiver: string,
         workflowIds: string[],
         hourlyRate: number,
-        sender: string | undefined
+        sender: string
     ): Promise<Response> => {
         return await postByFetch('AddInvoice', {
             title: title,
