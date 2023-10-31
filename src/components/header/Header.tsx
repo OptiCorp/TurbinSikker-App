@@ -61,7 +61,7 @@ export const Header = () => {
     }
     useEffect(() => {
         if (!workflow && !checklist && id && currentUser?.id) {
-            ;(async () => {
+            ; (async () => {
                 try {
                     const checklistData = await api.getChecklist(id)
                     setChecklist(checklistData)
@@ -70,7 +70,7 @@ export const Header = () => {
                 }
             })()
         } else {
-            ;(async () => {
+            ; (async () => {
                 if (workflowId)
                     try {
                         const workFlowData = await api.getWorkflow(workflowId)
@@ -115,13 +115,11 @@ export const Header = () => {
         } else if (location.pathname.includes(workflowId && taskId)) {
             pathTitle = 'Create punch'
         } else if (location.pathname.includes('Checklists')) {
-            pathTitle = `${
-                isLeader ? 'Checklists in progress' : 'Outgoing checklists'
-            }`
+            pathTitle = `${isLeader ? 'Checklists in progress' : 'Outgoing checklists'
+                }`
         } else if (location.pathname.includes('MyCheckLists')) {
-            pathTitle = `${
-                isLeader ? 'Checklists templates' : 'Incomming checklists'
-            }`
+            pathTitle = `${isLeader ? 'Checklists templates' : 'Incomming checklists'
+                }`
         } else {
             pathTitle =
                 basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join('') ||
@@ -141,7 +139,7 @@ export const Header = () => {
         <>
             {' '}
             <Sidebar open={open} setOpen={setOpen} />
-            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} />
+            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} />
             <NewTopBar>
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (
