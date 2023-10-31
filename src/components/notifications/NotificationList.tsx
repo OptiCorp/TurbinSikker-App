@@ -9,14 +9,20 @@ import useGlobal from "../../context/globalContextProvider"
 export type Props = {
     open: boolean
     setOpen: (open: boolean) => void
+    getAllNotificationsParent: () => void
 }
 
 
-const NotificationList: FunctionComponent<Props> = ({ open, setOpen }) => {
+const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotificationsParent }) => {
 
-    const client = new WebSocket("wss://pub-sub-test.webpubsub.azure.com/client/hubs/Hub?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3c3M6Ly9wdWItc3ViLXRlc3Qud2VicHVic3ViLmF6dXJlLmNvbS9jbGllbnQvaHVicy9IdWIiLCJpYXQiOjE2OTg2NjY4MDQsImV4cCI6MTY5ODcyNjgwNH0._SOsGcf3OL7XmCfq3LRuBcKt5pvN5eGminPbbrsm-_o")
-    client.onmessage = () => {
-        getAllNotifications()
+    const client = new WebSocket("wss://pub-sub-test.webpubsub.azure.com/client/hubs/Hub?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3c3M6Ly9wdWItc3ViLXRlc3Qud2VicHVic3ViLmF6dXJlLmNvbS9jbGllbnQvaHVicy9IdWIiLCJpYXQiOjE2OTg3NjI2NTYsImV4cCI6MTY5ODgyMjY1Nn0.AhgaZfs_LzKhtFx8YRBcTROBylXuOQyLrEmCk3Wex3A")
+    client.onmessage = (event) => {
+        if (currentUser) {
+            if (event.data === currentUser.id) {
+                getAllNotifications()
+                getAllNotificationsParent()
+            }
+        }
     }
 
     const api = apiService()
@@ -48,14 +54,13 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen }) => {
         setActiveNotification(notification)
         if (notification.notificationStatus === "Unread") {
             await api.updateNotification(notification.id, "Read")
+            getAllNotifications()
+            getAllNotificationsParent()
         }
     }
 
     const closer = () => {
-        if (isInfoOpen) {
-            setIsInfoOpen(false)
-            return
-        }
+        setIsInfoOpen(false)
         setOpen(false)
     }
 
