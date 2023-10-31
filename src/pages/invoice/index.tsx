@@ -11,6 +11,7 @@ import { ApiStatus, PunchItem, Invoice, Workflow } from '../../services/apiTypes
 import apiService from '../../services/api'
 import { Loading } from '../../components/loading/Loading'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
+import useGlobal from '../../context/globalContextProvider'
 
 function ListInvoices() {
   const api = apiService()
@@ -25,6 +26,7 @@ function ListInvoices() {
   // const createdDate = punch && formatDate(punch.createdDate)
   // const timestamp = punch && formatTimestamp(punch?.createdDate)
   const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+  const { currentUser } = useGlobal()
 
   const [isSendOpen, setIsSendOpen] = useState(false);
   const handleSendOpen = () => {
@@ -77,7 +79,9 @@ function ListInvoices() {
 
   const sendInvoice = async () => {
     // const workflowIds =  completedWorkflows!.map((workflow) => workflow.id);
-    await api.addInvoice(title, receiver, selectedWorkflows, hourlyRate);
+    if (currentUser) {
+      await api.addInvoice(title, receiver, selectedWorkflows, hourlyRate, currentUser.id);
+    }
     handleSendClose();
     getAllInvoices();
   }

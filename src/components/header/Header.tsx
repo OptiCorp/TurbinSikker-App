@@ -1,12 +1,13 @@
-import { Icon, TopBar } from '@equinor/eds-core-react'
-import { arrow_back_ios, menu } from '@equinor/eds-icons'
-import { useEffect, useState } from 'react'
+import { Dialog, Icon, TopBar } from '@equinor/eds-core-react'
+import { arrow_back_ios, menu, notifications } from '@equinor/eds-icons'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { Workflow } from '../../services/apiTypes'
+import { Notifications, Workflow } from '../../services/apiTypes'
 import { COLORS } from '../../style/GlobalStyles'
 import Sidebar from '../sidebar/Sidebar'
+import NotificationList from '../notifications/NotificationList'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
@@ -16,9 +17,16 @@ export const Header = () => {
     const location = useLocation()
     const [open, setOpen] = useState(false)
 
+
+    const [read, setRead] = useState(true)
+    const [notificationsOpen, setNotificationsOpen] = useState(false)
+
+
     useEffect(() => {
         setActiveUrl(window.location.pathname)
+        getAllNotifications()
     }, [location])
+
 
     const useBasePath = () => {
         const params = useParams<Record<string, string>>()
@@ -37,18 +45,26 @@ export const Header = () => {
 
     const [title, setTitle] = useState('')
 
+    const getAllNotifications = async () => {
+        if (currentUser) {
+            const notifications = await api.getNotificationsByUser(currentUser.id);
+            setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+        }
+    }
+
+
     useEffect(() => {
         if (!currentUser?.id || !accessToken) return
-        ;async (): Promise<void> => {
-            try {
-                const workFlowData = await api.getWorkflow(id)
+            ; async (): Promise<void> => {
+                try {
+                    const workFlowData = await api.getWorkflow(id)
 
-                setWorkFlow(workFlowData)
-                if (!workFlowData.checklist.checklistTasks) return
-            } catch (error) {
-                console.log(error)
+                    setWorkFlow(workFlowData)
+                    if (!workFlowData.checklist.checklistTasks) return
+                } catch (error) {
+                    console.log(error)
+                }
             }
-        }
     }, [accessToken, currentUser?.id])
 
     useEffect(() => {
@@ -70,13 +86,14 @@ export const Header = () => {
 
     const onClick = () => {
         navigate(-1)
-        
+
     }
 
     return (
         <>
             {' '}
             <Sidebar open={open} setOpen={setOpen} />
+            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} />
             <NewTopBar>
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (
@@ -93,6 +110,21 @@ export const Header = () => {
                     <HeaderLocation>{title}</HeaderLocation>
                 </TopBar.CustomContent>
                 <TopBar.Actions>
+                    {read ? (<Icon
+                        data={notifications}
+                        size={40}
+                        style={{
+                            color: COLORS.dangerRed
+                        }}
+                        onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    />) : (<Icon
+                        data={notifications}
+                        size={40}
+                        style={{
+                            color: COLORS.white
+                        }}
+                        onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    />)}
                     <Icon
                         data={menu}
                         size={40}
