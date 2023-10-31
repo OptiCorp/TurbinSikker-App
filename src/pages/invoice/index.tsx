@@ -5,9 +5,10 @@ import {
   TableWrapper, InvoiceListItem, TextWrapper
 } from './styles'
 import { useEffect, useState } from 'react'
-import { Invoice, Workflow } from '../../services/apiTypes'
+import { ApiStatus, Invoice, Workflow } from '../../services/apiTypes'
 import apiService from '../../services/api'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
+import useGlobal from '../../context/globalContextProvider'
 
 function ListInvoices() {
   const api = apiService()
@@ -18,6 +19,12 @@ function ListInvoices() {
   const [title, setTitle] = useState<string>("")
   const [hourlyRate, setHourlyRate] = useState<number>(0)
   const [message, setMessage] = useState<string>("")
+
+  // const createdDate = punch && formatDate(punch.createdDate)
+  // const timestamp = punch && formatTimestamp(punch?.createdDate)
+  const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+  const { currentUser } = useGlobal()
+
 
   const [isSendOpen, setIsSendOpen] = useState(false);
   const handleSendOpen = () => {
@@ -70,7 +77,12 @@ function ListInvoices() {
   }
 
   const sendInvoice = async () => {
-    await api.addInvoice(title, receiver, selectedWorkflows, hourlyRate);
+
+    // const workflowIds =  completedWorkflows!.map((workflow) => workflow.id);
+    if (currentUser) {
+      await api.addInvoice(title, receiver, selectedWorkflows, hourlyRate, currentUser.id);
+    }
+
     handleSendClose();
     getAllInvoices();
   }
