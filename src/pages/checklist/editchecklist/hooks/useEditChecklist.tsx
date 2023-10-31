@@ -3,13 +3,14 @@ import { useNavigate, useParams } from 'react-router'
 import useGlobal from '../../../../context/globalContextProvider'
 import apiService from '../../../../services/api'
 import { Checklist, Task } from '../../../../services/apiTypes'
+import { useRoles } from '../../../../services/useRoles'
 
 export const useEditChecklist = () => {
     const navigate = useNavigate()
     const [dialogDelete, setDialogDelete] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const { id } = useParams() as { id: string }
-
+    const { isLeader } = useRoles()
     const [task, setTask] = useState<Task | undefined>()
 
     const [checklist, setChecklist] = useState<Checklist>()
@@ -93,7 +94,9 @@ export const useEditChecklist = () => {
             const res = await api.updateChecklist(id, data.title, data.status)
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Checklist updated')
-                navigate('/Checklists')
+                navigate('/MyChecklists', {
+                    state: { isLeader },
+                })
                 setRefreshList((prev) => !prev)
             }
         } catch (error) {

@@ -25,6 +25,7 @@ import { NavActionsComponent } from '../../../components/navigation/hooks/useNav
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import { PunchItem, Status, Upload } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
+import { Modal, ModalContent } from './ImageModal'
 
 export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
@@ -47,13 +48,15 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
     const { hasPermission } = useHasPermission()
     const { uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
-
+    const [isOpen, setIsOpen] = useState(false)
     const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
             setFile(e.target.files[0])
         }
     }
+
+    const showModal = () => setIsOpen((prev) => !prev)
 
     const disabled = hasPermission || (!hasPermission && punch?.status === 'Pending')
     const path = appLocation.pathname.split('/')
@@ -108,20 +111,43 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         )}
                     </PunchAddUploadContainer>
                 ) : (
-                    <PunchUploadContainer>
+                    <>
                         {addedUploads?.map((upload: Upload, idx) => {
-                            return <img key={idx} src={`data:image/png;base64, ${upload.bytes}`} />
+                            const image = `data:image/png;base64, ${upload.bytes}`
+                            return (
+                                <PunchUploadContainer key={idx}>
+                                    <Modal
+                                        onClose={() => setIsOpen(false)}
+                                        isDismissable
+                                        onOpen={showModal}
+                                    >
+                                        <img src={image} alt="Punch image." />
+                                    </Modal>
+                                    {isOpen && (
+                                        <ModalContent onClose={() => setIsOpen(false)}>
+                                            <img src={image} alt="Punch image." />
+                                        </ModalContent>
+                                    )}
+                                </PunchUploadContainer>
+                            )
                         })}
-                    </PunchUploadContainer>
+                    </>
                 )}
                 {punch?.checklistTask && (
                     <>
-                        <Typography variant="h4">Report name</Typography>
-                        <p>{punch?.checklistTask.description}</p>
+                        <Typography style={{ marginTop: '5px' }} variant="h4">
+                            Report name
+                        </Typography>
+
+                        <Typography variant="body_short">
+                            {punch?.checklistTask.description}
+                        </Typography>
                     </>
                 )}
 
-                <Typography variant="h4">Description</Typography>
+                <Typography style={{ marginTop: '10px' }} variant="h4">
+                    Description
+                </Typography>
                 {appLocation.pathname === '/AddPunch' ? (
                     <TextField
                         id=""

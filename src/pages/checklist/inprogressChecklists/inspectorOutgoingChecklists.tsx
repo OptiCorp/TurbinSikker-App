@@ -1,12 +1,12 @@
-import { Typography } from '@equinor/eds-core-react'
+import { Table, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { StyledTableRow } from '../myChecklists/styles'
+import { StyledTableRow, TitleCellContent } from '../myChecklists/styles'
 
 import { Workflow } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
-import { CellContent, StyledBodyTitle, StyledTableCellCheckL } from './styles'
+import { CellContent } from './styles'
 
 interface CheckListRowProps {
     WorkFlow: Workflow
@@ -21,23 +21,23 @@ export const InspectorOutgoingCheckLists: FunctionComponent<
     return (
         <>
             <StyledTableRow>
-                <StyledTableCellCheckL>
-                    <StyledBodyTitle>
+                <Table.Cell>
+                    <TitleCellContent>
                         <Typography variant="body_short_bold">
                             {WorkFlow.checklist.title}
-                        </Typography>
-                    </StyledBodyTitle>
-                </StyledTableCellCheckL>
-                <StyledTableCellCheckL>
+                        </Typography>{' '}
+                    </TitleCellContent>
+                </Table.Cell>
+                <Table.Cell>
                     <CellContent>
                         <UserChip workflow={WorkFlow} />
                     </CellContent>
-                </StyledTableCellCheckL>
-                <StyledTableCellCheckL>
+                </Table.Cell>
+                <Table.Cell>
                     <CellContent>
                         <ChipStatus workflow={WorkFlow} />
                     </CellContent>
-                </StyledTableCellCheckL>
+                </Table.Cell>
             </StyledTableRow>
         </>
     )

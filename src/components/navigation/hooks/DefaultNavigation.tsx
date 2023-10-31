@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom'
 import { useRoles } from '../../../services/useRoles'
 import { FooterContainer, StyledList, StyledTab, StyledTabs } from '../styles'
 import { NavItem } from './NavItem'
-import useGlobal from '../../../context/globalContextProvider'
 
 export const DefaultNavigation: React.FC<{
     hideNavbar: boolean
@@ -14,20 +13,25 @@ export const DefaultNavigation: React.FC<{
         path.pathname.includes('Punches') || path.pathname.includes('punch')
             ? 0
             : path.pathname.includes('Checklists') ||
-                path.pathname.includes('MyChecklists') ||
-                path.pathname.includes('CompletedChecklists')
-                ? 1
-                : path.pathname.includes('Invoices')
-                    ? 2
-                    : undefined
+
+              path.pathname.includes('MyChecklists') ||
+              path.pathname.includes('ForReviewChecklists')
+            ? 1
+            : path.pathname.includes('Invoice')
+            ? 2
+            : 1
+
+           
+
     )
 
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
 
-    const { isInspector } = useRoles()
-    const { currentUser } = useGlobal()
+    const { isInspector, isLeader } = useRoles()
+  
+
     return (
         <FooterContainer>
             {!hideNavbar && (
@@ -63,7 +67,7 @@ export const DefaultNavigation: React.FC<{
                             )}
                         </StyledTab>
 
-                        {currentUser?.userRole.name === "Leader" ? (
+                        {isLeader ? (
                             <StyledTab>
                                 <NavItem
                                     icon={credit_card}
@@ -72,13 +76,9 @@ export const DefaultNavigation: React.FC<{
                                     to="/Invoice"
                                 />
                             </StyledTab>
-                        ) : <></>
-                        }
-
-
-
-
-
+                        ) : (
+                            <></>
+                        )}
                     </StyledList>
                 </StyledTabs>
             )}

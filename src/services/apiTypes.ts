@@ -123,3 +123,12 @@ export type Invoice = {
     workflows: Workflow[]
     message: string
 }
+
+export type Notifications = {
+    id: string
+    message: string
+    notificationStatus: string
+    createdDate: string
+    updatedDate: string
+    notificationType: string
+}

@@ -27,7 +27,7 @@ export const SendCheckList = () => {
                 {snackbar}
                 <form onSubmit={handleSubmit(onSubmit)} id="send-checklist">
                     <SendBackgroundWrap>
-                        <SelectComponent />
+                     <SelectComponent /> 
                     </SendBackgroundWrap>
 
                     <NavActionsComponent

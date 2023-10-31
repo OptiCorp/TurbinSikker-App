@@ -1,13 +1,12 @@
-import { Typography } from '@equinor/eds-core-react'
+import { Table, Typography } from '@equinor/eds-core-react'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import useGlobal from '../../../context/globalContextProvider'
 import { formatDate } from '../../../helpers/dateFormattingHelpers'
 import { Checklist } from '../../../services/apiTypes'
 import { StyledTableRow } from '../myChecklists/styles'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
-import { CellContent, StyledTableCellCheckL } from './styles'
+import { CellContent, CellStatus } from './styles'
 
 interface CheckListRowProps {
     workflow: Checklist
@@ -23,7 +22,6 @@ export const LeaderInprogressChecklists: FunctionComponent<
 
     const formattedCreatedDate = formatDate(workflow.createdDate || '')
 
-    
     return (
         <>
             {workflow.workflows.map((workflow) => (
@@ -31,7 +29,7 @@ export const LeaderInprogressChecklists: FunctionComponent<
                     <StyledTableRow
                         onClick={() => clickHandler(workflow.checklist.id)}
                     >
-                        <StyledTableCellCheckL>
+                        <Table.Cell>
                             <CellContent>
                                 <Typography variant="body_long_bold">
                                     {workflow.checklist.title}
@@ -42,22 +40,22 @@ export const LeaderInprogressChecklists: FunctionComponent<
                                     token={{
                                         fontSize: '0.8rem',
                                     }}
-                                    style={{ height: '0px', minWidth: '100px' }}
+                                    style={{ height: '1rem' }}
                                 >
                                     Created {formattedCreatedDate}
                                 </Typography>
                             </CellContent>
-                        </StyledTableCellCheckL>
-                        <StyledTableCellCheckL>
+                        </Table.Cell>
+                        <Table.Cell>
                             <CellContent>
                                 <UserChip workflow={workflow} />
                             </CellContent>
-                        </StyledTableCellCheckL>
-                        <StyledTableCellCheckL>
-                            <CellContent>
-                                <ChipStatus workflow={workflow} />
-                            </CellContent>
-                        </StyledTableCellCheckL>
+                        </Table.Cell>
+                        <Table.Cell>
+                            <CellStatus>
+                                <ChipStatus workflow={workflow} />{' '}
+                            </CellStatus>
+                        </Table.Cell>
                     </StyledTableRow>
                 </>
             ))}{' '}

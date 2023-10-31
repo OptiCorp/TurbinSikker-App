@@ -4,6 +4,7 @@ import {
     Category,
     Checklist,
     Invoice,
+    Notifications,
     PunchItem,
     Task,
     Upload,
@@ -623,13 +624,15 @@ const apiService = () => {
         title: string,
         receiver: string,
         workflowIds: string[],
-        hourlyRate: number
+        hourlyRate: number,
+        sender: string
     ): Promise<Response> => {
         return await postByFetch('AddInvoice', {
             title: title,
             receiver: receiver,
             workflowIds: workflowIds,
             hourlyRate: hourlyRate,
+            sender: sender
         })
     }
 
@@ -647,6 +650,26 @@ const apiService = () => {
 
     const deleteInvoice = async (id: string): Promise<void> => {
         await deleteByFetch(`DeleteInvoice?id=${id}`)
+    }
+
+    const getAllNotifications = async (): Promise<Notifications[]> => {
+        const data = await getByFetch(`GetAllNotifications`)
+        return data
+    }
+
+    const getNotificationsByUser = async (id: string): Promise<Notifications[]> => {
+        const data = await getByFetch(`GetNotificationByUserId?id=${id}`)
+        return data;
+    }
+
+    const updateNotification = async (
+        id: string,
+        notificationStatus: string
+    ): Promise<void> => {
+        await postByFetch('UpdateNotififcation', {
+            id: id,
+            notificationStatus: notificationStatus
+        })
     }
 
     // const sdasdsa = () => {
@@ -721,6 +744,9 @@ const apiService = () => {
         addInvoice,
         updateInvoice,
         deleteInvoice,
+        getAllNotifications,
+        getNotificationsByUser,
+        updateNotification
     }
 }
 
