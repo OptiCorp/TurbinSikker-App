@@ -1,4 +1,3 @@
-import { unstable_renderSubtreeIntoContainer } from 'react-dom'
 import { API_URL } from '../config'
 import { pca } from '../msalconfig'
 import {
