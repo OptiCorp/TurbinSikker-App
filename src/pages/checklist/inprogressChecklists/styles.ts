@@ -1,37 +1,35 @@
-import { Chip, Table } from '@equinor/eds-core-react'
+import { Chip } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import { COLORS } from '../../../style/GlobalStyles'
 
-export const StyledTableCellCheckL = styled(Table.Cell)`
-    padding-inline: 8px;
-`
-
 export const StyledChip = styled(Chip)`
-    min-width: 120px;
     align-items: center;
-
+    width: 100%;
     display: flex;
     justify-content: left;
     align-content: center;
-    margin: 0 auto;
+    margin: 0;
 `
 
 export const CellContent = styled.div`
     font-weight: 600;
-    display: flex;
     -webkit-box-align: center;
+    gap: 0.5rem;
     min-height: 50px;
     margin: 10px 0px;
-    flex-direction: column;
+    width: 100%;
+    display: flex;
     align-items: flex-start;
-    justify-content: space-evenly;
+    justify-content: center;
+    flex-direction: column;
 `
 
-export const StyledBodyTitle = styled.div`
-    height: 10px;
-    display: inline;
-    text-align: left;
-    width: 100%;
+export const CellStatus = styled.div`
+    display: flex;
+    align-items: left;
+
+    flex-direction: column;
+    margin: 0;
 `
 
 export const ListWrapperCheckL = styled.div`
@@ -47,25 +45,26 @@ export const ListWrapperCheckL = styled.div`
 
 export const StyledHeadContents = styled.h3`
     height: 10px;
-    display: inline;
-    text-align: left;
-    width: 100%;
-`
 
-export const StyledHeadTitle = styled.h3`
-    height: 10px;
-    display: inline;
     text-align: left;
     width: 100%;
 `
 
 export const Wrap = styled.div`
     display: flex;
-
+    height: 100%;
     box-shadow:
         rgba(0, 0, 0, 0.12) 0px 1px 3px,
         rgba(0, 0, 0, 0.24) 0px 1px 2px;
     background: ${COLORS.primary};
     align-items: left;
+    flex-direction: column;
+    padding: 1rem 1rem;
+    padding-bottom: 1rem;
+`
+export const StyledHeaderCell = styled.div`
+    display: flex;
+    -webkit-box-align: center;
+
     flex-direction: column;
 `

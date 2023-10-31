@@ -20,6 +20,7 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
                     variant="caption"
                     token={{
                         fontSize: '0.8rem',
+                        lineHeight: '1rem',
                     }}
                 >
                     {isInspector ? (

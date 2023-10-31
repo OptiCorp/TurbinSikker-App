@@ -26,14 +26,7 @@ export const EditStyledCardHeader = styled(Card.Header)`
     height: 1rem;
 `
 
-export const ReviewCardHeader = styled(Card.Header)`
-    display: flex;
-    align-items: baseline;
-    width: 90%;
-    justify-content: space-between;
-    align-content: flex-start;
-    flex-direction: row;
-`
+export const ReviewCardHeader = styled(Card.Header)``
 
 export const List = styled.ul`
     display: flex;
@@ -82,8 +75,10 @@ export const ImageContainer = styled.div`
 export const CustomCard = styled(Card)`
     font-size: 1.5rem;
     display: grid;
+    padding-top: 1rem;
     grid-template-columns: 1fr;
-    grid-template-rows: 30px 20px 30px;
+    grid-template-rows: 10px 10px 20px;
+    height: 130px;
     row-gap: 2rem;
     padding-bottom: 1rem;
     margin: 0 auto;
@@ -91,17 +86,25 @@ export const CustomCard = styled(Card)`
 
 export const StyledReviewCard = styled(Card)`
     font-size: 1.5rem;
-    align-items: flex-start;
-    display: flex;
+    display: grid;
+    padding-top: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 10px 10px 20px;
+    height: 130px;
+    row-gap: 2rem;
+    align-content: space-between;
+    padding-bottom: 1rem;
+    margin: 0 auto;
 `
 
 export const CustomCardContent = styled(Card.Content)`
     font-size: 1.5rem;
     display: flex;
     height: 60px;
-    width: 93%;
-    margin: 0 auto;
+
+    margin: 0;
     align-items: baseline;
+    width: 96%;
 `
 
 export const SubmitErrorContainer = styled.div`

@@ -60,7 +60,7 @@ export const ImageContainerActive = styled.div`
     align-items: center;
 `
 
-export const StyledTab = styled(Tabs.Tab)`
+export const StyledTab = styled.div`
     display: flex;
     color: ${COLORS.white};
     justify-content: center;
@@ -68,7 +68,8 @@ export const StyledTab = styled(Tabs.Tab)`
     text-decoration: none;
     width: 100%;
     border-bottom: none;
-` as typeof Tabs.Tab
+`
+
 export const NavigationMainWrap = styled.div`
     border-bottom: none;
     color: ${COLORS.white};
@@ -80,8 +81,7 @@ export const NavigationMainWrap = styled.div`
     align-items: center;
 `
 export const StyledList = styled(Tabs.List)`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
     width: 100vw;
     height: 100%;
 `

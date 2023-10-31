@@ -49,11 +49,7 @@ export const NavItem = ({
     return (
         <Link to={to} style={{ textDecoration: 'none' }}>
             <ImageContainerActive>
-                {/* {currentUser && (
-                    <NotificationBadge
-                        count={countCommittedWorkflows(currentUser.id)}
-                    />
-                )} */}
+          
                 <Icon
                     data={icon}
                     size={24}

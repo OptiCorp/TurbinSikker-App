@@ -13,19 +13,25 @@ export const DefaultNavigation: React.FC<{
         path.pathname.includes('Punches') || path.pathname.includes('punch')
             ? 0
             : path.pathname.includes('Checklists') ||
-              path.pathname.includes('MyCheckLists') ||
-              path.pathname.includes('CompletedChecklists')
+
+              path.pathname.includes('MyChecklists') ||
+              path.pathname.includes('ForReviewChecklists')
             ? 1
             : path.pathname.includes('Invoice')
             ? 2
-            : undefined
+            : 1
+
+           
+
     )
 
     const handleChange = (index: number) => {
         setActiveTab(index)
     }
 
-    const { isInspector } = useRoles()
+    const { isInspector, isLeader } = useRoles()
+  
+
     return (
         <FooterContainer>
             {!hideNavbar && (
@@ -56,18 +62,23 @@ export const DefaultNavigation: React.FC<{
                                     icon={assignment}
                                     name="Checklists"
                                     isActive={activeTab === 1}
-                                    to="/CheckLists"
+                                    to="/Checklists"
                                 />
                             )}
                         </StyledTab>
-                        <StyledTab>
-                            <NavItem
-                                icon={credit_card}
-                                name="Invoicing"
-                                isActive={activeTab === 2}
-                                to="/Invoice"
-                            />
-                        </StyledTab>
+
+                        {isLeader ? (
+                            <StyledTab>
+                                <NavItem
+                                    icon={credit_card}
+                                    name="Invoices"
+                                    isActive={activeTab === 2}
+                                    to="/Invoice"
+                                />
+                            </StyledTab>
+                        ) : (
+                            <></>
+                        )}
                     </StyledList>
                 </StyledTabs>
             )}

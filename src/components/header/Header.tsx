@@ -4,7 +4,8 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { Notifications, Workflow } from '../../services/apiTypes'
+import { Notifications, Checklist, Workflow } from '../../services/apiTypes'
+import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import Sidebar from '../sidebar/Sidebar'
 import NotificationList from '../notifications/NotificationList'
@@ -13,14 +14,16 @@ import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 export const Header = () => {
     const navigate = useNavigate()
     const [activeUrl, setActiveUrl] = useState<string>('')
-
+    const [checklist, setChecklist] = useState<Checklist>()
     const location = useLocation()
     const [open, setOpen] = useState(false)
+    const { isInspector, isLeader } = useRoles()
+    const api = apiService()
+
 
 
     const [read, setRead] = useState(true)
     const [notificationsOpen, setNotificationsOpen] = useState(false)
-
 
     useEffect(() => {
         setActiveUrl(window.location.pathname)
@@ -36,10 +39,8 @@ export const Header = () => {
             location.pathname.slice(1)
         )
     }
-
-    const { id } = useParams() as { id: string }
-    const api = apiService()
     const basePath = useBasePath()
+
     const { accessToken, currentUser } = useGlobal()
     const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
 
@@ -52,42 +53,89 @@ export const Header = () => {
         }
     }
 
-
+    const { id, workflowId, taskId, punchId } = useParams() as {
+        id: string
+        taskId: string
+        workflowId: string
+        punchId: string
+    }
     useEffect(() => {
-        if (!currentUser?.id || !accessToken) return
-            ; async (): Promise<void> => {
+        if (!workflow && !checklist && id && currentUser?.id) {
+            ;(async () => {
                 try {
-                    const workFlowData = await api.getWorkflow(id)
-
-                    setWorkFlow(workFlowData)
-                    if (!workFlowData.checklist.checklistTasks) return
+                    const checklistData = await api.getChecklist(id)
+                    setChecklist(checklistData)
                 } catch (error) {
                     console.log(error)
                 }
-            }
-    }, [accessToken, currentUser?.id])
+            })()
+        } else {
+            ;(async () => {
+                if (workflowId)
+                    try {
+                        const workFlowData = await api.getWorkflow(workflowId)
+                        setWorkFlow(workFlowData)
+                    } catch (error) {
+                        console.log(error)
+                        console.log('test')
+                    }
+            })()
+        }
+    }, [currentUser?.id, id, workflowId])
 
     useEffect(() => {
         let pathTitle = ''
-        if (location.pathname.includes('FillOutCheckList') && workflow) {
+
+        if (location.pathname.includes('FillOutCheckList')) {
             pathTitle =
-                workflow.checklist?.title + ' ' + workflow.id.slice(10, -18) ||
+                workflow?.checklist.title + ' ' + workflow?.id.slice(10, -18) ||
                 ''
         } else if (location.pathname === '/AddUser/') {
-            pathTitle = location.pathname.slice(1, -1)
+            pathTitle = 'Add user'
+        } else if (location.pathname === '/ListUsers/') {
+            pathTitle = 'List of users'
+        } else if (location.pathname.includes('PreviewCheckList')) {
+            pathTitle = checklist?.title || ''
+        } else if (location.pathname.includes('ForReviewChecklists')) {
+            pathTitle = 'For review'
+        } else if (location.pathname.includes('EditCheckList')) {
+            pathTitle = 'Edit' + ' ' + checklist?.title || ''
+        } else if (location.pathname === '/SendCheckList/') {
+            pathTitle = 'Send checklist' || ''
+        } else if (location.pathname === `/SendChecklist/${id}`) {
+            pathTitle = 'Send' + ' ' + checklist?.title || ''
+        } else if (
+            location.pathname === `/workflow/${workflowId}/punch/${punchId}`
+        ) {
+            pathTitle =
+                (workflow?.checklist.title || '') +
+                ' ' +
+                ' Punch ' +
+                punchId.slice(0, -28)
+        } else if (location.pathname.includes(workflowId && taskId)) {
+            pathTitle = 'Create punch'
+        } else if (location.pathname.includes('Checklists')) {
+            pathTitle = `${
+                isLeader ? 'Checklists in progress' : 'Outgoing checklists'
+            }`
+        } else if (location.pathname.includes('MyCheckLists')) {
+            pathTitle = `${
+                isLeader ? 'Checklists templates' : 'Incomming checklists'
+            }`
         } else {
             pathTitle =
-                basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join(' ') ||
+                basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join('') ||
                 basePath ||
-                'Checklists'
+                ''
         }
         setTitle(pathTitle)
-    }, [location.pathname, basePath, workflow, workflow?.checklist?.title])
+    }, [location.pathname, basePath, workflow, checklist])
 
     const onClick = () => {
         navigate(-1)
-
     }
+
+    console.log(location.pathname)
 
     return (
         <>

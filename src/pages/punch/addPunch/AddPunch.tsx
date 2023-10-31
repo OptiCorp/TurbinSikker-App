@@ -1,11 +1,4 @@
-import {
-    Button,
-    CircularProgress,
-    Dialog,
-    Icon,
-    TextField,
-    Typography,
-} from '@equinor/eds-core-react'
+import { Button, Dialog, Icon, TextField, Typography } from '@equinor/eds-core-react'
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
@@ -30,8 +23,9 @@ import { PunchUploadContainer } from '../styles'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { ApiStatus, PunchItem, Status, Upload } from '../../../services/apiTypes'
+import { PunchItem, Status, Upload } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
+import { Modal, ModalContent } from './ImageModal'
 
 export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
@@ -52,9 +46,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
         setStatus,
     } = useAddPunch()
     const { hasPermission } = useHasPermission()
-    const { fetchUploadStatus, uploads: addedUploads } = usePunch()
+    const { uploads: addedUploads } = usePunch()
     const appLocation = useLocation()
-
+    const [isOpen, setIsOpen] = useState(false)
     const [rejectMessageDialog, setRejectMessageDialog] = useState(true)
     function loadFile(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) {
@@ -62,11 +56,13 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
         }
     }
 
+    const showModal = () => setIsOpen((prev) => !prev)
+
     const disabled = hasPermission || (!hasPermission && punch?.status === 'Pending')
     const path = appLocation.pathname.split('/')
     const lastPathSegment = path[path.length - 1]
     return (
-        <form id="punchForm" style={{ position: 'relative' }} onSubmit={handleSubmit(onSubmit)}>
+        <form id="punchForm" onSubmit={handleSubmit(onSubmit)}>
             <PunchAddContainer>
                 {!(addedUploads?.length > 0) ? (
                     <PunchAddUploadContainer>
@@ -115,30 +111,43 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         )}
                     </PunchAddUploadContainer>
                 ) : (
-                    <PunchUploadContainer>
-                        {fetchUploadStatus === ApiStatus.LOADING && <CircularProgress />}
-                        {fetchUploadStatus !== ApiStatus.LOADING && (
-                            <PunchUploadContainer>
-                                {addedUploads?.map((upload: Upload, idx) => {
-                                    return (
-                                        <img
-                                            key={idx}
-                                            src={`data:image/png;base64, ${upload.bytes}`}
-                                        />
-                                    )
-                                })}
-                            </PunchUploadContainer>
-                        )}
-                    </PunchUploadContainer>
+                    <>
+                        {addedUploads?.map((upload: Upload, idx) => {
+                            const image = `data:image/png;base64, ${upload.bytes}`
+                            return (
+                                <PunchUploadContainer key={idx}>
+                                    <Modal
+                                        onClose={() => setIsOpen(false)}
+                                        isDismissable
+                                        onOpen={showModal}
+                                    >
+                                        <img src={image} alt="Punch image." />
+                                    </Modal>
+                                    {isOpen && (
+                                        <ModalContent onClose={() => setIsOpen(false)}>
+                                            <img src={image} alt="Punch image." />
+                                        </ModalContent>
+                                    )}
+                                </PunchUploadContainer>
+                            )
+                        })}
+                    </>
                 )}
                 {punch?.checklistTask && (
                     <>
-                        <Typography variant="h4">Report name</Typography>
-                        <p>{punch?.checklistTask.description}</p>
+                        <Typography style={{ marginTop: '5px' }} variant="h4">
+                            Report name
+                        </Typography>
+
+                        <Typography variant="body_short">
+                            {punch?.checklistTask.description}
+                        </Typography>
                     </>
                 )}
 
-                <Typography variant="h4">Description</Typography>
+                <Typography style={{ marginTop: '10px' }} variant="h4">
+                    Description
+                </Typography>
                 {appLocation.pathname === '/AddPunch' ? (
                     <TextField
                         id=""

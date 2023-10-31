@@ -20,7 +20,7 @@ export const useAddTaskForm = () => {
     const appLocation = useLocation()
     const { currentUser } = useGlobal()
     const methods = useForm<FormData>()
-    const { handleSubmit, control } = methods
+    const { handleSubmit, control, reset, resetField } = methods
     const [selectedOption, setSelectedOption] = useState('')
     const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const api = apiService()
@@ -32,6 +32,7 @@ export const useAddTaskForm = () => {
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task added')
                 if (res.ok) setRefreshList((prev) => !prev)
+                if (res.ok) reset(data)
             }
         } catch (error) {
             console.log(error)
@@ -82,7 +83,10 @@ export const useAddTaskForm = () => {
         handleSubmit,
         location: appLocation.pathname,
         setSelectedOption,
+        reset,
+        resetField,
         category,
+        selectedOption,
         tasks,
     }
 }

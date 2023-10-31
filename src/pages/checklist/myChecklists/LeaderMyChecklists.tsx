@@ -1,17 +1,12 @@
 import { FunctionComponent } from 'react'
 
-import { Chip, Icon, Typography } from '@equinor/eds-core-react'
+import { Chip, Icon, Table, Typography } from '@equinor/eds-core-react'
 import { assignment_user } from '@equinor/eds-icons'
 import { useNavigate } from 'react-router'
 
 import { Checklist } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
-import {
-    CellContentMyList,
-    MyCheckListCell,
-    StyledChip,
-    StyledTableRow,
-} from './styles'
+import { CellContentMyList, StyledChip, StyledTableRow } from './styles'
 
 interface CheckListRowProps {
     checklist: Checklist
@@ -19,7 +14,7 @@ interface CheckListRowProps {
     setActiveRow: (open: boolean) => void
 }
 
-export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
+export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
     checklist,
 }) => {
     const formatDate = (dateString: string | null) => {
@@ -55,7 +50,7 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                 <StyledTableRow
                     onClick={() => clickHandler(checklist.id || '')}
                 >
-                    <MyCheckListCell>
+                    <Table.Cell>
                         <CellContentMyList>
                             <Typography variant="body_long_bold">
                                 {checklist.title}
@@ -66,13 +61,13 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                 token={{
                                     fontSize: '0.8rem',
                                 }}
-                                style={{ height: '0px', minWidth: '100px' }}
+                                style={{ height: '1rem' }}
                             >
                                 Created {formattedCreatedDate}
                             </Typography>
                         </CellContentMyList>
-                    </MyCheckListCell>
-                    <MyCheckListCell>
+                    </Table.Cell>
+                    <Table.Cell>
                         <CellContentMyList>
                             <StyledChip>
                                 <Icon
@@ -90,15 +85,12 @@ export const LeaderMyChecklists: FunctionComponent<CheckListRowProps> = ({
                                 </Typography>
                             </StyledChip>
                         </CellContentMyList>
-                    </MyCheckListCell>
+                    </Table.Cell>
 
-                    <MyCheckListCell>
-                        <CellContentMyList>
-                            <Chip variant="active" style={{ margin: '0 auto' }}>
-                                {checklist.status}
-                            </Chip>
-                        </CellContentMyList>
-                    </MyCheckListCell>
+                    <Table.Cell>
+                        {' '}
+                        <Chip> {checklist.status} </Chip>{' '}
+                    </Table.Cell>
                 </StyledTableRow>
             )}
         </>

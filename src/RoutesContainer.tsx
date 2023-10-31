@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import Layout from './Layout'
 import { ProtectedRoute } from './ProtectedRoute'
 
-import { GlobalProvider } from './context/globalContextProvider'
+import useGlobal, { GlobalProvider } from './context/globalContextProvider'
 import { IndexCheckLists } from './pages/checklist'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { ForReviewChecklists } from './pages/checklist/forReview/Index'
@@ -23,6 +23,7 @@ import { useRoles } from './services/useRoles'
 
 export function RoutesContainer() {
     const { isInspector, isLeader } = useRoles()
+    const { currentUser } = useGlobal()
     return (
         <>
             <Routes>
@@ -45,7 +46,7 @@ export function RoutesContainer() {
                             }
                         />
                         <Route
-                            path="/CompletedChecklists"
+                            path="/ForReviewChecklists"
                             element={<ForReviewChecklists />}
                         />
                         <Route
@@ -60,7 +61,7 @@ export function RoutesContainer() {
                             path="/"
                             element={
                                 isInspector ? (
-                                    <MyCheckLists />
+                                    <Navigate replace to="MyCheckLists" />
                                 ) : (
                                     <ChecklistComponent />
                                 )
@@ -115,7 +116,16 @@ export function RoutesContainer() {
                         element={<AddPunch />}
                     />
 
-                    <Route path="/invoice" element={<ListInvoices />} />
+                    <Route
+                        path="/invoice"
+                        element={
+                            isLeader ? (
+                                <ListInvoices />
+                            ) : (
+                                <Navigate to="/MyChecklists" />
+                            )
+                        }
+                    />
 
                     <Route path="/EditUser/:id" element={<AddUser />} />
                     <Route path="/User/:id" element={<AddUser />} />

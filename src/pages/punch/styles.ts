@@ -6,8 +6,6 @@ export const PunchWrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    max-width: 768px;
-    /* padding: 20px; */
 
     h4 {
         font-weight: normal;
@@ -32,29 +30,26 @@ export const PunchUploadContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
     min-height: 100px;
     position: relative;
-    max-height: 175px;
+
     button {
         position: absolute;
         right: 0;
         height: 100%;
         opacity: 50%;
-
         background-color: transparent;
         border: none;
     }
-
     img {
         width: 100%;
-        margin: auto;
+        max-height: 200px;
+        object-fit: contain;
     }
 `
 
 export const SeverityIconContainer = styled.div`
     align-items: center;
-    /* padding-left: 2rem; */
     gap: 4;
 `
 
