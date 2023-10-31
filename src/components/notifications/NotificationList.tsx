@@ -82,32 +82,30 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen }) => {
                 {!isInfoOpen
                     ?
                     (
-                        <center>
-                            <Table style={{ width: '100%' }}>
-                                <Table.Head>
-                                    <Table.Row>
-                                        <Table.Cell>Type</Table.Cell>
-                                        <Table.Cell>Message</Table.Cell>
-                                    </Table.Row>
-                                </Table.Head>
-                                <Table.Body>
-                                    {notificationsList?.map((notify, key) =>
-                                        (notify.notificationStatus === 'Unread')
-                                            ?
-                                            (<Table.Row key={key}>
-                                                <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
-                                                <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
-                                            </Table.Row>)
-                                            :
-                                            (<Table.Row style={{ backgroundColor: COLORS.gray }} key={key}>
-                                                <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
-                                                <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
-                                            </Table.Row>)
+                        <Table style={{ width: '100%' }}>
+                            <Table.Head>
+                                <Table.Row>
+                                    <Table.Cell>Type</Table.Cell>
+                                    <Table.Cell>Message</Table.Cell>
+                                </Table.Row>
+                            </Table.Head>
+                            <Table.Body>
+                                {notificationsList?.map((notify, key) =>
+                                    (notify.notificationStatus === 'Unread')
+                                        ?
+                                        (<Table.Row key={key}>
+                                            <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
+                                            <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
+                                        </Table.Row>)
+                                        :
+                                        (<Table.Row style={{ backgroundColor: COLORS.gray }} key={key}>
+                                            <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
+                                            <Table.Cell onClick={() => handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
+                                        </Table.Row>)
 
-                                    )}
-                                </Table.Body>
-                            </Table>
-                        </center>)
+                                )}
+                            </Table.Body>
+                        </Table>)
                     :
                     (
                         <Table style={{ width: '100%' }}>
