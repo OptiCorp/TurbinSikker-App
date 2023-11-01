@@ -132,3 +132,7 @@ export type Notifications = {
     updatedDate: string
     notificationType: string
 }
+
+export type pubSubToken = {
+    token: string
+}
