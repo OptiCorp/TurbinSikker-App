@@ -4,16 +4,14 @@ import { COLORS } from '../../../style/GlobalStyles'
 
 export const BackgroundWrap = styled.div`
     display: flex;
-    height: 100%;
-    box-shadow:
-        rgba(0, 0, 0, 0.12) 0px 1px 3px,
-        rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    background: ${COLORS.primary};
+    height: min(400px);
     align-items: left;
     flex-direction: column;
     padding: 1rem 1rem;
-    padding-bottom: 5rem;
-    overflow-y: scroll;
+    overflow: scroll;
+    background: ${COLORS.primary};
+    box-shadow: 0 -13px 8px -5px ${COLORS.silverGray};
+    padding-bottom: 4rem;
 `
 
 export const StyledTableRow = styled(Table.Row)`
@@ -40,7 +38,7 @@ export const CellContentMyList = styled.div`
 `
 
 export const TitleCellContent = styled.div`
-    text-indent: -5px;
+    text-wrap: pretty;
 `
 export const ButtonWrap = styled.div`
     display: flex;

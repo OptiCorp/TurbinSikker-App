@@ -5,8 +5,11 @@ import { COLORS } from '../../../style/GlobalStyles'
 export const PreviewWrapper = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    margin: 1rem auto;
+    justify-content: flex-start;
+    margin: 0 auto;
+
+    min-height: 80vh;
+    padding-bottom: 3rem;
     flex-direction: column;
 `
 

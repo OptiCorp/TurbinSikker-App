@@ -62,6 +62,7 @@ export type Category = {
 
 export type Checklist = {
     id: string
+    workflows: Workflow[]
     title: string
     status: string
     createdDate: string
@@ -69,8 +70,7 @@ export type Checklist = {
     user: User
     value: string
     label: string
-    checklistTasks: Task[]
-    workflows: Workflow[]
+    checklistTasks: ChecklistTaskInfo[]
 }
 
 export type Task = {
@@ -78,6 +78,18 @@ export type Task = {
     description: string
     category: Category
     value: string
+}
+
+export type ChecklistTaskInfo = {
+    id: string
+    categoryId: string
+    description: string
+    category: {
+        id: string
+        name: string
+    }
+    estAvgCompletionTime: number
+    value?: string
 }
 
 export type TaskPicker = {
@@ -105,11 +117,9 @@ export type Workflow = {
     checklist: Checklist
     user: User
     completionTimeMinutes: string
-    taskInfos: TaskInfos[]
+    taskInfos: { id?: string; taskId?: string; status?: number }
     creator: User
 }
-
-export type TaskInfo = {}
 
 export type TaskInfos = { id?: string; taskId?: string; status?: number }
 

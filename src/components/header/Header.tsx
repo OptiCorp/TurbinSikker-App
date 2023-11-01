@@ -122,7 +122,7 @@ export const Header = () => {
 
     return (
         <>
-            {' '}
+      
             <Sidebar open={open} setOpen={setOpen} />
             <NewTopBar>
                 <TopBar.Header>

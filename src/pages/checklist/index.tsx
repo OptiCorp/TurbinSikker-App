@@ -7,17 +7,9 @@ import { COLORS } from '../../style/GlobalStyles'
 import { MainWrap } from './styles'
 
 export const IndexCheckLists = () => {
-    // const [activeTab, setActiveTab] = useState(1)
-    // const [activeInspectorTab, setActiveInspectorTab] = useState(0)
-
-    // const handleChange = (index: number) => {
-    //     setActiveTab(index)
-    // }
     const path = useLocation()
     const { isLeader } = useRoles()
-    // const [activeTab, setActiveTab] = useState<number | undefined>(
-    //     path.pathname.includes('MyCheckLists')? 0 : 1
-    // )
+
     const [activeTab, setActiveTab] = useState<number | undefined>(
         path.pathname.includes('MyChecklists')
             ? 0
@@ -32,7 +24,7 @@ export const IndexCheckLists = () => {
         setActiveTab(index)
     }
     const { currentUser, openSnackbar } = useGlobal()
-    console.log(activeTab)
+
     return (
         <>
             {currentUser && (
@@ -99,9 +91,7 @@ export const IndexCheckLists = () => {
                                 )}
                             </Tabs.List>
 
-                            <>
-                                <Outlet />
-                            </>
+                            <Outlet />
                         </Tabs>
                     </>
                 </MainWrap>

@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 
 import {
     Button,
@@ -16,8 +16,8 @@ import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
 import { Controller } from 'react-hook-form'
-import useGlobal from '../../context/globalContextProvider'
-import apiService from '../../services/api'
+import { ChecklistTaskInfo, Workflow } from '../../services/apiTypes'
+
 import { useFillChecklistForm } from './hooks/useFillChecklist'
 import {
     CustomCard,
@@ -30,15 +30,17 @@ import {
     StyledSwitch,
     SubmitErrorContainer,
 } from './styles'
-import { FillOutListProps } from './types'
+
+export type FillOutListProps = {
+    workflow: Workflow
+    tasks: ChecklistTaskInfo[]
+    // taskInfo: TaskInfo[]
+}
 
 export const FillOutList: FunctionComponent<FillOutListProps> = ({
     tasks,
     workflow,
-    taskInfo,
 }) => {
-    const api = apiService()
-    const { openSnackbar, setRefreshList } = useGlobal()
     const { workflowId } = useParams() as { workflowId: string }
     const navigate = useNavigate()
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
@@ -50,27 +52,28 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     }
 
     const { control, methods } = useFillChecklistForm()
+
     const [checked, setChecked] = useState(false)
 
-    useEffect(() => {
-        if (checked === true) return
-        methods.setValue('taskInfos.0.status', 2)
-    }, [taskInfo])
+    // useEffect(() => {
+    //     if (checked === true) return
+    //     methods.setValue('taskInfos.0.status', 2)
+    // }, [taskInfo])
 
     return (
         <>
-          
-                <>
-                    <FillOutWrap key={task?.id}>
-                      {taskInfo && tasks && (
-                            <CustomCard>
+            <>
+                <FillOutWrap>
+                    {tasks.map((task) => {
+                        return (
+                            <CustomCard key={task.id}>
                                 <Card.Header
-                                    style={{
-                                        filter:
-                                            taskInfo.status === 2
-                                                ? 'blur(3px)'
-                                                : 'none',
-                                    }}
+                                // style={{
+                                //     filter:
+                                //         taskInfo[taskId]?.status === 2
+                                //             ? 'blur(3px)'
+                                //             : 'none',
+                                // }}
                                 >
                                     <CustomCategoryName>
                                         {task.category.name}
@@ -104,14 +107,14 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                                     size="small"
                                                     label="N/A?"
                                                     type="checkbox"
-                                                    checked={true}
-                                                    onChange={(e) =>
+                                                    checked={field.value === 2}
+                                                    onChange={() => {
                                                         field.onChange(
-                                                            e.target.checked
-                                                                ? true
-                                                                : false
+                                                            field.value !== 2
+                                                                ? 2
+                                                                : 0
                                                         )
-                                                    }
+                                                    }}
                                                 />
                                             )}
                                         />
@@ -166,10 +169,10 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                 </SubmitErrorContainer>
                                 {/* // {checked === 0 && <Error>Required</Error>}</> */}
                             </CustomCard>
-                        ))}
-                    </FillOutWrap>
-                </>
-            ))}
+                        )
+                    })}
+                </FillOutWrap>
+            </>
 
             <NavActionsComponent
                 buttonColor="primary"

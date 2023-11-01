@@ -1,17 +1,12 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
+import { useEffect, useState } from 'react'
 import { default as useGlobal } from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
+import { ChecklistTaskInfo, Workflow } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
-
-export type FillOutChecklistEntity = {
-    id: string
-    userId: string
-    status: string
-    completionTimeMinutes: number
-    taskInfos: { id: string; taskId: string; status: number }[]
-}
+import { FillOutChecklistEntity } from './types'
 
 export const useFillChecklistForm = () => {
     const methods = useForm<FillOutChecklistEntity>()
@@ -29,6 +24,34 @@ export const useFillChecklistForm = () => {
         workflowId: string
         taskId: string
     }
+
+    // const [dict, setDict] = useState<Task({})
+
+    const [checklistTasks, setChecklistTasks] = useState<ChecklistTaskInfo[]>(
+        []
+    )
+
+    const [workflow, setWorkFlow] = useState<Workflow>()
+
+    useEffect(() => {
+        ;(async (): Promise<void> => {
+            if (!currentUser) return
+            try {
+                const workFlowData = await api.getWorkflow(workflowId)
+
+                setWorkFlow(workFlowData)
+                if (workFlowData?.checklist.checklistTasks) {
+                    setChecklistTasks(workFlowData.checklist.checklistTasks)
+                }
+                if (workflow?.taskInfos?.id) {
+                    workFlowData.taskInfos.id
+                }
+                console.log(workFlowData.taskInfos.id)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [])
 
     const onSubmit: SubmitHandler<FillOutChecklistEntity> = async (
         data: FillOutChecklistEntity
@@ -91,6 +114,9 @@ export const useFillChecklistForm = () => {
         methods,
         onSubmit,
         control,
+
+        checklistTasks,
+        workflow,
         handleSubmit,
     }
 }

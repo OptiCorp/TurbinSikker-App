@@ -30,15 +30,16 @@ body,
     width: 100%;
     font-family: equinor;
     height: 100%;
+    background: ${COLORS.primary};
     font-size: 13px;
   }
-
   .wrapper {
     display: grid;
-    height: 100vh;
+    height: 100%;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
-    overflow-x: hidden;
+    overflow-x: hidden; 
+   
   }
 
   

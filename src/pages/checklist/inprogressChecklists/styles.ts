@@ -53,9 +53,9 @@ export const StyledHeadContents = styled.h3`
 export const Wrap = styled.div`
     display: flex;
     height: 100%;
-    box-shadow:
-        rgba(0, 0, 0, 0.12) 0px 1px 3px,
-        rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    padding-top: 25px;
+
+    box-shadow: 0 -13px 8px -5px ${COLORS.silverGray};
     background: ${COLORS.primary};
     align-items: left;
     flex-direction: column;
@@ -65,6 +65,6 @@ export const Wrap = styled.div`
 export const StyledHeaderCell = styled.div`
     display: flex;
     -webkit-box-align: center;
-
+    textwrap: nowrap;
     flex-direction: column;
 `

@@ -1,11 +1,10 @@
 import { Typography } from '@equinor/eds-core-react'
-import { useEffect, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { useParams } from 'react-router'
 import useSnackBar from '../../components/snackbar/useSnackBar'
+import useGlobal from '../../context/globalContextProvider'
 import { formatDate } from '../../helpers/dateFormattingHelpers'
 import apiService from '../../services/api'
-import { Task, Workflow } from '../../services/apiTypes'
 import { useRoles } from '../../services/useRoles'
 import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { PreviewWrapper } from '../checklist/previewCheckList/styles'
@@ -21,32 +20,9 @@ import {
     StyledCard,
 } from './styles'
 
-export type TaskInfoD = {
-    taskInfos: {
-        taskId: string
-        status: number
-    }
-}
 export const FillOutCheckList = () => {
-    useEffect(() => {
-        ;(async (): Promise<void> => {
-            try {
-                const workFlowData = await api.getWorkflow(workflowId)
-
-                setWorkFlow(workFlowData)
-                if (workFlowData?.checklist.checklistTasks) {
-                    setTasks(workFlowData.checklist.checklistTasks)
-                }
-                if (workflow?.taskInfos) {
-                    setTaskInfos(workFlowData.taskInfos)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        })()
-    }, [])
-
-    const { methods, onSubmit } = useFillChecklistForm()
+    const { methods, onSubmit, workflow, checklistTasks } =
+        useFillChecklistForm()
 
     const { handleSubmit } = methods
     const { workflowId } = useParams() as { workflowId: string }
@@ -54,12 +30,10 @@ export const FillOutCheckList = () => {
 
     const { isInspector, isLeader } = useRoles()
     const { snackbar, setSnackbarText } = useSnackBar()
-
-    const [workflow, setWorkFlow] = useState<Workflow>()
-    const [tasks, setTasks] = useState<Task[]>([])
-    const [taskInfos, setTaskInfos] = useState<TaskInfoD>([{}])
+    const { currentUser, openSnackbar, setRefreshList } = useGlobal()
 
     const formattedUpdateDate = formatDate(workflow?.updatedDate || '')
+
     return (
         <FormProvider {...methods}>
             {snackbar}
@@ -112,14 +86,12 @@ export const FillOutCheckList = () => {
                             <>
                                 {workflow && isInspector ? (
                                     <>
-                                        {taskInfos.map((taskInfo) => (
-                                            <FillOutList
-                                                workflow={workflow}
-                                                tasks={tasks}
-                                                key={workflow.id}
-                                                taskInfo={taskInfo}
-                                            />
-                                        ))}
+                                        <FillOutList
+                                            workflow={workflow}
+                                            tasks={checklistTasks}
+                                            key={workflow.id}
+                                            // taskInfo={taskDataSets}
+                                        />
                                     </>
                                 ) : (
                                     <>
@@ -127,7 +99,7 @@ export const FillOutCheckList = () => {
                                             <>
                                                 <ReviewList
                                                     workflow={workflow}
-                                                    tasks={tasks}
+                                                    tasks={checklistTasks}
                                                     key={workflow.id}
                                                 />
                                             </>
