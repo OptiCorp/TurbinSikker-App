@@ -18,4 +18,5 @@ export interface GlobalContextType {
     closeSnackbar?: () => void
     refreshList: boolean
     setRefreshList: React.Dispatch<React.SetStateAction<boolean>>
+    pubSubToken: string
 }
