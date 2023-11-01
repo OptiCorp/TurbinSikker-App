@@ -11,6 +11,7 @@ import {
     User,
     UserRole,
     Workflow,
+    pubSubToken,
 } from './apiTypes'
 
 const request = {
@@ -652,6 +653,11 @@ const apiService = () => {
         await deleteByFetch(`DeleteInvoice?id=${id}`)
     }
 
+    const getPubSubAccessToken = async (): Promise<pubSubToken> => {
+        const data = await getByFetch('GetPubSubAccessToken')
+        return data
+    }
+
     const getAllNotifications = async (): Promise<Notifications[]> => {
         const data = await getByFetch(`GetAllNotifications`)
         return data
@@ -744,6 +750,7 @@ const apiService = () => {
         addInvoice,
         updateInvoice,
         deleteInvoice,
+        getPubSubAccessToken,
         getAllNotifications,
         getNotificationsByUser,
         updateNotification

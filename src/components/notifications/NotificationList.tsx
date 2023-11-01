@@ -14,8 +14,11 @@ export type Props = {
 
 
 const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotificationsParent }) => {
+    const api = apiService()
+    const { currentUser, pubSubToken } = useGlobal()
 
-    const client = new WebSocket("wss://pub-sub-test.webpubsub.azure.com/client/hubs/Hub?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ3c3M6Ly9wdWItc3ViLXRlc3Qud2VicHVic3ViLmF6dXJlLmNvbS9jbGllbnQvaHVicy9IdWIiLCJpYXQiOjE2OTg3NjI2NTYsImV4cCI6MTY5ODgyMjY1Nn0.AhgaZfs_LzKhtFx8YRBcTROBylXuOQyLrEmCk3Wex3A")
+
+    const client = new WebSocket(pubSubToken)
     client.onmessage = (event) => {
         if (currentUser) {
             if (event.data === currentUser.id) {
@@ -24,10 +27,6 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
             }
         }
     }
-
-    const api = apiService()
-
-    const { currentUser } = useGlobal()
 
     const [notificationsList, setNotificationsList] = useState<Notifications[]>()
 

@@ -22,7 +22,7 @@ export const Header = () => {
 
 
 
-    const [read, setRead] = useState(true)
+    const [read, setRead] = useState(false)
     const [notificationsOpen, setNotificationsOpen] = useState(false)
 
     useEffect(() => {

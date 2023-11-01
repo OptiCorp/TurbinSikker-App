@@ -11,7 +11,7 @@ import {
 import { Loading } from '../components/loading/Loading'
 import PageNotFound from '../pages/pageNotFound'
 import apiService from '../services/api'
-import { ApiStatus, User } from '../services/apiTypes'
+import { ApiStatus, User, pubSubToken } from '../services/apiTypes'
 import { AzureUserInfo, GlobalContextType } from './types'
 
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
@@ -28,6 +28,7 @@ export function GlobalProvider({
     const accountname = account?.name
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
+    const [pubSubToken, setPubSubToken] = useState<string>("")
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [snackbarText, setSnackbarText] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -39,6 +40,11 @@ export function GlobalProvider({
 
     const closeSnackbar = () => {
         setIsOpen(false)
+    }
+
+    const pubSubTokenSetter = async () => {
+        let token = await api.getPubSubAccessToken()
+        setPubSubToken(token.token)
     }
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -61,6 +67,7 @@ export function GlobalProvider({
                         console.error(err)
                         instance.logoutRedirect()
                     })
+                pubSubTokenSetter()
             } else {
                 console.error('No account is available.')
             }
@@ -168,6 +175,7 @@ export function GlobalProvider({
                     isOpen,
                     refreshList,
                     setRefreshList,
+                    pubSubToken,
                 }}
             >
                 {children}
