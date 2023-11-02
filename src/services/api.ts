@@ -6,11 +6,10 @@ import {
     Invoice,
     PunchItem,
     Task,
-    TaskInfos,
     Upload,
     User,
     UserRole,
-    Workflow,
+    WorkflowResponse,
 } from './apiTypes'
 
 const request = {
@@ -341,13 +340,15 @@ const apiService = () => {
 
     // Workflow
 
-    const getAllWorkflows = async (): Promise<Workflow[]> => {
+    const getAllWorkflows = async (): Promise<WorkflowResponse[]> => {
         const data = await getByFetch('GetAllWorkflows')
 
         return data
     }
 
-    const getWorkflow = async (workflowId: string): Promise<Workflow> => {
+    const getWorkflow = async (
+        workflowId: string
+    ): Promise<WorkflowResponse> => {
         const data = await getByFetch(`GetWorkflow?id=${workflowId}`)
 
         if (!workflowId) {
@@ -358,14 +359,14 @@ const apiService = () => {
 
     const getAllWorkflowsByUserId = async (
         userId: string
-    ): Promise<Workflow[]> => {
+    ): Promise<WorkflowResponse[]> => {
         const data = await getByFetch(
             `GetAllWorkflowsByUserId?userId=${userId}`
         )
         return data
     }
 
-    const getAllCompletedWorkflows = async (): Promise<Workflow[]> => {
+    const getAllCompletedWorkflows = async (): Promise<WorkflowResponse[]> => {
         const data = await getByFetch(`GetAllCompletedWorkflows`)
         return data
     }
@@ -387,7 +388,7 @@ const apiService = () => {
         userId: string,
         status: string,
         completionTimeMinutes: number,
-        taskInfos: TaskInfos[]
+        taskInfos: { taskId: string; status: string }[]
     ) => {
         return putByFetch('UpdateWorkflow', {
             id: id,

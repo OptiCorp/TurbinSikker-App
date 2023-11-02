@@ -62,7 +62,7 @@ export type Category = {
 
 export type Checklist = {
     id: string
-    workflows: Workflow[]
+    workflows: WorkflowResponse[]
     title: string
     status: string
     createdDate: string
@@ -117,11 +117,26 @@ export type Workflow = {
     checklist: Checklist
     user: User
     completionTimeMinutes: string
-    taskInfos: { id?: string; taskId?: string; status?: number }
+    taskInfos: {
+        taskId: string
+        status: string
+    }[]
     creator: User
 }
 
-export type TaskInfos = { id?: string; taskId?: string; status?: number }
+export type WorkflowResponse = {
+    id: string
+    status: string
+    createdDate: string
+    updatedDate: null | string
+    checklist: Checklist
+    user: User
+    completionTimeMinutes: string
+    taskInfos: TaskInfos
+    creator: User
+}
+
+export type TaskInfos = { [key: string]: string }
 
 export type Invoice = {
     id: string

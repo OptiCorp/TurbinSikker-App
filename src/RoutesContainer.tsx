@@ -36,26 +36,28 @@ export function RoutesContainer() {
                         </GlobalProvider>
                     }
                 >
-                    <Route
-                        path="/Checklists"
-                        element={
-                            <GlobalProvider>
-                                <ChecklistComponent />
-                            </GlobalProvider>
-                        }
-                    />
-                    <Route
-                        path="/ForReviewChecklists"
-                        element={<ForReviewChecklists />}
-                    />
-                    <Route
-                        path="/MyChecklists"
-                        element={
-                            <GlobalProvider>
-                                <MyCheckLists />
-                            </GlobalProvider>
-                        }
-                    />
+                 
+                        <Route
+                            path="/Checklists"
+                            element={
+                                <GlobalProvider>
+                                    <ChecklistComponent />
+                                </GlobalProvider>
+                            }
+                        />
+                        <Route
+                            path="/ForReviewChecklists"
+                            element={<ForReviewChecklists />}
+                        />
+                        <Route
+                            path="/MyChecklists"
+                            element={
+                                <GlobalProvider>
+                                    <MyCheckLists />
+                                </GlobalProvider>
+                            }
+                        />
+                    
                     <Route
                         path="/"
                         element={
@@ -67,6 +69,7 @@ export function RoutesContainer() {
                         }
                     />
                 </Route>
+
                 <Route
                     path="/PreviewCheckList/:id"
                     element={<PreviewCheckList />}

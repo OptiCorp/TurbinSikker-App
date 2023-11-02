@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { Checklist, Workflow } from '../../services/apiTypes'
+import { Checklist, WorkflowResponse } from '../../services/apiTypes'
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import Sidebar from '../sidebar/Sidebar'
@@ -20,7 +20,7 @@ export const Header = () => {
     const api = apiService()
 
     const { accessToken, currentUser } = useGlobal()
-    const [workflow, setWorkFlow] = useState<Workflow>()
+    const [workflow, setWorkFlow] = useState<WorkflowResponse>()
 
     const [title, setTitle] = useState('')
     useEffect(() => {
@@ -122,7 +122,6 @@ export const Header = () => {
 
     return (
         <>
-      
             <Sidebar open={open} setOpen={setOpen} />
             <NewTopBar>
                 <TopBar.Header>

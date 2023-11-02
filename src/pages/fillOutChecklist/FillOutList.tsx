@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 
 import {
     Button,
@@ -16,7 +16,11 @@ import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
 import { Controller } from 'react-hook-form'
-import { ChecklistTaskInfo, Workflow } from '../../services/apiTypes'
+import {
+    ChecklistTaskInfo,
+    TaskInfos,
+    WorkflowResponse,
+} from '../../services/apiTypes'
 
 import { useFillChecklistForm } from './hooks/useFillChecklist'
 import {
@@ -32,34 +36,35 @@ import {
 } from './styles'
 
 export type FillOutListProps = {
-    workflow: Workflow
+    workflow: WorkflowResponse
     tasks: ChecklistTaskInfo[]
-    // taskInfo: TaskInfo[]
+    taskInfo: TaskInfos
 }
 
 export const FillOutList: FunctionComponent<FillOutListProps> = ({
     tasks,
     workflow,
+    taskInfo,
 }) => {
     const { workflowId } = useParams() as { workflowId: string }
     const navigate = useNavigate()
     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const [completionTime, setCompletionTime] = useState<number>()
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
-    const [taskId, setTaskId] = useState('')
+    const [taskIdd, setTaskIdd] = useState('')
     const createPunch = () => {
-        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
+        navigate(`/workflow/${workflowId}/${taskIdd}/addpunch`)
     }
 
     const { control, methods } = useFillChecklistForm()
 
     const [checked, setChecked] = useState(false)
 
-    // useEffect(() => {
-    //     if (checked === true) return
-    //     methods.setValue('taskInfos.0.status', 2)
-    // }, [taskInfo])
-
+    useEffect(() => {
+        if (checked === true) return
+        methods.setValue(`taskInfos.[0]`, 'Finished')
+    }, [taskInfo])
+    console.log(taskInfo)
     return (
         <>
             <>
@@ -68,12 +73,13 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                         return (
                             <CustomCard key={task.id}>
                                 <Card.Header
-                                // style={{
-                                //     filter:
-                                //         taskInfo[taskId]?.status === 2
-                                //             ? 'blur(3px)'
-                                //             : 'none',
-                                // }}
+                                    style={{
+                                        filter:
+                                            taskInfo[task.id] ===
+                                            'NotApplicable'
+                                                ? 'blur(3px)'
+                                                : 'none',
+                                    }}
                                 >
                                     <CustomCategoryName>
                                         {task.category.name}
@@ -81,7 +87,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
 
                                     <Typography
                                         onClick={() => {
-                                            setTaskId(task.id)
+                                            setTaskIdd(task.id)
                                             setPunchDialogShowing(true)
                                         }}
                                         token={{
@@ -101,19 +107,15 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     <NotApplicableWrap>
                                         <Controller
                                             control={control}
-                                            name={`taskInfos.0.status`}
+                                            name={'taskInfos'}
                                             render={({ field }) => (
                                                 <StyledSwitch
                                                     size="small"
                                                     label="N/A?"
                                                     type="checkbox"
-                                                    checked={field.value === 2}
+                                                    checked={checked}
                                                     onChange={() => {
-                                                        field.onChange(
-                                                            field.value !== 2
-                                                                ? 2
-                                                                : 0
-                                                        )
+                                                        field
                                                     }}
                                                 />
                                             )}
@@ -145,11 +147,11 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                             <>
                                                 <Controller
                                                     control={control}
-                                                    name={`taskInfos.0.taskId`}
+                                                    name={`taskInfos.${task.id}`}
                                                     render={({ field }) => (
                                                         <Checkbox
                                                             label={''}
-                                                            name={`taskInfos.${taskId}`}
+                                                            name={`taskInfos.${task.id}`}
                                                             id={`checkbox-${task.id}`}
                                                             // checked={field.value === 1}
                                                             onChange={(e) =>

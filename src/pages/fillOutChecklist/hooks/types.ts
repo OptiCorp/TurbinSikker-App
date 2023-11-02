@@ -1,15 +1,7 @@
-export type DatasetRecord = {
-    [taskId: string]: TaskInfos
-}
-export type TaskInfos = {
-    taskId: string
-    status: number
-}
-
-export type FillOutChecklistEntity = {
+export type FillOutChecklistForm = {
     id: string
     userId: string
     status: string
     completionTimeMinutes: number
-    taskInfos: { id: string; taskId: string; status: number }[]
+    taskInfos: { [key: string]: string }
 }

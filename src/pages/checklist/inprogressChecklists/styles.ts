@@ -52,10 +52,9 @@ export const StyledHeadContents = styled.h3`
 
 export const Wrap = styled.div`
     display: flex;
-    height: 100%;
+    height: min(70vh);
     padding-top: 25px;
 
-    box-shadow: 0 -13px 8px -5px ${COLORS.silverGray};
     background: ${COLORS.primary};
     align-items: left;
     flex-direction: column;

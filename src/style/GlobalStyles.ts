@@ -30,7 +30,7 @@ body,
     width: 100%;
     font-family: equinor;
     height: 100%;
-    background: ${COLORS.primary};
+    background: ${COLORS.whiteSmoke};
     font-size: 13px;
   }
   .wrapper {
@@ -39,7 +39,15 @@ body,
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
     overflow-x: hidden; 
+    position: fixed;
+    background-color: ${COLORS.primary};
    
+  }
+
+  .tablewrapper {
+
+
+
   }
 
   

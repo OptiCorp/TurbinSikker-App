@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router'
 import { UserChip } from '../inprogressChecklists/UserChip'
 import { ChipStatus } from '../inprogressChecklists/chipStatus'
 
-import { Workflow } from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 import { CellContentMyList, StyledTableRow, TitleCellContent } from './styles'
 
 interface PendingCheckListRowProps {
-    WorkFlow: Workflow
+    WorkFlow: WorkflowResponse
 }
 
 export const InspectorPendingRow: FunctionComponent<

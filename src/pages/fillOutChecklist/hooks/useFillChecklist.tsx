@@ -4,19 +4,22 @@ import { useNavigate, useParams } from 'react-router'
 import { useEffect, useState } from 'react'
 import { default as useGlobal } from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { ChecklistTaskInfo, Workflow } from '../../../services/apiTypes'
+import {
+    ChecklistTaskInfo,
+    TaskInfos,
+    WorkflowResponse,
+} from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
-import { FillOutChecklistEntity } from './types'
+import { FillOutChecklistForm } from './types'
 
 export const useFillChecklistForm = () => {
-    const methods = useForm<FillOutChecklistEntity>()
+    const methods = useForm<FillOutChecklistForm>()
 
     const navigate = useNavigate()
 
     const api = apiService()
-    const { currentUser, accessToken, openSnackbar, setRefreshList } =
-        useGlobal()
-    const creatorId = currentUser?.id
+    const { currentUser, openSnackbar, setRefreshList } = useGlobal()
+
     const { isInspector, isLeader } = useRoles()
     const { handleSubmit, control } = methods
     const { id, workflowId, taskId } = useParams() as {
@@ -25,13 +28,11 @@ export const useFillChecklistForm = () => {
         taskId: string
     }
 
-    // const [dict, setDict] = useState<Task({})
-
     const [checklistTasks, setChecklistTasks] = useState<ChecklistTaskInfo[]>(
         []
     )
-
-    const [workflow, setWorkFlow] = useState<Workflow>()
+    const [taskInfos, setTaskInfos] = useState<TaskInfos>()
+    const [workflow, setWorkFlow] = useState<WorkflowResponse>()
 
     useEffect(() => {
         ;(async (): Promise<void> => {
@@ -43,19 +44,33 @@ export const useFillChecklistForm = () => {
                 if (workFlowData?.checklist.checklistTasks) {
                     setChecklistTasks(workFlowData.checklist.checklistTasks)
                 }
-                if (workflow?.taskInfos?.id) {
-                    workFlowData.taskInfos.id
+                if (workflow?.taskInfos) {
+                    setTaskInfos(workFlowData.taskInfos)
                 }
-                console.log(workFlowData.taskInfos.id)
+                console.log(workFlowData.taskInfos)
             } catch (error) {
                 console.log(error)
             }
         })()
     }, [])
 
-    const onSubmit: SubmitHandler<FillOutChecklistEntity> = async (
-        data: FillOutChecklistEntity
+    const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
+        data: FillOutChecklistForm
     ) => {
+        const taskInfos = Object.entries(data.taskInfos).reduce(
+            (acc, [key, value]) => {
+                acc.push({
+                    taskId: key,
+                    status: value,
+                })
+                return acc
+            },
+            [] as {
+                taskId: string
+                status: string
+            }[]
+        )
+
         if (isLeader && workflowId) {
             try {
                 const res = await api.updateWorkflow(
@@ -63,7 +78,7 @@ export const useFillChecklistForm = () => {
                     data.userId,
                     'Done' || 'Rejected',
                     data.completionTimeMinutes,
-                    data.taskInfos
+                    taskInfos
                 )
 
                 if (res.ok) {
@@ -81,24 +96,20 @@ export const useFillChecklistForm = () => {
             }
         }
 
-        if (
-            isInspector &&
-            workflowId &&
-            data.taskInfos.every((task) => task.status === 1 || 2)
-        ) {
+        if (isInspector && workflowId) {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
                     'Committed',
                     data.completionTimeMinutes,
-                    data.taskInfos
+                    taskInfos
                 )
                 if (res.ok) {
                     openSnackbar && openSnackbar('Checklist committed')
                     navigate('/Checklists')
                     setRefreshList((prev) => !prev)
-                } else if (data.taskInfos.some((task) => task.status === 0)) {
+                } else if ('') {
                     openSnackbar &&
                         openSnackbar(
                             'All tasks must be checked to commit checklist'
@@ -114,7 +125,7 @@ export const useFillChecklistForm = () => {
         methods,
         onSubmit,
         control,
-
+        taskInfos,
         checklistTasks,
         workflow,
         handleSubmit,

@@ -4,7 +4,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Checklist, Workflow } from '../../../services/apiTypes'
+import { Checklist, WorkflowResponse } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 
 import { InspectorOutgoingCheckLists } from './inspectorOutgoingChecklists'
@@ -15,7 +15,7 @@ export const ChecklistComponent = () => {
     const { currentUser, refreshList } = useGlobal()
 
     const [checklists, setChecklists] = useState<Checklist[]>([])
-    const [workflows, setWorkFlows] = useState<Workflow[]>([])
+    const [workflows, setWorkFlows] = useState<WorkflowResponse[]>([])
 
     const api = apiService()
 
@@ -55,7 +55,7 @@ export const ChecklistComponent = () => {
         <>
             <Wrap>
                 <Table>
-                    <Table.Head sticky>
+                    <Table.Head>
                         <Table.Row>
                             <Table.Cell>
                                 <Typography variant="body_long_bold">

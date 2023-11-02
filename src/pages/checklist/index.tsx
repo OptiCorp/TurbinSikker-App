@@ -29,71 +29,69 @@ export const IndexCheckLists = () => {
         <>
             {currentUser && (
                 <MainWrap>
-                    <>
-                        <Tabs
-                            variant="minWidth"
-                            onChange={handleChange}
-                            activeTab={activeTab}
-                        >
-                            <Tabs.List>
+                    <Tabs
+                        variant="minWidth"
+                        onChange={handleChange}
+                        activeTab={activeTab}
+                    >
+                        <Tabs.List>
+                            <Tabs.Tab
+                                as={Link}
+                                to="/MyCheckLists"
+                                style={{
+                                    borderBottom: 'none',
+                                    borderTopRightRadius: '10px',
+                                    borderTopLeftRadius: '10px',
+                                    color: COLORS.black,
+
+                                    backgroundColor:
+                                        activeTab === 0
+                                            ? COLORS.primary
+                                            : COLORS.frostyGray,
+                                }}
+                            >
+                                <> My checklists</>
+                            </Tabs.Tab>
+                            <Tabs.Tab
+                                as={Link}
+                                to="/Checklists"
+                                style={{
+                                    borderBottom: 'none',
+                                    borderTopRightRadius: '10px',
+                                    borderTopLeftRadius: '10px',
+                                    color: COLORS.black,
+                                    backgroundColor:
+                                        activeTab === 1
+                                            ? COLORS.primary
+                                            : COLORS.frostyGray,
+                                }}
+                            >
+                                <>In progress</>
+                            </Tabs.Tab>
+                            {isLeader ? (
                                 <Tabs.Tab
                                     as={Link}
-                                    to="/MyCheckLists"
+                                    to="/ForReviewChecklists"
                                     style={{
                                         borderBottom: 'none',
                                         borderTopRightRadius: '10px',
                                         borderTopLeftRadius: '10px',
                                         color: COLORS.black,
-
                                         backgroundColor:
-                                            activeTab === 0
+                                            activeTab === 2
                                                 ? COLORS.primary
                                                 : COLORS.frostyGray,
                                     }}
                                 >
-                                    <> My checklists</>
+                                    For review
                                 </Tabs.Tab>
-                                <Tabs.Tab
-                                    as={Link}
-                                    to="/Checklists"
-                                    style={{
-                                        borderBottom: 'none',
-                                        borderTopRightRadius: '10px',
-                                        borderTopLeftRadius: '10px',
-                                        color: COLORS.black,
-                                        backgroundColor:
-                                            activeTab === 1
-                                                ? COLORS.primary
-                                                : COLORS.frostyGray,
-                                    }}
-                                >
-                                    <>In progress</>
-                                </Tabs.Tab>
-                                {isLeader ? (
-                                    <Tabs.Tab
-                                        as={Link}
-                                        to="/ForReviewChecklists"
-                                        style={{
-                                            borderBottom: 'none',
-                                            borderTopRightRadius: '10px',
-                                            borderTopLeftRadius: '10px',
-                                            color: COLORS.black,
-                                            backgroundColor:
-                                                activeTab === 2
-                                                    ? COLORS.primary
-                                                    : COLORS.frostyGray,
-                                        }}
-                                    >
-                                        For review
-                                    </Tabs.Tab>
-                                ) : (
-                                    <></>
-                                )}
-                            </Tabs.List>
+                            ) : (
+                                <></>
+                            )}
+                        </Tabs.List>
 
-                            <Outlet />
-                        </Tabs>
-                    </>
+                        <Outlet />
+                    </Tabs>
                 </MainWrap>
             )}
         </>
