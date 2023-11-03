@@ -3,5 +3,8 @@ export type FillOutChecklistForm = {
     userId: string
     status: string
     completionTimeMinutes: number
-    taskInfos: { [key: string]: string }
+    taskInfos: {
+        taskId: string
+        status: string
+    }[]
 }

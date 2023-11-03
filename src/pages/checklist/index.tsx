@@ -50,7 +50,12 @@ export const IndexCheckLists = () => {
                                             : COLORS.frostyGray,
                                 }}
                             >
-                                <> My checklists</>
+                                <>
+                                    {' '}
+                                    {isLeader
+                                        ? 'My checklist'
+                                        : 'Incomming checklists'}
+                                </>
                             </Tabs.Tab>
                             <Tabs.Tab
                                 as={Link}
@@ -66,7 +71,12 @@ export const IndexCheckLists = () => {
                                             : COLORS.frostyGray,
                                 }}
                             >
-                                <>In progress</>
+                                <>
+                                    {' '}
+                                    {isLeader
+                                        ? 'My checklist'
+                                        : 'Outgoing checklists'}
+                                </>
                             </Tabs.Tab>
                             {isLeader ? (
                                 <Tabs.Tab

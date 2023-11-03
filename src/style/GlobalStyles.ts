@@ -39,8 +39,8 @@ body,
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
     overflow-x: hidden; 
-    position: fixed;
-    background-color: ${COLORS.primary};
+   
+    background-color: ${COLORS.whiteSmoke};
    
   }
 

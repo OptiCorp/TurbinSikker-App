@@ -19,8 +19,7 @@ import {
 } from './styles'
 
 export const FillOutCheckList = () => {
-    const { methods, onSubmit, workflow, checklistTasks, taskInfos } =
-        useFillChecklistForm()
+    const { methods, onSubmit, workflow } = useFillChecklistForm()
 
     const { handleSubmit } = methods
     const { workflowId } = useParams() as { workflowId: string }
@@ -36,14 +35,14 @@ export const FillOutCheckList = () => {
             {snackbar}
             <form onSubmit={handleSubmit(onSubmit)} id="fill-checklist">
                 <BackgroundWrap>
-                    {workflow && isLeader && (
+                 
                         <InfoHeader>
                             {' '}
                             <StyledCard>
                                 <EditStyledCardHeader>
                                     {workflow?.checklist.title}{' '}
                                 </EditStyledCardHeader>
-
+                                {workflow && isLeader && (
                                 <List>
                                     <Container>
                                         <Typography
@@ -74,10 +73,10 @@ export const FillOutCheckList = () => {
                                     >
                                         {' '}
                                     </Typography>
-                                </List>
+                                </List>)}
                             </StyledCard>
                         </InfoHeader>
-                    )}
+                    
                     <>
                         <PreviewWrapper>
                             <>
@@ -85,9 +84,7 @@ export const FillOutCheckList = () => {
                                     <>
                                         <FillOutList
                                             workflow={workflow}
-                                            tasks={checklistTasks}
                                             key={workflow.id}
-                                            taskInfo={taskInfos || {}}
                                         />
                                     </>
                                 ) : (

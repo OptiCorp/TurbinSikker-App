@@ -77,15 +77,12 @@ export const CategoryName = styled.h3`
 export const ActionHeader = styled.div`
     color: red;
     display: flex;
-
     flex-direction: row-reverse;
 `
 
 export const Delete = styled.div`
     color: red;
-
     justify-content: flex-end;
-
     display: flex;
     margin: 0;
 `

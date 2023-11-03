@@ -498,9 +498,19 @@ const apiService = () => {
         })
     }
 
-    const addTaskToChecklist = async (id: string, checklistId: string) => {
+    const addTaskToChecklist = async (taskId: string, checklistId: string) => {
         return postByFetch('AddTaskToChecklist', {
-            id: id,
+            taskId: taskId,
+            checklistId: checklistId,
+        })
+    }
+
+    const removeTaskFromChecklist = async (
+        taskId: string,
+        checklistId: string
+    ) => {
+        return postByFetch('removeTaskFromChecklist ', {
+            taskId: taskId,
             checklistId: checklistId,
         })
     }
@@ -758,6 +768,7 @@ const apiService = () => {
         addTask,
         updateTask,
         addTaskToChecklist,
+        removeTaskFromChecklist,
         deleteTask,
         getAllWorkflows,
         getWorkflow,

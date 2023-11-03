@@ -1,16 +1,28 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
 import { useEffect, useState } from 'react'
 import { default as useGlobal } from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import {
-    ChecklistTaskInfo,
-    TaskInfos,
-    WorkflowResponse,
-} from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { FillOutChecklistForm } from './types'
+
+const objectTaskListToArray = (taskObject: { [key: string]: string }) => {
+    return Object.entries(taskObject).reduce(
+        (acc, [key, value]) => {
+            acc.push({
+                taskId: key,
+                status: value,
+            })
+            return acc
+        },
+        [] as {
+            taskId: string
+            status: string
+        }[]
+    )
+}
 
 export const useFillChecklistForm = () => {
     const methods = useForm<FillOutChecklistForm>()
@@ -19,73 +31,49 @@ export const useFillChecklistForm = () => {
 
     const api = apiService()
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
-
+    const [workflow, setWorkflow] = useState<WorkflowResponse>()
     const { isInspector, isLeader } = useRoles()
-    const { handleSubmit, control } = methods
-    const { id, workflowId, taskId } = useParams() as {
-        id: string
-        workflowId: string
-        taskId: string
-    }
+    const { handleSubmit, control, register, getFieldState} = methods
 
-    const [checklistTasks, setChecklistTasks] = useState<ChecklistTaskInfo[]>(
-        []
-    )
-    const [taskInfos, setTaskInfos] = useState<TaskInfos>()
-    const [workflow, setWorkFlow] = useState<WorkflowResponse>()
+    const { fields, update } = useFieldArray({
+        control: methods.control,
+        name: 'taskInfos',
+    })
 
+    
+    const { workflowId } = useParams() as { workflowId: string }
     useEffect(() => {
         ;(async (): Promise<void> => {
-            if (!currentUser) return
-            try {
-                const workFlowData = await api.getWorkflow(workflowId)
+            const workFlowData = await api.getWorkflow(workflowId)
 
-                setWorkFlow(workFlowData)
-                if (workFlowData?.checklist.checklistTasks) {
-                    setChecklistTasks(workFlowData.checklist.checklistTasks)
-                }
-                if (workflow?.taskInfos) {
-                    setTaskInfos(workFlowData.taskInfos)
-                }
-                console.log(workFlowData.taskInfos)
-            } catch (error) {
-                console.log(error)
-            }
+            if (!currentUser || !workFlowData) return
+            methods.reset({
+                id: workflowId,
+                userId: currentUser.id,
+                status: workFlowData.status,
+                completionTimeMinutes: workFlowData.completionTimeMinutes,
+                taskInfos: objectTaskListToArray(workFlowData.taskInfos),
+            })
+            setWorkflow(workFlowData)
         })()
-    }, [])
+    }, [workflowId])
 
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
-        const taskInfos = Object.entries(data.taskInfos).reduce(
-            (acc, [key, value]) => {
-                acc.push({
-                    taskId: key,
-                    status: value,
-                })
-                return acc
-            },
-            [] as {
-                taskId: string
-                status: string
-            }[]
-        )
-
         if (isLeader && workflowId) {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
-                    'Done' || 'Rejected',
+                    'Done',
                     data.completionTimeMinutes,
-                    taskInfos
+                    methods.watch('taskInfos')
                 )
 
                 if (res.ok) {
-                    if ('Done' && openSnackbar) {
+                    if (openSnackbar) {
                         openSnackbar('Checklist Approved')
-                    } else if ('Rejected' && openSnackbar) {
-                        openSnackbar('Checklist Rejected')
                     }
 
                     navigate('/Checklists')
@@ -97,26 +85,28 @@ export const useFillChecklistForm = () => {
         }
 
         if (isInspector && workflowId) {
-            try {
-                const res = await api.updateWorkflow(
-                    workflowId,
-                    data.userId,
-                    'Committed',
-                    data.completionTimeMinutes,
-                    taskInfos
-                )
-                if (res.ok) {
-                    openSnackbar && openSnackbar('Checklist committed')
-                    navigate('/Checklists')
-                    setRefreshList((prev) => !prev)
-                } else if ('') {
-                    openSnackbar &&
-                        openSnackbar(
-                            'All tasks must be checked to commit checklist'
-                        )
+            {
+                try {
+                    const res = await api.updateWorkflow(
+                        workflowId,
+                        data.userId,
+                        'Committed',
+                        data.completionTimeMinutes,
+                        methods.watch('taskInfos')
+                    )
+                    if (res.ok) {
+                        openSnackbar && openSnackbar('Checklist committed')
+                        navigate('/Checklists')
+                        setRefreshList((prev) => !prev)
+                    }if ('') {
+                        openSnackbar &&
+                            openSnackbar(
+                                'All tasks must be checked to commit checklist'
+                            )
+                    }
+                } catch (error) {
+                    console.log(error)
                 }
-            } catch (error) {
-                console.log(error)
             }
         }
     }
@@ -124,10 +114,9 @@ export const useFillChecklistForm = () => {
     return {
         methods,
         onSubmit,
-        control,
-        taskInfos,
-        checklistTasks,
         workflow,
+        control,
+        register,
         handleSubmit,
     }
 }

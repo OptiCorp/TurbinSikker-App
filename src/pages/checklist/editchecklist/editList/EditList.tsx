@@ -49,10 +49,9 @@ export const EditList = ({ tasks }: Props) => {
     }
 
     const deleteTask = async () => {
-        const taskId = task?.id
-        if (!taskId) return
+        if (!task?.id) return
         try {
-            const res = await api.deleteTask(taskId)
+            const res = await api.removeTaskFromChecklist(task.id, id)
 
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task deleted')
