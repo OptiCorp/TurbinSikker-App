@@ -80,14 +80,15 @@ export function GlobalProvider({
     }, [account, inProgress, instance, accountUsername, accountname])
 
     async function createUser(userEmail: string, name: string) {
-        const firstName = name.split(' ')[0]
-        const lastName = name.split(' ')[1]
-        const username = userEmail.split('@')[0]
+        const nameSplit = name.split(' ')
+        const firstName = nameSplit[0]
+        const lastName = nameSplit[nameSplit.length - 1]
+        const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
         try {
             const createUserResponse = await api.addUser({
                 azureAdUserId: userEmail,
                 firstName: firstName,
-                lastName: lastName ? lastName : firstName,
+                lastName: lastName,
                 username: username,
                 email: userEmail,
             })
