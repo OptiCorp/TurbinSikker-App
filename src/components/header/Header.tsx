@@ -58,11 +58,11 @@ export const Header = () => {
     }
 
     useEffect(() => {
-        ; (async () => {
-            await setPubSubClient(new WebPubSubClient(pubSubToken))
-            console.log("token: " + pubSubToken)
-            pubSubClient?.start()
-        })()
+        console.log("token: " + pubSubToken)
+            ; (async () => {
+                setPubSubClient(new WebPubSubClient(pubSubToken))
+                await pubSubClient?.start()
+            })()
         if (currentUser) {
             ; (async () => {
                 const notifications = await api.getNotificationsByUser(currentUser.id);
@@ -73,11 +73,11 @@ export const Header = () => {
         return pubSubClient?.stop()
     }, [])
 
-    pubSubClient?.on("server-message", (e) => {
+    pubSubClient?.on("server-message", async (e) => {
         console.log("message received: " + e.message.data)
         if (currentUser) {
             if (e.message.data === currentUser.id) {
-                getAllNotifications()
+                await getAllNotifications()
             }
         }
     })
