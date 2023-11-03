@@ -47,8 +47,6 @@ export const Header = () => {
 
     const [notificationsList, setNotificationsList] = useState<Notifications[]>([])
 
-    const [pubSubClient, setPubSubClient] = useState<WebPubSubClient>()
-
     const getAllNotifications = async () => {
         if (currentUser) {
             const notifications = await api.getNotificationsByUser(currentUser.id);
@@ -58,11 +56,18 @@ export const Header = () => {
     }
 
     useEffect(() => {
-        console.log("token: " + pubSubToken)
-            ; (async () => {
-                setPubSubClient(new WebPubSubClient(pubSubToken))
-                await pubSubClient?.start()
-            })()
+        const pubSubClient = new WebPubSubClient(pubSubToken)
+
+        pubSubClient?.on("server-message", (e) => {
+            if (currentUser) {
+                if (e.message.data === currentUser.id) {
+                    getAllNotifications()
+                }
+            }
+        })
+
+        pubSubClient?.start()
+
         if (currentUser) {
             (async () => {
                 const notifications = await api.getNotificationsByUser(currentUser.id);
@@ -70,17 +75,12 @@ export const Header = () => {
                 setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
             })()
         }
-        return pubSubClient?.stop()
+        return () => {
+            pubSubClient?.off("server-message", () => { })
+            pubSubClient?.stop()
+        }
     }, [])
 
-    pubSubClient?.on("server-message", async (e) => {
-        console.log("message received: " + e.message.data)
-        if (currentUser) {
-            if (e.message.data === currentUser.id) {
-                await getAllNotifications()
-            }
-        }
-    })
 
     const { id, workflowId, taskId, punchId } = useParams() as {
         id: string
