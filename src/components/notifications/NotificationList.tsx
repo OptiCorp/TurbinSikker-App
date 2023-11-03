@@ -1,40 +1,25 @@
+import { WebPubSubClient } from "@azure/web-pubsub-client"
 import { Dialog, List, Table, Typography, Icon } from "@equinor/eds-core-react"
 import { FunctionComponent, useEffect, useState } from "react"
 import { Notifications } from "../../services/apiTypes"
-import { notifications, close } from "@equinor/eds-icons"
+import { close } from "@equinor/eds-icons"
 import { COLORS } from "../../style/GlobalStyles"
 import apiService from "../../services/api"
 import useGlobal from "../../context/globalContextProvider"
+// import useGlobal from "../../context/globalContextProvider"
 
 export type Props = {
     open: boolean
     setOpen: (open: boolean) => void
     getAllNotificationsParent: () => void
+    notificationsList: Notifications[]
 }
 
 
-const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotificationsParent }) => {
+const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotificationsParent, notificationsList }) => {
     const api = apiService()
-    const { currentUser, pubSubToken } = useGlobal()
 
 
-    const client = new WebSocket(pubSubToken)
-    client.onmessage = (event) => {
-        if (currentUser) {
-            if (event.data === currentUser.id) {
-                getAllNotifications()
-                getAllNotificationsParent()
-            }
-        }
-    }
-
-    const [notificationsList, setNotificationsList] = useState<Notifications[]>()
-
-    const getAllNotifications = async () => {
-        if (currentUser) {
-            setNotificationsList(await api.getNotificationsByUser(currentUser.id))
-        }
-    }
 
     const handleClose = () => {
         setOpen(false)
@@ -53,7 +38,6 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
         setActiveNotification(notification)
         if (notification.notificationStatus === "Unread") {
             await api.updateNotification(notification.id, "Read")
-            getAllNotifications()
             getAllNotificationsParent()
         }
     }
@@ -63,9 +47,6 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
         setOpen(false)
     }
 
-    useEffect(() => {
-        getAllNotifications()
-    }, [])
 
 
     return <>
@@ -94,7 +75,7 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
                                 </Table.Row>
                             </Table.Head>
                             <Table.Body>
-                                {notificationsList?.map((notify, key) =>
+                                {notificationsList.map((notify, key) =>
                                     (notify.notificationStatus === 'Unread')
                                         ?
                                         (<Table.Row key={key}>
