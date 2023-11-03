@@ -1,12 +1,9 @@
-import { WebPubSubClient } from "@azure/web-pubsub-client"
-import { Dialog, List, Table, Typography, Icon } from "@equinor/eds-core-react"
-import { FunctionComponent, useEffect, useState } from "react"
+import { Dialog, Table, Typography, Icon } from "@equinor/eds-core-react"
+import { FunctionComponent, useState } from "react"
 import { Notifications } from "../../services/apiTypes"
 import { close } from "@equinor/eds-icons"
 import { COLORS } from "../../style/GlobalStyles"
 import apiService from "../../services/api"
-import useGlobal from "../../context/globalContextProvider"
-// import useGlobal from "../../context/globalContextProvider"
 
 export type Props = {
     open: boolean

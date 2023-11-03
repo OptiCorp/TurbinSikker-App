@@ -40,7 +40,7 @@ export const Header = () => {
     }
     const basePath = useBasePath()
 
-    const { accessToken, currentUser, pubSubToken } = useGlobal()
+    const { currentUser, pubSubToken } = useGlobal()
     const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
 
     const [title, setTitle] = useState('')
@@ -90,7 +90,7 @@ export const Header = () => {
     }
     useEffect(() => {
         if (!workflow && !checklist && id && currentUser?.id) {
-            ; (async () => {
+            (async () => {
                 try {
                     const checklistData = await api.getChecklist(id)
                     setChecklist(checklistData)
@@ -99,7 +99,7 @@ export const Header = () => {
                 }
             })()
         } else {
-            ; (async () => {
+            (async () => {
                 if (workflowId)
                     try {
                         const workFlowData = await api.getWorkflow(workflowId)
