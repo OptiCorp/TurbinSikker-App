@@ -50,7 +50,9 @@ export function GlobalProvider({
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
     useEffect(() => {
-        pubSubTokenSetter()
+        (async () => {
+            await pubSubTokenSetter()
+        })
     }, [])
 
     useEffect(() => {
