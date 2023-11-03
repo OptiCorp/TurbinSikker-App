@@ -42,16 +42,12 @@ export function GlobalProvider({
         setIsOpen(false)
     }
 
-    const pubSubTokenSetter = async () => {
-        let token = await api.getPubSubAccessToken()
-        setPubSubToken(token.token)
-    }
-
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
     useEffect(() => {
         (async () => {
-            await pubSubTokenSetter()
+            let token = await api.getPubSubAccessToken()
+            setPubSubToken(token.token)
         })()
     }, [])
 

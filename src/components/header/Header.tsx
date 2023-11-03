@@ -64,7 +64,7 @@ export const Header = () => {
                 await pubSubClient?.start()
             })()
         if (currentUser) {
-            ; (async () => {
+            (async () => {
                 const notifications = await api.getNotificationsByUser(currentUser.id);
                 setNotificationsList(notifications)
                 setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
