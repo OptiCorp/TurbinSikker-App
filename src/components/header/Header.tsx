@@ -10,6 +10,7 @@ import { COLORS } from '../../style/GlobalStyles'
 import Sidebar from '../sidebar/Sidebar'
 import NotificationList from '../notifications/NotificationList'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
+import { WebPubSubClient } from '@azure/web-pubsub-client'
 
 export const Header = () => {
     const navigate = useNavigate()
@@ -27,9 +28,7 @@ export const Header = () => {
 
     useEffect(() => {
         setActiveUrl(window.location.pathname)
-        getAllNotifications()
     }, [location])
-
 
     const useBasePath = () => {
         const params = useParams<Record<string, string>>()
@@ -41,17 +40,47 @@ export const Header = () => {
     }
     const basePath = useBasePath()
 
-    const { accessToken, currentUser } = useGlobal()
+    const { currentUser, pubSubToken } = useGlobal()
     const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
 
     const [title, setTitle] = useState('')
 
+    const [notificationsList, setNotificationsList] = useState<Notifications[]>([])
+
+    const [pubSubClient, setPubSubClient] = useState<WebPubSubClient>()
+
     const getAllNotifications = async () => {
         if (currentUser) {
             const notifications = await api.getNotificationsByUser(currentUser.id);
+            setNotificationsList(notifications)
             setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
         }
     }
+
+    useEffect(() => {
+        ; (async () => {
+            await setPubSubClient(new WebPubSubClient(pubSubToken))
+            console.log("token: " + pubSubToken)
+            pubSubClient?.start()
+        })()
+        if (currentUser) {
+            ; (async () => {
+                const notifications = await api.getNotificationsByUser(currentUser.id);
+                setNotificationsList(notifications)
+                setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+            })()
+        }
+        return pubSubClient?.stop()
+    }, [])
+
+    pubSubClient?.on("server-message", (e) => {
+        console.log("message received: " + e.message.data)
+        if (currentUser) {
+            if (e.message.data === currentUser.id) {
+                getAllNotifications()
+            }
+        }
+    })
 
     const { id, workflowId, taskId, punchId } = useParams() as {
         id: string
@@ -61,7 +90,7 @@ export const Header = () => {
     }
     useEffect(() => {
         if (!workflow && !checklist && id && currentUser?.id) {
-            ; (async () => {
+            (async () => {
                 try {
                     const checklistData = await api.getChecklist(id)
                     setChecklist(checklistData)
@@ -70,7 +99,7 @@ export const Header = () => {
                 }
             })()
         } else {
-            ; (async () => {
+            (async () => {
                 if (workflowId)
                     try {
                         const workFlowData = await api.getWorkflow(workflowId)
@@ -133,13 +162,12 @@ export const Header = () => {
         navigate(-1)
     }
 
-    console.log(location.pathname)
 
     return (
         <>
             {' '}
             <Sidebar open={open} setOpen={setOpen} />
-            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} />
+            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} notificationsList={notificationsList} />
             <NewTopBar>
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (

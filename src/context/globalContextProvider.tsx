@@ -50,6 +50,10 @@ export function GlobalProvider({
     const [currentUser, setCurrentUser] = useState<User | null>(null)
 
     useEffect(() => {
+        pubSubTokenSetter()
+    }, [])
+
+    useEffect(() => {
         if (inProgress === InteractionStatus.None) {
             if (account) {
                 instance.setActiveAccount(account)
@@ -67,7 +71,6 @@ export function GlobalProvider({
                         console.error(err)
                         instance.logoutRedirect()
                     })
-                pubSubTokenSetter()
             } else {
                 console.error('No account is available.')
             }
