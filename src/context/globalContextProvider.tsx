@@ -52,7 +52,7 @@ export function GlobalProvider({
     useEffect(() => {
         (async () => {
             await pubSubTokenSetter()
-        })
+        })()
     }, [])
 
     useEffect(() => {
