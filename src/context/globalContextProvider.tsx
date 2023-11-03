@@ -11,7 +11,7 @@ import {
 import { Loading } from '../components/loading/Loading'
 import PageNotFound from '../pages/pageNotFound'
 import apiService from '../services/api'
-import { ApiStatus, User } from '../services/apiTypes'
+import { ApiStatus, User, pubSubToken } from '../services/apiTypes'
 import { AzureUserInfo, GlobalContextType } from './types'
 
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
@@ -28,6 +28,7 @@ export function GlobalProvider({
     const accountname = account?.name
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
+    const [pubSubToken, setPubSubToken] = useState<string>("")
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [snackbarText, setSnackbarText] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -42,6 +43,13 @@ export function GlobalProvider({
     }
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
+
+    useEffect(() => {
+        (async () => {
+            let token = await api.getPubSubAccessToken()
+            setPubSubToken(token.token)
+        })()
+    }, [])
 
     useEffect(() => {
         if (inProgress === InteractionStatus.None) {
@@ -68,8 +76,9 @@ export function GlobalProvider({
     }, [account, inProgress, instance, accountUsername, accountname])
 
     async function createUser(userEmail: string, name: string) {
-        const firstName = name.split(' ')[0]
-        const lastName = name.split(' ')[1]
+        const nameSplit = name.split(' ')
+        const firstName = nameSplit[0]
+        const lastName = nameSplit[nameSplit.length - 1]
         const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
         try {
             const createUserResponse = await api.addUser({
@@ -168,6 +177,7 @@ export function GlobalProvider({
                     isOpen,
                     refreshList,
                     setRefreshList,
+                    pubSubToken,
                 }}
             >
                 {children}

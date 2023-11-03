@@ -1,14 +1,20 @@
-import { Icon, TopBar } from '@equinor/eds-core-react'
-import { arrow_back_ios, menu } from '@equinor/eds-icons'
-import { useEffect, useState } from 'react'
+import { Dialog, Icon, TopBar } from '@equinor/eds-core-react'
+import { arrow_back_ios, menu, notifications } from '@equinor/eds-icons'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { Checklist, WorkflowResponse } from '../../services/apiTypes'
+
+import {Notifications, Checklist, WorkflowResponse } from '../../services/apiTypes'
+
+
+
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import Sidebar from '../sidebar/Sidebar'
+import NotificationList from '../notifications/NotificationList'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
+import { WebPubSubClient } from '@azure/web-pubsub-client'
 
 export const Header = () => {
     const navigate = useNavigate()
@@ -19,10 +25,16 @@ export const Header = () => {
     const { isInspector, isLeader } = useRoles()
     const api = apiService()
 
+
     const { accessToken, currentUser } = useGlobal()
     const [workflow, setWorkFlow] = useState<WorkflowResponse>()
 
-    const [title, setTitle] = useState('')
+
+
+
+    const [read, setRead] = useState(false)
+    const [notificationsOpen, setNotificationsOpen] = useState(false)
+
     useEffect(() => {
         setActiveUrl(window.location.pathname)
     }, [location])
@@ -36,6 +48,49 @@ export const Header = () => {
         )
     }
     const basePath = useBasePath()
+
+    const { currentUser, pubSubToken } = useGlobal()
+    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
+
+    const [title, setTitle] = useState('')
+
+    const [notificationsList, setNotificationsList] = useState<Notifications[]>([])
+
+    const [pubSubClient, setPubSubClient] = useState<WebPubSubClient>()
+
+    const getAllNotifications = async () => {
+        if (currentUser) {
+            const notifications = await api.getNotificationsByUser(currentUser.id);
+            setNotificationsList(notifications)
+            setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+        }
+    }
+
+    useEffect(() => {
+        console.log("token: " + pubSubToken)
+            ; (async () => {
+                setPubSubClient(new WebPubSubClient(pubSubToken))
+                await pubSubClient?.start()
+            })()
+        if (currentUser) {
+            (async () => {
+                const notifications = await api.getNotificationsByUser(currentUser.id);
+                setNotificationsList(notifications)
+                setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+            })()
+        }
+        return pubSubClient?.stop()
+    }, [])
+
+    pubSubClient?.on("server-message", async (e) => {
+        console.log("message received: " + e.message.data)
+        if (currentUser) {
+            if (e.message.data === currentUser.id) {
+                await getAllNotifications()
+            }
+        }
+    })
+
     const { id, workflowId, taskId, punchId } = useParams() as {
         id: string
         taskId: string
@@ -44,7 +99,7 @@ export const Header = () => {
     }
     useEffect(() => {
         if (!workflow && !checklist && id && currentUser?.id) {
-            ;(async () => {
+            (async () => {
                 try {
                     const checklistData = await api.getChecklist(id)
                     setChecklist(checklistData)
@@ -53,7 +108,7 @@ export const Header = () => {
                 }
             })()
         } else {
-            ;(async () => {
+            (async () => {
                 if (workflowId)
                     try {
                         const workFlowData = await api.getWorkflow(workflowId)
@@ -98,13 +153,11 @@ export const Header = () => {
         } else if (location.pathname.includes(workflowId && taskId)) {
             pathTitle = 'Create punch'
         } else if (location.pathname.includes('Checklists')) {
-            pathTitle = `${
-                isLeader ? 'Checklists in progress' : 'Outgoing checklists'
-            }`
+            pathTitle = `${isLeader ? 'Checklists in progress' : 'Outgoing checklists'
+                }`
         } else if (location.pathname.includes('MyCheckLists')) {
-            pathTitle = `${
-                isLeader ? 'Checklists templates' : 'Incomming checklists'
-            }`
+            pathTitle = `${isLeader ? 'Checklists templates' : 'Incomming checklists'
+                }`
         } else {
             pathTitle =
                 basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join('') ||
@@ -118,11 +171,11 @@ export const Header = () => {
         navigate(-1)
     }
 
-    console.log(location.pathname)
 
     return (
         <>
             <Sidebar open={open} setOpen={setOpen} />
+            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} notificationsList={notificationsList} />
             <NewTopBar>
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (
@@ -139,6 +192,21 @@ export const Header = () => {
                     <HeaderLocation>{title}</HeaderLocation>
                 </TopBar.CustomContent>
                 <TopBar.Actions>
+                    {read ? (<Icon
+                        data={notifications}
+                        size={40}
+                        style={{
+                            color: COLORS.dangerRed
+                        }}
+                        onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    />) : (<Icon
+                        data={notifications}
+                        size={40}
+                        style={{
+                            color: COLORS.white
+                        }}
+                        onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    />)}
                     <Icon
                         data={menu}
                         size={40}
