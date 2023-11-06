@@ -28,7 +28,8 @@ export function GlobalProvider({
     const accountname = account?.name
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
-    const [pubSubToken, setPubSubToken] = useState<string>('')
+    // const [pubSubToken, setPubSubToken] = useState<string>('')
+    let pubSubToken = ''
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [snackbarText, setSnackbarText] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -47,7 +48,7 @@ export function GlobalProvider({
     useEffect(() => {
         (async () => {
             let token = await api.getPubSubAccessToken()
-            setPubSubToken(token.token)
+            pubSubToken = token.token
         })()
     }, [])
 
