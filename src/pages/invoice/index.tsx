@@ -23,13 +23,13 @@ import {
 
 import { useEffect, useState } from 'react'
 
-import { Invoice, WorkflowResponse } from '../../services/apiTypes'
+import { WorkflowResponse } from '../../services/apiTypes'
 import { InvoiceListItem, TableWrapper, TextWrapper } from './styles'
 function ListInvoices() {
   const api = apiService()
   const [invoices, setInvoices] = useState<Invoice[]>()
   const [activeInvoice, setActiveInvoice] = useState<Invoice>()
-  const [completedWorkflows, setCompletedWorkflows] = useState<Workflow[]>()
+  const [completedWorkflows, setCompletedWorkflows] = useState<WorkflowResponse[]>()
   const [receiver, setReceiver] = useState<string>("")
   const [title, setTitle] = useState<string>("")
   const [hourlyRate, setHourlyRate] = useState<number>(0)
