@@ -25,12 +25,7 @@ export const Header = () => {
     const { isInspector, isLeader } = useRoles()
     const api = apiService()
 
-
- 
     const [workflow, setWorkFlow] = useState<WorkflowResponse>()
-
-
-
 
     const [read, setRead] = useState(false)
     const [notificationsOpen, setNotificationsOpen] = useState(false)
@@ -50,7 +45,7 @@ export const Header = () => {
     const basePath = useBasePath()
 
     const { currentUser, pubSubToken} = useGlobal()
-    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
+   
 
     const [title, setTitle] = useState('')
 
