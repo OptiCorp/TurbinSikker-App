@@ -150,8 +150,8 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                                 'NotApplicable',
                                         }}
                                         render={({
-                                            field: { value, onChange },
-                                            fieldState: { error },
+                                            field: { value, onChange }
+                                          
                                         }) => {
                                             return value === 'NotApplicable' ? (
                                                 <ImageContainer />
