@@ -10,6 +10,7 @@ export default defineConfig({
         react(),
         checker({
             typescript: true,
+            overlay: { initialIsOpen: false },
         }),
         nodePolyfills(),
     ],

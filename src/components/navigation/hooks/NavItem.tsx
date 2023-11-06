@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Workflow } from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
 import { ImageContainerActive } from '../styles'
 export const NavItem = ({
@@ -18,7 +18,7 @@ export const NavItem = ({
     icon: IconData
     to: string
 }) => {
-    const [workFlows, setWorkFlow] = useState<Workflow[]>([])
+    const [workFlows, setWorkFlow] = useState<WorkflowResponse[]>([])
     const api = apiService()
     const { currentUser } = useGlobal()
 
@@ -49,7 +49,6 @@ export const NavItem = ({
     return (
         <Link to={to} style={{ textDecoration: 'none' }}>
             <ImageContainerActive>
-          
                 <Icon
                     data={icon}
                     size={24}

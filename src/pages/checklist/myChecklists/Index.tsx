@@ -7,7 +7,7 @@ import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultN
 import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Checklist, Workflow } from '../../../services/apiTypes'
+import { Checklist, WorkflowResponse } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
 import { InspectorPendingRow } from './InspectorPendingRow'
@@ -16,7 +16,7 @@ import { BackgroundWrap, MakeTitleField } from './styles'
 
 export const MyCheckLists = () => {
     const api = apiService()
-    const [workflow, setWorkFlow] = useState<Workflow[]>([])
+    const [workflow, setWorkFlow] = useState<WorkflowResponse[]>([])
     const [checklists, setChecklists] = useState<Checklist[]>([])
     const { currentUser, openSnackbar, setRefreshList, refreshList } =
         useGlobal()
@@ -79,7 +79,7 @@ export const MyCheckLists = () => {
             <BackgroundWrap>
                 <BannerComponent />
                 <Table>
-                    <Table.Head sticky>
+                    <Table.Head>
                         <Table.Row>
                             <Table.Cell>
                                 <Typography variant="body_long_bold">

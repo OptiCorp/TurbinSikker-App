@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import useGlobal from '../../../../context/globalContextProvider'
 import apiService from '../../../../services/api'
-import { Checklist, Task } from '../../../../services/apiTypes'
+import { Checklist, ChecklistTaskInfo, Task } from '../../../../services/apiTypes'
 import { useRoles } from '../../../../services/useRoles'
 
 export const useEditChecklist = () => {
@@ -18,7 +18,7 @@ export const useEditChecklist = () => {
         useGlobal()
     const [headerOpen, setHeaderOpen] = useState(false)
     const api = apiService()
-    const [tasks, setTasks] = useState<Task[]>([])
+    const [tasks, setTasks] = useState<ChecklistTaskInfo[]>([])
 
     useEffect(() => {
         if (!currentUser?.id || !id) return

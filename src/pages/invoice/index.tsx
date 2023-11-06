@@ -1,20 +1,35 @@
-import { Typography, Table, Button, Dialog, Input, Label, Chip, Divider, Autocomplete, AutocompleteChanges, Radio, } from '@equinor/eds-core-react'
-import { formatDate, formatTimestamp } from '../../helpers/dateFormattingHelpers'
 
-import {
-  TableWrapper, InvoiceListItem, TextWrapper
-} from './styles'
-import { useEffect, useState } from 'react'
 import { ApiStatus, Invoice, Workflow } from '../../services/apiTypes'
 import apiService from '../../services/api'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
 import useGlobal from '../../context/globalContextProvider'
+import {
+    Autocomplete,
+    AutocompleteChanges,
+    Button,
+    Chip,
+    Dialog,
+    Divider,
+    Input,
+    Label,
+    Radio,
+    Table,
+    Typography,
+} from '@equinor/eds-core-react'
+import {
+    formatDate,
+    formatTimestamp,
+} from '../../helpers/dateFormattingHelpers'
 
+import { useEffect, useState } from 'react'
+
+import { WorkflowResponse } from '../../services/apiTypes'
+import { InvoiceListItem, TableWrapper, TextWrapper } from './styles'
 function ListInvoices() {
   const api = apiService()
   const [invoices, setInvoices] = useState<Invoice[]>()
   const [activeInvoice, setActiveInvoice] = useState<Invoice>()
-  const [completedWorkflows, setCompletedWorkflows] = useState<Workflow[]>()
+  const [completedWorkflows, setCompletedWorkflows] = useState<WorkflowResponse[]>()
   const [receiver, setReceiver] = useState<string>("")
   const [title, setTitle] = useState<string>("")
   const [hourlyRate, setHourlyRate] = useState<number>(0)
@@ -310,6 +325,7 @@ function ListInvoices() {
     </>
 
   )
+
 }
 
 export default ListInvoices

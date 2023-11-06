@@ -1,10 +1,10 @@
 import { Chip, Typography } from '@equinor/eds-core-react'
 import { FC } from 'react'
 import { formatDate } from '../../../helpers/dateFormattingHelpers'
-import { Workflow } from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 
 type ChipStatusProps = {
-    workflow: Workflow
+    workflow: WorkflowResponse
 }
 
 export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
@@ -52,7 +52,7 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                     </Chip>
                     <Typography
                         variant="caption"
-                        style={{ margin: '0', paddingLeft: '10px'}}
+                        style={{ margin: '0', paddingLeft: '10px' }}
                         token={{
                             lineHeight: '2rem',
                             fontSize: '0.7rem',

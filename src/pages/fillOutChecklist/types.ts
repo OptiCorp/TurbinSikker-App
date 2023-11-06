@@ -1,13 +1,6 @@
-import { Task, Workflow } from '../../services/apiTypes'
+import { ChecklistTaskInfo, Workflow } from '../../services/apiTypes'
 
-export type UpdatingWorkFlowEntity = {
-    id: string
-    status: string
-
-    userId: string
-}
-
-export type FillOutListProps = {
-    tasks: Task[]
+export type ReviewProps = {
     workflow: Workflow
+    tasks: ChecklistTaskInfo[]
 }
