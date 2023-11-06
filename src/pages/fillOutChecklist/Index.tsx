@@ -19,7 +19,7 @@ import {
 } from './styles'
 
 export const FillOutCheckList = () => {
-    const { methods, onSubmit, workflow } = useFillChecklistForm()
+    const { methods, onSubmit, workflow, setSubmitDialogShowing, submitDialogShowing } = useFillChecklistForm()
 
     const { handleSubmit } = methods
     const { workflowId } = useParams() as { workflowId: string }
@@ -84,6 +84,8 @@ export const FillOutCheckList = () => {
                                     <>
                                         <FillOutList
                                             workflow={workflow}
+                                            setSubmitDialogShowing={setSubmitDialogShowing}
+                                            submitDialogShowing={submitDialogShowing}
                                             key={workflow.id}
                                         />
                                     </>

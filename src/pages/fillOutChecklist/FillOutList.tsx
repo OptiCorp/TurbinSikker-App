@@ -15,7 +15,14 @@ import { useNavigate, useParams } from 'react-router'
 import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import {
+    Controller,
+    DeepMap,
+    FieldError,
+    FieldValues,
+    useFieldArray,
+    useFormContext,
+} from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
 import useSnackBar from '../../components/snackbar/useSnackBar'
@@ -32,16 +39,23 @@ import {
     SubmitErrorContainer,
 } from './styles'
 
+export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
+    DeepMap<TFieldValues, FieldError>
+
 export type FillOutListProps = {
     workflow: WorkflowResponse
+    setSubmitDialogShowing: (submitDialogShowing: boolean) => void
+    submitDialogShowing: boolean
 }
 
 export const FillOutList: FunctionComponent<FillOutListProps> = ({
     workflow,
+    setSubmitDialogShowing,
+    submitDialogShowing,
 }) => {
     const { workflowId } = useParams() as { workflowId: string }
     const navigate = useNavigate()
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
+
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
     const [taskId, settaskId] = useState('')
     const createPunch = () => {
@@ -51,6 +65,8 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
 
     const methods = useFormContext<FillOutChecklistForm>()
 
+    const { formState: errors } = methods
+
     const { fields, update } = useFieldArray({
         control: methods.control,
         name: 'taskInfos',
@@ -58,7 +74,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
 
     return (
         <>
-            {snackbar}
             <>
                 <FillOutWrap>
                     {fields.map((field, index) => {
@@ -132,8 +147,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         multiline
                                         style={{
                                             filter:
-                                                field.status[index] ===
-                                                'NotApplicable'
+                                                field.status === 'NotApplicable'
                                                     ? 'blur(3px)'
                                                     : 'none',
                                         }}
@@ -141,6 +155,14 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         readOnly
                                     />
                                 </CustomCardContent>
+                                {methods.formState.errors.taskInfos && (
+                                    <div style={{ color: 'red' }}>
+                                        {
+                                            methods.formState.errors.taskInfos
+                                                .message
+                                        }
+                                    </div>
+                                )}
                                 <SubmitErrorContainer>
                                     <Controller
                                         control={methods.control}
@@ -152,6 +174,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         }}
                                         render={({
                                             field: { value, onChange },
+                                            fieldState: { error },
                                         }) => {
                                             return value === 'NotApplicable' ? (
                                                 <ImageContainer />
@@ -179,91 +202,96 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                             )
                                         }}
                                     />
+                                    {}
                                 </SubmitErrorContainer>
-                                {/* // {checked === 0 && <Error>Required</Error>}</> */}
                             </CustomCard>
                         )
                     })}
                 </FillOutWrap>
-            </>
 
-            <NavActionsComponent
-                buttonColor="primary"
-                as="button"
-                secondButtonColor="primary"
-                buttonVariant="outlined"
-                secondOnClick={() => setSubmitDialogShowing(true)}
-                isShown={true}
-                ButtonMessage="Clear"
-                type="button"
-                SecondButtonMessage="Submit"
-            />
-            <CustomDialog
-                title="Make Punch?"
-                buttonVariant="ghost"
-                negativeButtonOnClick={() => setPunchDialogShowing(false)}
-                negativeButtonText="Cancel"
-                positiveButtonText="OK"
-                positiveButtonOnClick={() => {
-                    createPunch()
-                }}
-                isOpen={punchDialogShowing}
-            >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
+                <NavActionsComponent
+                    buttonColor="primary"
+                    as="button"
+                    secondButtonColor="primary"
+                    buttonVariant="outlined"
+                    secondOnClick={() => setSubmitDialogShowing(true)}
+                    isShown={true}
+                    ButtonMessage="Clear"
+                    type="button"
+                    onClick={() => {
+                        methods.reset()
+                    }}
+                    SecondButtonMessage="Submit"
+                />
+                <CustomDialog
+                    title="Make Punch?"
+                    buttonVariant="ghost"
+                    negativeButtonOnClick={() => setPunchDialogShowing(false)}
+                    negativeButtonText="Cancel"
+                    positiveButtonText="OK"
+                    positiveButtonOnClick={() => {
+                        createPunch()
+                    }}
+                    isOpen={punchDialogShowing}
                 >
-                    You will be forwarded to Punch form. You will be able to
-                    continue this form where you left after.
-                </Typography>
-            </CustomDialog>
-            <Dialog
-                open={submitDialogShowing}
-                onClose={() => setSubmitDialogShowing(false)}
-                isDismissable
-            >
-                <Dialog.Header>
-                    <Dialog.Title>
-                        Submit {workflow.checklist.title}?
-                    </Dialog.Title>
-                </Dialog.Header>
-                <Dialog.CustomContent>
-                    <Typography style={{ marginBottom: '10px' }}>
-                        This will commit {workflow.checklist.title} to{' '}
-                        {workflow.creator.username}
+                    <Typography
+                        group="input"
+                        variant="text"
+                        token={{ textAlign: 'left' }}
+                    >
+                        You will be forwarded to Punch form. You will be able to
+                        continue this form where you left after.
                     </Typography>
-                    <div>
-                        <Label
-                            htmlFor="textfield-normal"
-                            label="Completion time (minutes):"
-                        />
-                        <Input
-                            id="textfield-normal"
-                            type="number"
-                            autoComplete="off"
-                            {...methods.register('completionTimeMinutes', {
-                                valueAsNumber: true,
-                            })}
-                        />
-                    </div>
-                </Dialog.CustomContent>
-                <Dialog.Actions>
-                    <Button
-                        style={{ marginRight: '10px' }}
-                        type="submit"
-                        form="fill-checklist"
-                    >
-                        Submit
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        onClick={() => setSubmitDialogShowing(false)}
-                    >
-                        Cancel
-                    </Button>
-                </Dialog.Actions>
-            </Dialog>
+                </CustomDialog>
+                <Dialog
+                    open={submitDialogShowing}
+                    onClose={() => setSubmitDialogShowing(false)}
+                    isDismissable
+                >
+                    <Dialog.Header>
+                        <Dialog.Title>
+                            Submit {workflow.checklist.title}?
+                        </Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.CustomContent>
+                        <Typography style={{ marginBottom: '10px' }}>
+                            This will commit {workflow.checklist.title} to{' '}
+                            {workflow.creator.username}
+                        </Typography>
+                        <div>
+                            <Label
+                                htmlFor="completionTimeMinutes"
+                                label="Completion time (minutes):"
+                            />
+                            <Input
+                                id="completionTimeMinutes"
+                                type="number"
+                                autoComplete="off"
+                                label
+                                {...methods.register('completionTimeMinutes', {
+                                    valueAsNumber: true,
+                                    required: 'This is required.',
+                                })}
+                            />
+                        </div>
+                    </Dialog.CustomContent>
+                    <Dialog.Actions>
+                        <Button
+                            style={{ marginRight: '10px' }}
+                            type="submit"
+                            form="fill-checklist"
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            onClick={() => setSubmitDialogShowing(false)}
+                        >
+                            Cancel
+                        </Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </>
         </>
     )
 }

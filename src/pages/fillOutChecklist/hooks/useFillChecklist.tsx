@@ -26,14 +26,22 @@ const objectTaskListToArray = (taskObject: { [key: string]: string }) => {
 
 export const useFillChecklistForm = () => {
     const methods = useForm<FillOutChecklistForm>()
-
+    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const navigate = useNavigate()
 
     const api = apiService()
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
     const [workflow, setWorkflow] = useState<WorkflowResponse>()
     const { isInspector, isLeader } = useRoles()
-    const { handleSubmit, control, register, getValues } = methods
+    const {
+        handleSubmit,
+        control,
+        register,
+        setError,
+        getValues,
+        reset,
+        formState: { errors },
+    } = methods
 
     const { fields, update } = useFieldArray({
         control: methods.control,
@@ -60,12 +68,6 @@ export const useFillChecklistForm = () => {
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
-        if (
-            !fields.every(
-                (x) => x.status === 'Finished' || x.status === 'notapplicable'
-            )
-        )
-            return
         if (isLeader && workflowId) {
             try {
                 const res = await api.updateWorkflow(
@@ -104,17 +106,21 @@ export const useFillChecklistForm = () => {
 
                     setRefreshList((prev) => !prev)
                 }
-                if (
-                    !fields.every(
-                        (x) =>
-                            x.status === 'Finished' ||
-                            x.status === 'notapplicable'
-                    )
-                ) {
-                    openSnackbar &&
-                        openSnackbar('Must check all tasks to submit')
-                    console.log('check all tasks to submit')
-                }
+
+                fields.forEach((field, index) => {
+                    if (
+                        field.status !== 'Finished' &&
+                        field.status !== 'NotApplicable'
+                    ) {
+                        setError(`taskInfos.${index}.status`, {
+                            type: 'manual',
+                            message: 'Please check this task before submitting',
+                        })
+                        openSnackbar &&
+                            openSnackbar('Must check all tasks to submit')
+                        setSubmitDialogShowing(false)
+                    }
+                })
             } catch (error) {
                 console.log(error)
             }
@@ -126,7 +132,11 @@ export const useFillChecklistForm = () => {
         onSubmit,
         workflow,
         control,
+        setSubmitDialogShowing,
+        submitDialogShowing,
+        formState: { errors },
         register,
+        reset,
         handleSubmit,
     }
 }
