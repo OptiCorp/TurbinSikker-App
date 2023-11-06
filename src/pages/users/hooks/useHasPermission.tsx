@@ -6,7 +6,7 @@ export function useHasPermission() {
     const [hasPermission, setHasPermission] = useState<boolean | undefined>(
         false
     )
-    const userRoleName = currentUser?.userRole.name
+    const userRoleName = currentUser?.userRole
 
     useEffect(() => {
         setHasPermission(

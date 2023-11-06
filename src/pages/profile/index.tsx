@@ -80,8 +80,8 @@ export const Profile: FunctionComponent = () => {
                     <Info>
                         <Typography variant="h5">{accounts[0].name}</Typography>
                         <Typography variant="body_short">
-                        {currentUser?.username}
-                            {currentUser?.userRole.name}
+                            {currentUser?.username}
+                            {currentUser?.userRole}
                         </Typography>
                     </Info>
                 )}

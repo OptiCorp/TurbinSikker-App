@@ -10,6 +10,7 @@ export const StyledTabh3 = styled.h3`
 export const TabWrap = styled.div`
     background: ${COLORS.whiteSmoke};
     border-top-right-radius: 10px;
+
     border-top-left-radius: 10px;
 `
 

@@ -17,16 +17,14 @@ export type User = {
     lastName: string
     email: string
     username: string
-    userRole: UserRole
+    userRole: string
     status: string
     createdDate: string
     updatedDate: string | null
 }
 
-export type UserRole = {
-    id: string
-    name: string
-}
+
+
 export type UserListEntity = {
     value: string
     label: string
@@ -115,7 +113,7 @@ export type Workflow = {
     createdDate: string
     updatedDate: null | string
     checklist: Checklist
-    
+
     user: User
     completionTimeMinutes: string
     taskInfos: {
@@ -130,18 +128,18 @@ export type WorkflowResponse = {
     status: string
     createdDate: string
     updatedDate: null | string
-    checklist: { 
+    checklist: {
         id: string
-    workflows: WorkflowResponse[]
-    title: string
-    status: number
-    createdDate: string
-    updatedDate: null | string
-    user: User
-    value: string
-    label: string
-    checklistTasks: ChecklistTaskInfo[]
-               }
+        workflows: WorkflowResponse[]
+        title: string
+        status: string
+        createdDate: string
+        updatedDate: null | string
+        user: User
+        value: string
+        label: string
+        checklistTasks: ChecklistTaskInfo[]
+    }
     user: User
     completionTimeMinutes: number
     taskInfos: TaskInfos

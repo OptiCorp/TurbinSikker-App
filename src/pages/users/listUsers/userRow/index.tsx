@@ -2,10 +2,10 @@ import { Chip, Icon, Table } from '@equinor/eds-core-react'
 import { edit } from '@equinor/eds-icons'
 import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
-import { useHasPermission } from '../../hooks/useHasPermission'
-import { StyledTableCell, TableData } from '../styles'
 import { User } from '../../../../services/apiTypes'
 import { COLORS } from '../../../../style/GlobalStyles'
+import { useHasPermission } from '../../hooks/useHasPermission'
+import { StyledTableCell, TableData } from '../styles'
 
 type Props = {
     user: User
@@ -37,7 +37,7 @@ export const UserRow: FunctionComponent<Props> = ({ user }) => {
                 <TableData>{user.email}</TableData>
             </StyledTableCell>
 
-            <StyledTableCell>{user.userRole.name}</StyledTableCell>
+            <StyledTableCell>{user.userRole}</StyledTableCell>
             <StyledTableCell>
                 {user.status === 'Active' ? (
                     <Chip variant="active" style={{ margin: '0 auto' }}>

@@ -33,14 +33,13 @@ export const useFillChecklistForm = () => {
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
     const [workflow, setWorkflow] = useState<WorkflowResponse>()
     const { isInspector, isLeader } = useRoles()
-    const { handleSubmit, control, register, getFieldState} = methods
+    const { handleSubmit, control, register, getValues } = methods
 
     const { fields, update } = useFieldArray({
         control: methods.control,
         name: 'taskInfos',
     })
 
-    
     const { workflowId } = useParams() as { workflowId: string }
     useEffect(() => {
         ;(async (): Promise<void> => {
@@ -61,6 +60,12 @@ export const useFillChecklistForm = () => {
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
+        if (
+            !fields.every(
+                (x) => x.status === 'Finished' || x.status === 'notapplicable'
+            )
+        )
+            return
         if (isLeader && workflowId) {
             try {
                 const res = await api.updateWorkflow(
@@ -85,28 +90,33 @@ export const useFillChecklistForm = () => {
         }
 
         if (isInspector && workflowId) {
-            {
-                try {
-                    const res = await api.updateWorkflow(
-                        workflowId,
-                        data.userId,
-                        'Committed',
-                        data.completionTimeMinutes,
-                        methods.watch('taskInfos')
-                    )
-                    if (res.ok) {
-                        openSnackbar && openSnackbar('Checklist committed')
-                        navigate('/Checklists')
-                        setRefreshList((prev) => !prev)
-                    }if ('') {
-                        openSnackbar &&
-                            openSnackbar(
-                                'All tasks must be checked to commit checklist'
-                            )
-                    }
-                } catch (error) {
-                    console.log(error)
+            try {
+                const res = await api.updateWorkflow(
+                    workflowId,
+                    data.userId,
+                    'Committed',
+                    data.completionTimeMinutes,
+                    methods.watch('taskInfos')
+                )
+                if (res.ok) {
+                    openSnackbar && openSnackbar('Checklist committed')
+                    navigate('/Checklists')
+
+                    setRefreshList((prev) => !prev)
                 }
+                if (
+                    !fields.every(
+                        (x) =>
+                            x.status === 'Finished' ||
+                            x.status === 'notapplicable'
+                    )
+                ) {
+                    openSnackbar &&
+                        openSnackbar('Must check all tasks to submit')
+                    console.log('check all tasks to submit')
+                }
+            } catch (error) {
+                console.log(error)
             }
         }
     }

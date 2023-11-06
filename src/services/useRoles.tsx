@@ -10,13 +10,13 @@ export const useRoles = () => {
         //     (role) => role === 'inspector'
         // ) || false
 
-        currentUser?.userRole.name === 'Inspector' || false
+        currentUser?.userRole === 'Inspector' || false
 
     const isLeader =
         // accounts[0].idTokenClaims?.roles?.some((role) => role === 'leader') ||
         // false
 
-        currentUser?.userRole.name === 'Leader' || false
+        currentUser?.userRole === 'Leader' || false
 
     return {
         isLeader,

@@ -18,6 +18,7 @@ import { NavActionsComponent } from '../../components/navigation/hooks/useNavAct
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
+import useSnackBar from '../../components/snackbar/useSnackBar'
 import { FillOutChecklistForm } from './hooks/types'
 import {
     CustomCard,
@@ -46,6 +47,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     const createPunch = () => {
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
+    const { snackbar, setSnackbarText } = useSnackBar()
 
     const methods = useFormContext<FillOutChecklistForm>()
 
@@ -54,10 +56,9 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
         name: 'taskInfos',
     })
 
-    console.log(workflow)
-
     return (
         <>
+            {snackbar}
             <>
                 <FillOutWrap>
                     {fields.map((field, index) => {
@@ -150,8 +151,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                                 'NotApplicable',
                                         }}
                                         render={({
-                                            field: { value, onChange }
-                                          
+                                            field: { value, onChange },
                                         }) => {
                                             return value === 'NotApplicable' ? (
                                                 <ImageContainer />

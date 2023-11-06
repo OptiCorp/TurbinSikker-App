@@ -26,39 +26,41 @@ export const LeaderInprogressChecklists: FunctionComponent<
         <>
             {workflow.workflows.map((workflow) => (
                 <>
-                    <StyledTableRow
-                        onClick={() => clickHandler(workflow.checklist.id)}
-                    >
-                        <Table.Cell>
-                            <CellContent>
-                                <Typography variant="body_long_bold">
-                                    {workflow.checklist.title}
-                                </Typography>
+                    {workflow.status === 'Sent' && (
+                        <StyledTableRow
+                            onClick={() => clickHandler(workflow.checklist.id)}
+                        >
+                            <Table.Cell>
+                                <CellContent>
+                                    <Typography variant="body_long_bold">
+                                        {workflow.checklist.title}
+                                    </Typography>
 
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '0.8rem',
-                                    }}
-                                    style={{ height: '1rem' }}
-                                >
-                                    Created {formattedCreatedDate}
-                                </Typography>
-                            </CellContent>
-                        </Table.Cell>
-                        <Table.Cell>
-                            <CellContent>
-                                <UserChip workflow={workflow} />
-                            </CellContent>
-                        </Table.Cell>
-                        <Table.Cell>
-                            <CellStatus>
-                                <ChipStatus workflow={workflow} />{' '}
-                            </CellStatus>
-                        </Table.Cell>
-                    </StyledTableRow>
+                                    <Typography
+                                        variant="caption"
+                                        token={{
+                                            fontSize: '0.8rem',
+                                        }}
+                                        style={{ height: '1rem' }}
+                                    >
+                                        Created {formattedCreatedDate}
+                                    </Typography>
+                                </CellContent>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <CellContent>
+                                    <UserChip workflow={workflow} />
+                                </CellContent>
+                            </Table.Cell>
+                            <Table.Cell>
+                                <CellStatus>
+                                    <ChipStatus workflow={workflow} />{' '}
+                                </CellStatus>
+                            </Table.Cell>
+                        </StyledTableRow>
+                    )}
                 </>
-            ))}{' '}
+            ))}
         </>
     )
 }

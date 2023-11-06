@@ -9,13 +9,8 @@ import {
     Task,
     Upload,
     User,
-    UserRole,
-
     WorkflowResponse,
-
-    Workflow,
     pubSubToken,
-
 } from './apiTypes'
 
 const request = {
@@ -247,35 +242,6 @@ const apiService = () => {
 
     // user role
 
-    const getAllUserRoles = async (): Promise<UserRole[]> => {
-        const data = await getByFetch('GetAllUserRoles')
-        return data
-    }
-
-    const getUserRole = async (id: string): Promise<UserRole> => {
-        const data = await getByFetch(`GetUserRole?id=${id}`)
-        return data
-    }
-
-    const addUserRole = async (
-        userRole: Pick<UserRole, 'name'>
-    ): Promise<void> => {
-        await postByFetch('AddUserRole', {
-            userRole,
-        })
-    }
-
-    const updateUserRole = async (id: string, name: string): Promise<void> => {
-        await postByFetch('UpdateUserRole', {
-            id: id,
-            name: name,
-        })
-    }
-
-    const deleteUserRole = async (id: string): Promise<void> => {
-        await deleteByFetch(`DeleteUserRole?id=${id}`)
-    }
-
     // checklist
 
     const getAllCheckLists = async (): Promise<Checklist> => {
@@ -452,14 +418,6 @@ const apiService = () => {
         return data
     }
 
-    // const addTask = async (
-    //     task: Pick<Task, 'category' | 'description'>
-    // ): Promise<void> => {
-    //     await postByFetch('AddTask', {
-    //         task,
-    //     })
-    // }
-
     const addTask = async (
         categoryId: string,
         description: string
@@ -469,24 +427,6 @@ const apiService = () => {
             description: description,
         })
     }
-
-    // const updateTask = async (
-    //     // checklistId: string,
-    //     //  update: Task
-    //     id: string,
-    //     categoryId: string,
-    //     description: string
-    //     // checklistId: string
-    // ): Promise<void> => {
-    //     await postByFetch('UpdateTask', {
-    //         checklistId: checklistId,
-    //         ...update,
-    //         /* id: id,
-    //         categoryId: categoryId,
-    //         description: description,
-    //         checklistId: checklistId, */
-    //     })
-    // }
 
     const updateTask = async (
         id: string,
@@ -677,11 +617,6 @@ const apiService = () => {
         return data
     }
 
-    // const getAllInvoicePdfs = async (): Promise<Invoice[]> => {
-    //     const data = await getByFetch('GetAllInvoicePdfs')
-    //     return data
-    // }
-
     const getInvoice = async (id: string): Promise<Invoice> => {
         const data = await getByFetch(`GetInvoice?id=${id}`)
         return data
@@ -704,7 +639,7 @@ const apiService = () => {
             receiver: receiver,
             workflowIds: workflowIds,
             hourlyRate: hourlyRate,
-            sender: sender
+            sender: sender,
         })
     }
 
@@ -734,9 +669,11 @@ const apiService = () => {
         return data
     }
 
-    const getNotificationsByUser = async (id: string): Promise<Notifications[]> => {
+    const getNotificationsByUser = async (
+        id: string
+    ): Promise<Notifications[]> => {
         const data = await getByFetch(`GetNotificationByUserId?id=${id}`)
-        return data;
+        return data
     }
 
     const updateNotification = async (
@@ -745,17 +682,9 @@ const apiService = () => {
     ): Promise<void> => {
         await postByFetch('UpdateNotififcation', {
             id: id,
-            notificationStatus: notificationStatus
+            notificationStatus: notificationStatus,
         })
     }
-
-    // const sdasdsa = () => {
-    //     const Location = useLocation()
-    //     const refreshCheckLists = Location.state
-    //         ? Location.state?.refreshCheckLists
-    //         : null
-    //     const [refreshList, setRefreshList] = React.useState<boolean>(false)
-    // }
 
     return {
         getAllUsers,
@@ -767,11 +696,7 @@ const apiService = () => {
         updateUser,
         softDeleteUser,
         hardDeleteUser,
-        getAllUserRoles,
-        getUserRole,
-        addUserRole,
-        updateUserRole,
-        deleteUserRole,
+
         getAllCategories,
         getCategory,
         getCategoriesByName,
@@ -825,7 +750,7 @@ const apiService = () => {
         getPubSubAccessToken,
         getAllNotifications,
         getNotificationsByUser,
-        updateNotification
+        updateNotification,
     }
 }
 

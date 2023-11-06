@@ -35,14 +35,13 @@ export const FillOutCheckList = () => {
             {snackbar}
             <form onSubmit={handleSubmit(onSubmit)} id="fill-checklist">
                 <BackgroundWrap>
-                 
-                        <InfoHeader>
-                            {' '}
-                            <StyledCard>
-                                <EditStyledCardHeader>
-                                    {workflow?.checklist.title}{' '}
-                                </EditStyledCardHeader>
-                                {workflow && isLeader && (
+                    <InfoHeader>
+                        {' '}
+                        <StyledCard>
+                            <EditStyledCardHeader>
+                                {workflow?.checklist.title}{' '}
+                            </EditStyledCardHeader>
+                            {workflow && isLeader && (
                                 <List>
                                     <Container>
                                         <Typography
@@ -73,10 +72,11 @@ export const FillOutCheckList = () => {
                                     >
                                         {' '}
                                     </Typography>
-                                </List>)}
-                            </StyledCard>
-                        </InfoHeader>
-                    
+                                </List>
+                            )}
+                        </StyledCard>
+                    </InfoHeader>
+
                     <>
                         <PreviewWrapper>
                             <>

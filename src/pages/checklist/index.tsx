@@ -13,8 +13,7 @@ export const IndexCheckLists = () => {
     const [activeTab, setActiveTab] = useState<number | undefined>(
         path.pathname.includes('MyChecklists')
             ? 0
-            : path.pathname.includes('Checklists') ||
-              path.pathname.includes('/')
+            : path.pathname.includes('Checklists')
             ? 1
             : path.pathname.includes('ForReviewChecklists')
             ? 2
@@ -74,7 +73,7 @@ export const IndexCheckLists = () => {
                                 <>
                                     {' '}
                                     {isLeader
-                                        ? 'My checklist'
+                                        ? 'In progress'
                                         : 'Outgoing checklists'}
                                 </>
                             </Tabs.Tab>
