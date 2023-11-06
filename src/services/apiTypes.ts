@@ -64,7 +64,7 @@ export type Checklist = {
     id: string
     workflows: WorkflowResponse[]
     title: string
-    status: number
+    status: string
     createdDate: string
     updatedDate: null | string
     user: User
