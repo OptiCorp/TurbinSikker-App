@@ -56,6 +56,10 @@ export const Header = () => {
     }
 
     useEffect(() => {
+        while (pubSubToken === '') {
+            console.log("Waiting")
+        }
+
         const pubSubClient = new WebPubSubClient(pubSubToken)
 
         pubSubClient?.on("server-message", (e) => {
