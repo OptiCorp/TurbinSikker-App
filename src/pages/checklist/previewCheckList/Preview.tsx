@@ -6,7 +6,7 @@ import { NavActionsComponent } from '../../../components/navigation/hooks/useNav
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Checklist, Task, Workflow } from '../../../services/apiTypes'
+import { Checklist, ChecklistTaskInfo } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
 import { PreviewList } from './PreviewList'
@@ -23,8 +23,8 @@ export const PreviewCheckList = () => {
     const { accessToken, currentUser, refreshList } = useGlobal()
     const state = location.state
     const [checklist, setChecklist] = useState<Checklist>()
-    const [tasks, setTasks] = useState<Task[]>([])
-    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
+    const [tasks, setTasks] = useState<ChecklistTaskInfo[]>([])
+
     const { id } = useParams() as { id: string }
     const clickHandler = (id: string) => {
         navigate(`/EditCheckList/${id}`)
@@ -97,31 +97,29 @@ export const PreviewCheckList = () => {
                         )}
                     </div>
                 )}
-                <>
-                    {state?.isFromCompletedList ? (
-                        <DefaultNavigation hideNavbar={false} />
-                    ) : (
-                        <>
-                            {checklist && (
-                                <NavActionsComponent
-                                    buttonColor="primary"
-                                    secondButtonColor="primary"
-                                    buttonVariant="outlined"
-                                    onClick={() => clickHandler(id)}
-                                    secondOnClick={() => {
-                                        navigate(
-                                            `/SendChecklist/${checklist.id}`
-                                        )
-                                    }}
-                                    isShown={true}
-                                    ButtonMessage="Edit Checklist"
-                                    SecondButtonMessage="Send"
-                                />
-                            )}
-                        </>
-                    )}
-                </>
             </BackgroundContainer>
+            <>
+                {state?.isFromCompletedList ? (
+                    <DefaultNavigation hideNavbar={false} />
+                ) : (
+                    <>
+                        {checklist && (
+                            <NavActionsComponent
+                                buttonColor="primary"
+                                secondButtonColor="primary"
+                                buttonVariant="outlined"
+                                onClick={() => clickHandler(id)}
+                                secondOnClick={() => {
+                                    navigate(`/SendChecklist/${checklist.id}`)
+                                }}
+                                isShown={true}
+                                ButtonMessage="Edit Checklist"
+                                SecondButtonMessage="Send"
+                            />
+                        )}
+                    </>
+                )}
+            </>
         </>
     )
 }

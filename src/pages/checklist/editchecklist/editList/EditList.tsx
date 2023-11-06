@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
 import useGlobal from '../../../../context/globalContextProvider'
 import apiService from '../../../../services/api'
-import { Checklist, Task } from '../../../../services/apiTypes'
+import { Checklist, ChecklistTaskInfo } from '../../../../services/apiTypes'
 import { PreviewListPoints } from '../../previewCheckList/styles'
 import { useEditChecklist } from '../hooks/useEditChecklist'
 import {
@@ -20,7 +20,7 @@ import {
 
 type Props = {
     checklist: Checklist
-    tasks: Task[]
+    tasks: ChecklistTaskInfo[]
 }
 
 export const EditList = ({ tasks }: Props) => {
@@ -29,7 +29,7 @@ export const EditList = ({ tasks }: Props) => {
     const { handleUpdateTask } = useEditChecklist()
     const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const { id } = useParams() as { id: string }
-    const [task, setTask] = useState<Task>()
+    const [task, setTask] = useState<ChecklistTaskInfo>()
     const api = apiService()
     const handleSubmit = () => {
         const categoryId = task?.category.id
@@ -49,10 +49,9 @@ export const EditList = ({ tasks }: Props) => {
     }
 
     const deleteTask = async () => {
-        const taskId = task?.id
-        if (!taskId) return
+        if (!task?.id) return
         try {
-            const res = await api.deleteTask(taskId)
+            const res = await api.removeTaskFromChecklist(task.id, id)
 
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task deleted')

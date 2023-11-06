@@ -4,7 +4,11 @@ import { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
-import { Notifications, Checklist, Workflow } from '../../services/apiTypes'
+
+import {Notifications, Checklist, WorkflowResponse } from '../../services/apiTypes'
+
+
+
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import Sidebar from '../sidebar/Sidebar'
@@ -21,7 +25,7 @@ export const Header = () => {
     const { isInspector, isLeader } = useRoles()
     const api = apiService()
 
-
+    const [workflow, setWorkFlow] = useState<WorkflowResponse>()
 
     const [read, setRead] = useState(false)
     const [notificationsOpen, setNotificationsOpen] = useState(false)
@@ -40,8 +44,8 @@ export const Header = () => {
     }
     const basePath = useBasePath()
 
-    const { currentUser, pubSubToken } = useGlobal()
-    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
+    const { currentUser, pubSubToken} = useGlobal()
+   
 
     const [title, setTitle] = useState('')
 
@@ -165,7 +169,6 @@ export const Header = () => {
 
     return (
         <>
-            {' '}
             <Sidebar open={open} setOpen={setOpen} />
             <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} notificationsList={notificationsList} />
             <NewTopBar>

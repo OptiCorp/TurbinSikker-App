@@ -4,7 +4,14 @@ import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 
 export const CategorySelector = () => {
-    const { category, tasks, setSelectedOption, selectedOption, reset, resetField } = useAddTaskForm()
+    const {
+        category,
+        tasks,
+        setSelectedOption,
+        selectedOption,
+        reset,
+        resetField,
+    } = useAddTaskForm()
     const { control } = useFormContext()
 
     return (
@@ -13,7 +20,6 @@ export const CategorySelector = () => {
                 <Select
                     styles={customStyles}
                     isClearable
-                    
                     options={category}
                     placeholder={'select category'}
                     onChange={(val) => {
@@ -31,7 +37,7 @@ export const CategorySelector = () => {
                     render={({ field: { onChange, value } }) => {
                         return (
                             <Select
-                       isDisabled={selectedOption ? false : true}
+                                isDisabled={selectedOption ? false : true}
                                 styles={customStyles}
                                 options={tasks}
                                 isClearable
@@ -40,7 +46,10 @@ export const CategorySelector = () => {
                                 onChange={(val) => {
                                     if (val === null) return onChange(null)
                                     onChange(val.id)
-                                }}placeholder={selectedOption ? 'select task' : ''}
+                                }}
+                                placeholder={
+                                    selectedOption ? 'select task' : ''
+                                }
                             />
                         )
                     }}

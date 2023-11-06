@@ -15,12 +15,13 @@ export const AddTasks = () => {
                 <TitleHeader>
                     <StyledCard>
                         <Card.Content>
-                      
                             <CategorySelector />
                         </Card.Content>
-                        <Button id="addTask" type="submit" form="addTask">
-                            Add Task
-                        </Button>
+                        <Card.Actions>
+                            <Button id="addTask" type="submit" form="addTask">
+                                Add Task
+                            </Button>
+                        </Card.Actions>
                     </StyledCard>
                 </TitleHeader>
             </form>

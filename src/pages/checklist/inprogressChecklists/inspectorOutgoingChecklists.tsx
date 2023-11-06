@@ -3,13 +3,13 @@ import { FunctionComponent } from 'react'
 import { useNavigate } from 'react-router'
 import { StyledTableRow, TitleCellContent } from '../myChecklists/styles'
 
-import { Workflow } from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 import { UserChip } from './UserChip'
 import { ChipStatus } from './chipStatus'
 import { CellContent } from './styles'
 
 interface CheckListRowProps {
-    WorkFlow: Workflow
+    WorkFlow: WorkflowResponse
 }
 
 export const InspectorOutgoingCheckLists: FunctionComponent<
