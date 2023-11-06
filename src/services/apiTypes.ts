@@ -114,18 +114,7 @@ export type Workflow = {
     status: string
     createdDate: string
     updatedDate: null | string
-    checklist: { 
-        id: string
-    workflows: WorkflowResponse[]
-    title: string
-    status: number
-    createdDate: string
-    updatedDate: null | string
-    user: User
-    value: string
-    label: string
-    checklistTasks: ChecklistTaskInfo[]
-               }
+    checklist: Checklist
     
     user: User
     completionTimeMinutes: string
@@ -141,7 +130,18 @@ export type WorkflowResponse = {
     status: string
     createdDate: string
     updatedDate: null | string
-    checklist: Checklist
+    checklist: { 
+        id: string
+    workflows: WorkflowResponse[]
+    title: string
+    status: number
+    createdDate: string
+    updatedDate: null | string
+    user: User
+    value: string
+    label: string
+    checklistTasks: ChecklistTaskInfo[]
+               }
     user: User
     completionTimeMinutes: number
     taskInfos: TaskInfos
