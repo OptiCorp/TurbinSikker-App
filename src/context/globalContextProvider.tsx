@@ -11,7 +11,7 @@ import {
 import { Loading } from '../components/loading/Loading'
 import PageNotFound from '../pages/pageNotFound'
 import apiService from '../services/api'
-import { ApiStatus, User, pubSubToken } from '../services/apiTypes'
+import { ApiStatus, User } from '../services/apiTypes'
 import { AzureUserInfo, GlobalContextType } from './types'
 
 const GlobalContext = createContext<GlobalContextType>({} as GlobalContextType)
@@ -28,8 +28,8 @@ export function GlobalProvider({
     const accountname = account?.name
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
-    // const [pubSubToken, setPubSubToken] = useState<string>('')
-    let pubSubToken = ''
+    const [pubSubToken, setPubSubToken] = useState<string>('')
+    const [pubSubStatus, setPubSubStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [snackbarText, setSnackbarText] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -44,13 +44,6 @@ export function GlobalProvider({
     }
 
     const [currentUser, setCurrentUser] = useState<User | null>(null)
-
-    useEffect(() => {
-        (async () => {
-            let token = await api.getPubSubAccessToken()
-            pubSubToken = token.token
-        })()
-    }, [])
 
     useEffect(() => {
         if (inProgress === InteractionStatus.None) {
@@ -147,11 +140,33 @@ export function GlobalProvider({
         }
     }
 
+    const fetchAndUpdatePubSubToken = async () => {
+        setPubSubStatus(ApiStatus.LOADING)
+        try {
+            await fetchPubSubToken()
+            setPubSubStatus(ApiStatus.SUCCESS)
+        } catch (error) {
+            console.log("Something went wrong: " + error)
+            setPubSubStatus(ApiStatus.ERROR)
+        }
+    }
+
+    const fetchPubSubToken = async () => {
+        const response = await api.getPubSubAccessToken()
+        if (response) {
+            setPubSubToken(response.token)
+        }
+    }
+
     useEffect(() => {
         if (idToken) {
             fetchUserAndUpdateContext(idToken)
         }
     }, [idToken])
+
+    useEffect(() => {
+        fetchAndUpdatePubSubToken()
+    }, [])
 
     if (status === ApiStatus.LOADING) {
         return <Loading text="Loading .." />
@@ -159,6 +174,14 @@ export function GlobalProvider({
 
     if (status === ApiStatus.ERROR) {
         return <PageNotFound />
+    }
+
+    if (pubSubStatus === ApiStatus.ERROR) {
+        return <PageNotFound />
+    }
+
+    if (pubSubStatus === ApiStatus.LOADING) {
+        return <Loading text='Loading ..' />
     }
 
     if (accounts.length > 0) {
