@@ -1,98 +1,96 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent } from "react";
 
-import { Chip, Icon, Table, Typography } from '@equinor/eds-core-react'
-import { assignment_user } from '@equinor/eds-icons'
-import { useNavigate } from 'react-router'
+import { Chip, Icon, Table, Typography } from "@equinor/eds-core-react";
+import { assignment_user } from "@equinor/eds-icons";
+import { useNavigate } from "react-router";
 
-import { Checklist } from '../../../services/apiTypes'
-import { COLORS } from '../../../style/GlobalStyles'
-import { CellContentMyList, StyledChip, StyledTableRow } from './styles'
+import { Checklist } from "../../../services/apiTypes";
+import { COLORS } from "../../../style/GlobalStyles";
+import { CellContentMyList, StyledChip, StyledTableRow } from "./styles";
 
 interface CheckListRowProps {
-    checklist: Checklist
-    activeRow: boolean
-    setActiveRow: (open: boolean) => void
+  checklist: Checklist;
+  activeRow: boolean;
+  setActiveRow: (open: boolean) => void;
 }
 
 export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
-    checklist,
+  checklist,
 }) => {
-    const formatDate = (dateString: string | null) => {
-        if (!dateString) {
-            return 'No updates'
-        }
-        const date = new Date(dateString)
-
-        return date.toLocaleDateString('en-GB')
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) {
+      return "No updates";
     }
+    const date = new Date(dateString);
 
-    const navigate = useNavigate()
-    const formattedCreatedDate = formatDate(checklist.createdDate || '')
+    return date.toLocaleDateString("en-GB");
+  };
 
-    const clickHandler = (id: string) => {
-        navigate(`/PreviewCheckList/${id}`)
+  const navigate = useNavigate();
+  const formattedCreatedDate = formatDate(checklist.createdDate || "");
+
+  const clickHandler = (id: string) => {
+    navigate(`/PreviewCheckList/${id}`);
+  };
+
+  const count = () => {
+    const length = checklist.workflows.length;
+    if (checklist.workflows.length > 1) {
+      return `${length} Inspectors`;
+    } else if (checklist.workflows.length === 1) {
+      return `${length} Inspector`;
+    } else {
+      return "none";
     }
+  };
 
-    const count = () => {
-        const length = checklist.workflows.length
-        if (checklist.workflows.length > 1) {
-            return `${length} Inspectors`
-        } else if (checklist.workflows.length === 1) {
-            return `${length} Inspector`
-        } else {
-            return 'none'
-        }
-    }
+  return (
+    <>
+      {checklist?.id && (
+        <StyledTableRow onClick={() => clickHandler(checklist.id || "")}>
+          <Table.Cell>
+            <CellContentMyList>
+              <Typography variant="body_long_bold">
+                {checklist.title}
+              </Typography>
 
-    return (
-        <>
-            {checklist?.id && (
-                <StyledTableRow
-                    onClick={() => clickHandler(checklist.id || '')}
+              <Typography
+                variant="caption"
+                token={{
+                  fontSize: "0.8rem",
+                }}
+                style={{ height: "1rem" }}
+              >
+                Created {formattedCreatedDate}
+              </Typography>
+            </CellContentMyList>
+          </Table.Cell>
+          <Table.Cell>
+            <CellContentMyList>
+              <StyledChip>
+                <Icon
+                  data={assignment_user}
+                  color={COLORS.secondary}
+                  style={{ height: "15px" }}
+                />
+                <Typography
+                  variant="caption"
+                  token={{
+                    fontSize: "0.8rem",
+                  }}
                 >
-                    <Table.Cell>
-                        <CellContentMyList>
-                            <Typography variant="body_long_bold">
-                                {checklist.title}
-                            </Typography>
+                  {count()}
+                </Typography>
+              </StyledChip>
+            </CellContentMyList>
+          </Table.Cell>
 
-                            <Typography
-                                variant="caption"
-                                token={{
-                                    fontSize: '0.8rem',
-                                }}
-                                style={{ height: '1rem' }}
-                            >
-                                Created {formattedCreatedDate}
-                            </Typography>
-                        </CellContentMyList>
-                    </Table.Cell>
-                    <Table.Cell>
-                        <CellContentMyList>
-                            <StyledChip>
-                                <Icon
-                                    data={assignment_user}
-                                    color={COLORS.secondary}
-                                    style={{ height: '15px' }}
-                                />
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '0.8rem',
-                                    }}
-                                >
-                                    {count()}
-                                </Typography>
-                            </StyledChip>
-                        </CellContentMyList>
-                    </Table.Cell>
-
-                    <Table.Cell>
-                        {' '}
-                        <Chip> {checklist.status} </Chip>{' '}
-                    </Table.Cell>
-                </StyledTableRow>
-            )}
-        </>
-    )
-}
+          <Table.Cell>
+            {" "}
+            <Chip> {checklist.status} </Chip>{" "}
+          </Table.Cell>
+        </StyledTableRow>
+      )}
+    </>
+  );
+};

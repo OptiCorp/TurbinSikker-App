@@ -1,7 +1,7 @@
-import { IconData } from '@equinor/eds-icons'
+import { IconData } from "@equinor/eds-icons";
 
 export type PunchSeverity = {
-    severity: string
-    color: string
-    icon: IconData
-}
+  severity: string;
+  color: string;
+  icon: IconData;
+};

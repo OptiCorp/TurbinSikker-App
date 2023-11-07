@@ -1,25 +1,25 @@
-import { useIsAuthenticated } from '@azure/msal-react'
-import { RoutesContainer } from './RoutesContainer'
+import { useIsAuthenticated } from "@azure/msal-react";
+import { RoutesContainer } from "./RoutesContainer";
 
-import { SnackBarComponent } from './components/snackbar/Snackbar'
-import { GlobalProvider } from './context/globalContextProvider'
-import { Login } from './pages/login'
-import './style/App.css'
+import { SnackBarComponent } from "./components/snackbar/Snackbar";
+import { GlobalProvider } from "./context/globalContextProvider";
+import { Login } from "./pages/login";
+import "./style/App.css";
 
 const App = () => {
-    const isAuthenticated = useIsAuthenticated()
+  const isAuthenticated = useIsAuthenticated();
 
-    return (
-        <div className="wrapper">
-            {isAuthenticated && (
-                <GlobalProvider>
-                    <SnackBarComponent />
-                    <RoutesContainer />
-                </GlobalProvider>
-            )}
-            {!isAuthenticated && <Login />}
-        </div>
-    )
-}
+  return (
+    <div className="wrapper">
+      {isAuthenticated && (
+        <GlobalProvider>
+          <SnackBarComponent />
+          <RoutesContainer />
+        </GlobalProvider>
+      )}
+      {!isAuthenticated && <Login />}
+    </div>
+  );
+};
 
-export default App
+export default App;

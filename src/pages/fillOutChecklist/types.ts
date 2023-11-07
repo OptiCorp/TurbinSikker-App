@@ -1,6 +1,6 @@
-import { ChecklistTaskInfo, Workflow } from '../../services/apiTypes'
+import { ChecklistTaskInfo, Workflow } from "../../services/apiTypes";
 
 export type ReviewProps = {
-    workflow: Workflow
-    tasks: ChecklistTaskInfo[]
-}
+  workflow: Workflow;
+  tasks: ChecklistTaskInfo[];
+};

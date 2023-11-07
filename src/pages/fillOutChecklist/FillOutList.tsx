@@ -25,7 +25,7 @@ import {
 } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
-import useSnackBar from '../../components/snackbar/useSnackBar'
+import { ErrorMessage } from '@hookform/error-message'
 import { FillOutChecklistForm } from './hooks/types'
 import {
     CustomCard,
@@ -61,15 +61,28 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
     const createPunch = () => {
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
-    const { snackbar, setSnackbarText } = useSnackBar()
 
     const methods = useFormContext<FillOutChecklistForm>()
 
-    const { formState: errors } = methods
+    const {
+        formState: { errors },
+    } = methods
+    console.log(errors)
 
     const { fields, update } = useFieldArray({
         control: methods.control,
         name: 'taskInfos',
+        rules: {
+            validate: (taskInfoes) => {
+                return (
+                    !taskInfoes.every(
+                        (x) =>
+                            x.status === 'Finished' ||
+                            x.status === 'NotApplicable'
+                    ) && 'required'
+                )
+            },
+        },
     })
 
     return (
@@ -139,7 +152,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     </NotApplicableWrap>
 
                                     <CustomTaskField
-                                        label={''}
+                                        label=""
                                         key={task.id}
                                         id="storybook-multi-readonly"
                                         name="task"
@@ -155,26 +168,17 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         readOnly
                                     />
                                 </CustomCardContent>
-                                {methods.formState.errors.taskInfos && (
-                                    <div style={{ color: 'red' }}>
-                                        {
-                                            methods.formState.errors.taskInfos
-                                                .message
-                                        }
-                                    </div>
-                                )}
+
                                 <SubmitErrorContainer>
                                     <Controller
                                         control={methods.control}
                                         name={`taskInfos.${index}.status`}
                                         rules={{
                                             required:
-                                                field.status === 'Finished' ||
-                                                'NotApplicable',
+                                                'Checkbox must be checked.',
                                         }}
                                         render={({
                                             field: { value, onChange },
-                                            fieldState: { error },
                                         }) => {
                                             return value === 'NotApplicable' ? (
                                                 <ImageContainer />
@@ -202,7 +206,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                             )
                                         }}
                                     />
-                                    {}
+                                    <ErrorMessage name={`taskInfos.root`} />
                                 </SubmitErrorContainer>
                             </CustomCard>
                         )
@@ -267,7 +271,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                 id="completionTimeMinutes"
                                 type="number"
                                 autoComplete="off"
-                                label
                                 {...methods.register('completionTimeMinutes', {
                                     valueAsNumber: true,
                                     required: 'This is required.',

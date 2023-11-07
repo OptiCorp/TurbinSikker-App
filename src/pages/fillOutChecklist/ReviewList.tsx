@@ -1,7 +1,7 @@
 // import { FunctionComponent, useState } from 'react'
 
-import { FunctionComponent } from 'react'
-import { ReviewProps } from './types'
+import { FunctionComponent } from "react";
+import { ReviewProps } from "./types";
 
 // import { Checkbox, Chip, Typography } from '@equinor/eds-core-react'
 // import { useNavigate, useParams } from 'react-router'
@@ -28,13 +28,13 @@ import { ReviewProps } from './types'
 // import { ReviewProps } from './types'
 
 export const ReviewList: FunctionComponent<ReviewProps> = (
-    {
-        // tasks,
-        // workflow,
-    }
+  {
+    // tasks,
+    // workflow,
+  },
 ) => {
-    return <></>
-}
+  return <></>;
+};
 //     const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
 //     const [applicableStatuses, setApplicableStatuses] = useState<
 //         Record<string, boolean>
