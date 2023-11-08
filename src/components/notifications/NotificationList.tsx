@@ -47,26 +47,28 @@ const NotificationList: FunctionComponent<Props> = ({
         setOpen(false)
     }
 
-    return (
-        <>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                style={{ height: '400px' }}
-            >
-                <Dialog.Header>
-                    <Dialog.Title>Notifications</Dialog.Title>
-                    <Icon
-                        data={close}
-                        size={40}
-                        style={{
-                            color: COLORS.black,
-                        }}
-                        onClick={() => closer()}
-                    />
-                </Dialog.Header>
-                <Dialog.CustomContent scrollable style={{ height: '100%' }}>
-                    {!isInfoOpen ? (
+
+
+
+    return <>
+        <Dialog open={open} onClose={handleClose} style={{ height: '400px' }}>
+            <Dialog.Header>
+                <Dialog.Title>Notifications</Dialog.Title>
+                <Icon
+                    data={close}
+                    size={24}
+                    style={{
+                        color: COLORS.black
+                    }}
+                    onClick={() => closer()}
+                />
+            </Dialog.Header>
+            <Dialog.CustomContent scrollable style={{ height: '100%' }}>
+
+                {!isInfoOpen
+                    ?
+                    (
+
                         <Table style={{ width: '100%' }}>
                             <Table.Head>
                                 <Table.Row>
@@ -76,55 +78,14 @@ const NotificationList: FunctionComponent<Props> = ({
                             </Table.Head>
                             <Table.Body>
                                 {notificationsList.map((notify, key) =>
-                                    notify.notificationStatus === 'Unread' ? (
-                                        <Table.Row key={key}>
-                                            <Table.Cell
-                                                onClick={async () =>
-                                                    await handleNotificationInfoOpen(
-                                                        notify
-                                                    )
-                                                }
-                                            >
-                                                {notify.notificationType}
-                                            </Table.Cell>
-                                            <Table.Cell
-                                                onClick={async () =>
-                                                    await handleNotificationInfoOpen(
-                                                        notify
-                                                    )
-                                                }
-                                            >
-                                                {notify.message}
-                                            </Table.Cell>
-                                        </Table.Row>
-                                    ) : (
-                                        <Table.Row
-                                            style={{
-                                                backgroundColor: COLORS.gray,
-                                            }}
-                                            key={key}
-                                        >
-                                            <Table.Cell
-                                                onClick={async () =>
-                                                    await handleNotificationInfoOpen(
-                                                        notify
-                                                    )
-                                                }
-                                            >
-                                                {notify.notificationType}
-                                            </Table.Cell>
-                                            <Table.Cell
-                                                onClick={async () =>
-                                                    await handleNotificationInfoOpen(
-                                                        notify
-                                                    )
-                                                }
-                                            >
-                                                {notify.message}
-                                            </Table.Cell>
-                                        </Table.Row>
-                                    )
-                                )}
+
+                                ((
+                                    <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(165, 223, 255)' : undefined }} key={key}>
+                                        <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
+                                        <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
+                                    </Table.Row>
+                                )))}
+
                             </Table.Body>
                         </Table>
                     ) : (

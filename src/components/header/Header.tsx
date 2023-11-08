@@ -1,70 +1,51 @@
-import { Dialog, Icon, TopBar } from "@equinor/eds-core-react";
-import { arrow_back_ios, menu, notifications } from "@equinor/eds-icons";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
-import useGlobal from "../../context/globalContextProvider";
-import apiService from "../../services/api";
 
-import {
-  Notifications,
-  Checklist,
-  WorkflowResponse,
-} from "../../services/apiTypes";
+import { Dialog, Icon, TopBar } from '@equinor/eds-core-react'
+import { arrow_back_ios, menu, notifications } from '@equinor/eds-icons'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
+import useGlobal from '../../context/globalContextProvider'
+import apiService from '../../services/api'
 
-import { useRoles } from "../../services/useRoles";
-import { COLORS } from "../../style/GlobalStyles";
-import Sidebar from "../sidebar/Sidebar";
-import NotificationList from "../notifications/NotificationList";
-import { HeaderContents, HeaderLocation, NewTopBar } from "./styles";
-import { WebPubSubClient } from "@azure/web-pubsub-client";
+import { Notifications, Checklist, WorkflowResponse, Workflow } from '../../services/apiTypes'
+
+
+
+import { useRoles } from '../../services/useRoles'
+import { COLORS } from '../../style/GlobalStyles'
+import Sidebar from '../sidebar/Sidebar'
+import NotificationList from '../notifications/NotificationList'
+import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
+import { WebPubSubClient } from '@azure/web-pubsub-client'
+import { Badge } from '../badge'
 
 export const Header = () => {
-  const navigate = useNavigate();
-  const [activeUrl, setActiveUrl] = useState<string>("");
-  const [checklist, setChecklist] = useState<Checklist>();
-  const location = useLocation();
-  const [open, setOpen] = useState(false);
-  const { isInspector, isLeader } = useRoles();
-  const api = apiService();
+    const navigate = useNavigate()
+    const [activeUrl, setActiveUrl] = useState('')
+    const [checklist, setChecklist] = useState<Checklist>()
+    const location = useLocation()
+    const [open, setOpen] = useState(false)
+    const { isInspector, isLeader } = useRoles()
+    const api = apiService()
 
-  const [workflow, setWorkFlow] = useState<WorkflowResponse>();
+    const [numberOfUnreads, setNumberOfUnreads] = useState(0)
 
-  const [read, setRead] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notificationsOpen, setNotificationsOpen] = useState(false)
 
-  useEffect(() => {
-    setActiveUrl(window.location.pathname);
-  }, [location]);
+    useEffect(() => {
+        setActiveUrl(window.location.pathname)
+    }, [location])
 
-  const useBasePath = () => {
-    const params = useParams<Record<string, string>>();
+    const useBasePath = () => {
+        const params = useParams<Record<string, string>>()
 
-    return Object.values(params).reduce(
-      (path, param) => path?.replace("/" + param, ""),
-      location.pathname.slice(1),
-    );
-  };
-  const basePath = useBasePath();
+        return Object.values(params).reduce(
+            (path, param) => path?.replace('/' + param, ''),
+            location.pathname.slice(1)
+        )
 
-  const { currentUser, pubSubToken } = useGlobal();
-
-  const [title, setTitle] = useState("");
-
-  const [notificationsList, setNotificationsList] = useState<Notifications[]>(
-    [],
-  );
-
-  const getAllNotifications = async () => {
-    if (currentUser) {
-      const notifications = await api.getNotificationsByUser(currentUser.id);
-      setNotificationsList(notifications);
-      setRead(
-        notifications.some(
-          (notification) => notification.notificationStatus === "Unread",
-        ),
-      );
     }
   };
+
 
   useEffect(() => {
     const pubSubClient = new WebPubSubClient(pubSubToken);
@@ -73,6 +54,25 @@ export const Header = () => {
       if (currentUser) {
         if (e.message.data === currentUser.id) {
           getAllNotifications();
+
+
+    const { currentUser, pubSubToken, openSnackbar } = useGlobal()
+    const [workflow, setWorkFlow] = useState<WorkflowResponse | undefined>(undefined)
+
+
+    const [title, setTitle] = useState('')
+
+    const [notificationsList, setNotificationsList] = useState<Notifications[]>([])
+
+    const getAllNotifications = async () => {
+        if (currentUser) {
+            const notifications = await api.getNotificationsByUser(currentUser.id);
+            const unreadNotifications = notifications.filter((notification) => notification.notificationStatus === "Unread")
+            setNotificationsList(notifications)
+            setNumberOfUnreads(unreadNotifications.length)
+
+
+          
         }
       }
     });
@@ -90,6 +90,7 @@ export const Header = () => {
         );
       })();
     }
+
     return () => {
       pubSubClient?.off("server-message", () => {});
       pubSubClient?.stop();
@@ -110,6 +111,35 @@ export const Header = () => {
           setChecklist(checklistData);
         } catch (error) {
           console.log(error);
+
+
+    useEffect(() => {
+        console.log("token: " + pubSubToken)
+        const pubSubClient = new WebPubSubClient(pubSubToken)
+
+        pubSubClient?.on("server-message", (e) => {
+            if (currentUser) {
+                if (e.message.data === currentUser.id) {
+                    getAllNotifications()
+                    if (openSnackbar) openSnackbar("Invoicing failed")
+                }
+            }
+        })
+
+        pubSubClient?.start()
+
+        if (currentUser) {
+            (async () => {
+                // const notifications = await api.getNotificationsByUser(currentUser.id);
+                // setNotificationsList(notifications)
+                // setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+                await getAllNotifications()
+            })()
+        }
+        return () => {
+            pubSubClient?.off("server-message", () => { })
+            pubSubClient?.stop()
+
         }
       })();
     } else {
@@ -168,6 +198,7 @@ export const Header = () => {
       pathTitle =
         basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join("") || basePath || "";
     }
+
     setTitle(pathTitle);
   }, [location.pathname, basePath, workflow, checklist]);
 
@@ -175,60 +206,48 @@ export const Header = () => {
     navigate(-1);
   };
 
-  return (
-    <>
-      <Sidebar open={open} setOpen={setOpen} />
-      <NotificationList
-        open={notificationsOpen}
-        setOpen={setNotificationsOpen}
-        getAllNotificationsParent={getAllNotifications}
-        notificationsList={notificationsList}
-      />
-      <NewTopBar>
-        <TopBar.Header>
-          {activeUrl === "/" ? null : (
-            <HeaderContents>
-              <Icon
-                data={arrow_back_ios}
-                color={COLORS.white}
-                onClick={onClick}
-              />
-            </HeaderContents>
-          )}
-        </TopBar.Header>
-        <TopBar.CustomContent>
-          <HeaderLocation>{title}</HeaderLocation>
-        </TopBar.CustomContent>
-        <TopBar.Actions>
-          {read ? (
-            <Icon
-              data={notifications}
-              size={40}
-              style={{
-                color: COLORS.dangerRed,
-              }}
-              onClick={() => setNotificationsOpen(!notificationsOpen)}
-            />
-          ) : (
-            <Icon
-              data={notifications}
-              size={40}
-              style={{
-                color: COLORS.white,
-              }}
-              onClick={() => setNotificationsOpen(!notificationsOpen)}
-            />
-          )}
-          <Icon
-            data={menu}
-            size={40}
-            style={{
-              color: COLORS.white,
-            }}
-            onClick={() => setOpen(!open)}
-          />
-        </TopBar.Actions>
-      </NewTopBar>
-    </>
-  );
-};
+
+
+
+    return (
+        <>
+            <Sidebar open={open} setOpen={setOpen} />
+            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} notificationsList={notificationsList} />
+            <NewTopBar>
+                <TopBar.Header>
+                    {activeUrl === '/' ? null : (
+                        <HeaderContents>
+                            <Icon
+                                data={arrow_back_ios}
+                                color={COLORS.white}
+                                onClick={onClick}
+                            />
+                        </HeaderContents>
+                    )}
+                </TopBar.Header>
+                <TopBar.CustomContent>
+                    <HeaderLocation>{title}</HeaderLocation>
+                </TopBar.CustomContent>
+                <TopBar.Actions>
+                    <Badge value={numberOfUnreads} color={"red"}>
+                        <Icon data={notifications}
+                            size={32}
+                            style={{
+                                color: COLORS.white
+                            }}
+                            onClick={() => setNotificationsOpen(!notificationsOpen)} />
+                    </Badge>
+                    <Icon
+                        data={menu}
+                        size={40}
+                        style={{
+                            color: COLORS.white,
+                        }}
+                        onClick={() => setOpen(!open)}
+                    />
+                </TopBar.Actions>
+            </NewTopBar>
+        </>
+    )
+}
+
