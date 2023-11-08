@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
 
-import {Notifications, Checklist, WorkflowResponse } from '../../services/apiTypes'
+import { Notifications, Checklist, WorkflowResponse, Workflow } from '../../services/apiTypes'
 
 
 
@@ -46,7 +46,7 @@ export const Header = () => {
 
 
     const { currentUser, pubSubToken, openSnackbar } = useGlobal()
-    const [workflow, setWorkFlow] = useState<Workflow | undefined>(undefined)
+    const [workflow, setWorkFlow] = useState<WorkflowResponse | undefined>(undefined)
 
 
     const [title, setTitle] = useState('')
