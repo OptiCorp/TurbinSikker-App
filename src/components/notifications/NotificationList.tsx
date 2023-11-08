@@ -52,7 +52,7 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
                 <Dialog.Title>Notifications</Dialog.Title>
                 <Icon
                     data={close}
-                    size={40}
+                    size={24}
                     style={{
                         color: COLORS.black
                     }}
@@ -73,19 +73,12 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
                             </Table.Head>
                             <Table.Body>
                                 {notificationsList.map((notify, key) =>
-                                    (notify.notificationStatus === 'Unread')
-                                        ?
-                                        (<Table.Row key={key}>
-                                            <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
-                                            <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
-                                        </Table.Row>)
-                                        :
-                                        (<Table.Row style={{ backgroundColor: COLORS.gray }} key={key}>
-                                            <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
-                                            <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
-                                        </Table.Row>)
-
-                                )}
+                                ((
+                                    <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(165, 223, 255)' : undefined }} key={key}>
+                                        <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
+                                        <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
+                                    </Table.Row>
+                                )))}
                             </Table.Body>
                         </Table>)
                     :
