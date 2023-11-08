@@ -2,9 +2,7 @@ import { Card } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import { COLORS } from '../../style/GlobalStyles'
 export const TitleHeader = styled.div`
-    display: flex;
     margin: 0 auto;
-    flex-direction: column;
 `
 
 export const ControllerWrap = styled.div`
@@ -14,6 +12,9 @@ export const ControllerWrap = styled.div`
 
 export const StyledCard = styled(Card)`
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1rem;
 `
 export const customStyles = {

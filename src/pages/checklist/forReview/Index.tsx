@@ -4,7 +4,7 @@ import { useLocation } from 'react-router'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
-import { Workflow } from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 import { ForReviewList } from './forReviewList'
 import { BackgroundWrapCompleted } from './styles'
 
@@ -14,8 +14,8 @@ export const ForReviewChecklists = () => {
     const location = useLocation()
     const state = location.state
     const { accessToken, currentUser } = useGlobal()
-    const [allWorkflows, setAllWorkFlows] = useState<Workflow[]>([])
-    const [workflows, setWorkFlows] = useState<Workflow[]>([])
+    const [allWorkflows, setAllWorkFlows] = useState<WorkflowResponse[]>([])
+    const [workflows, setWorkFlows] = useState<WorkflowResponse[]>([])
 
     useEffect(() => {
         if (!currentUser) return

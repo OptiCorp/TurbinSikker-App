@@ -7,6 +7,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     if (isInspector) {
         return <Navigate to="/" replace />
     } else {
-        return <div>{children}</div>
+        return <>{children}</>
     }
 }

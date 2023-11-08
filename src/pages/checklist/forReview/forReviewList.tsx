@@ -5,12 +5,12 @@ import { UserChip } from '../inprogressChecklists/UserChip'
 import { ChipStatus } from '../inprogressChecklists/chipStatus'
 
 import useGlobal from '../../../context/globalContextProvider'
-import { Workflow } from '../../../services/apiTypes'
+import { WorkflowResponse } from '../../../services/apiTypes'
 import { CellStatus } from '../inprogressChecklists/styles'
 import { CellContentCompleted, StyledTableRowCompleted } from './styles'
 
 interface CompletedRowProps {
-    WorkFlow: Workflow
+    WorkFlow: WorkflowResponse
 }
 
 export const ForReviewList: FunctionComponent<CompletedRowProps> = ({

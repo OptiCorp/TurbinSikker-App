@@ -1,4 +1,4 @@
-import { Task } from '../../../services/apiTypes'
+import { ChecklistTaskInfo } from '../../../services/apiTypes'
 import {
     CategoryName,
     Container,
@@ -8,7 +8,7 @@ import {
 } from './styles'
 
 type Props = {
-    tasks: Task[]
+    tasks: ChecklistTaskInfo[]
 }
 
 export const PreviewList = ({ tasks }: Props) => {
