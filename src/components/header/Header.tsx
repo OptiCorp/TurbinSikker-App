@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
 
-import {Notifications, Checklist, WorkflowResponse } from '../../services/apiTypes'
+import { Notifications, Checklist, WorkflowResponse, Workflow } from '../../services/apiTypes'
 
 
 
@@ -15,19 +15,19 @@ import Sidebar from '../sidebar/Sidebar'
 import NotificationList from '../notifications/NotificationList'
 import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 import { WebPubSubClient } from '@azure/web-pubsub-client'
+import { Badge } from '../badge'
 
 export const Header = () => {
     const navigate = useNavigate()
-    const [activeUrl, setActiveUrl] = useState<string>('')
+    const [activeUrl, setActiveUrl] = useState('')
     const [checklist, setChecklist] = useState<Checklist>()
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const { isInspector, isLeader } = useRoles()
     const api = apiService()
 
-    const [workflow, setWorkFlow] = useState<WorkflowResponse>()
+    const [numberOfUnreads, setNumberOfUnreads] = useState(0)
 
-    const [read, setRead] = useState(false)
     const [notificationsOpen, setNotificationsOpen] = useState(false)
 
     useEffect(() => {
@@ -44,8 +44,10 @@ export const Header = () => {
     }
     const basePath = useBasePath()
 
-    const { currentUser, pubSubToken} = useGlobal()
-   
+
+    const { currentUser, pubSubToken, openSnackbar } = useGlobal()
+    const [workflow, setWorkFlow] = useState<WorkflowResponse | undefined>(undefined)
+
 
     const [title, setTitle] = useState('')
 
@@ -54,8 +56,10 @@ export const Header = () => {
     const getAllNotifications = async () => {
         if (currentUser) {
             const notifications = await api.getNotificationsByUser(currentUser.id);
+            const unreadNotifications = notifications.filter((notification) => notification.notificationStatus === "Unread")
             setNotificationsList(notifications)
-            setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+            setNumberOfUnreads(unreadNotifications.length)
+
         }
     }
 
@@ -67,6 +71,7 @@ export const Header = () => {
             if (currentUser) {
                 if (e.message.data === currentUser.id) {
                     getAllNotifications()
+                    if (openSnackbar) openSnackbar("Invoicing failed")
                 }
             }
         })
@@ -75,9 +80,10 @@ export const Header = () => {
 
         if (currentUser) {
             (async () => {
-                const notifications = await api.getNotificationsByUser(currentUser.id);
-                setNotificationsList(notifications)
-                setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+                // const notifications = await api.getNotificationsByUser(currentUser.id);
+                // setNotificationsList(notifications)
+                // setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+                await getAllNotifications()
             })()
         }
         return () => {
@@ -188,21 +194,14 @@ export const Header = () => {
                     <HeaderLocation>{title}</HeaderLocation>
                 </TopBar.CustomContent>
                 <TopBar.Actions>
-                    {read ? (<Icon
-                        data={notifications}
-                        size={40}
-                        style={{
-                            color: COLORS.dangerRed
-                        }}
-                        onClick={() => setNotificationsOpen(!notificationsOpen)}
-                    />) : (<Icon
-                        data={notifications}
-                        size={40}
-                        style={{
-                            color: COLORS.white
-                        }}
-                        onClick={() => setNotificationsOpen(!notificationsOpen)}
-                    />)}
+                    <Badge value={numberOfUnreads} color={"red"}>
+                        <Icon data={notifications}
+                            size={32}
+                            style={{
+                                color: COLORS.white
+                            }}
+                            onClick={() => setNotificationsOpen(!notificationsOpen)} />
+                    </Badge>
                     <Icon
                         data={menu}
                         size={40}
