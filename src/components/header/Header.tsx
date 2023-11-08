@@ -1,4 +1,3 @@
-
 import { Dialog, Icon, TopBar } from '@equinor/eds-core-react'
 import { arrow_back_ios, menu, notifications } from '@equinor/eds-icons'
 import { useEffect, useLayoutEffect, useState } from 'react'
@@ -42,18 +41,8 @@ export const Header = () => {
             (path, param) => path?.replace('/' + param, ''),
             location.pathname.slice(1)
         )
-
     }
-  };
-
-
-  useEffect(() => {
-    const pubSubClient = new WebPubSubClient(pubSubToken);
-
-    pubSubClient?.on("server-message", (e) => {
-      if (currentUser) {
-        if (e.message.data === currentUser.id) {
-          getAllNotifications();
+    const basePath = useBasePath()
 
 
     const { currentUser, pubSubToken, openSnackbar } = useGlobal()
@@ -71,47 +60,8 @@ export const Header = () => {
             setNotificationsList(notifications)
             setNumberOfUnreads(unreadNotifications.length)
 
-
-          
         }
-      }
-    });
-
-    pubSubClient?.start();
-
-    if (currentUser) {
-      (async () => {
-        const notifications = await api.getNotificationsByUser(currentUser.id);
-        setNotificationsList(notifications);
-        setRead(
-          notifications.some(
-            (notification) => notification.notificationStatus === "Unread",
-          ),
-        );
-      })();
     }
-
-    return () => {
-      pubSubClient?.off("server-message", () => {});
-      pubSubClient?.stop();
-    };
-  }, []);
-
-  const { id, workflowId, taskId, punchId } = useParams() as {
-    id: string;
-    taskId: string;
-    workflowId: string;
-    punchId: string;
-  };
-  useEffect(() => {
-    if (!workflow && !checklist && id && currentUser?.id) {
-      (async () => {
-        try {
-          const checklistData = await api.getChecklist(id);
-          setChecklist(checklistData);
-        } catch (error) {
-          console.log(error);
-
 
     useEffect(() => {
         console.log("token: " + pubSubToken)
@@ -139,74 +89,89 @@ export const Header = () => {
         return () => {
             pubSubClient?.off("server-message", () => { })
             pubSubClient?.stop()
-
         }
-      })();
-    } else {
-      (async () => {
-        if (workflowId)
-          try {
-            const workFlowData = await api.getWorkflow(workflowId);
-            setWorkFlow(workFlowData);
-          } catch (error) {
-            console.log(error);
-            console.log("test");
-          }
-      })();
+    }, [])
+
+
+    const { id, workflowId, taskId, punchId } = useParams() as {
+        id: string
+        taskId: string
+        workflowId: string
+        punchId: string
     }
-  }, [currentUser?.id, id, workflowId]);
+    useEffect(() => {
+        if (!workflow && !checklist && id && currentUser?.id) {
+            (async () => {
+                try {
+                    const checklistData = await api.getChecklist(id)
+                    setChecklist(checklistData)
+                } catch (error) {
+                    console.log(error)
+                }
+            })()
+        } else {
+            (async () => {
+                if (workflowId)
+                    try {
+                        const workFlowData = await api.getWorkflow(workflowId)
+                        setWorkFlow(workFlowData)
+                    } catch (error) {
+                        console.log(error)
+                        console.log('test')
+                    }
+            })()
+        }
+    }, [currentUser?.id, id, workflowId])
 
-  useEffect(() => {
-    let pathTitle = "";
+    useEffect(() => {
+        let pathTitle = ''
 
-    if (location.pathname.includes("FillOutCheckList")) {
-      pathTitle =
-        workflow?.checklist.title + " " + workflow?.id.slice(10, -18) || "";
-    } else if (location.pathname === "/AddUser/") {
-      pathTitle = "Add user";
-    } else if (location.pathname === "/ListUsers/") {
-      pathTitle = "List of users";
-    } else if (location.pathname.includes("PreviewCheckList")) {
-      pathTitle = checklist?.title || "";
-    } else if (location.pathname.includes("ForReviewChecklists")) {
-      pathTitle = "For review";
-    } else if (location.pathname.includes("EditCheckList")) {
-      pathTitle = "Edit" + " " + checklist?.title || "";
-    } else if (location.pathname === "/SendCheckList/") {
-      pathTitle = "Send checklist" || "";
-    } else if (location.pathname === `/SendChecklist/${id}`) {
-      pathTitle = "Send" + " " + checklist?.title || "";
-    } else if (
-      location.pathname === `/workflow/${workflowId}/punch/${punchId}`
-    ) {
-      pathTitle =
-        (workflow?.checklist.title || "") +
-        " " +
-        " Punch " +
-        punchId.slice(0, -28);
-    } else if (location.pathname.includes(workflowId && taskId)) {
-      pathTitle = "Create punch";
-    } else if (location.pathname.includes("Checklists")) {
-      pathTitle = `${
-        isLeader ? "Checklists in progress" : "Outgoing checklists"
-      }`;
-    } else if (location.pathname.includes("MyCheckLists")) {
-      pathTitle = `${
-        isLeader ? "Checklists templates" : "Incomming checklists"
-      }`;
-    } else {
-      pathTitle =
-        basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join("") || basePath || "";
+        if (location.pathname.includes('FillOutCheckList')) {
+            pathTitle =
+                workflow?.checklist.title + ' ' + workflow?.id.slice(10, -18) ||
+                ''
+        } else if (location.pathname === '/AddUser/') {
+            pathTitle = 'Add user'
+        } else if (location.pathname === '/ListUsers/') {
+            pathTitle = 'List of users'
+        } else if (location.pathname.includes('PreviewCheckList')) {
+            pathTitle = checklist?.title || ''
+        } else if (location.pathname.includes('ForReviewChecklists')) {
+            pathTitle = 'For review'
+        } else if (location.pathname.includes('EditCheckList')) {
+            pathTitle = 'Edit' + ' ' + checklist?.title || ''
+        } else if (location.pathname === '/SendCheckList/') {
+            pathTitle = 'Send checklist' || ''
+        } else if (location.pathname === `/SendChecklist/${id}`) {
+            pathTitle = 'Send' + ' ' + checklist?.title || ''
+        } else if (
+            location.pathname === `/workflow/${workflowId}/punch/${punchId}`
+        ) {
+            pathTitle =
+                (workflow?.checklist.title || '') +
+                ' ' +
+                ' Punch ' +
+                punchId.slice(0, -28)
+        } else if (location.pathname.includes(workflowId && taskId)) {
+            pathTitle = 'Create punch'
+        } else if (location.pathname.includes('Checklists')) {
+            pathTitle = `${isLeader ? 'Checklists in progress' : 'Outgoing checklists'
+                }`
+        } else if (location.pathname.includes('MyCheckLists')) {
+            pathTitle = `${isLeader ? 'Checklists templates' : 'Incomming checklists'
+                }`
+        } else {
+            pathTitle =
+                basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join('') ||
+                basePath ||
+                ''
+        }
+        setTitle(pathTitle)
+    }, [location.pathname, basePath, workflow, checklist])
+
+    const onClick = () => {
+        navigate(-1)
     }
-
-    setTitle(pathTitle);
-  }, [location.pathname, basePath, workflow, checklist]);
-
-  const onClick = () => {
-    navigate(-1);
-  };
-
-
 
 
     return (
@@ -250,4 +215,3 @@ export const Header = () => {
         </>
     )
 }
-
