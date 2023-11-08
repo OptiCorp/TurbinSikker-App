@@ -1,9 +1,9 @@
-import { Dialog, Icon, Table, Typography } from '@equinor/eds-core-react'
-import { close } from '@equinor/eds-icons'
-import { FunctionComponent, useState } from 'react'
-import apiService from '../../services/api'
-import { Notifications } from '../../services/apiTypes'
-import { COLORS } from '../../style/GlobalStyles'
+import { Dialog, Table, Typography, Icon } from "@equinor/eds-core-react"
+import { FunctionComponent, useState } from "react"
+import { Notifications } from "../../services/apiTypes"
+import { close } from "@equinor/eds-icons"
+import { COLORS } from "../../style/GlobalStyles"
+import apiService from "../../services/api"
 
 export type Props = {
     open: boolean
@@ -12,13 +12,11 @@ export type Props = {
     notificationsList: Notifications[]
 }
 
-const NotificationList: FunctionComponent<Props> = ({
-    open,
-    setOpen,
-    getAllNotificationsParent,
-    notificationsList,
-}) => {
+
+const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotificationsParent, notificationsList }) => {
     const api = apiService()
+
+
 
     const handleClose = () => {
         setOpen(false)
@@ -28,16 +26,15 @@ const NotificationList: FunctionComponent<Props> = ({
         setOpen(true)
     }
 
-    const [activeNotification, setActiveNotification] =
-        useState<Notifications>()
+    const [activeNotification, setActiveNotification] = useState<Notifications>()
 
     const [isInfoOpen, setIsInfoOpen] = useState(false)
 
     const handleNotificationInfoOpen = async (notification: Notifications) => {
         setIsInfoOpen(true)
         setActiveNotification(notification)
-        if (notification.notificationStatus === 'Unread') {
-            await api.updateNotification(notification.id, 'Read')
+        if (notification.notificationStatus === "Unread") {
+            await api.updateNotification(notification.id, "Read")
             getAllNotificationsParent()
         }
     }
@@ -46,7 +43,6 @@ const NotificationList: FunctionComponent<Props> = ({
         setIsInfoOpen(false)
         setOpen(false)
     }
-
 
 
 
@@ -68,7 +64,6 @@ const NotificationList: FunctionComponent<Props> = ({
                 {!isInfoOpen
                     ?
                     (
-
                         <Table style={{ width: '100%' }}>
                             <Table.Head>
                                 <Table.Row>
@@ -78,52 +73,35 @@ const NotificationList: FunctionComponent<Props> = ({
                             </Table.Head>
                             <Table.Body>
                                 {notificationsList.map((notify, key) =>
-
                                 ((
                                     <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(165, 223, 255)' : undefined }} key={key}>
                                         <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
                                         <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
                                     </Table.Row>
                                 )))}
-
                             </Table.Body>
-                        </Table>
-                    ) : (
+                        </Table>)
+                    :
+                    (
                         <Table style={{ width: '100%' }}>
                             <Table.Body>
                                 <Table.Row>
-                                    <Table.Cell>
-                                        <Typography
-                                            group="table"
-                                            variant="cell_header"
-                                        >
-                                            Type
-                                        </Typography>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        {activeNotification?.notificationType}
-                                    </Table.Cell>
+                                    <Table.Cell><Typography group="table" variant="cell_header">Type</Typography></Table.Cell>
+                                    <Table.Cell>{activeNotification?.notificationType}</Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
-                                    <Table.Cell>
-                                        <Typography
-                                            group="table"
-                                            variant="cell_header"
-                                        >
-                                            Message
-                                        </Typography>
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        {activeNotification?.message}
-                                    </Table.Cell>
+                                    <Table.Cell><Typography group="table" variant="cell_header">Message</Typography></Table.Cell>
+                                    <Table.Cell>{activeNotification?.message}</Table.Cell>
                                 </Table.Row>
                             </Table.Body>
                         </Table>
                     )}
-                </Dialog.CustomContent>
-            </Dialog>
-        </>
-    )
+
+
+            </Dialog.CustomContent>
+
+        </Dialog>
+    </>
 }
 
 export default NotificationList
