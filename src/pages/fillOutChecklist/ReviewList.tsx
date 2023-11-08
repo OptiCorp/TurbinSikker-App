@@ -1,18 +1,20 @@
 // import { FunctionComponent, useState } from 'react'
 
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent } from 'react'
 import { ReviewProps } from './types'
 
-import { Checkbox, Chip, Icon, Typography } from '@equinor/eds-core-react'
+import { Checkbox, Icon } from '@equinor/eds-core-react'
 import { error_filled } from '@equinor/eds-icons'
 
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import { DialogLeader } from './dialogLeader'
 import { FillOutChecklistForm } from './hooks/types'
 import {
     CustomCardContent,
     CustomCategoryName,
     CustomTaskField,
     Error,
+    ImageContainer,
     NotApplicableWrap,
     ReviewCardHeader,
     ReviewWrap,
@@ -21,10 +23,6 @@ import {
 } from './styles'
 
 export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
-
-    const [rejectDialogShowing, setRejectDialogShowing] = useState(false)
-
     const methods = useFormContext<FillOutChecklistForm>()
 
     const { fields } = useFieldArray({
@@ -42,12 +40,16 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                     if (!task) return
                     return (
                         <StyledReviewCard
-                            style={{
-                                border:
-                                    field.status === 'Unfinished'
-                                        ? '2px solid red'
-                                        : '2px solid green',
-                            }}
+                            // style={{
+                            //     border:
+                            //         field.status === 'Unfinished'
+                            //             ? '2px solid red'
+                            //             : field.status === 'Finished'
+                            //             ? '2px solid green'
+                            //             : field.status === 'NotApplicable'
+                            //             ? '2px solid yellow'
+                            //             : '',
+                            // }}
                             // variant={
                             //     field.status === 'Unfinished'
                             //         ? 'danger'
@@ -59,7 +61,7 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                                 <CustomCategoryName>
                                     {task.category.name}{' '}
                                 </CustomCategoryName>
-                                <Chip variant="active">
+                                {/* <Chip variant="active">
                                     <Typography
                                         variant="caption"
                                         token={{
@@ -67,12 +69,8 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                                             fontWeight: 600,
                                             fontSize: '0.7rem',
                                         }}
-                                    >
-                                        {field.status === 'Unfinished'
-                                            ? 'error'
-                                            : 'success'}
-                                    </Typography>
-                                </Chip>
+                                    ></Typography>
+                                </Chip> */}
                             </ReviewCardHeader>
                             <CustomCardContent>
                                 <NotApplicableWrap>
@@ -98,6 +96,12 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                                             />
                                         )
                                     }
+                                    style={{
+                                        filter:
+                                            field.status === 'NotApplicable'
+                                                ? 'blur(3px)'
+                                                : 'none',
+                                    }}
                                     helperText={
                                         field.status === 'Unfinished'
                                             ? 'is not finished'
@@ -114,86 +118,32 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                                 />
 
                                 <Error>
-                                    <Checkbox
-                                        disabled={
-                                            field.status === 'NotApplicable'
-                                                ? true
-                                                : false
-                                        }
-                                        checked={
-                                            field.status === 'Finished'
-                                                ? true
-                                                : false
-                                        }
-                                    />
+                                    {field.status === 'NotApplicable' ? (
+                                        <ImageContainer />
+                                    ) : (
+                                        <Checkbox
+                                            readOnly
+                                            disabled={
+                                                field.status === 'NotApplicable'
+                                                    ? true
+                                                    : false
+                                            }
+                                            checked={
+                                                field.status === 'Finished'
+                                                    ? true
+                                                    : false
+                                            }
+                                        />
+                                    )}
                                 </Error>
                             </CustomCardContent>
                         </StyledReviewCard>
                     )
                 })}
             </ReviewWrap>{' '}
+            <>
+                <DialogLeader workflow={workflow} />
+            </>
         </>
     )
-
-    {
-        /* <NavActionsComponent
-                        buttonColor="primary"
-                        as="button"
-                        secondButtonColor="primary"
-                        buttonVariant="outlined"
-                        secondOnClick={() => setSubmitDialogShowing(true)}
-                        isShown={true}
-                        onClick={() => setRejectDialogShowing(true)}
-                        ButtonMessage="Reject"
-                        type="button"
-                        SecondButtonMessage="Approve"
-                    />
-                </>
-         
-            <CustomDialog
-                title="Reject Checklist?"
-                buttonVariant="ghost"
-                negativeButtonOnClick={() => setRejectDialogShowing(false)}
-                negativeButtonText="Cancel"
-                positiveButtonText="OK"
-                positiveButtonOnClick={() => {
-                    // handleReject()
-                }}
-                isOpen={rejectDialogShowing}
-            >
-                <RejectWrap>
-                    <Typography
-                        group="input"
-                        variant="text"
-                        token={{ textAlign: 'left' }}
-                    >
-                        {workflow.checklist.title} will be send back to{' '}
-                    </Typography>
-
-                    <UserChip workflow={workflow} />
-
-                    <CustomTaskField
-                        label={''}
-                        key={workflow.id}
-                        id="storybook-multi-readonly"
-                        name="workflow"
-                        multiline
-                        placeholder="Describe why the checklist was rejected"
-                        rows={3}
-                    />
-                </RejectWrap>
-            </CustomDialog>
-            <CustomDialog
-                title={`Approve ${workflow.checklist.title}?`}
-                buttonVariant="ghost"
-                negativeButtonOnClick={() => setSubmitDialogShowing(false)}
-                negativeButtonText="Cancel"
-                positiveButtonText="Submit"
-                positiveButtonOnClick={() => {
-                    setSubmitDialogShowing(false)
-                    // handleSubmit()
-                }}
-                isOpen={submitDialogShowing}
-            ></CustomDialog> */
-    }
 }

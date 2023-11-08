@@ -99,6 +99,10 @@ export const useFillChecklistForm = () => {
                 if (res.ok) navigate('/Checklists')
                 setRefreshList((prev) => !prev)
             }
+            // if (methods.getFieldState('taskInfos' errors ? validation?)) {
+            //     setSubmitDialogShowing(false)
+            //     if (openSnackbar) openSnackbar('All tasks must be checked')
+            // }
         }
     }
 

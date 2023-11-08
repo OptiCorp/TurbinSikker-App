@@ -1,145 +1,168 @@
-import { Dialog, Table, Typography, Icon } from "@equinor/eds-core-react";
-import { FunctionComponent, useState } from "react";
-import { Notifications } from "../../services/apiTypes";
-import { close } from "@equinor/eds-icons";
-import { COLORS } from "../../style/GlobalStyles";
-import apiService from "../../services/api";
+import { Dialog, Icon, Table, Typography } from '@equinor/eds-core-react'
+import { close } from '@equinor/eds-icons'
+import { FunctionComponent, useState } from 'react'
+import apiService from '../../services/api'
+import { Notifications } from '../../services/apiTypes'
+import { COLORS } from '../../style/GlobalStyles'
 
 export type Props = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  getAllNotificationsParent: () => void;
-  notificationsList: Notifications[];
-};
+    open: boolean
+    setOpen: (open: boolean) => void
+    getAllNotificationsParent: () => void
+    notificationsList: Notifications[]
+}
 
 const NotificationList: FunctionComponent<Props> = ({
-  open,
-  setOpen,
-  getAllNotificationsParent,
-  notificationsList,
+    open,
+    setOpen,
+    getAllNotificationsParent,
+    notificationsList,
 }) => {
-  const api = apiService();
+    const api = apiService()
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const [activeNotification, setActiveNotification] = useState<Notifications>();
-
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
-
-  const handleNotificationInfoOpen = async (notification: Notifications) => {
-    setIsInfoOpen(true);
-    setActiveNotification(notification);
-    if (notification.notificationStatus === "Unread") {
-      await api.updateNotification(notification.id, "Read");
-      getAllNotificationsParent();
+    const handleClose = () => {
+        setOpen(false)
     }
-  };
 
-  const closer = () => {
-    setIsInfoOpen(false);
-    setOpen(false);
-  };
+    const handleOpen = () => {
+        setOpen(true)
+    }
 
-  return (
-    <>
-      <Dialog open={open} onClose={handleClose} style={{ height: "400px" }}>
-        <Dialog.Header>
-          <Dialog.Title>Notifications</Dialog.Title>
-          <Icon
-            data={close}
-            size={40}
-            style={{
-              color: COLORS.black,
-            }}
-            onClick={() => closer()}
-          />
-        </Dialog.Header>
-        <Dialog.CustomContent scrollable style={{ height: "100%" }}>
-          {!isInfoOpen ? (
-            <Table style={{ width: "100%" }}>
-              <Table.Head>
-                <Table.Row>
-                  <Table.Cell>Type</Table.Cell>
-                  <Table.Cell>Message</Table.Cell>
-                </Table.Row>
-              </Table.Head>
-              <Table.Body>
-                {notificationsList.map((notify, key) =>
-                  notify.notificationStatus === "Unread" ? (
-                    <Table.Row key={key}>
-                      <Table.Cell
-                        onClick={async () =>
-                          await handleNotificationInfoOpen(notify)
-                        }
-                      >
-                        {notify.notificationType}
-                      </Table.Cell>
-                      <Table.Cell
-                        onClick={async () =>
-                          await handleNotificationInfoOpen(notify)
-                        }
-                      >
-                        {notify.message}
-                      </Table.Cell>
-                    </Table.Row>
-                  ) : (
-                    <Table.Row
-                      style={{ backgroundColor: COLORS.gray }}
-                      key={key}
-                    >
-                      <Table.Cell
-                        onClick={async () =>
-                          await handleNotificationInfoOpen(notify)
-                        }
-                      >
-                        {notify.notificationType}
-                      </Table.Cell>
-                      <Table.Cell
-                        onClick={async () =>
-                          await handleNotificationInfoOpen(notify)
-                        }
-                      >
-                        {notify.message}
-                      </Table.Cell>
-                    </Table.Row>
-                  ),
-                )}
-              </Table.Body>
-            </Table>
-          ) : (
-            <Table style={{ width: "100%" }}>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell>
-                    <Typography group="table" variant="cell_header">
-                      Type
-                    </Typography>
-                  </Table.Cell>
-                  <Table.Cell>
-                    {activeNotification?.notificationType}
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    <Typography group="table" variant="cell_header">
-                      Message
-                    </Typography>
-                  </Table.Cell>
-                  <Table.Cell>{activeNotification?.message}</Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-          )}
-        </Dialog.CustomContent>
-      </Dialog>
-    </>
-  );
-};
+    const [activeNotification, setActiveNotification] =
+        useState<Notifications>()
 
-export default NotificationList;
+    const [isInfoOpen, setIsInfoOpen] = useState(false)
+
+    const handleNotificationInfoOpen = async (notification: Notifications) => {
+        setIsInfoOpen(true)
+        setActiveNotification(notification)
+        if (notification.notificationStatus === 'Unread') {
+            await api.updateNotification(notification.id, 'Read')
+            getAllNotificationsParent()
+        }
+    }
+
+    const closer = () => {
+        setIsInfoOpen(false)
+        setOpen(false)
+    }
+
+    return (
+        <>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                style={{ height: '400px' }}
+            >
+                <Dialog.Header>
+                    <Dialog.Title>Notifications</Dialog.Title>
+                    <Icon
+                        data={close}
+                        size={40}
+                        style={{
+                            color: COLORS.black,
+                        }}
+                        onClick={() => closer()}
+                    />
+                </Dialog.Header>
+                <Dialog.CustomContent scrollable style={{ height: '100%' }}>
+                    {!isInfoOpen ? (
+                        <Table style={{ width: '100%' }}>
+                            <Table.Head>
+                                <Table.Row>
+                                    <Table.Cell>Type</Table.Cell>
+                                    <Table.Cell>Message</Table.Cell>
+                                </Table.Row>
+                            </Table.Head>
+                            <Table.Body>
+                                {notificationsList.map((notify, key) =>
+                                    notify.notificationStatus === 'Unread' ? (
+                                        <Table.Row key={key}>
+                                            <Table.Cell
+                                                onClick={async () =>
+                                                    await handleNotificationInfoOpen(
+                                                        notify
+                                                    )
+                                                }
+                                            >
+                                                {notify.notificationType}
+                                            </Table.Cell>
+                                            <Table.Cell
+                                                onClick={async () =>
+                                                    await handleNotificationInfoOpen(
+                                                        notify
+                                                    )
+                                                }
+                                            >
+                                                {notify.message}
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ) : (
+                                        <Table.Row
+                                            style={{
+                                                backgroundColor: COLORS.gray,
+                                            }}
+                                            key={key}
+                                        >
+                                            <Table.Cell
+                                                onClick={async () =>
+                                                    await handleNotificationInfoOpen(
+                                                        notify
+                                                    )
+                                                }
+                                            >
+                                                {notify.notificationType}
+                                            </Table.Cell>
+                                            <Table.Cell
+                                                onClick={async () =>
+                                                    await handleNotificationInfoOpen(
+                                                        notify
+                                                    )
+                                                }
+                                            >
+                                                {notify.message}
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    )
+                                )}
+                            </Table.Body>
+                        </Table>
+                    ) : (
+                        <Table style={{ width: '100%' }}>
+                            <Table.Body>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        <Typography
+                                            group="table"
+                                            variant="cell_header"
+                                        >
+                                            Type
+                                        </Typography>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {activeNotification?.notificationType}
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>
+                                        <Typography
+                                            group="table"
+                                            variant="cell_header"
+                                        >
+                                            Message
+                                        </Typography>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {activeNotification?.message}
+                                    </Table.Cell>
+                                </Table.Row>
+                            </Table.Body>
+                        </Table>
+                    )}
+                </Dialog.CustomContent>
+            </Dialog>
+        </>
+    )
+}
+
+export default NotificationList

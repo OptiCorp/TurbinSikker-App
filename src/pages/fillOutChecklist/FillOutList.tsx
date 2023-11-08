@@ -12,7 +12,7 @@ import {
 } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
-import { DialogFillOutChecklist } from './dialog'
+import { DialogInspector } from './dialogInspector'
 import { FillOutChecklistForm } from './hooks/types'
 import {
     CustomCard,
@@ -49,6 +49,17 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
         control: methods.control,
         name: 'taskInfos',
     })
+
+    //     useEffect(() => {
+    //   fields.map((field) => field.status) ?
+
+    //       return () => {
+    //         second
+    //       }
+    //     }, [third])
+
+    console.log(fields)
+
     return (
         <>
             <>
@@ -202,7 +213,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                     })}
                 </FillOutWrap>
                 <>
-                    <DialogFillOutChecklist
+                    <DialogInspector
                         workflow={workflow}
                         taskId={taskId}
                         setPunchDialogShowing={setPunchDialogShowing}

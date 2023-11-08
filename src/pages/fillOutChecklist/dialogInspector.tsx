@@ -31,10 +31,10 @@ export type DialogProps = {
     submitDialogShowing: boolean
     setPunchDialogShowing: (punchDialogShowing: boolean) => void
     punchDialogShowing: boolean
-    taskId: string
+    taskId?: string
 }
 
-export const DialogFillOutChecklist: FunctionComponent<DialogProps> = ({
+export const DialogInspector: FunctionComponent<DialogProps> = ({
     workflow,
     setSubmitDialogShowing,
     submitDialogShowing,
@@ -49,8 +49,13 @@ export const DialogFillOutChecklist: FunctionComponent<DialogProps> = ({
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
 
+    // const [inspectorSubmitDialog, setInspectorSubmitDialog] = useState(false)
+    // useEffect(() => {
+    //     if (submitDialogShowing === true) setInspectorSubmitDialog(true)
+    //     else if (submitDialogShowing === false) setInspectorSubmitDialog(false)
+    // }, [submitDialogShowing])
+
     const methods = useFormContext<FillOutChecklistForm>()
-    const { handleSubmit } = methods
 
     return (
         <>
@@ -63,6 +68,7 @@ export const DialogFillOutChecklist: FunctionComponent<DialogProps> = ({
                 isShown={true}
                 ButtonMessage="Clear"
                 type="button"
+                primaryType="button"
                 onClick={() => {
                     methods.reset()
                 }}
@@ -88,6 +94,7 @@ export const DialogFillOutChecklist: FunctionComponent<DialogProps> = ({
                     continue this form where you left after.
                 </Typography>
             </CustomDialog>
+
             <Dialog
                 open={submitDialogShowing}
                 onClose={() => setSubmitDialogShowing(false)}
@@ -95,12 +102,13 @@ export const DialogFillOutChecklist: FunctionComponent<DialogProps> = ({
             >
                 <Dialog.Header>
                     <Dialog.Title>
-                        Submit {workflow.checklist.title}?
+                        Submit
+                        {workflow.checklist.title}?
                     </Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
                     <Typography style={{ marginBottom: '10px' }}>
-                        This will commit {workflow.checklist.title} to{' '}
+                        This will commit {workflow.checklist.title} to
                         {workflow.creator.username}
                     </Typography>
                     <div>

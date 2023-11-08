@@ -59,6 +59,7 @@ export const Error = styled.div`
     font-size: 1rem;
     font-weight: 600;
     align-self: end;
+    width: 100px;
     color: ${COLORS.dangerRed};
 `
 

@@ -7,6 +7,7 @@ import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 import { FillOutList } from './FillOutList'
 
+import { ReviewList } from './ReviewList'
 import { useFillChecklistForm } from './hooks/useFillChecklist'
 import {
     BackgroundWrap,
@@ -16,7 +17,6 @@ import {
     List,
     StyledCard,
 } from './styles'
-import { ReviewList } from './ReviewList'
 
 export const FillOutCheckList = () => {
     const {
@@ -37,7 +37,12 @@ export const FillOutCheckList = () => {
     return (
         <FormProvider {...methods}>
             {snackbar}
-            <form onSubmit={handleSubmit(onSubmit)} id="fill-checklist">
+            <form
+                onSubmit={handleSubmit(onSubmit, () =>
+                    setSubmitDialogShowing(false)
+                )}
+                id="fill-checklist"
+            >
                 <BackgroundWrap>
                     <InfoHeader>
                         {' '}
@@ -98,7 +103,11 @@ export const FillOutCheckList = () => {
                                         />
                                     </>
                                 ) : (
-                                    <>{workflow && <ReviewList workflow={workflow}/>}</>
+                                    <>
+                                        {workflow && (
+                                            <ReviewList workflow={workflow} />
+                                        )}
+                                    </>
                                 )}
                             </>
                         </PreviewWrapper>
