@@ -195,7 +195,7 @@ export function GlobalProvider({
         return <span>There are currently no users signed in!</span>
 
     }
-  }, [idToken]);
+  }, [idToken]),
 
   if (status === ApiStatus.LOADING) {
     return <Loading text="Loading .." />;
