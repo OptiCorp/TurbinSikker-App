@@ -74,7 +74,7 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
                             <Table.Body>
                                 {notificationsList.map((notify, key) =>
                                 ((
-                                    <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(165, 223, 255)' : undefined }} key={key}>
+                                    <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(189, 238, 255)' : undefined }} key={key}>
                                         <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
                                         <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
                                     </Table.Row>
