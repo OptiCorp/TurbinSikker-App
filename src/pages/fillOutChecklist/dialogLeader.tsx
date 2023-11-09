@@ -12,6 +12,7 @@ import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
 
 import {
+    Controller,
     DeepMap,
     FieldError,
     FieldValues,
@@ -19,9 +20,6 @@ import {
 } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
-import { useNavigate, useParams } from 'react-router'
-import useGlobal from '../../context/globalContextProvider'
-import apiService from '../../services/api'
 import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { FillOutChecklistForm } from './hooks/types'
 import { CustomTaskField, RejectWrap } from './styles'
@@ -35,29 +33,8 @@ export type DialogProps = {
 
 export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
     const methods = useFormContext<FillOutChecklistForm>()
-    const { handleSubmit } = methods
     const [rejectDialogShowing, setRejectDialogShowing] = useState(false)
     const [approveDialogShow, setApproveDialogShow] = useState(false)
-    const { workflowId } = useParams() as { workflowId: string }
-    const api = apiService()
-    const { currentUser, openSnackbar, setRefreshList } = useGlobal()
-    const navigate = useNavigate()
-
-    const handleReject = async () => {
-        const res = await api.updateWorkflow(
-            workflowId,
-            workflow.user.id,
-            'Sent',
-            workflow.completionTimeMinutes,
-            methods.watch('taskInfos')
-        )
-        if (res.ok) {
-            setRejectDialogShowing(false)
-            if (openSnackbar) openSnackbar('Checklist rejected')
-            if (res.ok) navigate('/Checklists')
-            setRefreshList((prev) => !prev)
-        }
-    }
 
     return (
         <>
@@ -80,14 +57,12 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
             <CustomDialog
                 title="Reject Checklist?"
                 buttonVariant="ghost"
-                type="button"
+                type="submit"
                 PrimaryType="button"
                 negativeButtonOnClick={() => setRejectDialogShowing(false)}
                 negativeButtonText="Cancel"
                 positiveButtonText="OK"
-                positiveButtonOnClick={() => {
-                    handleReject()
-                }}
+                form="fill-checklist"
                 isOpen={rejectDialogShowing}
             >
                 <RejectWrap>
@@ -100,15 +75,36 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                     </Typography>
 
                     <UserChip workflow={workflow} />
-
-                    <CustomTaskField
-                        label={''}
-                        key={workflow.id}
-                        id="storybook-multi-readonly"
-                        name="workflow"
-                        multiline
-                        placeholder="Describe why the checklist was rejected"
-                        rows={3}
+                    <Controller
+                        control={methods.control}
+                        name={`comment`}
+                        rules={{
+                            required: 'Required',
+                        }}
+                        render={({ field: { ref } }) => (
+                            <CustomTaskField
+                                label={''}
+                                inputRef={ref}
+                                key="comment"
+                                id="comment"
+                                {...methods.register('comment', {
+                                    required: 'This is required.',
+                                    minLength: 10,
+                                })}
+                                defaultValue="write here"
+                                multiline
+                                placeholder="Describe why the checklist was rejected"
+                                rows={3}
+                                onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    methods.setValue(
+                                        'comment',
+                                        event.target.value
+                                    )
+                                }}
+                            />
+                        )}
                     />
                 </RejectWrap>
             </CustomDialog>

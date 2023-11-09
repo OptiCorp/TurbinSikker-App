@@ -1,62 +1,62 @@
-import { API_URL } from "../config";
-import { pca } from "../msalconfig";
+import { API_URL } from '../config'
+import { pca } from '../msalconfig'
 import {
-  Category,
-  Checklist,
-  Invoice,
-  Notifications,
-  PunchItem,
-  Task,
-  Upload,
-  User,
-  WorkflowResponse,
-  pubSubToken,
-} from "./apiTypes";
+    Category,
+    Checklist,
+    Invoice,
+    Notifications,
+    PunchItem,
+    Task,
+    Upload,
+    User,
+    WorkflowResponse,
+    pubSubToken,
+} from './apiTypes'
 
 const request = {
-  scopes: ["cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read"],
-  account: pca.getAllAccounts()[0],
-};
+    scopes: ['cc0af56e-ee49-46ce-aad6-010dce5bcbb6/User.Read'],
+    account: pca.getAllAccounts()[0],
+}
 
 const apiService = () => {
-  // Generic function for get requests
-  const getByFetch = async (url: string): Promise<any> => {
-    return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
-      const getOperation = {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      };
-      const res = await fetch(`${API_URL}/${url}`, getOperation);
-      if (res.ok) {
-        const jsonResult = await res.json();
-        const resultObj = jsonResult;
-        return resultObj;
-      } else {
-        console.error("Get by fetch failed. Url=" + url, res);
-      }
-    });
-  };
+    // Generic function for get requests
+    const getByFetch = async (url: string): Promise<any> => {
+        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+            const getOperation = {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
+            const res = await fetch(`${API_URL}/${url}`, getOperation)
+            if (res.ok) {
+                const jsonResult = await res.json()
+                const resultObj = jsonResult
+                return resultObj
+            } else {
+                console.error('Get by fetch failed. Url=' + url, res)
+            }
+        })
+    }
 
-  // Generic function for post requests
-  const postByFetch = async (url: string, bodyData?: any) => {
-    try {
-      const tokenResponse = await pca.acquireTokenSilent(request);
-      const postOperation = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify(bodyData),
-      };
-      const res = await fetch(`${API_URL}/${url}`, postOperation);
-      return res;
-      /*   if (res.ok) {
+    // Generic function for post requests
+    const postByFetch = async (url: string, bodyData?: any) => {
+        try {
+            const tokenResponse = await pca.acquireTokenSilent(request)
+            const postOperation = {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify(bodyData),
+            }
+            const res = await fetch(`${API_URL}/${url}`, postOperation)
+            return res
+            /*   if (res.ok) {
                 const contentType = res.headers.get('content-type')
                 if (contentType && contentType.includes('application/json')) {
                     const jsonResult = await res.json()
@@ -66,11 +66,11 @@ const apiService = () => {
             } else {
                 console.error('Post by fetch failed. Url=' + url, res)
             } */
-    } catch (error) {
-      console.error("An error occurred:", error);
-      throw error;
-    }
-    /* 
+        } catch (error) {
+            console.error('An error occurred:', error)
+            throw error
+        }
+        /* 
         return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
             const postOperation = {
                 method: 'POST',
@@ -90,111 +90,113 @@ const apiService = () => {
                 console.error('Post by fetch failed. Url=' + url, res)
             }
         }) */
-  };
-
-  const postFileByFetch = async (url: string, file: FormData) => {
-    return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
-      const postOperation = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: file,
-      };
-      const res = await fetch(`${API_URL}/${url}`, postOperation);
-      if (res.ok) {
-        const jsonResult = await res.json();
-        const resultObj = jsonResult;
-        return resultObj;
-      } else {
-        console.error("Post by fetch failed. Url=" + url, res);
-      }
-    });
-  };
-
-  // Generic function for put requests
-  const putByFetch = async (url: string, bodyData: any) => {
-    try {
-      const tokenResponse = await pca.acquireTokenSilent(request);
-      const putOperations = {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify(bodyData),
-      };
-      const res = await fetch(`${API_URL}/${url}`, putOperations);
-
-      return res;
-    } catch (error) {
-      console.error("An error occurred:", error);
-      throw error;
     }
-  };
 
-  // Generic function for delete requests
-  const deleteByFetch = async (url: string) => {
-    try {
-      const tokenResponse = await pca.acquireTokenSilent(request);
-      const deleteOperation = {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${tokenResponse.accessToken}`,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      };
-      const res = await fetch(`${API_URL}/${url}`, deleteOperation);
-
-      return res;
-    } catch (error) {
-      console.error("An error occurred:", error);
-      throw error;
+    const postFileByFetch = async (url: string, file: FormData) => {
+        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
+            const postOperation = {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: file,
+            }
+            const res = await fetch(`${API_URL}/${url}`, postOperation)
+            if (res.ok) {
+                const jsonResult = await res.json()
+                const resultObj = jsonResult
+                return resultObj
+            } else {
+                console.error('Post by fetch failed. Url=' + url, res)
+            }
+        })
     }
-  };
 
-  // User
+    // Generic function for put requests
+    const putByFetch = async (url: string, bodyData: any) => {
+        try {
+            const tokenResponse = await pca.acquireTokenSilent(request)
+            const putOperations = {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify(bodyData),
+            }
+            const res = await fetch(`${API_URL}/${url}`, putOperations)
 
-  const getAllUsers = async (): Promise<User[]> => {
-    const data = await getByFetch("GetAllUsers");
-    return data;
-  };
+            return res
+        } catch (error) {
+            console.error('An error occurred:', error)
+            throw error
+        }
+    }
 
-  const getAllUsersAdmin = async (): Promise<User[]> => {
-    const data = await getByFetch("GetAllUsersAdmin");
-    return data;
-  };
+    // Generic function for delete requests
+    const deleteByFetch = async (url: string) => {
+        try {
+            const tokenResponse = await pca.acquireTokenSilent(request)
+            const deleteOperation = {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            }
+            const res = await fetch(`${API_URL}/${url}`, deleteOperation)
 
-  const getUser = async (id: string): Promise<User> => {
-    const data = await getByFetch(`GetUser?id=${id}`);
-    return data;
-  };
+            return res
+        } catch (error) {
+            console.error('An error occurred:', error)
+            throw error
+        }
+    }
 
-  const getUserByAzureAdUserId = async (id: string) => {
-    const data = await getByFetch(`GetUserByAzureAdUserId?azureAdUserId=${id}`);
-    return data;
-  };
+    // User
 
-  const getUserByUserName = async (username: string): Promise<User> => {
-    const data = await getByFetch(`GetUserByUserName?username=${username}`);
-    return data;
-  };
+    const getAllUsers = async (): Promise<User[]> => {
+        const data = await getByFetch('GetAllUsers')
+        return data
+    }
 
-  const addUser = async (
-    user: Omit<
-      User,
-      "id" | "status" | "userRole" | "createdDate" | "updatedDate"
-    >,
-  ): Promise<Response> => {
-    return await postByFetch("AddUser", {
-      ...user,
-    });
-  };
+    const getAllUsersAdmin = async (): Promise<User[]> => {
+        const data = await getByFetch('GetAllUsersAdmin')
+        return data
+    }
 
-  /* const updateUser = async (
+    const getUser = async (id: string): Promise<User> => {
+        const data = await getByFetch(`GetUser?id=${id}`)
+        return data
+    }
+
+    const getUserByAzureAdUserId = async (id: string) => {
+        const data = await getByFetch(
+            `GetUserByAzureAdUserId?azureAdUserId=${id}`
+        )
+        return data
+    }
+
+    const getUserByUserName = async (username: string): Promise<User> => {
+        const data = await getByFetch(`GetUserByUserName?username=${username}`)
+        return data
+    }
+
+    const addUser = async (
+        user: Omit<
+            User,
+            'id' | 'status' | 'userRole' | 'createdDate' | 'updatedDate'
+        >
+    ): Promise<Response> => {
+        return await postByFetch('AddUser', {
+            ...user,
+        })
+    }
+
+    /* const updateUser = async (
         id: string,
         firstName: string,
         lastName: string,
@@ -210,538 +212,550 @@ const apiService = () => {
         })
     } */
 
-  const updateUser = async (
-    id: string,
-    username: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    userRoleId: string,
-    status: string,
-  ) => {
-    return postByFetch("UpdateUser", {
-      id: id,
-      username: username,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      userRoleId: userRoleId,
-      status: status,
-    });
-  };
-
-  const softDeleteUser = async (id: string) => {
-    return deleteByFetch(`SoftDeleteUser?id=${id}`);
-  };
-
-  const hardDeleteUser = async (id: string) => {
-    return deleteByFetch(`HardDeleteUser?id=${id}`);
-  };
-
-  // user role
-
-  // checklist
-
-  const getAllCheckLists = async (): Promise<Checklist> => {
-    const data = await getByFetch(`GetAllChecklists`);
-    return data;
-  };
-
-  const getChecklist = async (id: string): Promise<Checklist> => {
-    const data = await getByFetch(`GetChecklist?id=${id}`);
-    if (!id) {
-      throw new Error("An error occurred, please try again");
+    const updateUser = async (
+        id: string,
+        username: string,
+        firstName: string,
+        lastName: string,
+        email: string,
+        userRoleId: string,
+        status: string
+    ) => {
+        return postByFetch('UpdateUser', {
+            id: id,
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            userRoleId: userRoleId,
+            status: status,
+        })
     }
-    return data;
-  };
 
-  const getAllChecklistsByUserId = async (
-    userId: string,
-  ): Promise<Checklist[]> => {
-    const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`);
-    if (!userId) {
-      throw new Error("An error occurred, please try again");
+    const softDeleteUser = async (id: string) => {
+        return deleteByFetch(`SoftDeleteUser?id=${id}`)
     }
-    return data;
-  };
 
-  const getChecklistByName = async (
-    searchString: string,
-  ): Promise<Checklist> => {
-    const data = await getByFetch(
-      `GetChecklistsByName?searchString=${searchString}`,
-    );
-    if (!searchString) {
-      throw new Error("An error occurred, please try again");
+    const hardDeleteUser = async (id: string) => {
+        return deleteByFetch(`HardDeleteUser?id=${id}`)
     }
-    return data;
-  };
 
-  const addChecklist = async (creatorId: string, title: string) => {
-    try {
-      const response = await postByFetch("AddChecklist", {
-        creatorId: creatorId,
-        title: title,
-      });
+    // user role
 
-      return response.json();
-    } catch (error) {
-      console.error("Error creating checklist:", error);
-      throw error;
+    // checklist
+
+    const getAllCheckLists = async (): Promise<Checklist> => {
+        const data = await getByFetch(`GetAllChecklists`)
+        return data
     }
-  };
-  // TODO: AddChecklistWithTasks
 
-  const updateChecklist = async (id: string, title: string, status: string) => {
-    return postByFetch("UpdateChecklist", {
-      id: id,
-      title: title,
-      status: status,
-    });
-  };
-
-  const deleteChecklist = async (id: string) => {
-    return deleteByFetch(`DeleteChecklist?id=${id}`);
-  };
-
-  // Workflow
-
-  const getAllWorkflows = async (): Promise<WorkflowResponse[]> => {
-    const data = await getByFetch("GetAllWorkflows");
-
-    return data;
-  };
-
-  const getWorkflow = async (workflowId: string): Promise<WorkflowResponse> => {
-    const data = await getByFetch(`GetWorkflow?id=${workflowId}`);
-
-    if (!workflowId) {
-      throw new Error("An error occurred, please try again");
+    const getChecklist = async (id: string): Promise<Checklist> => {
+        const data = await getByFetch(`GetChecklist?id=${id}`)
+        if (!id) {
+            throw new Error('An error occurred, please try again')
+        }
+        return data
     }
-    return data;
-  };
 
-  const getAllWorkflowsByUserId = async (
-    userId: string,
-  ): Promise<WorkflowResponse[]> => {
-    const data = await getByFetch(`GetAllWorkflowsByUserId?userId=${userId}`);
-    return data;
-  };
+    const getAllChecklistsByUserId = async (
+        userId: string
+    ): Promise<Checklist[]> => {
+        const data = await getByFetch(`GetAllChecklistsByUserId?id=${userId}`)
+        if (!userId) {
+            throw new Error('An error occurred, please try again')
+        }
+        return data
+    }
 
-  const getAllCompletedWorkflows = async (): Promise<WorkflowResponse[]> => {
-    const data = await getByFetch(`GetAllCompletedWorkflows`);
-    return data;
-  };
+    const getChecklistByName = async (
+        searchString: string
+    ): Promise<Checklist> => {
+        const data = await getByFetch(
+            `GetChecklistsByName?searchString=${searchString}`
+        )
+        if (!searchString) {
+            throw new Error('An error occurred, please try again')
+        }
+        return data
+    }
 
-  const createWorkflow = async (
-    checklistId: string,
-    userIds: string[],
-    creatorId: string,
-  ) => {
-    return postByFetch("CreateWorkflow", {
-      checklistId: checklistId,
-      userIds: userIds,
-      creatorId: creatorId,
-    });
-  };
+    const addChecklist = async (creatorId: string, title: string) => {
+        try {
+            const response = await postByFetch('AddChecklist', {
+                creatorId: creatorId,
+                title: title,
+            })
 
-  const updateWorkflow = async (
-    id: string,
-    userId: string,
-    status: string,
-    completionTimeMinutes: number,
-    taskInfos: { taskId: string; status: string }[],
-  ) => {
-    return putByFetch("UpdateWorkflow", {
-      id: id,
-      userId: userId,
-      status: status,
-      completionTimeMinutes: completionTimeMinutes,
-      taskInfos: taskInfos,
-    });
-  };
+            return response.json()
+        } catch (error) {
+            console.error('Error creating checklist:', error)
+            throw error
+        }
+    }
+    // TODO: AddChecklistWithTasks
 
-  // const updateWorkflow = async (
-  //     update: Pick<Workflow, 'id' | 'user' | 'status'>
-  // ): Promise<void> => {
-  //     await putByFetch('UpdateWorkflow', {
-  //         update,
-  //     })
-  // }
+    const updateChecklist = async (
+        id: string,
+        title: string,
+        status: string
+    ) => {
+        return postByFetch('UpdateChecklist', {
+            id: id,
+            title: title,
+            status: status,
+        })
+    }
 
-  const deleteWorkflow = async (id: string): Promise<void> => {
-    await deleteByFetch(`DeleteWorkflow?id=${id}`);
-  };
+    const deleteChecklist = async (id: string) => {
+        return deleteByFetch(`DeleteChecklist?id=${id}`)
+    }
 
-  // Checklist Task
+    // Workflow
 
-  const getAllTasks = async (): Promise<Task> => {
-    const data = await getByFetch("GetAllTasks");
-    return data;
-  };
+    const getAllWorkflows = async (): Promise<WorkflowResponse[]> => {
+        const data = await getByFetch('GetAllWorkflows')
 
-  const getTask = async (id: string): Promise<Task> => {
-    const data = await getByFetch(`GetTask?id=${id}`);
-    return data;
-  };
+        return data
+    }
 
-  const getAllTasksByCategoryId = async (
-    categoryId: string,
-  ): Promise<Task[]> => {
-    const response = await getByFetch(
-      `GetAllTasksByCategoryId?id=${categoryId}`,
-    );
-    return response;
-  };
+    const getWorkflow = async (
+        workflowId: string
+    ): Promise<WorkflowResponse> => {
+        const data = await getByFetch(`GetWorkflow?id=${workflowId}`)
 
-  const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
-    const data = await getByFetch(`GetAllTasksByChecklistId?id=${id}`);
-    return data;
-  };
+        if (!workflowId) {
+            throw new Error('An error occurred, please try again')
+        }
+        return data
+    }
 
-  const getTasksByDescription = async (searchString: string): Promise<Task> => {
-    const data = await getByFetch(
-      `GetTasksByDescription?searchString=${searchString}`,
-    );
-    return data;
-  };
+    const getAllWorkflowsByUserId = async (
+        userId: string
+    ): Promise<WorkflowResponse[]> => {
+        const data = await getByFetch(
+            `GetAllWorkflowsByUserId?userId=${userId}`
+        )
+        return data
+    }
 
-  const addTask = async (
-    categoryId: string,
-    description: string,
-  ): Promise<void> => {
-    await postByFetch("AddTask", {
-      categoryId: categoryId,
-      description: description,
-    });
-  };
+    const getAllCompletedWorkflows = async (): Promise<WorkflowResponse[]> => {
+        const data = await getByFetch(`GetAllCompletedWorkflows`)
+        return data
+    }
 
-  const updateTask = async (
-    id: string,
-    categoryId: string,
-    description: string,
-    checklistId: string,
-    estAvgCompletionTime: number,
-  ): Promise<void> => {
-    await postByFetch("UpdateTask", {
-      id: id,
-      categoryId: categoryId,
-      description: description,
-      checklistId: checklistId,
-      estAvgCompletionTime: estAvgCompletionTime,
-    });
-  };
+    const createWorkflow = async (
+        checklistId: string,
+        userIds: string[],
+        creatorId: string
+    ) => {
+        return postByFetch('CreateWorkflow', {
+            checklistId: checklistId,
+            userIds: userIds,
+            creatorId: creatorId,
+        })
+    }
 
-  const addTaskToChecklist = async (taskId: string, checklistId: string) => {
-    return postByFetch("AddTaskToChecklist", {
-      taskId: taskId,
-      checklistId: checklistId,
-    });
-  };
+    const updateWorkflow = async (
+        id: string,
+        userId: string,
+        status: string,
+        completionTimeMinutes: number,
+        taskInfos: { taskId: string; status: string }[],
+        comment: string
+    ) => {
+        return putByFetch('UpdateWorkflow', {
+            id: id,
+            userId: userId,
+            status: status,
+            completionTimeMinutes: completionTimeMinutes,
+            taskInfos: taskInfos,
+            comment: comment,
+        })
+    }
 
-  const removeTaskFromChecklist = async (
-    taskId: string,
-    checklistId: string,
-  ) => {
-    return postByFetch("removeTaskFromChecklist ", {
-      taskId: taskId,
-      checklistId: checklistId,
-    });
-  };
+    // const updateWorkflow = async (
+    //     update: Pick<Workflow, 'id' | 'user' | 'status'>
+    // ): Promise<void> => {
+    //     await putByFetch('UpdateWorkflow', {
+    //         update,
+    //     })
+    // }
 
-  const deleteTask = async (id: string) => {
-    return deleteByFetch(`DeleteTask?id=${id}`);
-  };
+    const deleteWorkflow = async (id: string): Promise<void> => {
+        await deleteByFetch(`DeleteWorkflow?id=${id}`)
+    }
 
-  // Category
+    // Checklist Task
 
-  const getAllCategories = async (): Promise<Category[]> => {
-    const data = await getByFetch("GetAllCategories");
-    return data;
-  };
+    const getAllTasks = async (): Promise<Task> => {
+        const data = await getByFetch('GetAllTasks')
+        return data
+    }
 
-  const getCategory = async (id: string): Promise<Category> => {
-    const data = await getByFetch(`GetCategory?id=${id}`);
-    return data;
-  };
+    const getTask = async (id: string): Promise<Task> => {
+        const data = await getByFetch(`GetTask?id=${id}`)
+        return data
+    }
 
-  const getCategoriesByName = async (
-    searchString: string,
-  ): Promise<Category> => {
-    const data = await getByFetch(
-      `GetCategoriesByName?searchString=${searchString}`,
-    );
-    return data;
-  };
+    const getAllTasksByCategoryId = async (
+        categoryId: string
+    ): Promise<Task[]> => {
+        const response = await getByFetch(
+            `GetAllTasksByCategoryId?id=${categoryId}`
+        )
+        return response
+    }
 
-  const addCategory = async (
-    category: Pick<Category, "name"> /* name: string */,
-  ): Promise<void> => {
-    await postByFetch(`AddCategory`, {
-      category,
-      /* name: name, */
-    });
-  };
+    const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
+        const data = await getByFetch(`GetAllTasksByChecklistId?id=${id}`)
+        return data
+    }
 
-  const updateCategory = async (update: Category): Promise<void> => {
-    await postByFetch("UpdateCategory", {
-      update,
-    });
-  };
+    const getTasksByDescription = async (
+        searchString: string
+    ): Promise<Task> => {
+        const data = await getByFetch(
+            `GetTasksByDescription?searchString=${searchString}`
+        )
+        return data
+    }
 
-  const deleteCategory = async (id: string): Promise<void> => {
-    await deleteByFetch(`DeleteCategory?id=${id}`);
-  };
+    const addTask = async (
+        categoryId: string,
+        description: string
+    ): Promise<void> => {
+        await postByFetch('AddTask', {
+            categoryId: categoryId,
+            description: description,
+        })
+    }
 
-  // punch
-  const getAllPunches = async (): Promise<PunchItem> => {
-    const data = await getByFetch("GetAllPunches");
-    return data;
-  };
+    const updateTask = async (
+        id: string,
+        categoryId: string,
+        description: string,
+        checklistId: string,
+        estAvgCompletionTime: number
+    ): Promise<void> => {
+        await postByFetch('UpdateTask', {
+            id: id,
+            categoryId: categoryId,
+            description: description,
+            checklistId: checklistId,
+            estAvgCompletionTime: estAvgCompletionTime,
+        })
+    }
 
-  const getPunch = async (id: string): Promise<PunchItem> => {
-    const data = await getByFetch(`GetPunch?id=${id}`);
-    return data;
-  };
+    const addTaskToChecklist = async (taskId: string, checklistId: string) => {
+        return postByFetch('AddTaskToChecklist', {
+            taskId: taskId,
+            checklistId: checklistId,
+        })
+    }
 
-  const getPunchesByWorkflowId = async (id: string): Promise<PunchItem> => {
-    const data = await getByFetch(`GetPunchesByWorkflowId?workflowId=${id}`);
-    return data;
-  };
+    const removeTaskFromChecklist = async (
+        taskId: string,
+        checklistId: string
+    ) => {
+        return postByFetch('removeTaskFromChecklist ', {
+            taskId: taskId,
+            checklistId: checklistId,
+        })
+    }
 
-  const getPunchInspectorId = async (id: string): Promise<PunchItem[]> => {
-    const data = await getByFetch(`GetPunchesByInspectorId?id=${id}`);
-    return data;
-  };
+    const deleteTask = async (id: string) => {
+        return deleteByFetch(`DeleteTask?id=${id}`)
+    }
 
-  const getPunchByLeaderId = async (id: string): Promise<PunchItem[]> => {
-    const data = await getByFetch(`GetPunchesByLeaderId?id=${id}`);
-    return data;
-  };
+    // Category
 
-  const addPunch = async (
-    creatorId: string,
-    checklistTaskId: string,
-    punch: Omit<
-      PunchItem,
-      | "id"
-      | "status"
-      | "message"
-      | "createdDate"
-      | "updatedDate"
-      | "user"
-      | "checklistTask"
-    >,
-  ): Promise<Response> => {
-    return await postByFetch("AddPunch", {
-      creatorId: creatorId,
-      checklistTaskId: checklistTaskId,
-      ...punch,
-    });
-  };
+    const getAllCategories = async (): Promise<Category[]> => {
+        const data = await getByFetch('GetAllCategories')
+        return data
+    }
 
-  const updatePunch = async (
-    id: string,
-    workflowId: string,
-    update: Partial<
-      Omit<
-        PunchItem,
-        | "id"
-        | "workflowId"
-        | "createdDate"
-        | "updatedDate"
-        | "user"
-        | "checklistTask"
-      >
-    >,
-  ) => {
-    return postByFetch("UpdatePunch", {
-      ...update,
-      id: id,
-      workflowId: workflowId,
-    });
-  };
+    const getCategory = async (id: string): Promise<Category> => {
+        const data = await getByFetch(`GetCategory?id=${id}`)
+        return data
+    }
 
-  const deletePunch = async (id: string): Promise<void> => {
-    await deleteByFetch(`DeletePunch?id=${id}`);
-  };
+    const getCategoriesByName = async (
+        searchString: string
+    ): Promise<Category> => {
+        const data = await getByFetch(
+            `GetCategoriesByName?searchString=${searchString}`
+        )
+        return data
+    }
 
-  // Upload
+    const addCategory = async (
+        category: Pick<Category, 'name'> /* name: string */
+    ): Promise<void> => {
+        await postByFetch(`AddCategory`, {
+            category,
+            /* name: name, */
+        })
+    }
 
-  const getUpload = async (id: string): Promise<Upload> => {
-    const data = await getByFetch(`GetUpload?id=${id}`);
-    return data;
-  };
+    const updateCategory = async (update: Category): Promise<void> => {
+        await postByFetch('UpdateCategory', {
+            update,
+        })
+    }
 
-  const getUploadByPunchId = async (punchId: string): Promise<Upload[]> => {
-    const data = await getByFetch(`GetUploadsByPunchId?punchId=${punchId}`);
-    return data;
-  };
+    const deleteCategory = async (id: string): Promise<void> => {
+        await deleteByFetch(`DeleteCategory?id=${id}`)
+    }
 
-  const addUpload = async (punchId: string, file: File): Promise<void> => {
-    const formData = new FormData();
-    formData.append("punchId", punchId);
-    formData.append("file", file);
+    // punch
+    const getAllPunches = async (): Promise<PunchItem> => {
+        const data = await getByFetch('GetAllPunches')
+        return data
+    }
 
-    await postFileByFetch("AddUpload", formData);
-  };
+    const getPunch = async (id: string): Promise<PunchItem> => {
+        const data = await getByFetch(`GetPunch?id=${id}`)
+        return data
+    }
 
-  const updateUpload = async (
-    update: Pick<Upload, "id" | "punchId">,
-  ): Promise<void> => {
-    await postByFetch("UpdateUpload", {
-      update,
-    });
-  };
+    const getPunchesByWorkflowId = async (id: string): Promise<PunchItem> => {
+        const data = await getByFetch(`GetPunchesByWorkflowId?workflowId=${id}`)
+        return data
+    }
 
-  const deleteUpload = async (id: string): Promise<void> => {
-    await deleteByFetch(`DeleteUpload?id=${id}`);
-  };
+    const getPunchInspectorId = async (id: string): Promise<PunchItem[]> => {
+        const data = await getByFetch(`GetPunchesByInspectorId?id=${id}`)
+        return data
+    }
 
-  // Invoice
+    const getPunchByLeaderId = async (id: string): Promise<PunchItem[]> => {
+        const data = await getByFetch(`GetPunchesByLeaderId?id=${id}`)
+        return data
+    }
 
-  const getAllInvoices = async (): Promise<Invoice[]> => {
-    const data = await getByFetch("GetAllInvoices");
-    return data;
-  };
+    const addPunch = async (
+        creatorId: string,
+        checklistTaskId: string,
+        punch: Omit<
+            PunchItem,
+            | 'id'
+            | 'status'
+            | 'message'
+            | 'createdDate'
+            | 'updatedDate'
+            | 'user'
+            | 'checklistTask'
+        >
+    ): Promise<Response> => {
+        return await postByFetch('AddPunch', {
+            creatorId: creatorId,
+            checklistTaskId: checklistTaskId,
+            ...punch,
+        })
+    }
 
-  const getInvoice = async (id: string): Promise<Invoice> => {
-    const data = await getByFetch(`GetInvoice?id=${id}`);
-    return data;
-  };
+    const updatePunch = async (
+        id: string,
+        workflowId: string,
+        update: Partial<
+            Omit<
+                PunchItem,
+                | 'id'
+                | 'workflowId'
+                | 'createdDate'
+                | 'updatedDate'
+                | 'user'
+                | 'checklistTask'
+            >
+        >
+    ) => {
+        return postByFetch('UpdatePunch', {
+            ...update,
+            id: id,
+            workflowId: workflowId,
+        })
+    }
 
-  const getInvoicePdfByInvoiceId = async (id: string): Promise<Invoice> => {
-    const data = await getByFetch(`GetInvoicePdfByInvoiceId?id=${id}`);
-    return data;
-  };
+    const deletePunch = async (id: string): Promise<void> => {
+        await deleteByFetch(`DeletePunch?id=${id}`)
+    }
 
-  const addInvoice = async (
-    title: string,
-    receiver: string,
-    workflowIds: string[],
-    hourlyRate: number,
-    sender: string,
-  ): Promise<Response> => {
-    return await postByFetch("AddInvoice", {
-      title: title,
-      receiver: receiver,
-      workflowIds: workflowIds,
-      hourlyRate: hourlyRate,
-      sender: sender,
-    });
-  };
+    // Upload
 
-  const updateInvoice = async (
-    id: string,
-    status: string,
-    message: string,
-  ): Promise<void> => {
-    await postByFetch("UpdateInvoice", {
-      id: id,
-      status: status,
-      message: message,
-    });
-  };
+    const getUpload = async (id: string): Promise<Upload> => {
+        const data = await getByFetch(`GetUpload?id=${id}`)
+        return data
+    }
 
-  const deleteInvoice = async (id: string): Promise<void> => {
-    await deleteByFetch(`DeleteInvoice?id=${id}`);
-  };
+    const getUploadByPunchId = async (punchId: string): Promise<Upload[]> => {
+        const data = await getByFetch(`GetUploadsByPunchId?punchId=${punchId}`)
+        return data
+    }
 
-  const getPubSubAccessToken = async (): Promise<pubSubToken> => {
-    const data = await getByFetch("GetPubSubAccessToken");
-    return data;
-  };
+    const addUpload = async (punchId: string, file: File): Promise<void> => {
+        const formData = new FormData()
+        formData.append('punchId', punchId)
+        formData.append('file', file)
 
-  const getAllNotifications = async (): Promise<Notifications[]> => {
-    const data = await getByFetch(`GetAllNotifications`);
-    return data;
-  };
+        await postFileByFetch('AddUpload', formData)
+    }
 
-  const getNotificationsByUser = async (
-    id: string,
-  ): Promise<Notifications[]> => {
-    const data = await getByFetch(`GetNotificationByUserId?id=${id}`);
-    return data;
-  };
+    const updateUpload = async (
+        update: Pick<Upload, 'id' | 'punchId'>
+    ): Promise<void> => {
+        await postByFetch('UpdateUpload', {
+            update,
+        })
+    }
 
-  const updateNotification = async (
-    id: string,
-    notificationStatus: string,
-  ): Promise<void> => {
-    await postByFetch("UpdateNotififcation", {
-      id: id,
-      notificationStatus: notificationStatus,
-    });
-  };
+    const deleteUpload = async (id: string): Promise<void> => {
+        await deleteByFetch(`DeleteUpload?id=${id}`)
+    }
 
-  return {
-    getAllUsers,
-    getAllUsersAdmin,
-    getUserByAzureAdUserId,
-    getUser,
-    getUserByUserName,
-    addUser,
-    updateUser,
-    softDeleteUser,
-    hardDeleteUser,
+    // Invoice
 
-    getAllCategories,
-    getCategory,
-    getCategoriesByName,
-    addCategory,
-    updateCategory,
-    deleteCategory,
-    getAllPunches,
-    getPunch,
-    getPunchesByWorkflowId,
-    getPunchInspectorId,
-    getPunchByLeaderId,
-    addPunch,
-    updatePunch,
-    deletePunch,
-    getAllCheckLists,
-    getChecklist,
-    getAllChecklistsByUserId,
-    getChecklistByName,
-    addChecklist,
-    updateChecklist,
-    deleteChecklist,
-    getAllTasks,
-    getTask,
-    getAllTasksByCategoryId,
-    getAllTasksByChecklistId,
-    getTasksByDescription,
-    addTask,
-    updateTask,
-    addTaskToChecklist,
-    removeTaskFromChecklist,
-    deleteTask,
-    getAllWorkflows,
-    getWorkflow,
-    getAllWorkflowsByUserId,
-    getAllCompletedWorkflows,
-    createWorkflow,
-    updateWorkflow,
-    deleteWorkflow,
-    getUpload,
-    getUploadByPunchId,
-    addUpload,
-    updateUpload,
-    deleteUpload,
-    getAllInvoices,
-    // getAllInvoicePdfs,
-    getInvoice,
-    getInvoicePdfByInvoiceId,
-    addInvoice,
-    updateInvoice,
-    deleteInvoice,
-    getPubSubAccessToken,
-    getAllNotifications,
-    getNotificationsByUser,
-    updateNotification,
-  };
-};
+    const getAllInvoices = async (): Promise<Invoice[]> => {
+        const data = await getByFetch('GetAllInvoices')
+        return data
+    }
 
-export type ApiService = ReturnType<typeof apiService>;
+    const getInvoice = async (id: string): Promise<Invoice> => {
+        const data = await getByFetch(`GetInvoice?id=${id}`)
+        return data
+    }
 
-export default apiService;
+    const getInvoicePdfByInvoiceId = async (id: string): Promise<Invoice> => {
+        const data = await getByFetch(`GetInvoicePdfByInvoiceId?id=${id}`)
+        return data
+    }
+
+    const addInvoice = async (
+        title: string,
+        receiver: string,
+        workflowIds: string[],
+        hourlyRate: number,
+        sender: string
+    ): Promise<Response> => {
+        return await postByFetch('AddInvoice', {
+            title: title,
+            receiver: receiver,
+            workflowIds: workflowIds,
+            hourlyRate: hourlyRate,
+            sender: sender,
+        })
+    }
+
+    const updateInvoice = async (
+        id: string,
+        status: string,
+        message: string
+    ): Promise<void> => {
+        await postByFetch('UpdateInvoice', {
+            id: id,
+            status: status,
+            message: message,
+        })
+    }
+
+    const deleteInvoice = async (id: string): Promise<void> => {
+        await deleteByFetch(`DeleteInvoice?id=${id}`)
+    }
+
+    const getPubSubAccessToken = async (): Promise<pubSubToken> => {
+        const data = await getByFetch('GetPubSubAccessToken')
+        return data
+    }
+
+    const getAllNotifications = async (): Promise<Notifications[]> => {
+        const data = await getByFetch(`GetAllNotifications`)
+        return data
+    }
+
+    const getNotificationsByUser = async (
+        id: string
+    ): Promise<Notifications[]> => {
+        const data = await getByFetch(`GetNotificationByUserId?id=${id}`)
+        return data
+    }
+
+    const updateNotification = async (
+        id: string,
+        notificationStatus: string
+    ): Promise<void> => {
+        await postByFetch('UpdateNotififcation', {
+            id: id,
+            notificationStatus: notificationStatus,
+        })
+    }
+
+    return {
+        getAllUsers,
+        getAllUsersAdmin,
+        getUserByAzureAdUserId,
+        getUser,
+        getUserByUserName,
+        addUser,
+        updateUser,
+        softDeleteUser,
+        hardDeleteUser,
+
+        getAllCategories,
+        getCategory,
+        getCategoriesByName,
+        addCategory,
+        updateCategory,
+        deleteCategory,
+        getAllPunches,
+        getPunch,
+        getPunchesByWorkflowId,
+        getPunchInspectorId,
+        getPunchByLeaderId,
+        addPunch,
+        updatePunch,
+        deletePunch,
+        getAllCheckLists,
+        getChecklist,
+        getAllChecklistsByUserId,
+        getChecklistByName,
+        addChecklist,
+        updateChecklist,
+        deleteChecklist,
+        getAllTasks,
+        getTask,
+        getAllTasksByCategoryId,
+        getAllTasksByChecklistId,
+        getTasksByDescription,
+        addTask,
+        updateTask,
+        addTaskToChecklist,
+        removeTaskFromChecklist,
+        deleteTask,
+        getAllWorkflows,
+        getWorkflow,
+        getAllWorkflowsByUserId,
+        getAllCompletedWorkflows,
+        createWorkflow,
+        updateWorkflow,
+        deleteWorkflow,
+        getUpload,
+        getUploadByPunchId,
+        addUpload,
+        updateUpload,
+        deleteUpload,
+        getAllInvoices,
+        // getAllInvoicePdfs,
+        getInvoice,
+        getInvoicePdfByInvoiceId,
+        addInvoice,
+        updateInvoice,
+        deleteInvoice,
+        getPubSubAccessToken,
+        getAllNotifications,
+        getNotificationsByUser,
+        updateNotification,
+    }
+}
+
+export type ApiService = ReturnType<typeof apiService>
+
+export default apiService

@@ -127,7 +127,6 @@ export const MyCheckLists = () => {
                     </Table.Body>
                 </Table>
             </BackgroundWrap>
-
             {activeRow === true ? (
                 <NavActionsComponent
                     buttonColor="danger"
@@ -157,7 +156,6 @@ export const MyCheckLists = () => {
             ) : (
                 <DefaultNavigation hideNavbar={false} />
             )}
-
             <CustomDialog
                 title="Title of checklist"
                 buttonVariant="ghost"
