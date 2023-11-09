@@ -105,5 +105,3 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
 }
 
 export default NotificationList
-
-

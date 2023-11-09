@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router'
-import apiService from '../../services/api'
-import { ApiStatus, Upload } from '../../services/apiTypes'
-import { Loading } from '../../components/loading/Loading'
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router";
+import apiService from "../../services/api";
+import { ApiStatus, Upload } from "../../services/apiTypes";
+import { Loading } from "../../components/loading/Loading";
 
 export function usePunch() {
-    const api = apiService()
-    const { punchId } = useParams() as { punchId: string }
-    const methods = useForm()
-    const [status, setStatus] = useState('')
-    const [uploads, setUploads] = useState<Upload[]>([])
-    const [positiveOpen, setPositiveOpen] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [fetchUploadStatus, setFetchUploadStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+  const api = apiService();
+  const { punchId } = useParams() as { punchId: string };
+  const methods = useForm();
+  const [status, setStatus] = useState("");
+  const [uploads, setUploads] = useState<Upload[]>([]);
+  const [positiveOpen, setPositiveOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fetchUploadStatus, setFetchUploadStatus] = useState<ApiStatus>(
+    ApiStatus.LOADING,
+  );
 
-    // TODO: onSubmit function NOT IN USE?
-    /* const onSubmit = async () => {
+  // TODO: onSubmit function NOT IN USE?
+  /* const onSubmit = async () => {
         try {
             const res = await fetch(`${API_URL}/updatePunch?id=${id}`, {
                 method: 'POST',
@@ -39,32 +41,32 @@ export function usePunch() {
         }
     } */
 
-    const handleOpen = () => {
-        setPositiveOpen(true)
-    }
-    const clearAndClose = () => {
-        setPositiveOpen(false)
-    }
+  const handleOpen = () => {
+    setPositiveOpen(true);
+  };
+  const clearAndClose = () => {
+    setPositiveOpen(false);
+  };
 
-    useEffect(() => {
-        setLoading(true)
-        if (!punchId) return
-        ;(async () => {
-            const uploadFromApi = await api.getUploadByPunchId(punchId)
-            setUploads(uploadFromApi)
-            setFetchUploadStatus(ApiStatus.SUCCESS)
-        })()
-    }, [])
+  useEffect(() => {
+    setLoading(true);
+    if (!punchId) return;
+    (async () => {
+      const uploadFromApi = await api.getUploadByPunchId(punchId);
+      setUploads(uploadFromApi);
+      setFetchUploadStatus(ApiStatus.SUCCESS);
+    })();
+  }, []);
 
-    return {
-        setStatus,
-        /* onSubmit, */
-        positiveOpen,
-        handleOpen,
-        clearAndClose,
-        loading,
-        fetchUploadStatus,
-        uploads,
-        methods,
-    }
+  return {
+    setStatus,
+    /* onSubmit, */
+    positiveOpen,
+    handleOpen,
+    clearAndClose,
+    loading,
+    fetchUploadStatus,
+    uploads,
+    methods,
+  };
 }

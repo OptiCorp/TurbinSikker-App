@@ -52,7 +52,7 @@ export const StyledHeadContents = styled.h3`
 
 export const Wrap = styled.div`
     display: flex;
-    height: min(70vh);
+    height: min(80vh);
     padding-top: 25px;
 
     background: ${COLORS.primary};

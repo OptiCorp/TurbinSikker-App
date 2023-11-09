@@ -1,13 +1,13 @@
 import { Typography } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
-import { useParams } from 'react-router'
 import useSnackBar from '../../components/snackbar/useSnackBar'
 import { formatDate } from '../../helpers/dateFormattingHelpers'
-import apiService from '../../services/api'
 import { useRoles } from '../../services/useRoles'
 import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { PreviewWrapper } from '../checklist/previewCheckList/styles'
 import { FillOutList } from './FillOutList'
+
+import { ReviewList } from './ReviewList'
 import { useFillChecklistForm } from './hooks/useFillChecklist'
 import {
     BackgroundWrap,
@@ -19,11 +19,15 @@ import {
 } from './styles'
 
 export const FillOutCheckList = () => {
-    const { methods, onSubmit, workflow } = useFillChecklistForm()
+    const {
+        methods,
+        onSubmit,
+        workflow,
+        setSubmitDialogShowing,
+        submitDialogShowing,
+    } = useFillChecklistForm()
 
     const { handleSubmit } = methods
-    const { workflowId } = useParams() as { workflowId: string }
-    const api = apiService()
 
     const { isInspector, isLeader } = useRoles()
     const { snackbar, setSnackbarText } = useSnackBar()
@@ -33,16 +37,20 @@ export const FillOutCheckList = () => {
     return (
         <FormProvider {...methods}>
             {snackbar}
-            <form onSubmit={handleSubmit(onSubmit)} id="fill-checklist">
+            <form
+                onSubmit={handleSubmit(onSubmit, () =>
+                    setSubmitDialogShowing(false)
+                )}
+                id="fill-checklist"
+            >
                 <BackgroundWrap>
-                 
-                        <InfoHeader>
-                            {' '}
-                            <StyledCard>
-                                <EditStyledCardHeader>
-                                    {workflow?.checklist.title}{' '}
-                                </EditStyledCardHeader>
-                                {workflow && isLeader && (
+                    <InfoHeader>
+                        {' '}
+                        <StyledCard>
+                            <EditStyledCardHeader>
+                                {workflow?.checklist.title}{' '}
+                            </EditStyledCardHeader>
+                            {workflow && isLeader && (
                                 <List>
                                     <Container>
                                         <Typography
@@ -73,10 +81,11 @@ export const FillOutCheckList = () => {
                                     >
                                         {' '}
                                     </Typography>
-                                </List>)}
-                            </StyledCard>
-                        </InfoHeader>
-                    
+                                </List>
+                            )}
+                        </StyledCard>
+                    </InfoHeader>
+
                     <>
                         <PreviewWrapper>
                             <>
@@ -84,11 +93,21 @@ export const FillOutCheckList = () => {
                                     <>
                                         <FillOutList
                                             workflow={workflow}
+                                            setSubmitDialogShowing={
+                                                setSubmitDialogShowing
+                                            }
+                                            submitDialogShowing={
+                                                submitDialogShowing
+                                            }
                                             key={workflow.id}
                                         />
                                     </>
                                 ) : (
-                                    <>{workflow && <>test</>}</>
+                                    <>
+                                        {workflow && (
+                                            <ReviewList workflow={workflow} />
+                                        )}
+                                    </>
                                 )}
                             </>
                         </PreviewWrapper>

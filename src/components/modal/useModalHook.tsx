@@ -15,6 +15,7 @@ interface DialogProps {
     buttonVariant?: 'contained' | 'outlined' | 'ghost'
     positiveButtonVariant?: 'contained' | 'outlined' | 'ghost'
     type?: 'submit' | 'reset' | 'button'
+    PrimaryType?: 'submit' | 'reset' | 'button'
     form?: string
 }
 
@@ -32,6 +33,7 @@ const CustomDialog: React.FC<DialogProps> = ({
     buttonVariant,
     positiveButtonVariant,
     type,
+    PrimaryType,
     form,
 }) => {
     return (
@@ -47,6 +49,7 @@ const CustomDialog: React.FC<DialogProps> = ({
                         onClick={negativeButtonOnClick}
                         color={negativeButtonColor}
                         variant={buttonVariant}
+                        type={PrimaryType}
                     >
                         {negativeButtonText}
                     </Button>

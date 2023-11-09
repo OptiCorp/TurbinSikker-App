@@ -39,6 +39,7 @@ export const MyCheckLists = () => {
 
             if (res.id) navigate(`/EditCheckList/${res.id}`)
             if (res.id && openSnackbar) openSnackbar('Checklist created')
+            console.log(res.id)
         } catch (error) {
             console.error('Error creating checklist:', error)
         }

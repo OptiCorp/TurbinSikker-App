@@ -4,7 +4,7 @@ import { COLORS } from '../../../style/GlobalStyles'
 
 export const BackgroundWrapCompleted = styled.div`
     display: flex;
-    height: 100%;
+    height: min(80vh);
 
     background: ${COLORS.primary};
     align-items: left;

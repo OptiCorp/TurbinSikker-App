@@ -1,23 +1,18 @@
 import { ChangeEvent, FunctionComponent, useState } from 'react'
 
+import { Card, Checkbox, Chip, Typography } from '@equinor/eds-core-react'
+
 import {
-    Button,
-    Card,
-    Checkbox,
-    Chip,
-    Dialog,
-    Input,
-    Label,
-    Typography,
-} from '@equinor/eds-core-react'
-import { useNavigate, useParams } from 'react-router'
-
-import CustomDialog from '../../components/modal/useModalHook'
-import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
-
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+    Controller,
+    DeepMap,
+    FieldError,
+    FieldValues,
+    useFieldArray,
+    useFormContext,
+} from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
+import { DialogInspector } from './dialogInspector'
 import { FillOutChecklistForm } from './hooks/types'
 import {
     CustomCard,
@@ -31,30 +26,39 @@ import {
     SubmitErrorContainer,
 } from './styles'
 
+export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
+    DeepMap<TFieldValues, FieldError>
+
 export type FillOutListProps = {
     workflow: WorkflowResponse
+    setSubmitDialogShowing: (submitDialogShowing: boolean) => void
+    submitDialogShowing: boolean
 }
 
 export const FillOutList: FunctionComponent<FillOutListProps> = ({
     workflow,
+    setSubmitDialogShowing,
+    submitDialogShowing,
 }) => {
-    const { workflowId } = useParams() as { workflowId: string }
-    const navigate = useNavigate()
-    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const [punchDialogShowing, setPunchDialogShowing] = useState(false)
     const [taskId, settaskId] = useState('')
-    const createPunch = () => {
-        navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
-    }
 
     const methods = useFormContext<FillOutChecklistForm>()
 
-    const { fields, update } = useFieldArray({
+    const { fields } = useFieldArray({
         control: methods.control,
         name: 'taskInfos',
     })
 
-    console.log(workflow)
+    //     useEffect(() => {
+    //   fields.map((field) => field.status) ?
+
+    //       return () => {
+    //         second
+    //       }
+    //     }, [third])
+
+    console.log(fields)
 
     return (
         <>
@@ -123,7 +127,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                     </NotApplicableWrap>
 
                                     <CustomTaskField
-                                        label={''}
+                                        label=""
                                         key={task.id}
                                         id="storybook-multi-readonly"
                                         name="task"
@@ -131,8 +135,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         multiline
                                         style={{
                                             filter:
-                                                field.status[index] ===
-                                                'NotApplicable'
+                                                field.status === 'NotApplicable'
                                                     ? 'blur(3px)'
                                                     : 'none',
                                         }}
@@ -140,130 +143,86 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         readOnly
                                     />
                                 </CustomCardContent>
+
                                 <SubmitErrorContainer>
                                     <Controller
                                         control={methods.control}
                                         name={`taskInfos.${index}.status`}
                                         rules={{
-                                            required:
-                                                field.status === 'Finished' ||
-                                                'NotApplicable',
+                                            validate: (value) => {
+                                                return value === 'Finished' ||
+                                                    value === 'NotApplicable'
+                                                    ? true
+                                                    : 'Task must be marked as finished or N/A'
+                                            },
                                         }}
                                         render={({
-                                            field: { value, onChange }
-                                          
+                                            field: { value, onChange },
+                                            fieldState: { error },
                                         }) => {
-                                            return value === 'NotApplicable' ? (
-                                                <ImageContainer />
-                                            ) : (
-                                                <Checkbox
-                                                    disabled={
-                                                        value ===
-                                                        'NotApplicable'
-                                                            ? true
-                                                            : false
-                                                    }
-                                                    checked={
-                                                        value === 'Finished'
-                                                    }
-                                                    onChange={(
-                                                        e: ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        onChange(
-                                                            e.target.checked
-                                                                ? 'Finished'
-                                                                : 'Unfinished'
-                                                        )
-                                                    }}
-                                                />
+                                            return (
+                                                <>
+                                                    {' '}
+                                                    {value ===
+                                                    'NotApplicable' ? (
+                                                        <ImageContainer />
+                                                    ) : (
+                                                        <Checkbox
+                                                            disabled={
+                                                                value ===
+                                                                'NotApplicable'
+                                                                    ? true
+                                                                    : false
+                                                            }
+                                                            checked={
+                                                                value ===
+                                                                'Finished'
+                                                            }
+                                                            onChange={(
+                                                                e: ChangeEvent<HTMLInputElement>
+                                                            ) => {
+                                                                onChange(
+                                                                    e.target
+                                                                        .checked
+                                                                        ? 'Finished'
+                                                                        : 'Unfinished'
+                                                                )
+                                                            }}
+                                                        />
+                                                    )}
+                                                    {error && (
+                                                        <Typography
+                                                            color="danger"
+                                                            group="table"
+                                                            variant="cell_header"
+                                                            token={{
+                                                                fontSize:
+                                                                    '1rem',
+                                                            }}
+                                                        >
+                                                            {error.message}
+                                                        </Typography>
+                                                    )}
+                                                </>
                                             )
                                         }}
                                     />
                                 </SubmitErrorContainer>
-                                {/* // {checked === 0 && <Error>Required</Error>}</> */}
                             </CustomCard>
                         )
                     })}
                 </FillOutWrap>
+                <>
+                    <DialogInspector
+                        workflow={workflow}
+                        taskId={taskId}
+                        setPunchDialogShowing={setPunchDialogShowing}
+                        punchDialogShowing={punchDialogShowing}
+                        setSubmitDialogShowing={setSubmitDialogShowing}
+                        submitDialogShowing={submitDialogShowing}
+                    />
+                </>
             </>
-
-            <NavActionsComponent
-                buttonColor="primary"
-                as="button"
-                secondButtonColor="primary"
-                buttonVariant="outlined"
-                secondOnClick={() => setSubmitDialogShowing(true)}
-                isShown={true}
-                ButtonMessage="Clear"
-                type="button"
-                SecondButtonMessage="Submit"
-            />
-            <CustomDialog
-                title="Make Punch?"
-                buttonVariant="ghost"
-                negativeButtonOnClick={() => setPunchDialogShowing(false)}
-                negativeButtonText="Cancel"
-                positiveButtonText="OK"
-                positiveButtonOnClick={() => {
-                    createPunch()
-                }}
-                isOpen={punchDialogShowing}
-            >
-                <Typography
-                    group="input"
-                    variant="text"
-                    token={{ textAlign: 'left' }}
-                >
-                    You will be forwarded to Punch form. You will be able to
-                    continue this form where you left after.
-                </Typography>
-            </CustomDialog>
-            <Dialog
-                open={submitDialogShowing}
-                onClose={() => setSubmitDialogShowing(false)}
-                isDismissable
-            >
-                <Dialog.Header>
-                    <Dialog.Title>
-                        Submit {workflow.checklist.title}?
-                    </Dialog.Title>
-                </Dialog.Header>
-                <Dialog.CustomContent>
-                    <Typography style={{ marginBottom: '10px' }}>
-                        This will commit {workflow.checklist.title} to{' '}
-                        {workflow.creator.username}
-                    </Typography>
-                    <div>
-                        <Label
-                            htmlFor="textfield-normal"
-                            label="Completion time (minutes):"
-                        />
-                        <Input
-                            id="textfield-normal"
-                            type="number"
-                            autoComplete="off"
-                            {...methods.register('completionTimeMinutes', {
-                                valueAsNumber: true,
-                            })}
-                        />
-                    </div>
-                </Dialog.CustomContent>
-                <Dialog.Actions>
-                    <Button
-                        style={{ marginRight: '10px' }}
-                        type="submit"
-                        form="fill-checklist"
-                    >
-                        Submit
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        onClick={() => setSubmitDialogShowing(false)}
-                    >
-                        Cancel
-                    </Button>
-                </Dialog.Actions>
-            </Dialog>
         </>
     )
 }

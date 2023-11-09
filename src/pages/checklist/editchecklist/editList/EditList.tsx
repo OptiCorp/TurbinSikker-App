@@ -1,5 +1,4 @@
-import { Button, Chip, Icon } from '@equinor/eds-core-react'
-import { remove_outlined } from '@equinor/eds-icons'
+import { Chip } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { useParams } from 'react-router'
 import CustomDialog from '../../../../components/modal/useModalHook'
@@ -9,7 +8,6 @@ import { Checklist, ChecklistTaskInfo } from '../../../../services/apiTypes'
 import { PreviewListPoints } from '../../previewCheckList/styles'
 import { useEditChecklist } from '../hooks/useEditChecklist'
 import {
-    ActionHeader,
     CategoryName,
     Container,
     Delete,
@@ -69,9 +67,9 @@ export const EditList = ({ tasks }: Props) => {
             {tasks.map((task) => (
                 <Container key={task.id}>
                     <CategoryName>{task.category.name}</CategoryName>
-                    <StyledCard>
+                    <StyledCard elevation="raised">
                         {' '}
-                        <ActionHeader>
+                        {/* <ActionHeader>
                             <Button
                                 style={{ color: 'red' }}
                                 variant="ghost_icon"
@@ -84,13 +82,14 @@ export const EditList = ({ tasks }: Props) => {
                                     size={24}
                                 ></Icon>
                             </Button>
-                        </ActionHeader>
+                        </ActionHeader> */}
                         <PreviewListPoints
                             label=""
                             key={task?.id}
                             id="storybook-multi-readonly"
                             placeholder={task?.description}
                             multiline
+                            readOnly
                             rows={3}
                             onClick={() => {
                                 setTask(task)
@@ -118,7 +117,7 @@ export const EditList = ({ tasks }: Props) => {
                             deleteTask()
                         }}
                     >
-                        delete task{' '}
+                        remove task{' '}
                     </Chip>
                 </Delete>
                 <EditListPoints

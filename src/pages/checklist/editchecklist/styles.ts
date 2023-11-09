@@ -84,5 +84,7 @@ export const Delete = styled.div`
     color: red;
     justify-content: flex-end;
     display: flex;
+    padding-bottom: 1rem;
+    height: 100%;
     margin: 0;
 `
