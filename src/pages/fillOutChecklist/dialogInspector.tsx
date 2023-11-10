@@ -49,12 +49,6 @@ export const DialogInspector: FunctionComponent<DialogProps> = ({
         navigate(`/workflow/${workflowId}/${taskId}/addpunch`)
     }
 
-    // const [inspectorSubmitDialog, setInspectorSubmitDialog] = useState(false)
-    // useEffect(() => {
-    //     if (submitDialogShowing === true) setInspectorSubmitDialog(true)
-    //     else if (submitDialogShowing === false) setInspectorSubmitDialog(false)
-    // }, [submitDialogShowing])
-
     const methods = useFormContext<FillOutChecklistForm>()
 
     return (
@@ -111,6 +105,7 @@ export const DialogInspector: FunctionComponent<DialogProps> = ({
                         This will commit {workflow.checklist.title} to
                         {workflow.creator.username}
                     </Typography>
+
                     <div>
                         <Label
                             htmlFor="completionTimeMinutes"

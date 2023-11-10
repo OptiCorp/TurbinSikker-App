@@ -55,6 +55,7 @@ export const useFillChecklistForm = () => {
                 status: workFlowData.status,
                 completionTimeMinutes: workFlowData.completionTimeMinutes,
                 taskInfos: objectTaskListToArray(workFlowData.taskInfos),
+                comment: workFlowData.comment,
             })
             setWorkflow(workFlowData)
         })()
@@ -63,22 +64,47 @@ export const useFillChecklistForm = () => {
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
-        if (isLeader) {
+        if (isLeader && data.status === 'Done') {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
                     'Done',
                     data.completionTimeMinutes,
-                    methods.watch('taskInfos')
+                    methods.watch('taskInfos'),
+                    ''
                 )
+
                 if (res.ok) {
                     setSubmitDialogShowing(false)
                     if (openSnackbar) openSnackbar('Checklist marked as done')
-                    if (res.ok) navigate('/Checklists')
+                    navigate('/Checklists')
                     setRefreshList((prev) => !prev)
+                } else {
+                    setSubmitDialogShowing(false)
                 }
-                if (!res.ok) {
+            } catch (error) {
+                console.error(error)
+                setSubmitDialogShowing(false)
+            }
+        } else if (isLeader && data.comment) {
+            try {
+                const res = await api.updateWorkflow(
+                    workflowId,
+                    data.userId,
+                    'Rejected',
+                    data.completionTimeMinutes,
+                    methods.watch('taskInfos'),
+                    data.comment
+                )
+
+                if (res.ok) {
+                    setSubmitDialogShowing(false)
+                    if (openSnackbar)
+                        openSnackbar('Checklist marked as rejected')
+                    navigate('/Checklists')
+                    setRefreshList((prev) => !prev)
+                } else {
                     setSubmitDialogShowing(false)
                 }
             } catch (error) {
@@ -86,23 +112,26 @@ export const useFillChecklistForm = () => {
                 setSubmitDialogShowing(false)
             }
         } else if (isInspector) {
-            const res = await api.updateWorkflow(
-                workflowId,
-                data.userId,
-                'Committed',
-                data.completionTimeMinutes,
-                methods.watch('taskInfos')
-            )
-            if (res.ok) {
+            try {
+                const res = await api.updateWorkflow(
+                    workflowId,
+                    data.userId,
+                    'Committed',
+                    data.completionTimeMinutes,
+                    methods.watch('taskInfos'),
+                    methods.watch('comment')
+                )
+
+                if (res.ok) {
+                    setSubmitDialogShowing(false)
+                    if (openSnackbar) openSnackbar('Checklist committed')
+                    navigate('/Checklists')
+                    setRefreshList((prev) => !prev)
+                }
+            } catch (error) {
+                console.error(error)
                 setSubmitDialogShowing(false)
-                if (openSnackbar) openSnackbar('Checklist committed')
-                if (res.ok) navigate('/Checklists')
-                setRefreshList((prev) => !prev)
             }
-            // if (methods.getFieldState('taskInfos' errors ? validation?)) {
-            //     setSubmitDialogShowing(false)
-            //     if (openSnackbar) openSnackbar('All tasks must be checked')
-            // }
         }
     }
 

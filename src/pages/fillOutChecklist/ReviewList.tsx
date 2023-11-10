@@ -61,16 +61,6 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                                 <CustomCategoryName>
                                     {task.category.name}{' '}
                                 </CustomCategoryName>
-                                {/* <Chip variant="active">
-                                    <Typography
-                                        variant="caption"
-                                        token={{
-                                            textAlign: 'center',
-                                            fontWeight: 600,
-                                            fontSize: '0.7rem',
-                                        }}
-                                    ></Typography>
-                                </Chip> */}
                             </ReviewCardHeader>
                             <CustomCardContent>
                                 <NotApplicableWrap>
