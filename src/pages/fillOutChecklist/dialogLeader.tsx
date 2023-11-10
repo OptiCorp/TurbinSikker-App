@@ -9,7 +9,7 @@ import {
 } from '@equinor/eds-core-react'
 
 import CustomDialog from '../../components/modal/useModalHook'
-import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
+import { NavActionsComponent } from '../../components/navigation/hooks/NavActionBtn'
 
 import {
     Controller,

@@ -23,15 +23,6 @@ export type User = {
     updatedDate: string | null
 }
 
-export type UserListEntity = {
-    value: string
-    label: string
-}
-export type ListEntity = {
-    value: string
-    label: string
-}
-
 export type PunchItem = {
     id: string
     workflowId: string
