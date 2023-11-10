@@ -1,40 +1,23 @@
-import {
-    Banner,
-    Button,
-    Icon,
-    Table,
-    Typography,
-} from '@equinor/eds-core-react'
-import { thumbs_down } from '@equinor/eds-icons'
+import { Banner, Button, Icon, Typography } from '@equinor/eds-core-react'
+import { warning_filled } from '@equinor/eds-icons'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
-import { UserChip } from '../../pages/checklist/inprogressChecklists/UserChip'
-import {
-    PunchListBoxContainer,
-    StatusBadge,
-} from '../../pages/punch/listPunches/styles'
 import apiService from '../../services/api'
 import { PunchItem, User, WorkflowResponse } from '../../services/apiTypes'
 import { useRoles } from '../../services/useRoles'
-import {
-    BannerContainer,
-    StatusBadgeContainer,
-    TableStyledBanner,
-    TableStyledHead,
-    Wrapper,
-} from './styles'
-
+import { COLORS } from '../../style/GlobalStyles'
+import { BannerP, Wrapper } from './styles'
 export const BannerComponent: React.FC = () => {
     const { currentUser } = useGlobal() as { currentUser: User }
     const api = apiService()
-    const { isLeader, isInspector } = useRoles()
+    const { isInspector } = useRoles()
     const [punches, setPunches] = useState<PunchItem[]>([])
     const [workflow, setWorkFlow] = useState<WorkflowResponse[]>([])
 
     const location = useLocation()
     useEffect(() => {
-        if (!punches && !punches)
+        if (punches)
             (async () => {
                 if (isInspector) {
                     const punchesFromApi = await api.getPunchInspectorId(
@@ -83,80 +66,44 @@ export const BannerComponent: React.FC = () => {
                             workflow.status === 'Rejected' &&
                             isInspector && (
                                 <Banner
+                                    style={{
+                                        border: `2px solid  ${COLORS.dangerRed};`,
+                                    }}
                                     key={workflow.id}
-                                    elevation="raised"
-                                    onClick={() =>
-                                        resubmitChecklist(workflow.id)
-                                    }
+                                    elevation="overlay"
                                 >
-                                    <BannerContainer>
-                                        <StatusBadgeContainer>
-                                            <StatusBadge
-                                                status={workflow.status}
-                                            >
-                                                {workflow.status}
-                                            </StatusBadge>{' '}
-                                        </StatusBadgeContainer>
-
-                                        <Table style={{ borderRadius: '10px' }}>
-                                            <Table.Head>
-                                                <Table.Row>
-                                                    <TableStyledHead>
-                                                        <Typography
-                                                            token={{}}
-                                                            variant="body_long_bold"
-                                                        >
-                                                            Checklist
-                                                        </Typography>{' '}
-                                                    </TableStyledHead>
-                                                    <TableStyledHead>
-                                                        <Typography
-                                                            token={{}}
-                                                            variant="body_long_bold"
-                                                        >
-                                                            rejected by
-                                                        </Typography>
-                                                    </TableStyledHead>
-
-                                                    <TableStyledHead>
-                                                        {' '}
-                                                        <Typography
-                                                            token={{}}
-                                                            variant="body_long_bold"
-                                                        >
-                                                            comment
-                                                        </Typography>{' '}
-                                                    </TableStyledHead>
-                                                </Table.Row>
-                                            </Table.Head>
-                                            <Table.Body>
-                                                <TableStyledBanner>
-                                                    {' '}
-                                                    <TableStyledHead>
-                                                        {' '}
-                                                        <Typography variant="body_long">
-                                                            {
-                                                                workflow
-                                                                    ?.checklist
-                                                                    .title
-                                                            }
-                                                        </Typography>
-                                                    </TableStyledHead>
-                                                    <TableStyledHead>
-                                                        <UserChip
-                                                            workflow={workflow}
-                                                        />
-                                                    </TableStyledHead>
-                                                    <TableStyledHead>
-                                                        {' '}
-                                                        <Typography variant="caption">
-                                                            {workflow.comment}
-                                                        </Typography>{' '}
-                                                    </TableStyledHead>
-                                                </TableStyledBanner>
-                                            </Table.Body>
-                                        </Table>
-                                    </BannerContainer>
+                                    <Banner.Icon variant="warning">
+                                        <Icon data={warning_filled} />
+                                    </Banner.Icon>
+                                    <Wrapper>
+                                        <BannerP>Checklist: </BannerP>
+                                        <Typography
+                                            style={{ display: 'inline' }}
+                                            variant="body_long_bold"
+                                        >
+                                            {' '}
+                                            {workflow?.checklist.title}{' '}
+                                        </Typography>
+                                        <BannerP> has been rejected! </BannerP>
+                                        <BannerP>Comment:</BannerP>
+                                        <Typography
+                                            style={{ display: 'inline' }}
+                                            variant="body_long_bold"
+                                        >
+                                            {' '}
+                                            {workflow.comment}
+                                        </Typography>
+                                    </Wrapper>
+                                    <Banner.Actions>
+                                        <Button
+                                            onClick={() =>
+                                                resubmitChecklist(workflow.id)
+                                            }
+                                        >
+                                            {' '}
+                                            resubmit
+                                        </Button>
+                                    </Banner.Actions>
                                 </Banner>
                             )
                     )}
@@ -167,37 +114,41 @@ export const BannerComponent: React.FC = () => {
                         (punch) =>
                             punch.status === 'Rejected' &&
                             isInspector && (
-                                <Banner
-                                    key={punch.id}
-                                    elevation="overlay"
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                >
-                                    <PunchListBoxContainer>
-                                        <StatusBadgeContainer>
-                                            <StatusBadge status={punch.status}>
-                                                {punch.status}
-                                            </StatusBadge>
-                                        </StatusBadgeContainer>
-
+                                <>
+                                    <Banner
+                                        key={punch.id}
+                                        elevation="overlay"
+                                        style={{
+                                            border: `2px solid  ${COLORS.dangerRed};`,
+                                        }}
+                                    >
                                         <Banner.Icon variant="warning">
-                                            <Icon data={thumbs_down} />
+                                            <Icon data={warning_filled} />
                                         </Banner.Icon>
                                         <Wrapper>
-                                            <Typography variant="caption">
-                                                Ticket-{punch?.id.split('-')[0]}
+                                            <BannerP>Ticket </BannerP>
+                                            <Typography
+                                                style={{ display: 'inline' }}
+                                                variant="body_long_bold"
+                                            >
+                                                {' '}
+                                                {punch?.id.split('-')[0]}
                                             </Typography>
-
-                                            <Typography variant="body_long_bold">
-                                                has been rejected!
+                                            <BannerP>
+                                                {' '}
+                                                has been rejected!{' '}
+                                            </BannerP>
+                                            <BannerP>Comment:</BannerP>
+                                            <Typography
+                                                style={{ display: 'inline' }}
+                                                variant="body_long_bold"
+                                            >
+                                                {' '}
+                                                {punch.message}
                                             </Typography>
                                         </Wrapper>
-
                                         <Banner.Actions>
                                             <Button
-                                                variant="contained"
-                                                color="danger"
                                                 onClick={() =>
                                                     resubmitPunch(
                                                         punch.id,
@@ -205,11 +156,12 @@ export const BannerComponent: React.FC = () => {
                                                     )
                                                 }
                                             >
+                                                {' '}
                                                 resubmit
                                             </Button>
                                         </Banner.Actions>
-                                    </PunchListBoxContainer>
-                                </Banner>
+                                    </Banner>
+                                </>
                             )
                     )}
                 </>
