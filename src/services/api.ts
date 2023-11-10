@@ -185,63 +185,6 @@ const apiService = () => {
         return data
     }
 
-    const addUser = async (
-        user: Omit<
-            User,
-            'id' | 'status' | 'userRole' | 'createdDate' | 'updatedDate'
-        >
-    ): Promise<Response> => {
-        return await postByFetch('AddUser', {
-            ...user,
-        })
-    }
-
-    /* const updateUser = async (
-        id: string,
-        firstName: string,
-        lastName: string,
-        userRoleId: string,
-        update: Partial<Omit<User, 'id' | 'firstName' | 'lastName' | 'createdDate' | 'updateDate'>>
-    ): Promise<void> => {
-        await postByFetch('UpdateUser', {
-            ...update,
-            id: id,
-            firstName: firstName,
-            lastName: lastName,
-            userRoleId: userRoleId,
-        })
-    } */
-
-    const updateUser = async (
-        id: string,
-        username: string,
-        firstName: string,
-        lastName: string,
-        email: string,
-        userRoleId: string,
-        status: string
-    ) => {
-        return postByFetch('UpdateUser', {
-            id: id,
-            username: username,
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            userRoleId: userRoleId,
-            status: status,
-        })
-    }
-
-    const softDeleteUser = async (id: string) => {
-        return deleteByFetch(`SoftDeleteUser?id=${id}`)
-    }
-
-    const hardDeleteUser = async (id: string) => {
-        return deleteByFetch(`HardDeleteUser?id=${id}`)
-    }
-
-    // user role
-
     // checklist
 
     const getAllCheckLists = async (): Promise<Checklist> => {
@@ -372,14 +315,6 @@ const apiService = () => {
             comment: comment,
         })
     }
-
-    // const updateWorkflow = async (
-    //     update: Pick<Workflow, 'id' | 'user' | 'status'>
-    // ): Promise<void> => {
-    //     await putByFetch('UpdateWorkflow', {
-    //         update,
-    //     })
-    // }
 
     const deleteWorkflow = async (id: string): Promise<void> => {
         await deleteByFetch(`DeleteWorkflow?id=${id}`)
@@ -694,10 +629,6 @@ const apiService = () => {
         getUserByAzureAdUserId,
         getUser,
         getUserByUserName,
-        addUser,
-        updateUser,
-        softDeleteUser,
-        hardDeleteUser,
 
         getAllCategories,
         getCategory,

@@ -61,9 +61,10 @@ export const MakeTitleField = styled(TextField)`
 
 export const StyledChip = styled(Chip)`
     align-items: center;
-
+    width: fit-content;
     display: flex;
     justify-content: left;
+    min-width: 80px;
     align-content: center;
     margin: 0;
 `

@@ -10,7 +10,7 @@ import {
 import { useNavigate, useParams } from 'react-router'
 
 import CustomDialog from '../../components/modal/useModalHook'
-import { NavActionsComponent } from '../../components/navigation/hooks/useNavActionBtn'
+import { NavActionsComponent } from '../../components/navigation/hooks/NavActionBtn'
 
 import {
     DeepMap,

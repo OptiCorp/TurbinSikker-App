@@ -1,120 +1,120 @@
-import { Typography } from "@equinor/eds-core-react";
-import { useEffect, useState } from "react";
-import { AddTasks } from "../../../components/addtasks/AddTasks";
-import CustomDialog from "../../../components/modal/useModalHook";
-import { NavActionsComponent } from "../../../components/navigation/hooks/useNavActionBtn";
-import { EditHeader } from "./EditHeader";
-import { EditList } from "./editList/EditList";
-import { useEditChecklist } from "./hooks/useEditChecklist";
-import { BackgroundContainer, ScrollWrapper } from "./styles";
+import { Typography } from '@equinor/eds-core-react'
+import { useEffect, useState } from 'react'
+import { AddTasks } from '../../../components/addtasks/AddTasks'
+import CustomDialog from '../../../components/modal/useModalHook'
+import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
+import { EditHeader } from './EditHeader'
+import { EditList } from './editList/EditList'
+import { useEditChecklist } from './hooks/useEditChecklist'
+import { BackgroundContainer, ScrollWrapper } from './styles'
 
 export const EditCheckList = () => {
-  const [dialogShowing, setDialogShowing] = useState(false);
+    const [dialogShowing, setDialogShowing] = useState(false)
 
-  const {
-    handleDelete,
-    setDialogDelete,
-    setHeaderOpen,
-    headerOpen,
-    checklist,
-    handleSave,
-    tasks,
-    dialogDelete,
-  } = useEditChecklist();
+    const {
+        handleDelete,
+        setDialogDelete,
+        setHeaderOpen,
+        headerOpen,
+        checklist,
+        handleSave,
+        tasks,
+        dialogDelete,
+    } = useEditChecklist()
 
-  const handleCloseDelete = () => {
-    setDialogDelete(false);
-  };
-
-  const handleClose = () => {
-    setDialogShowing(false);
-  };
-  const [title, setTitle] = useState("");
-  const [checked, setChecked] = useState(!!checklist?.status);
-
-  useEffect(() => {
-    if (checklist) {
-      setTitle(checklist.title);
+    const handleCloseDelete = () => {
+        setDialogDelete(false)
     }
-  }, [checklist]);
 
-  useEffect(() => {
-    setChecked(checklist?.status === "Active");
-  }, [checklist]);
+    const handleClose = () => {
+        setDialogShowing(false)
+    }
+    const [title, setTitle] = useState('')
+    const [checked, setChecked] = useState(!!checklist?.status)
 
-  function convertStatusToString(status: boolean): "Active" | "Inactive" {
-    return status ? "Active" : "Inactive";
-  }
+    useEffect(() => {
+        if (checklist) {
+            setTitle(checklist.title)
+        }
+    }, [checklist])
 
-  return (
-    <BackgroundContainer>
-      <>
-        {checklist && (
-          <>
-            <ScrollWrapper key={checklist?.id}>
-              <EditHeader
-                dialogShowing={dialogShowing}
-                setDialogShowing={setDialogShowing}
-                headerOpen={headerOpen}
-                setHeaderOpen={setHeaderOpen}
-                handleClose={handleClose}
-                checked={checked}
-                setChecked={setChecked}
-                title={title}
-                checklist={checklist}
-                setTitle={setTitle}
-              />
+    useEffect(() => {
+        setChecked(checklist?.status === 'Active')
+    }, [checklist])
 
-              {headerOpen && <AddTasks />}
-              {checklist && (
-                <>
-                  <EditList
-                    key={checklist?.id}
-                    checklist={checklist}
-                    tasks={tasks}
-                  />
-                </>
-              )}
-            </ScrollWrapper>{" "}
-          </>
-        )}
+    function convertStatusToString(status: boolean): 'Active' | 'Inactive' {
+        return status ? 'Active' : 'Inactive'
+    }
 
-        <CustomDialog
-          title="Delete checklist?"
-          negativeButtonText="Cancel"
-          positiveButtonText="Delete"
-          positiveButtonColor="danger"
-          positiveButtonOnClick={handleDelete}
-          negativeButtonOnClick={handleCloseDelete}
-          isOpen={dialogDelete}
-        >
-          <Typography
-            variant="caption"
-            token={{
-              textAlign: "center",
-            }}
-          >
-            You sure you want to delete {checklist?.title}?
-          </Typography>
-        </CustomDialog>
+    return (
+        <BackgroundContainer>
+            <>
+                {checklist && (
+                    <>
+                        <ScrollWrapper key={checklist?.id}>
+                            <EditHeader
+                                dialogShowing={dialogShowing}
+                                setDialogShowing={setDialogShowing}
+                                headerOpen={headerOpen}
+                                setHeaderOpen={setHeaderOpen}
+                                handleClose={handleClose}
+                                checked={checked}
+                                setChecked={setChecked}
+                                title={title}
+                                checklist={checklist}
+                                setTitle={setTitle}
+                            />
 
-        <NavActionsComponent
-          buttonColor="danger"
-          secondButtonColor="primary"
-          onClick={() => {
-            setDialogDelete(true);
-          }}
-          secondOnClick={() => {
-            handleSave({
-              title: title,
-              status: convertStatusToString(checked),
-            });
-          }}
-          ButtonMessage="Delete"
-          SecondButtonMessage="Save"
-          isShown={true}
-        />
-      </>
-    </BackgroundContainer>
-  );
-};
+                            {headerOpen && <AddTasks />}
+                            {checklist && (
+                                <>
+                                    <EditList
+                                        key={checklist?.id}
+                                        checklist={checklist}
+                                        tasks={tasks}
+                                    />
+                                </>
+                            )}
+                        </ScrollWrapper>{' '}
+                    </>
+                )}
+
+                <CustomDialog
+                    title="Delete checklist?"
+                    negativeButtonText="Cancel"
+                    positiveButtonText="Delete"
+                    positiveButtonColor="danger"
+                    positiveButtonOnClick={handleDelete}
+                    negativeButtonOnClick={handleCloseDelete}
+                    isOpen={dialogDelete}
+                >
+                    <Typography
+                        variant="caption"
+                        token={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        You sure you want to delete {checklist?.title}?
+                    </Typography>
+                </CustomDialog>
+
+                <NavActionsComponent
+                    buttonColor="danger"
+                    secondButtonColor="primary"
+                    onClick={() => {
+                        setDialogDelete(true)
+                    }}
+                    secondOnClick={() => {
+                        handleSave({
+                            title: title,
+                            status: convertStatusToString(checked),
+                        })
+                    }}
+                    ButtonMessage="Delete"
+                    SecondButtonMessage="Save"
+                    isShown={true}
+                />
+            </>
+        </BackgroundContainer>
+    )
+}
