@@ -50,16 +50,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
         name: 'taskInfos',
     })
 
-    //     useEffect(() => {
-    //   fields.map((field) => field.status) ?
-
-    //       return () => {
-    //         second
-    //       }
-    //     }, [third])
-
-    console.log(fields)
-
     return (
         <>
             <>
