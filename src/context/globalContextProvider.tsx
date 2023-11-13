@@ -71,16 +71,14 @@ export function GlobalProvider({
         }
     }, [account, inProgress, instance, accountUsername, accountname])
 
-
-
-    async function fetchUserByEmail(userEmail: string) {
-        const response = await api.getUserByAzureAdUserId(userEmail)
+    async function fetchUserByAzureAdUserId(id: string) {
+        const response = await api.getUserByAzureAdUserId(id)
         if (response) {
             const user = response
 
             setCurrentUser(user)
         } else {
-            console.error('Error fetching user by email')
+            console.log("Error fetching user by Azure AD ID")
         }
     }
 
@@ -88,7 +86,7 @@ export function GlobalProvider({
         setStatus(ApiStatus.LOADING)
         try {
             const userInfo = getUserInfoFromIdToken(token)
-            await fetchUserByEmail(userInfo.preferredUserName)
+            await fetchUserByAzureAdUserId(userInfo.oid)
             setStatus(ApiStatus.SUCCESS)
         } catch (error) {
             console.error('Error fetching and updating user:', error)
@@ -98,11 +96,13 @@ export function GlobalProvider({
     function getUserInfoFromIdToken(token: string): {
         preferredUserName: string
         name: string
+        oid: string
     } {
         const decodedToken: AzureUserInfo = decode(token)
 
         return {
             preferredUserName: decodedToken?.preferred_username || '',
+            oid: decodedToken?.oid,
             name: decodedToken.name || '',
         }
     }

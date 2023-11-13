@@ -3,6 +3,7 @@ import { User } from '../services/apiTypes'
 export type AzureUserInfo = {
     preferred_username: string
     name: string
+    oid: string
 }
 
 export interface GlobalContextType {
