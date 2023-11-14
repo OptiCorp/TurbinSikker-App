@@ -14,13 +14,7 @@ export const AddTasks = () => {
             <form onSubmit={handleSubmit(onSubmit)} id="addTask">
                 <TitleHeader>
                     <StyledCard>
-                        <Card.Content
-                            style={{
-                                width: '300px',
-                                display: 'grid',
-                                gridTemplateColumns: '1fr 1fr',
-                            }}
-                        >
+                        <Card.Content style={{}}>
                             <CategorySelector />{' '}
                         </Card.Content>
                         <Card.Actions>

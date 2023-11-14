@@ -1,4 +1,4 @@
-import { Button } from '@equinor/eds-core-react'
+import { Button, Typography } from '@equinor/eds-core-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select, { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -7,6 +7,7 @@ import apiService from '../../services/api'
 import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 import { AddTaskForm } from './types'
+import CustomDialog from '../modal/useModalHook'
 
 export const CategorySelector = () => {
     const {
@@ -44,6 +45,8 @@ export const CategorySelector = () => {
         if (!selectedOption) return
         try {
             const res = await api.addTask(selectedOption, description, 0)
+
+            if (openSnackbar) openSnackbar('task created')
             setRefreshList((prev) => !prev)
             if (description) methods.setValue('id', res.id)
         } catch (error) {
@@ -52,25 +55,32 @@ export const CategorySelector = () => {
         }
     }
 
+
+
+
     return (
         <>
             <ControllerWrap>
                 <Controller
                     control={methods.control}
                     name="category"
-                    render={({ field: { onChange } }) => {
+                    render={({ field: { onChange, value } }) => {
                         return (
                             <Select
+                                value={
+                                    value
+                                        ? category.find((c) => c.id === value)
+                                        : null
+                                }
                                 styles={customStyles}
                                 isClearable
                                 options={category}
-                                placeholder={'select category'}
+                                placeholder={'select category' || ''}
                                 onChange={(val) => {
                                     if (val === null) return onChange(null)
 
                                     setSelectedOption(val.value)
                                     onChange(val.value)
-                                    reset(val)
                                 }}
                             />
                         )
@@ -100,34 +110,25 @@ export const CategorySelector = () => {
                                 getOptionLabel={(task) =>
                                     task.description
                                         ? task.description
-                                        : 'Add new task: ' + task.value
+                                        : 'Add new task: ' + task.value 
                                 }
+                              
                                 onChange={(val) => {
                                     if (val === null) return onChange(null)
                                     onChange(val.id)
                                 }}
                                 placeholder={
-                                    selectedOption ? 'select task' : null
+                                    selectedOption
+                                        ? 'select task or write new task'
+                                        : null
                                 }
-                                //components={{ MenuList: SelectMenuButton }}
+                      
                             />
                         )
                     }}
                 />
             </ControllerWrap>
-            {/* <BtnWrapBox>
-                {' '}
-                <Button variant="contained_icon" aria-label="add action">
-                    <Icon data={add}></Icon>
-                </Button>
-                <Button
-                    variant="contained_icon"
-                    aria-label="add action"
-                    disabled={selectedOption ? false : true}
-                >
-                    <Icon data={add}></Icon>
-                </Button>
-            </BtnWrapBox> */}
+          
         </>
     )
 }

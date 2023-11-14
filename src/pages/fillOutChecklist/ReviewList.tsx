@@ -3,7 +3,7 @@
 import { FunctionComponent } from 'react'
 import { ReviewProps } from './types'
 
-import { Checkbox, Icon } from '@equinor/eds-core-react'
+import { Checkbox, Icon, Label } from '@equinor/eds-core-react'
 import { error_filled } from '@equinor/eds-icons'
 
 import { useFieldArray, useFormContext } from 'react-hook-form'
@@ -40,28 +40,18 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                     if (!task) return
                     return (
                         <StyledReviewCard
-                            // style={{
-                            //     border:
-                            //         field.status === 'Unfinished'
-                            //             ? '2px solid red'
-                            //             : field.status === 'Finished'
-                            //             ? '2px solid green'
-                            //             : field.status === 'NotApplicable'
-                            //             ? '2px solid yellow'
-                            //             : '',
-                            // }}
-                            // variant={
-                            //     field.status === 'Unfinished'
-                            //         ? 'danger'
-                            //         : 'default'
-                            // }
+                         
                             elevation="raised"
                         >
-                            <ReviewCardHeader>
-                                <CustomCategoryName>
-                                    {task.category.name}{' '}
-                                </CustomCategoryName>
-                            </ReviewCardHeader>
+                             <Label
+                            htmlFor="storybook-multi-readonly"
+                            label={task.category.name}
+                            style={{
+                                height: '0',
+                                fontWeight: '600',
+                                fontSize: '1rem',
+                            }}
+                        />{' '}
                             <CustomCardContent>
                                 <NotApplicableWrap>
                                     <StyledSwitch

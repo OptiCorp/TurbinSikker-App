@@ -17,8 +17,10 @@ export const UserChip: FC<UserChip> = ({ workflow }) => {
       <StyledChip variant="default">
         <Icon data={assignment_user} color={COLORS.primary} />
         <Typography
+        
           variant="caption"
           token={{
+            
             fontSize: "0.8rem",
             lineHeight: "1rem",
           }}

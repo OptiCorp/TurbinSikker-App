@@ -6,6 +6,10 @@ import { COLORS } from '../../style/GlobalStyles'
 export const InfoHeader = styled.div`
     display: flex;
     width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
     min-height: 50px;
 
     background-color: ${COLORS.white};

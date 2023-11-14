@@ -32,10 +32,10 @@ export const useAddTaskForm = () => {
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task added')
                 if (res.ok) setRefreshList((prev) => !prev)
-                if (res.ok) reset({ category: '', id: '' })
-             
+
+                if (res.ok) methods.reset({ category: '', id: '' })
             }
-            console.log(category)
+           
         } catch (error) {
             console.log(error)
         }
@@ -55,6 +55,7 @@ export const useAddTaskForm = () => {
                     })
                 )
                 setCategory(categories)
+           
             } catch (error) {
                 console.log(error)
             }

@@ -51,7 +51,7 @@ export const EditCheckList = () => {
             <>
                 {checklist && (
                     <>
-                        <ScrollWrapper key={checklist?.id}>
+                        <>
                             <EditHeader
                                 dialogShowing={dialogShowing}
                                 setDialogShowing={setDialogShowing}
@@ -64,7 +64,8 @@ export const EditCheckList = () => {
                                 checklist={checklist}
                                 setTitle={setTitle}
                             />
-
+                        </>
+                        <ScrollWrapper key={checklist?.id}>
                             {headerOpen && <AddTasks />}
                             {checklist && (
                                 <>
@@ -75,7 +76,7 @@ export const EditCheckList = () => {
                                     />
                                 </>
                             )}
-                        </ScrollWrapper>{' '}
+                        </ScrollWrapper>
                     </>
                 )}
 
