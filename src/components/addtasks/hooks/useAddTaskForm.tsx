@@ -14,7 +14,7 @@ export const useAddTaskForm = () => {
     const methods = useForm<AddTaskForm>({
         defaultValues: { id: '', category: '' },
     })
-    const { handleSubmit, control, reset, resetField } = methods
+    const { handleSubmit, control, reset, resetField, watch } = methods
     const [selectedOption, setSelectedOption] = useState('')
     const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const api = apiService()
@@ -36,11 +36,11 @@ export const useAddTaskForm = () => {
     }, [currentUser?.id, checklistId])
 
     const onSubmit: SubmitHandler<AddTaskForm> = async (data: AddTaskForm) => {
-        const taskAlreadyExcist = checklistsData.some(
+        const taskAlreadyExist = checklistsData.some(
             (Task) => Task.id === data.id
         )
 
-        if (taskAlreadyExcist) {
+        if (taskAlreadyExist) {
             if (openSnackbar)
                 openSnackbar('task already excist on this checklist')
             console.log('test')
@@ -78,7 +78,7 @@ export const useAddTaskForm = () => {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
+    }, [currentUser?.id, refreshList, selectedOption])
 
     useEffect(() => {
         ;(async (): Promise<void> => {
@@ -107,6 +107,7 @@ export const useAddTaskForm = () => {
         reset,
         resetField,
         category,
+        watch,
         selectedOption,
         tasks,
     }

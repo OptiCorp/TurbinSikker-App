@@ -1,7 +1,6 @@
 import { Button, TextField, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import CustomDialog from '../../../components/modal/useModalHook'
-import useGlobal from '../../../context/globalContextProvider'
 import { Checklist } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
 import { MakeTitleField } from '../myChecklists/styles'
@@ -34,8 +33,6 @@ export const EditHeader = ({
 }: Props) => {
     const [changeTitle, setChangeTitle] = useState('')
     const [defaultTitle, setDefaultTitle] = useState('')
-
-    const { currentUser, refreshList } = useGlobal()
 
     useEffect(() => {
         if (checklist) {

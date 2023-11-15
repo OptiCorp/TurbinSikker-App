@@ -7,9 +7,13 @@ type Props = {
 }
 
 export const PreviewList = ({ tasks }: Props) => {
+    const sortedTasks = [...tasks].sort((a, b) =>
+        a.category.name.localeCompare(b.category.name)
+    )
+
     return (
         <PreviewListWrap>
-            {tasks.map((task) => (
+            {sortedTasks.map((task) => (
                 <StyledCard elevation="raised" key={task.id}>
                     <Label
                         htmlFor="storybook-multi-readonly"

@@ -22,19 +22,9 @@ export const InspectorPendingRow: FunctionComponent<
     if (WorkFlow.checklist.status !== 'Active') return null
     if (WorkFlow.status !== 'Sent' || !WorkFlow) return null
 
-    //to do
-    //show sent back workflows as a banner or similar.
-
     return (
         <>
-            <StyledTableRow
-                onClick={() => clickHandler(WorkFlow.id || '')}
-                // style={{
-                //     border: WorkFlow.taskInfos.hasOwnProperty('Finished')
-                //         ? '2px solid red'
-                //         : '',
-                // }}
-            >
+            <StyledTableRow onClick={() => clickHandler(WorkFlow.id || '')}>
                 <Table.Cell>
                     <TitleCellContent>
                         <Typography variant="body_long_bold">

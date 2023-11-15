@@ -426,13 +426,20 @@ const apiService = () => {
         return data
     }
 
-    const addCategory = async (
-        category: Pick<Category, 'name'> /* name: string */
-    ): Promise<void> => {
-        await postByFetch(`AddCategory`, {
-            category,
-            /* name: name, */
+    // const addCategory = async (
+    //     category: Pick<Category, 'name'> /* name: string */
+    // ): Promise<void> => {
+    //     await postByFetch(`AddCategory`, {
+    //         category,
+    //         /* name: name, */
+    //     })
+    // }
+
+    const addCategory = async (name: string) => {
+        const response = await postByFetch('AddCategory', {
+            name: name,
         })
+        return response.json()
     }
 
     const updateCategory = async (update: Category): Promise<void> => {

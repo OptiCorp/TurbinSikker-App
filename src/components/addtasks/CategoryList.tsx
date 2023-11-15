@@ -1,53 +1,39 @@
-import { Button } from '@equinor/eds-core-react'
 import { Controller, useFormContext } from 'react-hook-form'
-import Select, { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
 import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 import { AddTaskForm } from './types'
-
 export const CategorySelector = () => {
-    const {
-        category,
-        tasks,
-        setSelectedOption,
-        selectedOption,
-        reset,
-
-        resetField,
-    } = useAddTaskForm()
+    const { category, tasks, setSelectedOption, selectedOption } =
+        useAddTaskForm()
 
     const api = apiService()
-    const { currentUser, openSnackbar, setRefreshList, refreshList } =
-        useGlobal()
+    const { openSnackbar, setRefreshList } = useGlobal()
     const methods = useFormContext<AddTaskForm>()
-
-    const SelectMenuButton = (props: any, description: string) => {
-        console.log(description)
-        return (
-            <components.MenuList {...props}>
-                {props.children}
-                <Button
-                    style={{ margin: '0 auto' }}
-                    variant="ghost"
-                    onClick={() => addnewOption(description)}
-                >
-                    Add new task
-                </Button>
-            </components.MenuList>
-        )
-    }
 
     const addnewOption = async (description: string) => {
         if (!selectedOption) return
         try {
             const res = await api.addTask(selectedOption, description, 0)
 
-            if (openSnackbar) openSnackbar('task created')
+            if (openSnackbar) openSnackbar('Task created')
             setRefreshList((prev) => !prev)
             if (description) methods.setValue('id', res.id)
+        } catch (error) {
+            if (error) return
+            console.log(error)
+        }
+    }
+
+    const addNewCategory = async (name: string) => {
+        try {
+            const res = await api.addCategory(name)
+
+            if (openSnackbar) openSnackbar('Category created')
+            setRefreshList((prev) => !prev)
+            if (name) methods.setValue('category', res.id)
         } catch (error) {
             if (error) return
             console.log(error)
@@ -62,20 +48,31 @@ export const CategorySelector = () => {
                     name="category"
                     render={({ field: { onChange, value } }) => {
                         return (
-                            <Select
+                            <CreatableSelect
+                                onCreateOption={(name) => {
+                                    addNewCategory(name)
+                                }}
                                 value={
                                     value
                                         ? category.find((c) => c.id === value)
                                         : null
                                 }
                                 styles={customStyles}
-                                isClearable
+                                getOptionLabel={(category) =>
+                                    category.name
+                                        ? category.name
+                                        : 'Add new category: ' + category.value
+                                }
+                                isClearable={true}
                                 options={category}
-                                placeholder={'select category' || ''}
+                                placeholder={
+                                    'select category or write a new category'
+                                }
                                 onChange={(val) => {
                                     if (val === null) return onChange(null)
 
                                     setSelectedOption(val.value)
+                                    methods.watch('category')
                                     onChange(val.value)
                                 }}
                             />
@@ -94,7 +91,11 @@ export const CategorySelector = () => {
                                 onCreateOption={(description) => {
                                     addnewOption(description)
                                 }}
-                                isDisabled={selectedOption ? false : true}
+                                isDisabled={
+                                    methods.watch('category') && selectedOption
+                                        ? false
+                                        : true
+                                }
                                 styles={customStyles}
                                 options={tasks}
                                 isClearable

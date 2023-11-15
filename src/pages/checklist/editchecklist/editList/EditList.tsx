@@ -83,11 +83,13 @@ export const EditList = ({ tasks }: Props) => {
     const handleClose = () => {
         setDialogDelete(false)
     }
-
+    const sortedTasks = [...tasks].sort((a, b) =>
+        a.category.name.localeCompare(b.category.name)
+    )
     return (
         <>
             <EditWrapper>
-                {tasks.map((task) => (
+                {sortedTasks.map((task) => (
                     <StyledCard elevation="raised" key={task.id}>
                         {' '}
                         <Delete>

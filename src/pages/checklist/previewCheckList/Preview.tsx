@@ -59,7 +59,7 @@ export const PreviewCheckList = () => {
                     <div key={checklist.id}>
                         <InfoHeader>
                             <EditStyledCardHeader>
-                                {checklist.status}
+                                
                                 <TextField
                                     id="storybook-readonly"
                                     placeholder={checklist.title}

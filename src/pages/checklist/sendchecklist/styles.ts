@@ -27,7 +27,6 @@ export const FormContainer = styled.div`
   min-height: 300px;
   display: flex;
   flex-direction: column;
-
   width: 300px;
   display: flex;
   margin: 0 auto;
@@ -41,19 +40,16 @@ export const RecipientsContainer = styled.div`
   font-size: 1.3rem;
   width: 300px;
   display: flex;
-
   margin: 0 auto;
 `;
 export const Bar = styled.div`
   min-height: 30px;
   max-height: 70px;
   width: 100%;
-
   background: ${COLORS.primary};
   margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   color: ${COLORS.white};
 `;
