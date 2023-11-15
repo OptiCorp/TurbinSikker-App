@@ -78,7 +78,7 @@ export function GlobalProvider({
 
             setCurrentUser(user)
         } else {
-            console.log("Error fetching user by Azure AD ID")
+            console.log('Error fetching user by Azure AD ID')
         }
     }
 

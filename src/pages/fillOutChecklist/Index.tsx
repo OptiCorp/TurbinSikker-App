@@ -9,14 +9,7 @@ import { FillOutList } from './FillOutList'
 
 import { ReviewList } from './ReviewList'
 import { useFillChecklistForm } from './hooks/useFillChecklist'
-import {
-    BackgroundWrap,
-    Container,
-    EditStyledCardHeader,
-    InfoHeader,
-    List,
-    StyledCard,
-} from './styles'
+import { BackgroundWrap, InfoHeader, List } from './styles'
 
 export const FillOutCheckList = () => {
     const {
@@ -44,48 +37,43 @@ export const FillOutCheckList = () => {
                 id="fill-checklist"
             >
                 <BackgroundWrap>
-                    <InfoHeader>
-                        {' '}
-                        <StyledCard>
-                            <EditStyledCardHeader>
-                                {workflow?.checklist.title}{' '}
-                            </EditStyledCardHeader>
-                            {workflow && isLeader && (
-                                <List>
-                                    <Container>
-                                        <Typography
-                                            variant="caption"
-                                            token={{
-                                                fontSize: '1rem',
-                                            }}
-                                        >
-                                            {' '}
-                                            Delivered by{' '}
-                                        </Typography>
-                                        <UserChip workflow={workflow} />
-                                    </Container>
+                    {workflow && isLeader && (
+                        <InfoHeader>
+                            <Typography
+                                variant="caption"
+                                token={{
+                                    fontWeight: '600',
+                                    fontSize: '1rem',
+                                }}
+                            >
+                                {' '}
+                                checklist:{' '}
+                            </Typography>{' '}
+                            {workflow?.checklist.title}
+                            <List>
+                                <Typography
+                                    variant="caption"
+                                    token={{
+                                        fontSize: '1rem',
+                                    }}
+                                >
+                                    {' '}
+                                    Delivered by{' '}
+                                </Typography>
+                                <UserChip workflow={workflow} />
 
-                                    <Typography
-                                        variant="caption"
-                                        token={{
-                                            fontSize: '1rem',
-                                        }}
-                                    >
-                                        at {formattedUpdateDate}{' '}
-                                    </Typography>
-                                    <Typography
-                                        variant="caption"
-                                        token={{
-                                            fontSize: '1rem',
-                                        }}
-                                    >
-                                        {' '}
-                                    </Typography>
-                                </List>
-                            )}
-                        </StyledCard>
-                    </InfoHeader>
-
+                                <Typography
+                                    variant="caption"
+                                    token={{
+                                        fontSize: '1rem',
+                                    }}
+                                >
+                                    at {formattedUpdateDate}{' '}
+                                </Typography>
+                            </List>
+                        </InfoHeader>
+                    )}
+                    s
                     <>
                         <PreviewWrapper>
                             <>

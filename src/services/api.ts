@@ -357,12 +357,15 @@ const apiService = () => {
 
     const addTask = async (
         categoryId: string,
-        description: string
-    ): Promise<void> => {
-        await postByFetch('AddTask', {
+        description: string,
+        EstAvgCompletionTime: number
+    ) => {
+        const response = await postByFetch('AddTask', {
             categoryId: categoryId,
             description: description,
+            EstAvgCompletionTime: EstAvgCompletionTime,
         })
+        return response.json()
     }
 
     const updateTask = async (

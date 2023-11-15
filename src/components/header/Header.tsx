@@ -138,7 +138,7 @@ export const Header = () => {
             pathTitle = checklist?.title || ''
         } else if (location.pathname.includes('ForReviewChecklists')) {
             pathTitle = 'For review'
-        } else if (location.pathname.includes('EditCheckList')) {
+        } else if (location.pathname.includes('EditCheckList' ) )  {
             pathTitle = 'Edit' + ' ' + checklist?.title || ''
         } else if (location.pathname === '/SendCheckList/') {
             pathTitle = 'Send checklist' || ''

@@ -5,7 +5,7 @@ import { COLORS } from '../../../style/GlobalStyles'
 export const StyledChip = styled(Chip)`
     align-items: center;
     width: 100%;
-    max-width: 100px;
+    max-width: 120px;
     display: flex;
     justify-content: left;
     align-content: center;
