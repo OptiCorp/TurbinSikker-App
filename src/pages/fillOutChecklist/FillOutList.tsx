@@ -123,12 +123,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         name="task"
                                         defaultValue={task.description}
                                         multiline
-                                        style={{
-                                            filter:
-                                                field.status === 'NotApplicable'
-                                                    ? 'blur(3px)'
-                                                    : 'none',
-                                        }}
                                         rows={4}
                                         readOnly
                                     />

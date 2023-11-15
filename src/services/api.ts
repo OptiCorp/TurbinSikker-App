@@ -341,7 +341,7 @@ const apiService = () => {
         return response
     }
 
-    const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
+    const getAllTasksByChecklistId = async (id: string): Promise<Task[]> => {
         const data = await getByFetch(`GetAllTasksByChecklistId?id=${id}`)
         return data
     }

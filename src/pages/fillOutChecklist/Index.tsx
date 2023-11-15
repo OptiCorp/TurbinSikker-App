@@ -73,7 +73,7 @@ export const FillOutCheckList = () => {
                             </List>
                         </InfoHeader>
                     )}
-                    s
+
                     <>
                         <PreviewWrapper>
                             <>

@@ -15,7 +15,7 @@ export const EditListPoints = styled(TextField)`
     padding: 0;
     margin: 0 auto;
     color: ${COLORS.dangerRed};
-
+    cursor: pointer;
     line-height: 5px;
 `
 

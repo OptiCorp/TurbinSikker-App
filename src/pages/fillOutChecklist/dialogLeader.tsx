@@ -33,6 +33,9 @@ export type DialogProps = {
 
 export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
     const methods = useFormContext<FillOutChecklistForm>()
+    const {
+        formState: { errors },
+    } = methods
     const [rejectDialogShowing, setRejectDialogShowing] = useState(false)
     const [approveDialogShow, setApproveDialogShow] = useState(false)
 
@@ -88,8 +91,11 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                                 key="comment"
                                 id="comment"
                                 {...methods.register('comment', {
-                                    required: 'This is required.',
-                                    minLength: 10,
+                                    required: 'minimum 5 characters!',
+                                    minLength: {
+                                        value: 5,
+                                        message: 'min length is 5',
+                                    },
                                 })}
                                 defaultValue="write here"
                                 multiline
@@ -106,6 +112,14 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                             />
                         )}
                     />
+                    {errors.comment && (
+                        <span role="alert">
+                            <Typography color="red">
+                                {' '}
+                                {errors.comment.message}
+                            </Typography>
+                        </span>
+                    )}
                 </RejectWrap>
             </CustomDialog>
 

@@ -1,4 +1,4 @@
-import { Button, Typography } from '@equinor/eds-core-react'
+import { Button } from '@equinor/eds-core-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select, { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -7,7 +7,6 @@ import apiService from '../../services/api'
 import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 import { AddTaskForm } from './types'
-import CustomDialog from '../modal/useModalHook'
 
 export const CategorySelector = () => {
     const {
@@ -54,9 +53,6 @@ export const CategorySelector = () => {
             console.log(error)
         }
     }
-
-
-
 
     return (
         <>
@@ -110,25 +106,22 @@ export const CategorySelector = () => {
                                 getOptionLabel={(task) =>
                                     task.description
                                         ? task.description
-                                        : 'Add new task: ' + task.value 
+                                        : 'Add new task: ' + task.value
                                 }
-                              
                                 onChange={(val) => {
                                     if (val === null) return onChange(null)
                                     onChange(val.id)
                                 }}
                                 placeholder={
                                     selectedOption
-                                        ? 'select task or write new task'
-                                        : null
+                                        ? 'Select task or write new task'
+                                        : 'Select category first!'
                                 }
-                      
                             />
                         )
                     }}
                 />
             </ControllerWrap>
-          
         </>
     )
 }
