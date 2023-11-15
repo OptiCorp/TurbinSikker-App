@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { BannerComponent } from '../../../components/banner/useBanner'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, WorkflowResponse } from '../../../services/apiTypes'
@@ -39,6 +39,7 @@ export const MyCheckLists = () => {
 
             if (res.id) navigate(`/EditCheckList/${res.id}`)
             if (res.id && openSnackbar) openSnackbar('Checklist created')
+            console.log(res.id)
         } catch (error) {
             console.error('Error creating checklist:', error)
         }
@@ -126,7 +127,6 @@ export const MyCheckLists = () => {
                     </Table.Body>
                 </Table>
             </BackgroundWrap>
-
             {activeRow === true ? (
                 <NavActionsComponent
                     buttonColor="danger"
@@ -156,7 +156,6 @@ export const MyCheckLists = () => {
             ) : (
                 <DefaultNavigation hideNavbar={false} />
             )}
-
             <CustomDialog
                 title="Title of checklist"
                 buttonVariant="ghost"

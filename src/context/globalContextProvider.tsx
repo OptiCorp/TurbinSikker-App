@@ -29,7 +29,9 @@ export function GlobalProvider({
     const [idToken, setIdToken] = useState<string>('')
     const [accessToken, setAccessToken] = useState('')
     const [pubSubToken, setPubSubToken] = useState<string>('')
-    const [pubSubStatus, setPubSubStatus] = useState<ApiStatus>(ApiStatus.LOADING)
+    const [pubSubStatus, setPubSubStatus] = useState<ApiStatus>(
+        ApiStatus.LOADING
+    )
     const [status, setStatus] = useState<ApiStatus>(ApiStatus.LOADING)
     const [snackbarText, setSnackbarText] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -69,52 +71,14 @@ export function GlobalProvider({
         }
     }, [account, inProgress, instance, accountUsername, accountname])
 
-    async function createUser(userEmail: string, name: string) {
-        const nameSplit = name.split(' ')
-        const firstName = nameSplit[0]
-        const lastName = nameSplit[nameSplit.length - 1]
-        const username = `${firstName.toLowerCase()}.${lastName.toLowerCase()}`
-        try {
-            const createUserResponse = await api.addUser({
-                azureAdUserId: userEmail,
-                firstName: firstName,
-                lastName: lastName,
-                username: username,
-                email: userEmail,
-            })
-            console.log(
-                'User creation response status:',
-                createUserResponse.status
-            )
-            if (createUserResponse.status === 200) {
-                await createUserResponse.json()
-            } else {
-                console.log(
-                    'Error creating user:',
-                    createUserResponse.statusText
-                )
-                return null
-            }
-        } catch (error) {
-            console.log('Error creating user:', error)
-            return null
-        }
-    }
-
-    async function fetchUserByEmail(userEmail: string, name: string) {
-        const response = await api.getUserByAzureAdUserId(userEmail)
+    async function fetchUserByAzureAdUserId(id: string) {
+        const response = await api.getUserByAzureAdUserId(id)
         if (response) {
             const user = response
 
             setCurrentUser(user)
-        } else if (!response) {
-            const newUser = await createUser(userEmail, name)
-
-            if (newUser) {
-                setCurrentUser(newUser)
-            }
         } else {
-            console.error('Error fetching user by email')
+            console.log('Error fetching user by Azure AD ID')
         }
     }
 
@@ -122,7 +86,7 @@ export function GlobalProvider({
         setStatus(ApiStatus.LOADING)
         try {
             const userInfo = getUserInfoFromIdToken(token)
-            await fetchUserByEmail(userInfo.preferredUserName, userInfo.name)
+            await fetchUserByAzureAdUserId(userInfo.oid)
             setStatus(ApiStatus.SUCCESS)
         } catch (error) {
             console.error('Error fetching and updating user:', error)
@@ -132,11 +96,13 @@ export function GlobalProvider({
     function getUserInfoFromIdToken(token: string): {
         preferredUserName: string
         name: string
+        oid: string
     } {
         const decodedToken: AzureUserInfo = decode(token)
 
         return {
             preferredUserName: decodedToken?.preferred_username || '',
+            oid: decodedToken?.oid,
             name: decodedToken.name || '',
         }
     }
@@ -147,7 +113,7 @@ export function GlobalProvider({
             await fetchPubSubToken()
             setPubSubStatus(ApiStatus.SUCCESS)
         } catch (error) {
-            console.log("Something went wrong: " + error)
+            console.log('Something went wrong: ' + error)
             setPubSubStatus(ApiStatus.ERROR)
         }
     }
@@ -182,7 +148,7 @@ export function GlobalProvider({
     }
 
     if (pubSubStatus === ApiStatus.LOADING) {
-        return <Loading text='Loading ..' />
+        return <Loading text="Loading .." />
     }
 
     if (accounts.length > 0) {

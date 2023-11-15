@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { default as useGlobal } from '../../../context/globalContextProvider'
-import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
 import apiService from '../../../services/api'
 import { PunchItem } from '../../../services/apiTypes'
+import { useHasPermission } from '../../../services/useHasPermission'
 
 type FormValuesPunchEntity = {
     creatorId: string

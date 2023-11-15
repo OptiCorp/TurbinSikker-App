@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router'
 import Layout from './Layout'
-import { ProtectedRoute } from './ProtectedRoute'
 
 import { GlobalProvider } from './context/globalContextProvider'
 import { IndexCheckLists } from './pages/checklist'
@@ -17,8 +16,7 @@ import { Profile } from './pages/profile'
 import Punch from './pages/punch/Index'
 import { AddPunch } from './pages/punch/addPunch/AddPunch'
 import ListPunches from './pages/punch/listPunches/index'
-import { AddUser } from './pages/users/addUser/AddUser'
-import { ListUsers } from './pages/users/listUsers/ListUsers'
+
 import { useRoles } from './services/useRoles'
 
 export function RoutesContainer() {
@@ -36,28 +34,27 @@ export function RoutesContainer() {
                         </GlobalProvider>
                     }
                 >
-                 
-                        <Route
-                            path="/Checklists"
-                            element={
-                                <GlobalProvider>
-                                    <ChecklistComponent />
-                                </GlobalProvider>
-                            }
-                        />
-                        <Route
-                            path="/ForReviewChecklists"
-                            element={<ForReviewChecklists />}
-                        />
-                        <Route
-                            path="/MyChecklists"
-                            element={
-                                <GlobalProvider>
-                                    <MyCheckLists />
-                                </GlobalProvider>
-                            }
-                        />
-                    
+                    <Route
+                        path="/Checklists"
+                        element={
+                            <GlobalProvider>
+                                <ChecklistComponent />
+                            </GlobalProvider>
+                        }
+                    />
+                    <Route
+                        path="/ForReviewChecklists"
+                        element={<ForReviewChecklists />}
+                    />
+                    <Route
+                        path="/MyChecklists"
+                        element={
+                            <GlobalProvider>
+                                <MyCheckLists />
+                            </GlobalProvider>
+                        }
+                    />
+
                     <Route
                         path="/"
                         element={
@@ -82,17 +79,6 @@ export function RoutesContainer() {
                 <Route path="/EditCheckList/:id" element={<EditCheckList />} />
                 <Route path="/SendCheckList" element={<SendCheckList />} />
                 <Route path="/SendCheckList/:id" element={<SendCheckList />} />
-
-                <Route path="/ListUsers" element={<ListUsers />} />
-                <Route
-                    path="/add-user"
-                    element={
-                        <ProtectedRoute>
-                            <AddUser />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="/AddUser" element={<AddUser />} />
 
                 <Route path="/Punches" element={<ListPunches />} />
                 <Route path="/workflow/:workflowId/punch" element={<Punch />} />
@@ -120,8 +106,6 @@ export function RoutesContainer() {
                     }
                 />
 
-                <Route path="/EditUser/:id" element={<AddUser />} />
-                <Route path="/User/:id" element={<AddUser />} />
                 <Route path="/404" element={<PageNotFound />} />
                 <Route path="*" element={<Navigate to="404" />} />
             </Route>

@@ -1,9 +1,23 @@
-import { Button, Dialog, Icon, TextField, Typography } from '@equinor/eds-core-react'
+import {
+    Button,
+    Dialog,
+    Icon,
+    TextField,
+    Typography,
+} from '@equinor/eds-core-react'
 import { image, upload } from '@equinor/eds-icons'
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
+import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
+import { PunchItem, Status, Upload } from '../../../services/apiTypes'
+import { useHasPermission } from '../../../services/useHasPermission'
+import { COLORS } from '../../../style/GlobalStyles'
+import { usePunch } from '../PunchHook'
 import SeverityButton from '../severityButton/SeverityButton'
+import { PunchUploadContainer } from '../styles'
 import { useAddPunch } from './AddPunchHook'
+import { Modal, ModalContent } from './ImageModal'
 import {
     PunchAddContainer,
     PunchAddUploadContainer,
@@ -18,14 +32,6 @@ import {
     SeverityButtonWrapper,
     SeverityContainer,
 } from './styles'
-import { usePunch } from '../PunchHook'
-import { PunchUploadContainer } from '../styles'
-import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
-import { useHasPermission } from '../../../pages/users/hooks/useHasPermission'
-import { PunchItem, Status, Upload } from '../../../services/apiTypes'
-import { COLORS } from '../../../style/GlobalStyles'
-import { Modal, ModalContent } from './ImageModal'
 
 export function AddPunch({ punch }: { punch?: PunchItem }) {
     const navigate = useNavigate()
@@ -58,7 +64,8 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
 
     const showModal = () => setIsOpen((prev) => !prev)
 
-    const disabled = hasPermission || (!hasPermission && punch?.status === 'Pending')
+    const disabled =
+        hasPermission || (!hasPermission && punch?.status === 'Pending')
     const path = appLocation.pathname.split('/')
     const lastPathSegment = path[path.length - 1]
     return (
@@ -70,12 +77,19 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                             <PunchUploadButtonIconContainer disabled={disabled}>
                                 <Icon
                                     data={upload}
-                                    color={hasPermission ? COLORS.lightGray : COLORS.black}
+                                    color={
+                                        hasPermission
+                                            ? COLORS.lightGray
+                                            : COLORS.black
+                                    }
                                     size={48}
                                 />
                             </PunchUploadButtonIconContainer>
 
-                            <PunchUploadButtonLabel disabled={disabled} htmlFor="file">
+                            <PunchUploadButtonLabel
+                                disabled={disabled}
+                                htmlFor="file"
+                            >
                                 Upload
                             </PunchUploadButtonLabel>
 
@@ -96,14 +110,21 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                             </PunchNoUploadContainer>
                         ) : (
                             <PunchUploadFilesContainer>
-                                <Typography variant="h5">Upload Files</Typography>
+                                <Typography variant="h5">
+                                    Upload Files
+                                </Typography>
 
                                 <PunchUploadFileContainer>
                                     {file?.name && (
                                         <PunchUploadItemsContainer>
-                                            <Icon color={COLORS.primary} data={image} />
+                                            <Icon
+                                                color={COLORS.primary}
+                                                data={image}
+                                            />
 
-                                            <Typography variant="caption">{file?.name}</Typography>
+                                            <Typography variant="caption">
+                                                {file?.name}
+                                            </Typography>
                                         </PunchUploadItemsContainer>
                                     )}
                                 </PunchUploadFileContainer>
@@ -124,8 +145,13 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                                         <img src={image} alt="Punch image." />
                                     </Modal>
                                     {isOpen && (
-                                        <ModalContent onClose={() => setIsOpen(false)}>
-                                            <img src={image} alt="Punch image." />
+                                        <ModalContent
+                                            onClose={() => setIsOpen(false)}
+                                        >
+                                            <img
+                                                src={image}
+                                                alt="Punch image."
+                                            />
                                         </ModalContent>
                                     )}
                                 </PunchUploadContainer>
@@ -151,10 +177,16 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                 {appLocation.pathname === '/AddPunch' ? (
                     <TextField
                         id=""
-                        value={!punch?.description ? userInput.description : undefined}
+                        value={
+                            !punch?.description
+                                ? userInput.description
+                                : undefined
+                        }
                         multiline
                         required
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
                             setUserInput((prevUserInput) => ({
                                 ...prevUserInput,
                                 description: event.target.value,
@@ -166,13 +198,16 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         id=""
                         multiline
                         disabled={
-                            (Status.REJECTED !== punch?.status && lastPathSegment !== 'addpunch') ||
+                            (Status.REJECTED !== punch?.status &&
+                                lastPathSegment !== 'addpunch') ||
                             hasPermission
                         }
                         key={punch?.id ?? ''}
                         required
                         defaultValue={punch?.description}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange={(
+                            event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
                             setUserInput({
                                 ...userInput,
                                 description: event.target.value,
@@ -185,7 +220,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     <Typography variant="h4">Severity</Typography>
                     <SeverityButtonWrapper>
                         <SeverityButton
-                            defaultValue={(punch?.severity as string) || 'Minor'}
+                            defaultValue={
+                                (punch?.severity as string) || 'Minor'
+                            }
                             userInput={userInput}
                             setUserInput={setUserInput}
                             punch={punch}
@@ -199,7 +236,11 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     <Dialog.Title>Reject Punch?</Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    <Typography
+                        group="input"
+                        variant="text"
+                        token={{ textAlign: 'left' }}
+                    >
                         Request will be rejected and returned to sender.
                     </Typography>
                     <PunchRejectMessageContainer>
@@ -208,15 +249,19 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                             id="comment"
                             multiline
                             required
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                setMessage(e.target.value)
-                            }
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => setMessage(e.target.value)}
                         />
                     </PunchRejectMessageContainer>
                 </Dialog.CustomContent>
 
                 <Dialog.Actions>
-                    <Button variant="ghost" color="danger" onClick={handleRejectClose}>
+                    <Button
+                        variant="ghost"
+                        color="danger"
+                        onClick={handleRejectClose}
+                    >
                         Cancel
                     </Button>
                     <Button
@@ -237,7 +282,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     <Dialog.Header>
                         <Dialog.Title>Punch Message</Dialog.Title>
                     </Dialog.Header>
-                    <Dialog.CustomContent style={{ maxHeight: '50px', overflowY: 'auto' }}>
+                    <Dialog.CustomContent
+                        style={{ maxHeight: '50px', overflowY: 'auto' }}
+                    >
                         <Typography
                             group="input"
                             color="disabled"
@@ -251,7 +298,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                         <Button variant="ghost" onClick={() => navigate(-1)}>
                             Back
                         </Button>
-                        <Button onClick={() => setRejectMessageDialog(false)}>Update</Button>
+                        <Button onClick={() => setRejectMessageDialog(false)}>
+                            Update
+                        </Button>
                     </Dialog.Actions>
                 </Dialog>
             )}
@@ -260,12 +309,18 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                 <Dialog.Header>
                     <Dialog.Title>
                         {!hasPermission &&
-                            (lastPathSegment === 'addpunch' ? 'Send punch?' : 'Update punch?')}
+                            (lastPathSegment === 'addpunch'
+                                ? 'Send punch?'
+                                : 'Update punch?')}
                         {hasPermission && 'Approve Punch?'}
                     </Dialog.Title>
                 </Dialog.Header>
                 <Dialog.CustomContent>
-                    <Typography group="input" variant="text" token={{ textAlign: 'left' }}>
+                    <Typography
+                        group="input"
+                        variant="text"
+                        token={{ textAlign: 'left' }}
+                    >
                         {!hasPermission &&
                             (lastPathSegment === 'addpunch'
                                 ? 'Send punch? Request will be sent for further approval and management'
@@ -279,7 +334,9 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                     </Button>
                     {!hasPermission && (
                         <Button type="submit" form="punchForm">
-                            {lastPathSegment === 'addpunch' ? 'Send Punch' : 'Update Punch'}
+                            {lastPathSegment === 'addpunch'
+                                ? 'Send Punch'
+                                : 'Update Punch'}
                         </Button>
                     )}
                     {hasPermission && (
@@ -297,13 +354,16 @@ export function AddPunch({ punch }: { punch?: PunchItem }) {
                 </Dialog.Actions>
             </Dialog>
 
-            {lastPathSegment !== 'addpunch' && punch?.status !== Status.REJECTED ? (
+            {lastPathSegment !== 'addpunch' &&
+            punch?.status !== Status.REJECTED ? (
                 <DefaultNavigation hideNavbar={false} />
             ) : !hasPermission ? (
                 <NavActionsComponent
                     ButtonMessage="Cancel"
                     SecondButtonMessage={
-                        lastPathSegment === 'addpunch' ? 'Submit punch' : 'Update punch'
+                        lastPathSegment === 'addpunch'
+                            ? 'Submit punch'
+                            : 'Update punch'
                     }
                     secondButtonColor="primary"
                     buttonVariant="outlined"

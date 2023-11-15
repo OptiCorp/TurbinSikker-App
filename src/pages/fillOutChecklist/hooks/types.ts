@@ -7,4 +7,5 @@ export type FillOutChecklistForm = {
         taskId: string
         status: string
     }[]
+    comment: string
 }

@@ -1,25 +1,25 @@
-import { useMsal } from '@azure/msal-react'
-import useGlobal from '../context/globalContextProvider'
+import { useMsal } from "@azure/msal-react";
+import useGlobal from "../context/globalContextProvider";
 
 export const useRoles = () => {
-    const { currentUser } = useGlobal()
-    const { accounts } = useMsal()
+  const { currentUser } = useGlobal();
+  const { accounts } = useMsal();
 
-    const isInspector =
-        // accounts[0].idTokenClaims?.roles?.some(
-        //     (role) => role === 'inspector'
-        // ) || false
+  const isInspector =
+    // accounts[0].idTokenClaims?.roles?.some(
+    //     (role) => role === 'inspector'
+    // ) || false
 
-        currentUser?.userRole.name === 'Inspector' || false
+    currentUser?.userRole === "Inspector" || false;
 
-    const isLeader =
-        // accounts[0].idTokenClaims?.roles?.some((role) => role === 'leader') ||
-        // false
+  const isLeader =
+    // accounts[0].idTokenClaims?.roles?.some((role) => role === 'leader') ||
+    // false
 
-        currentUser?.userRole.name === 'Leader' || false
+    currentUser?.userRole === "Leader" || false;
 
-    return {
-        isLeader,
-        isInspector,
-    }
-}
+  return {
+    isLeader,
+    isInspector,
+  };
+};

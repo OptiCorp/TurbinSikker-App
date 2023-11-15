@@ -75,14 +75,8 @@ export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
                                     color={COLORS.secondary}
                                     style={{ height: '15px' }}
                                 />
-                                <Typography
-                                    variant="caption"
-                                    token={{
-                                        fontSize: '0.8rem',
-                                    }}
-                                >
-                                    {count()}
-                                </Typography>
+
+                                {count()}
                             </StyledChip>
                         </CellContentMyList>
                     </Table.Cell>

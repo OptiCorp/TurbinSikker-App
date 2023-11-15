@@ -7,6 +7,8 @@ export const TitleHeader = styled.div`
 
 export const ControllerWrap = styled.div`
     grid-column: 1/2;
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
 `
 
@@ -20,19 +22,33 @@ export const StyledCard = styled(Card)`
 export const customStyles = {
     control: (styles: any) => ({
         ...styles,
+        cursor: 'pointer',
+
         background: '#F7F7F7',
         borderBottom: `1px solid ${COLORS.black}`,
     }),
 
-    option: (styles: any) => ({ ...styles }),
+    option: (base: any) => ({ ...base, cursor: 'pointer', width: '350px' }),
     container: (styles: any) => ({
         ...styles,
-        width: 250,
+        width: 350,
+
+        cursor: 'pointer',
         paddingBottom: '10px',
     }),
     menu: (styles: any) => ({
         ...styles,
         width: '500',
+
+        cursor: 'pointer',
         lineHeight: '20px',
     }),
 }
+
+export const BtnWrapBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    margin: 0 auto;
+`

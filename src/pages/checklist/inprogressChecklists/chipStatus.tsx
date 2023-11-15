@@ -88,6 +88,24 @@ export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
                 </>
             )
 
+        case 'Rejected':
+            return (
+                <>
+                    <Chip style={{}} variant="error">
+                        Rejected{' '}
+                    </Chip>
+                    <Typography
+                        style={{ margin: '0' }}
+                        variant="caption"
+                        token={{
+                            fontSize: '0.7rem',
+                        }}
+                    >
+                        {formattedUpdateDate}
+                    </Typography>
+                </>
+            )
+
         default:
             return (
                 <>

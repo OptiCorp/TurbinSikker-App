@@ -54,7 +54,7 @@ const Sidebar: FunctionComponent<Props> = ({ open, setOpen }) => {
                         </Button>
                         <Button
                             as={Link}
-                            to="/ListUsers"
+                            to="https://um-app-prod.azurewebsites.net/"
                             fullWidth
                             variant="ghost"
                         >

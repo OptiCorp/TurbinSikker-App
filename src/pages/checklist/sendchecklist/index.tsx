@@ -1,7 +1,7 @@
 import { Button, Dialog, Typography } from '@equinor/eds-core-react'
 import { FormProvider } from 'react-hook-form'
 import { useNavigate } from 'react-router'
-import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
 import useSnackBar from '../../../components/snackbar/useSnackBar'
 import { SelectComponent } from './SelectComponent'
 import { useAddWorkFlowForm } from './hooks/useAddWorkFlowForm'
@@ -27,7 +27,7 @@ export const SendCheckList = () => {
                 {snackbar}
                 <form onSubmit={handleSubmit(onSubmit)} id="send-checklist">
                     <SendBackgroundWrap>
-                     <SelectComponent /> 
+                        <SelectComponent />
                     </SendBackgroundWrap>
 
                     <NavActionsComponent

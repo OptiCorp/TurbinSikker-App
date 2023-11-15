@@ -5,6 +5,7 @@ import { COLORS } from '../../../style/GlobalStyles'
 export const StyledChip = styled(Chip)`
     align-items: center;
     width: 100%;
+    max-width: 120px;
     display: flex;
     justify-content: left;
     align-content: center;
@@ -52,7 +53,7 @@ export const StyledHeadContents = styled.h3`
 
 export const Wrap = styled.div`
     display: flex;
-    height: min(70vh);
+    height: min(80vh);
     padding-top: 25px;
 
     background: ${COLORS.primary};

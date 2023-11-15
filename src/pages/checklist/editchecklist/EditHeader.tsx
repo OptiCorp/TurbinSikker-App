@@ -1,9 +1,7 @@
 import { Button, TextField, Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
 import CustomDialog from '../../../components/modal/useModalHook'
 import useGlobal from '../../../context/globalContextProvider'
-import apiService from '../../../services/api'
 import { Checklist } from '../../../services/apiTypes'
 import { COLORS } from '../../../style/GlobalStyles'
 import { MakeTitleField } from '../myChecklists/styles'
@@ -37,10 +35,6 @@ export const EditHeader = ({
     const [changeTitle, setChangeTitle] = useState('')
     const [defaultTitle, setDefaultTitle] = useState('')
 
-    const { id } = useParams() as { id: string }
-
-    // const [checklist, setChecklist] = useState<Checklist>()
-    const api = apiService()
     const { currentUser, refreshList } = useGlobal()
 
     useEffect(() => {
@@ -49,23 +43,6 @@ export const EditHeader = ({
         }
         setTitle(changeTitle)
     }, [checklist])
-
-    // useEffect(() => {
-    //     if (!currentUser?.id || !id) return
-
-    //     const fetchChecklist = async (id: string) => {
-    //         if (!id) return
-    //         try {
-    //             const checklistData = await api.getChecklist(id)
-
-    //             setChecklist(checklistData)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-
-    //     fetchChecklist(id)
-    // }, [currentUser?.id, id, refreshList])
 
     return (
         <>

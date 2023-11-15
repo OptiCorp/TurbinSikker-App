@@ -4,7 +4,7 @@ import { COLORS } from '../../../style/GlobalStyles'
 
 export const BackgroundWrap = styled.div`
     display: flex;
-    height: min(70vh);
+    height: min(80vh);
     align-items: left;
     flex-direction: column;
     padding: 1rem 1rem;
@@ -61,9 +61,10 @@ export const MakeTitleField = styled(TextField)`
 
 export const StyledChip = styled(Chip)`
     align-items: center;
-
+    width: fit-content;
     display: flex;
     justify-content: left;
+    min-width: 80px;
     align-content: center;
     margin: 0;
 `

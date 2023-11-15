@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '18.x'
+          node-version: "18.x"
 
       - name: npm install, build, and test
         run: |
@@ -30,7 +30,7 @@ jobs:
       - name: Copy web.config file to dist
         run: |
           Copy-Item ".\web.config" -Destination ".\dist\web.config"
-      
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
@@ -41,7 +41,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -50,11 +50,11 @@ jobs:
         with:
           name: node-app
 
-      - name: 'Deploy to Azure Web App'
+      - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'turbinsikker-app-win-prod'
-          slot-name: 'Production'
+          app-name: "turbinsikker-app-win-prod"
+          slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8A91383BDFF64F3F9224728D14776D2A }}
           package: .

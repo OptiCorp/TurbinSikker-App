@@ -1,8 +1,8 @@
 import { Button, Typography } from '@equinor/eds-core-react'
 
 import { ElementType, FunctionComponent } from 'react'
-import { BtnWrapper } from '../../../pages/users/addUser/styles'
-import { FooterContainerHook } from '../styles'
+
+import { BtnWrapper, FooterContainerHook } from '../styles'
 
 interface NavProps {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void

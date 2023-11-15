@@ -15,25 +15,30 @@ export const PreviewWrapper = styled.div`
 
 export const InfoHeader = styled.div`
     display: flex;
+    background-color: ${COLORS.white};
     width: 100%;
     min-height: 50px;
 `
 export const PreviewListWrap = styled.ul`
     display: flex;
     flex-direction: column;
-    padding-bottom: 5rem;
+    padding: 1rem;
     width: 70%;
+    gap: 3rem;
     margin: 0 auto;
 `
 export const PreviewListPoints = styled(TextField)`
     text-align: center;
     padding: 0;
+    width: 70%;
 `
 
 export const StyledCard = styled(Card)`
     font-size: 1.5rem;
     background: ${COLORS.white};
     margin: 0 auto;
+    max-width: 800px;
+    padding: 0.5rem;
     text-align: center;
 `
 
@@ -43,22 +48,16 @@ export const CategoryName = styled.h3`
     font-weight: 600;
 `
 
-export const Container = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-`
-
 export const EditStyledCardHeader = styled(Card.Header)`
     display: flex;
     flex-direction: row;
-    margin: 0 auto;
+    align-self: left;
+    width: 200px;
 `
 export const BackgroundContainer = styled.div`
     background-color: ${COLORS.frostyGray};
     width: 100%;
-    padding-right: 1rem;
-    padding-left: 1rem;
+
     height: 100%;
 
     margin: 0 auto;

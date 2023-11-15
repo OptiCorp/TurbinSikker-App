@@ -14,8 +14,8 @@ export const AddTasks = () => {
             <form onSubmit={handleSubmit(onSubmit)} id="addTask">
                 <TitleHeader>
                     <StyledCard>
-                        <Card.Content>
-                            <CategorySelector />
+                        <Card.Content style={{}}>
+                            <CategorySelector />{' '}
                         </Card.Content>
                         <Card.Actions>
                             <Button id="addTask" type="submit" form="addTask">

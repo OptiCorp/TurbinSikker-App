@@ -1,7 +1,7 @@
 import { Button, TextField, Typography } from '@equinor/eds-core-react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
-import { NavActionsComponent } from '../../../components/navigation/hooks/useNavActionBtn'
+import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
 
 import { useEffect, useState } from 'react'
 import useGlobal from '../../../context/globalContextProvider'

@@ -26,10 +26,11 @@ export const ForReviewList: FunctionComponent<CompletedRowProps> = ({
     if (WorkFlow?.creator.id !== currentUser?.id) {
         return null
     }
-    if (WorkFlow.status !== 'Committed') return null
-
+    
+   
     return (
         <>
+        {WorkFlow.status === 'Committed' || WorkFlow.status === 'Rejected' ?  (
             <StyledTableRowCompleted onClick={() => clickHandler(WorkFlow.id)}>
                 <Table.Cell>
                     <CellContentCompleted>
@@ -49,7 +50,7 @@ export const ForReviewList: FunctionComponent<CompletedRowProps> = ({
                         <ChipStatus workflow={WorkFlow} />
                     </CellStatus>
                 </Table.Cell>
-            </StyledTableRowCompleted>
+            </StyledTableRowCompleted>) : <></>}
         </>
     )
 }

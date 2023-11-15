@@ -52,11 +52,17 @@ export const Header = () => {
     const [title, setTitle] = useState('')
 
     const [notificationsList, setNotificationsList] = useState<Notifications[]>([])
+    const [badgeColor, setBadgeColor] = useState("orange")
 
     const getAllNotifications = async () => {
         if (currentUser) {
             const notifications = await api.getNotificationsByUser(currentUser.id);
             const unreadNotifications = notifications.filter((notification) => notification.notificationStatus === "Unread")
+            if (unreadNotifications.some(notification => notification.notificationType.toLowerCase() === "error")) {
+                setBadgeColor("red")
+            } else {
+                setBadgeColor("orange")
+            }
             setNotificationsList(notifications)
             setNumberOfUnreads(unreadNotifications.length)
 
@@ -69,9 +75,15 @@ export const Header = () => {
 
         pubSubClient?.on("server-message", (e) => {
             if (currentUser) {
-                if (e.message.data === currentUser.id) {
+                var notificationType = e.message.data.toString().split(' ')[0];
+                var reveiverId = e.message.data.toString().split(' ')[1];
+                if (reveiverId === currentUser.id) {
                     getAllNotifications()
-                    if (openSnackbar) openSnackbar("Invoicing failed")
+                    if (notificationType === "error") {
+                        if (openSnackbar) openSnackbar("Invoice failed")
+                    } else {
+                        if (openSnackbar) openSnackbar("Invoice sent")
+                    }
                 }
             }
         })
@@ -138,7 +150,7 @@ export const Header = () => {
             pathTitle = checklist?.title || ''
         } else if (location.pathname.includes('ForReviewChecklists')) {
             pathTitle = 'For review'
-        } else if (location.pathname.includes('EditCheckList')) {
+        } else if (location.pathname.includes('EditCheckList' ) )  {
             pathTitle = 'Edit' + ' ' + checklist?.title || ''
         } else if (location.pathname === '/SendCheckList/') {
             pathTitle = 'Send checklist' || ''
@@ -194,7 +206,7 @@ export const Header = () => {
                     <HeaderLocation>{title}</HeaderLocation>
                 </TopBar.CustomContent>
                 <TopBar.Actions>
-                    <Badge value={numberOfUnreads} color={"red"}>
+                    <Badge value={numberOfUnreads} color={badgeColor}>
                         <Icon data={notifications}
                             size={32}
                             style={{

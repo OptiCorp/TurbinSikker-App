@@ -97,3 +97,10 @@ export const StyledChip = styled(Chip)`
     background-color: ${COLORS.styledChipColor};
     color: ${COLORS.white};
 `
+export const BtnWrapper = styled.div`
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    justify-content: space-evenly;
+`

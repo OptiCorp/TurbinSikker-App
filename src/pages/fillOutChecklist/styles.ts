@@ -6,6 +6,10 @@ import { COLORS } from '../../style/GlobalStyles'
 export const InfoHeader = styled.div`
     display: flex;
     width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
     min-height: 50px;
 
     background-color: ${COLORS.white};
@@ -59,6 +63,7 @@ export const Error = styled.div`
     font-size: 1rem;
     font-weight: 600;
     align-self: end;
+    width: 100px;
     color: ${COLORS.dangerRed};
 `
 
@@ -124,7 +129,7 @@ export const CustomCategoryName = styled.h3`
 export const CustomTaskField = styled(TextField)`
     & textarea {
         padding: 0;
-        min-width: 150px;
+        max-width: 200px;
 
         padding-left: 10px;
     }
@@ -145,12 +150,14 @@ export const FillOutWrap = styled.ul`
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    min-width: 300px;
+    padding-bottom: 1rem;
     margin-top: 1rem;
     padding: 0;
-    gap: 1rem;
+    gap: 2rem;
     width: 40%;
-    min-width: 300px;
+
     padding-bottom: 1rem;
 `
 
@@ -159,8 +166,11 @@ export const ReviewWrap = styled.ul`
 
     margin-top: 1rem;
     padding: 0;
-    gap: 1rem;
+    gap: 2rem;
     width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     min-width: 300px;
     padding-bottom: 1rem;
 `

@@ -4,36 +4,38 @@ import { useLocation, useParams } from 'react-router'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Category, Task } from '../../../services/apiTypes'
-
-export type CategoryTaskSelector = {
-    value: string
-    label: string
-}
-
-type FormData = {
-    id: string
-}
+import { AddTaskForm } from '../types'
 
 export const useAddTaskForm = () => {
     const [tasks, setTasks] = useState<Task[]>([])
     const { id: checklistId } = useParams() as { id: string }
     const appLocation = useLocation()
     const { currentUser } = useGlobal()
-    const methods = useForm<FormData>()
-    const { handleSubmit, control, reset, resetField } = methods
+    const methods = useForm<AddTaskForm>({
+        defaultValues: { id: '', category: '' },
+    })
+    const {
+        handleSubmit,
+        control,
+        reset,
+        resetField,
+        formState: { isSubmitSuccessful },
+    } = methods
     const [selectedOption, setSelectedOption] = useState('')
     const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const api = apiService()
     const [category, setCategory] = useState<Category[]>([])
 
-    const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
+    const onSubmit: SubmitHandler<AddTaskForm> = async (data: AddTaskForm) => {
         try {
             const res = await api.addTaskToChecklist(data.id, checklistId)
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task added')
                 if (res.ok) setRefreshList((prev) => !prev)
-                if (res.ok) reset(data)
+
+                if (res.ok) methods.reset({ category: '', id: '' })
             }
+           
         } catch (error) {
             console.log(error)
         }
@@ -53,6 +55,7 @@ export const useAddTaskForm = () => {
                     })
                 )
                 setCategory(categories)
+           
             } catch (error) {
                 console.log(error)
             }

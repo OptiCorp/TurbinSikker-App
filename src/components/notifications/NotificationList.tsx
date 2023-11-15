@@ -4,6 +4,7 @@ import { Notifications } from "../../services/apiTypes"
 import { close } from "@equinor/eds-icons"
 import { COLORS } from "../../style/GlobalStyles"
 import apiService from "../../services/api"
+import { StyledDialog } from "./styles"
 
 export type Props = {
     open: boolean
@@ -47,8 +48,8 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
 
 
     return <>
-        <Dialog open={open} onClose={handleClose} style={{ height: '400px' }}>
-            <Dialog.Header>
+        <StyledDialog open={open} onClose={handleClose}>
+            <Dialog.Header style={{ width: '100%', paddingBottom: '16px' }}>
                 <Dialog.Title>Notifications</Dialog.Title>
                 <Icon
                     data={close}
@@ -59,22 +60,22 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
                     onClick={() => closer()}
                 />
             </Dialog.Header>
-            <Dialog.CustomContent scrollable style={{ height: '100%' }}>
+            <Dialog.CustomContent scrollable style={{ height: '100%', paddingTop: '0px' }}>
 
                 {!isInfoOpen
                     ?
                     (
                         <Table style={{ width: '100%' }}>
-                            <Table.Head>
+                            <Table.Head style={{ position: 'sticky', top: '0px' }}>
                                 <Table.Row>
                                     <Table.Cell>Type</Table.Cell>
                                     <Table.Cell>Message</Table.Cell>
                                 </Table.Row>
                             </Table.Head>
-                            <Table.Body>
+                            <Table.Body style={{ overflowY: 'auto' }}>
                                 {notificationsList.map((notify, key) =>
                                 ((
-                                    <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(165, 223, 255)' : undefined }} key={key}>
+                                    <Table.Row style={{ backgroundColor: notify.notificationStatus === 'Unread' ? 'rgb(189, 238, 255)' : undefined }} key={key}>
                                         <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.notificationType}</Table.Cell>
                                         <Table.Cell onClick={async () => await handleNotificationInfoOpen(notify)}>{notify.message}</Table.Cell>
                                     </Table.Row>
@@ -96,14 +97,9 @@ const NotificationList: FunctionComponent<Props> = ({ open, setOpen, getAllNotif
                             </Table.Body>
                         </Table>
                     )}
-
-
             </Dialog.CustomContent>
-
-        </Dialog>
+        </StyledDialog>
     </>
 }
 
 export default NotificationList
-
-

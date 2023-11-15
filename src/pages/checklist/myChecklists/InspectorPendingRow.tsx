@@ -19,12 +19,22 @@ export const InspectorPendingRow: FunctionComponent<
     const clickHandler = (id: string | undefined) => {
         navigate(`/FillOutChecklist/${id}`)
     }
-    if (WorkFlow.checklist.status !== 0) return null
+    if (WorkFlow.checklist.status !== 'Active') return null
     if (WorkFlow.status !== 'Sent' || !WorkFlow) return null
+
+    //to do
+    //show sent back workflows as a banner or similar.
 
     return (
         <>
-            <StyledTableRow onClick={() => clickHandler(WorkFlow.id || '')}>
+            <StyledTableRow
+                onClick={() => clickHandler(WorkFlow.id || '')}
+                // style={{
+                //     border: WorkFlow.taskInfos.hasOwnProperty('Finished')
+                //         ? '2px solid red'
+                //         : '',
+                // }}
+            >
                 <Table.Cell>
                     <TitleCellContent>
                         <Typography variant="body_long_bold">

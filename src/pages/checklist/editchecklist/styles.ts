@@ -1,6 +1,7 @@
 import { Card, Dialog, Switch, TextField } from '@equinor/eds-core-react'
 import styled from 'styled-components'
 import { COLORS } from '../../../style/GlobalStyles'
+
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -28,14 +29,15 @@ export const BackgroundContainer = styled.div`
 
 export const ScrollWrapper = styled.div`
     overflow: scroll;
+    height: 700px;
     padding-bottom: 20px;
-    margin-bottom: 4rem;
 `
 export const EditWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding-bottom: 5rem;
+    padding: 1rem;
     width: 70%;
+    gap: 3rem;
     margin: 0 auto;
 `
 export const EditStyledCardHeader = styled(Card.Header)`
@@ -45,6 +47,7 @@ export const EditStyledCardHeader = styled(Card.Header)`
 `
 export const EditCard = styled(Card)`
     background: ${COLORS.white};
+    width: 100%;
     margin: 0 auto;
 `
 export const StyledSwitch = styled(Switch)`
@@ -53,36 +56,27 @@ export const StyledSwitch = styled(Switch)`
     top: 0;
     margin: 0 auto;
 `
-export const Container = styled.div`
-    width: 100%;
 
-    display: flex;
-    flex-direction: column;
-`
 export const StyledCard = styled(Card)`
     font-size: 1.5rem;
-    background: white;
+    background: ${COLORS.white};
+
     margin: 0 auto;
-    height: min-content;
     display: flex;
     position: relative;
+    max-width: 800px;
     text-align: center;
 `
 
-export const CategoryName = styled.h3`
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
-`
 export const ActionHeader = styled.div`
-    color: red;
     display: flex;
     flex-direction: row-reverse;
 `
 
 export const Delete = styled.div`
-    color: red;
-    justify-content: flex-end;
-    display: flex;
+    display: inline-flex;
+    align-self: flex-end;
+    height: 0;
+    cursor: pointer;
     margin: 0;
 `

@@ -1,4 +1,4 @@
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 
 import { useEffect, useState } from 'react'
@@ -25,23 +25,25 @@ const objectTaskListToArray = (taskObject: { [key: string]: string }) => {
 }
 
 export const useFillChecklistForm = () => {
-    const methods = useForm<FillOutChecklistForm>()
-
+    const [submitDialogShowing, setSubmitDialogShowing] = useState(false)
     const navigate = useNavigate()
 
     const api = apiService()
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
     const [workflow, setWorkflow] = useState<WorkflowResponse>()
     const { isInspector, isLeader } = useRoles()
-    const { handleSubmit, control, register, getFieldState} = methods
 
-    const { fields, update } = useFieldArray({
-        control: methods.control,
-        name: 'taskInfos',
-    })
+    const methods = useForm<FillOutChecklistForm>()
+    const {
+        handleSubmit,
+        control,
+        register,
+        reset,
+        formState: { errors },
+    } = methods
 
-    
     const { workflowId } = useParams() as { workflowId: string }
+
     useEffect(() => {
         ;(async (): Promise<void> => {
             const workFlowData = await api.getWorkflow(workflowId)
@@ -49,10 +51,11 @@ export const useFillChecklistForm = () => {
             if (!currentUser || !workFlowData) return
             methods.reset({
                 id: workflowId,
-                userId: currentUser.id,
+                userId: isInspector ? currentUser.id : workFlowData.user.id,
                 status: workFlowData.status,
                 completionTimeMinutes: workFlowData.completionTimeMinutes,
                 taskInfos: objectTaskListToArray(workFlowData.taskInfos),
+                comment: workFlowData.comment,
             })
             setWorkflow(workFlowData)
         })()
@@ -61,52 +64,73 @@ export const useFillChecklistForm = () => {
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
-        if (isLeader && workflowId) {
+        if (isLeader && data.status === 'Done') {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
                     'Done',
                     data.completionTimeMinutes,
-                    methods.watch('taskInfos')
+                    methods.watch('taskInfos'),
+                    ''
                 )
 
                 if (res.ok) {
-                    if (openSnackbar) {
-                        openSnackbar('Checklist Approved')
-                    }
+                    setSubmitDialogShowing(false)
+                    if (openSnackbar) openSnackbar('Checklist marked as done')
+                    navigate('/Checklists')
+                    setRefreshList((prev) => !prev)
+                } else {
+                    setSubmitDialogShowing(false)
+                }
+            } catch (error) {
+                console.error(error)
+                setSubmitDialogShowing(false)
+            }
+        } else if (isLeader && data.comment) {
+            try {
+                const res = await api.updateWorkflow(
+                    workflowId,
+                    data.userId,
+                    'Rejected',
+                    data.completionTimeMinutes,
+                    methods.watch('taskInfos'),
+                    data.comment
+                )
 
+                if (res.ok) {
+                    setSubmitDialogShowing(false)
+                    if (openSnackbar)
+                        openSnackbar('Checklist marked as rejected')
+                    navigate('/Checklists')
+                    setRefreshList((prev) => !prev)
+                } else {
+                    setSubmitDialogShowing(false)
+                }
+            } catch (error) {
+                console.error(error)
+                setSubmitDialogShowing(false)
+            }
+        } else if (isInspector) {
+            try {
+                const res = await api.updateWorkflow(
+                    workflowId,
+                    data.userId,
+                    'Committed',
+                    data.completionTimeMinutes,
+                    methods.watch('taskInfos'),
+                    methods.watch('comment')
+                )
+
+                if (res.ok) {
+                    setSubmitDialogShowing(false)
+                    if (openSnackbar) openSnackbar('Checklist committed')
                     navigate('/Checklists')
                     setRefreshList((prev) => !prev)
                 }
             } catch (error) {
-                console.log(error)
-            }
-        }
-
-        if (isInspector && workflowId) {
-            {
-                try {
-                    const res = await api.updateWorkflow(
-                        workflowId,
-                        data.userId,
-                        'Committed',
-                        data.completionTimeMinutes,
-                        methods.watch('taskInfos')
-                    )
-                    if (res.ok) {
-                        openSnackbar && openSnackbar('Checklist committed')
-                        navigate('/Checklists')
-                        setRefreshList((prev) => !prev)
-                    }if ('') {
-                        openSnackbar &&
-                            openSnackbar(
-                                'All tasks must be checked to commit checklist'
-                            )
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
+                console.error(error)
+                setSubmitDialogShowing(false)
             }
         }
     }
@@ -116,7 +140,11 @@ export const useFillChecklistForm = () => {
         onSubmit,
         workflow,
         control,
+        setSubmitDialogShowing,
+        submitDialogShowing,
+        formState: { errors },
         register,
+        reset,
         handleSubmit,
     }
 }
