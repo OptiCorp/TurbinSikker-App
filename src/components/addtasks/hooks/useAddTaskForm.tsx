@@ -14,19 +14,39 @@ export const useAddTaskForm = () => {
     const methods = useForm<AddTaskForm>({
         defaultValues: { id: '', category: '' },
     })
-    const {
-        handleSubmit,
-        control,
-        reset,
-        resetField,
-        formState: { isSubmitSuccessful },
-    } = methods
+    const { handleSubmit, control, reset, resetField } = methods
     const [selectedOption, setSelectedOption] = useState('')
     const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const api = apiService()
     const [category, setCategory] = useState<Category[]>([])
+    const [checklistsData, setChecklistsData] = useState<Task[]>([])
+
+    useEffect(() => {
+        if (!tasks && !checklistId) return
+        ;(async () => {
+            try {
+                const checklistTaskData =
+                    await api.getAllTasksByChecklistId(checklistId)
+
+                setChecklistsData(checklistTaskData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [currentUser?.id, checklistId])
 
     const onSubmit: SubmitHandler<AddTaskForm> = async (data: AddTaskForm) => {
+        const taskAlreadyExcist = checklistsData.some(
+            (Task) => Task.id === data.id
+        )
+
+        if (taskAlreadyExcist) {
+            if (openSnackbar)
+                openSnackbar('task already excist on this checklist')
+            console.log('test')
+            return
+        }
+
         try {
             const res = await api.addTaskToChecklist(data.id, checklistId)
             if (res.ok) {
@@ -35,7 +55,6 @@ export const useAddTaskForm = () => {
 
                 if (res.ok) methods.reset({ category: '', id: '' })
             }
-           
         } catch (error) {
             console.log(error)
         }
@@ -55,7 +74,6 @@ export const useAddTaskForm = () => {
                     })
                 )
                 setCategory(categories)
-           
             } catch (error) {
                 console.log(error)
             }

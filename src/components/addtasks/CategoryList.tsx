@@ -1,4 +1,4 @@
-import { Button, Typography } from '@equinor/eds-core-react'
+import { Button } from '@equinor/eds-core-react'
 import { Controller, useFormContext } from 'react-hook-form'
 import Select, { components } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -7,7 +7,6 @@ import apiService from '../../services/api'
 import { useAddTaskForm } from './hooks/useAddTaskForm'
 import { ControllerWrap, customStyles } from './styles'
 import { AddTaskForm } from './types'
-import CustomDialog from '../modal/useModalHook'
 
 export const CategorySelector = () => {
     const {
@@ -55,9 +54,6 @@ export const CategorySelector = () => {
         }
     }
 
-
-
-
     return (
         <>
             <ControllerWrap>
@@ -98,7 +94,11 @@ export const CategorySelector = () => {
                                 onCreateOption={(description) => {
                                     addnewOption(description)
                                 }}
-                                isDisabled={selectedOption ? false : true}
+                                isDisabled={
+                                    methods.getFieldState('category').isTouched
+                                        ? false
+                                        : true
+                                }
                                 styles={customStyles}
                                 options={tasks}
                                 isClearable
@@ -110,9 +110,8 @@ export const CategorySelector = () => {
                                 getOptionLabel={(task) =>
                                     task.description
                                         ? task.description
-                                        : 'Add new task: ' + task.value 
+                                        : 'Add new task: ' + task.value
                                 }
-                              
                                 onChange={(val) => {
                                     if (val === null) return onChange(null)
                                     onChange(val.id)
@@ -122,13 +121,11 @@ export const CategorySelector = () => {
                                         ? 'select task or write new task'
                                         : null
                                 }
-                      
                             />
                         )
                     }}
                 />
             </ControllerWrap>
-          
         </>
     )
 }
