@@ -64,7 +64,10 @@ export const useFillChecklistForm = () => {
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
-        if (isLeader && data.status === 'Done') {
+        if (
+            (isLeader && data.status === 'Committed') ||
+            data.status === 'Rejected'
+        ) {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,

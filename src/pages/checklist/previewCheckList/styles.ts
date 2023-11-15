@@ -8,7 +8,6 @@ export const PreviewWrapper = styled.div`
     justify-content: flex-start;
     margin: 0 auto;
 
-    min-height: 80vh;
     padding-bottom: 3rem;
     flex-direction: column;
 `
@@ -17,11 +16,13 @@ export const InfoHeader = styled.div`
     display: flex;
     background-color: ${COLORS.white};
     width: 100%;
+    justify-content: center;
     min-height: 50px;
 `
 export const PreviewListWrap = styled.ul`
     display: flex;
     flex-direction: column;
+    padding-bottom: 3rem;
     padding: 1rem;
     width: 70%;
     gap: 3rem;
@@ -40,12 +41,6 @@ export const StyledCard = styled(Card)`
     max-width: 800px;
     padding: 0.5rem;
     text-align: center;
-`
-
-export const CategoryName = styled.h3`
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 600;
 `
 
 export const EditStyledCardHeader = styled(Card.Header)`

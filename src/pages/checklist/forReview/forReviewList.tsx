@@ -23,34 +23,42 @@ export const ForReviewList: FunctionComponent<CompletedRowProps> = ({
             state: { isFromCompletedList: true },
         })
     }
-    if (WorkFlow?.creator.id !== currentUser?.id) {
+    if (
+        WorkFlow?.creator.id !== currentUser?.id ||
+        WorkFlow.checklist.status === 'Inactive'
+    ) {
         return null
     }
-    
-   
+
     return (
         <>
-        {WorkFlow.status === 'Committed' || WorkFlow.status === 'Rejected' ?  (
-            <StyledTableRowCompleted onClick={() => clickHandler(WorkFlow.id)}>
-                <Table.Cell>
-                    <CellContentCompleted>
-                        <Typography variant="body_long_bold">
-                            {WorkFlow.checklist.title}
-                        </Typography>
-                    </CellContentCompleted>
-                </Table.Cell>
-                <Table.Cell>
-                    <CellContentCompleted>
-                        <UserChip workflow={WorkFlow} />
-                    </CellContentCompleted>
-                </Table.Cell>
+            {WorkFlow.status === 'Committed' ||
+            WorkFlow.status === 'Rejected' ? (
+                <StyledTableRowCompleted
+                    onClick={() => clickHandler(WorkFlow.id)}
+                >
+                    <Table.Cell>
+                        <CellContentCompleted>
+                            <Typography variant="body_long_bold">
+                                {WorkFlow.checklist.title}
+                            </Typography>
+                        </CellContentCompleted>
+                    </Table.Cell>
+                    <Table.Cell>
+                        <CellContentCompleted>
+                            <UserChip workflow={WorkFlow} />
+                        </CellContentCompleted>
+                    </Table.Cell>
 
-                <Table.Cell>
-                    <CellStatus>
-                        <ChipStatus workflow={WorkFlow} />
-                    </CellStatus>
-                </Table.Cell>
-            </StyledTableRowCompleted>) : <></>}
+                    <Table.Cell>
+                        <CellStatus>
+                            <ChipStatus workflow={WorkFlow} />
+                        </CellStatus>
+                    </Table.Cell>
+                </StyledTableRowCompleted>
+            ) : (
+                <></>
+            )}
         </>
     )
 }

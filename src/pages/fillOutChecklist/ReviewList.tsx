@@ -11,12 +11,10 @@ import { DialogLeader } from './dialogLeader'
 import { FillOutChecklistForm } from './hooks/types'
 import {
     CustomCardContent,
-    CustomCategoryName,
     CustomTaskField,
     Error,
     ImageContainer,
     NotApplicableWrap,
-    ReviewCardHeader,
     ReviewWrap,
     StyledReviewCard,
     StyledSwitch,
@@ -39,23 +37,24 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                     )
                     if (!task) return
                     return (
-                        <StyledReviewCard
-                         
-                            elevation="raised"
-                        >
-                             <Label
-                            htmlFor="storybook-multi-readonly"
-                            label={task.category.name}
-                            style={{
-                                height: '0',
-                                fontWeight: '600',
-                                fontSize: '1rem',
-                            }}
-                        />{' '}
+                        <StyledReviewCard key={task.id} elevation="raised">
+                            <Label
+                                htmlFor="storybook-multi-readonly"
+                                label={task.category.name}
+                                style={{
+                                    height: '0',
+                                    fontWeight: '600',
+                                    fontSize: '1rem',
+                                }}
+                            />{' '}
                             <CustomCardContent>
                                 <NotApplicableWrap>
                                     <StyledSwitch
-                                        disabled={true}
+                                        disabled={
+                                            field.status === 'NotApplicable'
+                                                ? false
+                                                : true
+                                        }
                                         size="small"
                                         label="N/A?"
                                         type="checkbox"
@@ -76,12 +75,6 @@ export const ReviewList: FunctionComponent<ReviewProps> = ({ workflow }) => {
                                             />
                                         )
                                     }
-                                    style={{
-                                        filter:
-                                            field.status === 'NotApplicable'
-                                                ? 'blur(3px)'
-                                                : 'none',
-                                    }}
                                     helperText={
                                         field.status === 'Unfinished'
                                             ? 'is not finished'

@@ -94,11 +94,7 @@ export const CategorySelector = () => {
                                 onCreateOption={(description) => {
                                     addnewOption(description)
                                 }}
-                                isDisabled={
-                                    methods.getFieldState('category').isTouched
-                                        ? false
-                                        : true
-                                }
+                                isDisabled={selectedOption ? false : true}
                                 styles={customStyles}
                                 options={tasks}
                                 isClearable
@@ -118,8 +114,8 @@ export const CategorySelector = () => {
                                 }}
                                 placeholder={
                                     selectedOption
-                                        ? 'select task or write new task'
-                                        : null
+                                        ? 'Select task or write new task'
+                                        : 'Select category first!'
                                 }
                             />
                         )
