@@ -9,14 +9,14 @@ import { StyledCard, TitleHeader } from './styles'
 export const AddTasks = () => {
     const { methods, onSubmit } = useAddTaskForm()
     const { handleSubmit } = methods
-    const { snackbar, setSnackbarText } = useSnackBar()
+    const { snackbar } = useSnackBar()
     return (
         <FormProvider {...methods}>
             {snackbar}
             <form onSubmit={handleSubmit(onSubmit)} id="addTask">
                 <TitleHeader>
                     <StyledCard>
-                        <Card.Content style={{}}>
+                        <Card.Content>
                             <CategorySelector />{' '}
                         </Card.Content>
                         <Card.Actions>

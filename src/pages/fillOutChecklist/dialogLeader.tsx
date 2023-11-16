@@ -11,21 +11,12 @@ import {
 import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/NavActionBtn'
 
-import {
-    Controller,
-    DeepMap,
-    FieldError,
-    FieldValues,
-    useFormContext,
-} from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
 import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { FillOutChecklistForm } from './hooks/types'
 import { CustomTaskField, RejectWrap } from './styles'
-
-export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
-    DeepMap<TFieldValues, FieldError>
 
 export type DialogProps = {
     workflow: WorkflowResponse

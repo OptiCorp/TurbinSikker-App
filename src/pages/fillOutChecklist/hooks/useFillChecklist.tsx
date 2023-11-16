@@ -31,6 +31,7 @@ export const useFillChecklistForm = () => {
     const api = apiService()
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
     const [workflow, setWorkflow] = useState<WorkflowResponse>()
+
     const { isInspector, isLeader } = useRoles()
 
     const methods = useForm<FillOutChecklistForm>()

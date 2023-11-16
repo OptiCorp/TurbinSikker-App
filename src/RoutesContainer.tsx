@@ -55,16 +55,13 @@ export function RoutesContainer() {
                         }
                     />
 
-                    <Route
-                        path="/"
-                        element={
-                            isInspector ? (
-                                <Navigate replace to="MyCheckLists" />
-                            ) : (
-                                <ChecklistComponent />
-                            )
-                        }
-                    />
+                    {isInspector && (
+                        <Route path="/" element={<MyCheckLists />} />
+                    )}
+
+                    {isLeader && (
+                        <Route path="/" element={<ChecklistComponent />} />
+                    )}
                 </Route>
 
                 <Route
