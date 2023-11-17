@@ -4,7 +4,6 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import { MainWrap } from './styles'
-
 export const IndexCheckLists = () => {
     const path = useLocation()
     const { isLeader, isInspector } = useRoles()
