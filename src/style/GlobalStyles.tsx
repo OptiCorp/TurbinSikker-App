@@ -22,7 +22,7 @@ export const COLORS = {
     styledChipColor: '#e60323',
 }
 
-const GlobalStyles = createGlobalStyle`
+export const GlobalStyles = createGlobalStyle`
 
 body,
   html {
@@ -64,5 +64,3 @@ body::-webkit-scrollbar {
 }
 
 `
-
-export default GlobalStyles
