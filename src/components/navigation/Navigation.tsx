@@ -1,9 +1,9 @@
-import { NavigationMainWrap } from "./styles";
+import { NavigationMainWrap } from './styles'
 
 export const Navigation: React.FC = () => {
-  return (
-    <>
-      <NavigationMainWrap></NavigationMainWrap>
-    </>
-  );
-};
+    return (
+        <>
+            <NavigationMainWrap></NavigationMainWrap>
+        </>
+    )
+}

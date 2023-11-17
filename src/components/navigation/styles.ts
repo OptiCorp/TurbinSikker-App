@@ -60,7 +60,7 @@ export const ImageContainerActive = styled.div`
     align-items: center;
 `
 
-export const StyledTab = styled.div`
+export const StyledTab = styled(Tabs.Tab)<{ isActive: number }>`
     display: flex;
     color: ${COLORS.white};
     justify-content: center;
@@ -80,13 +80,8 @@ export const NavigationMainWrap = styled.div`
     gap: 0.5rem;
     align-items: center;
 `
-export const StyledList = styled(Tabs.List)`
-    display: flex;
-    width: 100vw;
-    height: 100%;
-`
 
-export const StyledTabs = styled(Tabs)``
+export const StyledTabs = styled(Tabs)<{ activeTab: number | undefined }>``
 
 export const StyledChip = styled(Chip)`
     height: 20px;

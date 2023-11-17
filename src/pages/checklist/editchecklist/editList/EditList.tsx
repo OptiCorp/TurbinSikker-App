@@ -129,7 +129,7 @@ export const EditList = ({ tasks }: Props) => {
                             helperText="click to edit"
                             onClick={() => {
                                 setTask(task)
-                                console.log(task)
+
                                 setDialogShowing(true)
                             }}
                         />{' '}
