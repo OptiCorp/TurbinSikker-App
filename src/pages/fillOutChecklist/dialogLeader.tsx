@@ -37,13 +37,18 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                 as="button"
                 secondButtonColor="primary"
                 buttonVariant="outlined"
-                secondOnClick={() => setApproveDialogShow(true)}
+                secondOnClick={() => {
+                    setApproveDialogShow(true)
+
+                    methods.setValue('status', 'Done')
+                }}
                 isShown={true}
                 ButtonMessage="Reject"
                 type="button"
                 primaryType="button"
                 onClick={() => {
                     setRejectDialogShowing(true)
+                    methods.setValue('status', 'Rejected')
                 }}
                 SecondButtonMessage="approve"
             />

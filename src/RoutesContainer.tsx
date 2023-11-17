@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router'
 import Layout from './Layout'
 
-import { GlobalProvider } from './context/globalContextProvider'
 import { IndexCheckLists } from './pages/checklist'
 import { EditCheckList } from './pages/checklist/editchecklist/editCheckList'
 import { ForReviewChecklists } from './pages/checklist/forReview/Index'
@@ -27,33 +26,16 @@ export function RoutesContainer() {
             <Route element={<Layout />}>
                 <Route path="/Profile" element={<Profile />} />
 
-                <Route
-                    element={
-                        <GlobalProvider>
-                            <IndexCheckLists />
-                        </GlobalProvider>
-                    }
-                >
+                <Route element={<IndexCheckLists />}>
                     <Route
                         path="/Checklists"
-                        element={
-                            <GlobalProvider>
-                                <ChecklistComponent />
-                            </GlobalProvider>
-                        }
+                        element={<ChecklistComponent />}
                     />
                     <Route
                         path="/ForReviewChecklists"
                         element={<ForReviewChecklists />}
                     />
-                    <Route
-                        path="/MyChecklists"
-                        element={
-                            <GlobalProvider>
-                                <MyCheckLists />
-                            </GlobalProvider>
-                        }
-                    />
+                    <Route path="/MyChecklists" element={<MyCheckLists />} />
 
                     {isInspector && (
                         <Route path="/" element={<MyCheckLists />} />

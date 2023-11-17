@@ -66,14 +66,13 @@ export const useFillChecklistForm = () => {
         data: FillOutChecklistForm
     ) => {
         if (
-            (isLeader && data.status === 'Committed') ||
-            data.status === 'Rejected'
+            (isLeader && data.status ==='Done' )
         ) {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
-                    'Done',
+          data.status,
                     data.completionTimeMinutes,
                     methods.watch('taskInfos'),
                     ''
@@ -91,12 +90,12 @@ export const useFillChecklistForm = () => {
                 console.error(error)
                 setSubmitDialogShowing(false)
             }
-        } else if (isLeader && data.comment) {
+        } else if (isLeader && data.comment && data.status === 'Rejected') {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
-                    'Rejected',
+                   data.status,
                     data.completionTimeMinutes,
                     methods.watch('taskInfos'),
                     data.comment
