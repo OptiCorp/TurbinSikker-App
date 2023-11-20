@@ -11,6 +11,8 @@ export const BackgroundWrap = styled.div`
     overflow: auto;
     height: 790px;
     overflow-x: hidden;
+    padding-bottom: 5rem;
+
     background: ${COLORS.primary};
 `
 

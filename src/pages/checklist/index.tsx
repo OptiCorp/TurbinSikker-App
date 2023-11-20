@@ -1,6 +1,7 @@
 import { Tabs } from '@equinor/eds-core-react'
 import { useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import useSnackBar from '../../components/snackbar/useSnackBar'
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
 import { MainWrap } from './styles'
@@ -98,7 +99,7 @@ export const IndexCheckLists = () => {
                             <></>
                         )}
                     </Tabs.List>
-
+              
                     <Outlet />
                 </Tabs>
             </MainWrap>

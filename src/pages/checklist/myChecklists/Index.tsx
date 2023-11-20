@@ -5,6 +5,7 @@ import { BannerComponent } from '../../../components/banner/useBanner'
 import CustomDialog from '../../../components/modal/useModalHook'
 import { DefaultNavigation } from '../../../components/navigation/hooks/DefaultNavigation'
 import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
+import useSnackBar from '../../../components/snackbar/useSnackBar'
 import useGlobal from '../../../context/globalContextProvider'
 import apiService from '../../../services/api'
 import { Checklist, WorkflowResponse } from '../../../services/apiTypes'
@@ -13,24 +14,31 @@ import { COLORS } from '../../../style/GlobalStyles'
 import { InspectorPendingRow } from './InspectorPendingRow'
 import { LeaderMyChecklist } from './LeaderMyChecklists'
 import { BackgroundWrap, MakeTitleField } from './styles'
-
 export const MyCheckLists = () => {
     const api = apiService()
     const [workflow, setWorkFlow] = useState<WorkflowResponse[]>([])
     const [checklists, setChecklists] = useState<Checklist[]>([])
-    const { currentUser, openSnackbar, refreshList } =
-        useGlobal()
+    const { currentUser, openSnackbar, refreshList } = useGlobal()
     const handleClose = () => {
         setDialogShowing(false)
     }
+    const { snackbar, setSnackbarText } = useSnackBar()
     const [title, setTitle] = useState('')
     const [isOpen, setIsOpen] = useState(false)
+    const [error, setError] = useState(false)
     const [dialogShowing, setDialogShowing] = useState(false)
     const [activeRow, setActiveRow] = useState(false)
     const navigate = useNavigate()
     const { isLeader, isInspector } = useRoles()
 
     const handleCreateChecklist = async () => {
+        const nameAlreadyExist = checklists.some(
+            (checklist) => checklist.title === title
+        )
+
+        if (nameAlreadyExist) {
+            setError(true)
+        }
         try {
             if (!currentUser) return
             const res = await api.addChecklist(currentUser.id, title)
@@ -78,6 +86,7 @@ export const MyCheckLists = () => {
     return (
         <>
             <BackgroundWrap>
+                {snackbar}
                 <BannerComponent />
                 <Table>
                     <Table.Head>
@@ -166,17 +175,28 @@ export const MyCheckLists = () => {
                 isOpen={dialogShowing}
             >
                 <MakeTitleField
-                    id="storybook-readonly"
+                    id="checklistName"
                     placeholder="name"
+                    aria-errormessage="asdsad"
                     label=""
+                    required={true}
+                    variant={error ? 'error' : undefined}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        setTitle(event.target.value)
+                        const value = event.target.value
+                        setTitle(value)
+                        if (!value) {
+                            setError(false)
+                        }
                     }}
                     style={{
                         borderBottom: `1px solid ${COLORS.secondary}`,
                         background: COLORS.white,
                     }}
                 />
+
+                <span>
+                    {error ? 'checklist by that name already exist' : ''}
+                </span>
             </CustomDialog>
         </>
     )

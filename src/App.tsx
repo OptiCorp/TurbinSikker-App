@@ -14,6 +14,7 @@ const App = () => {
             <div className="wrapper">
                 {isAuthenticated && (
                     <GlobalProvider>
+                        
                         <SnackBarComponent />
                         <RoutesContainer />
                     </GlobalProvider>

@@ -43,7 +43,7 @@ export const useAddTaskForm = () => {
         if (taskAlreadyExist) {
             if (openSnackbar)
                 openSnackbar('task already excist on this checklist')
-            console.log('test')
+         
             return
         }
 
