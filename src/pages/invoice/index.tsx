@@ -1,6 +1,5 @@
 import {
     Autocomplete,
-    AutocompleteChanges,
     Button,
     Chip,
     Dialog,
@@ -11,171 +10,44 @@ import {
     Table,
     Typography,
 } from '@equinor/eds-core-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { DefaultNavigation } from '../../components/navigation/hooks/DefaultNavigation'
-import useGlobal from '../../context/globalContextProvider'
 import {
     formatDate,
     formatTimestamp,
 } from '../../helpers/dateFormattingHelpers'
-import apiService from '../../services/api'
-import { ApiStatus, Invoice, WorkflowResponse } from '../../services/apiTypes'
+import { useInvoice } from './hooks/useInvoice'
 import { InvoiceListItem, TableWrapper, TextWrapper } from './styles'
 
-export type ListEntity = {
-    id: string
-    title: string
-    value: string
-    label: string
-}
-
 function ListInvoices() {
-    const api = apiService()
-    const [invoices, setInvoices] = useState<Invoice[]>()
-    const [activeInvoice, setActiveInvoice] = useState<Invoice>()
-    const [completedWorkflows, setCompletedWorkflows] =
-        useState<WorkflowResponse[]>()
-    const [receiver, setReceiver] = useState<string>('')
-    const [title, setTitle] = useState<string>('')
-    const [hourlyRate, setHourlyRate] = useState<number>(0)
-    const [message, setMessage] = useState<string>('')
-
-    const [list, setList] = useState<ListEntity[]>([])
-    const [fetchPunchStatus, setFetchPunchStatus] = useState<ApiStatus>(
-        ApiStatus.LOADING
-    )
-    const { currentUser } = useGlobal()
-
-    const [isSendOpen, setIsSendOpen] = useState(false)
-    const handleSendOpen = () => {
-        setIsSendOpen(true)
-    }
-    const handleSendClose = () => {
-        setIsSendOpen(false)
-        setSelectedWorkflows([])
-    }
-
-    const [isStatusOpen, setIsStatusOpen] = useState(false)
-    const handleStatusOpen = (invoice: Invoice) => {
-        setIsStatusOpen(true)
-        setStatus(invoice.status)
-        setActiveInvoice(invoice)
-        setMessage(invoice.message)
-    }
-
-    const handleStatusClose = () => {
-        setIsStatusOpen(false)
-        setStatus('')
-    }
-
-    const [isInfoOpen, setIsInfoOpen] = useState(false)
-    const handleInfoOpen = (invoice: Invoice) => {
-        setIsInfoOpen(true)
-        setActiveInvoice(invoice)
-    }
-
-    const handleInfoClose = () => {
-        setIsInfoOpen(false)
-    }
-
-    const getAllInvoices = async () => {
-        const invoicesFromApi = await api.getAllInvoices()
-        setInvoices(invoicesFromApi)
-    }
-
-    const getAllCompletedWorkflows = async () => {
-        const workflowsFromApi = await api.getAllCompletedWorkflows()
-        setCompletedWorkflows(workflowsFromApi)
-        // if (workflowsFromApi) {
-        //     const listData: ListEntity[] = workflowsFromApi.map((workflow) => {
-        //         return {
-        //             id: workflow.id,
-        //             title: workflow.checklist.title,
-        //             value: workflow.id,
-        //             label: workflow.checklist.title,
-        //         }
-        //     })
-        //     setList(listData)
-        // }
-    }
-
-    // type Item = {
-    //     label: string
-    // }
-    // function CustomItem(option: Item) {
-    //     const label = completedWorkflows?.map(
-    //         (workflow) => workflow.checklist.title
-    //     )
-    //     return <h1>{label}</h1>
-    // }
-
-    const updateStatus = async () => {
-        await api.updateInvoice(activeInvoice!.id, status!, message)
-        await getAllInvoices()
-        setIsStatusOpen(false)
-        setStatus('')
-    }
-
-    const sendInvoice = async () => {
-        if (currentUser) {
-            await api.addInvoice(
-                title,
-                receiver,
-                selectedWorkflows,
-                hourlyRate,
-                currentUser.id
-            )
-        }
-
-        handleSendClose()
-        getAllInvoices()
-    }
-
-    const handleChangeEmail = async (
-        event: React.FormEvent<HTMLInputElement>
-    ) => {
-        setReceiver(event.currentTarget.value)
-    }
-
-    const handleChangeTitle = async (
-        event: React.FormEvent<HTMLInputElement>
-    ) => {
-        setTitle(event.currentTarget.value)
-    }
-
-    const handleChangeHourlyRate = async (
-        event: React.FormEvent<HTMLInputElement>
-    ) => {
-        const hourlyRate = event.currentTarget.value
-        setHourlyRate(parseInt(hourlyRate))
-    }
-
-    const handleChangeMessage = async (
-        event: React.FormEvent<HTMLInputElement>
-    ) => {
-        setMessage(event.currentTarget.value)
-    }
-
-    const [selectedWorkflows, setSelectedWorkflows] = useState<string[]>([])
-
-    const onChangeOptions = (changes: AutocompleteChanges<string>) => {
-        setSelectedWorkflows(changes.selectedItems)
-    }
-
-    const [status, setStatus] = useState<string>()
-    const onChangeStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStatus(event.target.value)
-    }
-
-    const downloadPDF = async () => {
-        const invoice = await api.getInvoicePdfByInvoiceId(activeInvoice!?.id)
-        const linkSource = `data:application/pdf;base64,${invoice.pdf}`
-        const downloadLink = document.createElement('a')
-        const fileName = 'invoice.pdf'
-        downloadLink.href = linkSource
-        downloadLink.download = fileName
-        downloadLink.click()
-    }
+    const {
+        handleSendOpen,
+        invoices,
+        handleInfoOpen,
+        handleStatusOpen,
+        isStatusOpen,
+        activeInvoice,
+        message,
+        handleChangeMessage,
+        status,
+        onChangeStatus,
+        updateStatus,
+        handleStatusClose,
+        isSendOpen,
+        handleSendClose,
+        handleChangeTitle,
+        handleChangeEmail,
+        handleChangeHourlyRate,
+        completedWorkflows,
+        selectedWorkflows,
+        sendInvoice,
+        downloadPDF,
+        onChangeOptions,
+        isInfoOpen,
+        handleInfoClose,
+        getAllCompletedWorkflows,
+        getAllInvoices,
+    } = useInvoice()
 
     useEffect(() => {
         getAllInvoices()
@@ -342,32 +214,18 @@ function ListInvoices() {
                                 onChange={handleChangeHourlyRate}
                             />
                         </div>
-                        {/* <Select
-                            options={list}
-                            isClearable
-                            isMulti={true}
-                            value={list.find((c) => c.id === c.value)}
-                            onChange={(val) => {
-                             (val.map((x) => x.value))
-                              setSelectedWorkflows(val)
-                          }}
-                        /> */}
-                        {/* <Autocomplete
-                            label="Checklists"
-                            options={completedWorkflows!?.map((workflow) => workflow.id)}
-                            onOptionsChange={onChangeOptions}
-                            selectedOptions={selectedWorkflows}
-                            optionLabel={(item) => item}
-                            optionComponent={CustomItem}
-                            multiple
-                        /> */}
                         <Autocomplete
-                            label="Checklists"
-                            options={completedWorkflows!?.map(
-                                (workflow) => workflow.id
-                            )}
-                            onOptionsChange={onChangeOptions}
+                            label=""
+                            options={
+                                completedWorkflows?.filter(
+                                    (x) => !!x.completionTimeMinutes
+                                ) || []
+                            }
                             selectedOptions={selectedWorkflows}
+                            optionLabel={(option) => option.checklist.title}
+                            onOptionsChange={({ selectedItems }) => {
+                                onChangeOptions(selectedItems)
+                            }}
                             multiple
                         />
                     </Dialog.CustomContent>
