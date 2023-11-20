@@ -9,13 +9,13 @@ import apiService from '../../../services/api'
 import { Checklist, ChecklistTaskInfo } from '../../../services/apiTypes'
 import { useRoles } from '../../../services/useRoles'
 import { COLORS } from '../../../style/GlobalStyles'
+import { ScrollWrapper } from '../editchecklist/styles'
 import { PreviewList } from './PreviewList'
 import {
     BackgroundContainer,
     EditStyledCardHeader,
     InfoHeader,
     NoTaskContainer,
-    StyledCard,
 } from './styles'
 export const PreviewCheckList = () => {
     const location = useLocation()
@@ -58,43 +58,43 @@ export const PreviewCheckList = () => {
                 {checklist && (
                     <div key={checklist.id}>
                         <InfoHeader>
-                            <StyledCard>
-                                <EditStyledCardHeader>
-                                    <TextField
-                                        id="storybook-readonly"
-                                        placeholder={checklist.title}
-                                        label=""
-                                        readOnly
-                                        style={{
-                                            borderBottom: '1px solid #243746',
-                                            background: COLORS.white,
-                                        }}
-                                    />
-                                </EditStyledCardHeader>
-                            </StyledCard>
+                            <EditStyledCardHeader>
+                                
+                                <TextField
+                                    id="storybook-readonly"
+                                    placeholder={checklist.title}
+                                    label=""
+                                    readOnly
+                                    style={{
+                                        borderBottom: '1px solid #243746',
+                                        background: COLORS.white,
+                                    }}
+                                />
+                            </EditStyledCardHeader>
                         </InfoHeader>
-
-                        {checklist?.checklistTasks?.length === 0 ? (
-                            <NoTaskContainer>
-                                <Typography variant="body_short_bold">
-                                    No tasks added yet!
-                                </Typography>
-                                {isLeader && (
-                                    <Button
-                                        variant="outlined"
-                                        onClick={() => {
-                                            navigate(
-                                                `/EditCheckList/${checklist.id}`
-                                            )
-                                        }}
-                                    >
-                                        Add some tasks here!
-                                    </Button>
-                                )}
-                            </NoTaskContainer>
-                        ) : (
-                            <PreviewList key={checklist.id} tasks={tasks} />
-                        )}
+                        <ScrollWrapper>
+                            {checklist?.checklistTasks?.length === 0 ? (
+                                <NoTaskContainer>
+                                    <Typography variant="body_short_bold">
+                                        No tasks added yet!
+                                    </Typography>
+                                    {isLeader && (
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                navigate(
+                                                    `/EditCheckList/${checklist.id}`
+                                                )
+                                            }}
+                                        >
+                                            Add some tasks here!
+                                        </Button>
+                                    )}
+                                </NoTaskContainer>
+                            ) : (
+                                <PreviewList key={checklist.id} tasks={tasks} />
+                            )}{' '}
+                        </ScrollWrapper>
                     </div>
                 )}
             </BackgroundContainer>

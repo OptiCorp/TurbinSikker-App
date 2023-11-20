@@ -65,6 +65,7 @@ export type Task = {
     description: string
     category: Category
     value: string
+    estAvgCompletionTime: number
 }
 
 export type ChecklistTaskInfo = {

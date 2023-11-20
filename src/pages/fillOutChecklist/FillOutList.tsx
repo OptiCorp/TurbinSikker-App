@@ -1,17 +1,6 @@
-import { ChangeEvent, FunctionComponent, useState } from 'react'
-
 import { Card, Checkbox, Chip, Typography } from '@equinor/eds-core-react'
-
-import {
-    Controller,
-    DeepMap,
-    FieldError,
-    FieldValues,
-    useFieldArray,
-    useFormContext,
-} from 'react-hook-form'
-import { WorkflowResponse } from '../../services/apiTypes'
-
+import { ChangeEvent, FunctionComponent, useState } from 'react'
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { DialogInspector } from './dialogInspector'
 import { FillOutChecklistForm } from './hooks/types'
 import {
@@ -25,15 +14,7 @@ import {
     StyledSwitch,
     SubmitErrorContainer,
 } from './styles'
-
-export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
-    DeepMap<TFieldValues, FieldError>
-
-export type FillOutListProps = {
-    workflow: WorkflowResponse
-    setSubmitDialogShowing: (submitDialogShowing: boolean) => void
-    submitDialogShowing: boolean
-}
+import { FillOutListProps } from './types'
 
 export const FillOutList: FunctionComponent<FillOutListProps> = ({
     workflow,
@@ -59,6 +40,7 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                             (x) => x.id === field.taskId
                         )
                         if (!task) return
+
                         return (
                             <CustomCard key={task.id}>
                                 <Card.Header>
@@ -123,12 +105,6 @@ export const FillOutList: FunctionComponent<FillOutListProps> = ({
                                         name="task"
                                         defaultValue={task.description}
                                         multiline
-                                        style={{
-                                            filter:
-                                                field.status === 'NotApplicable'
-                                                    ? 'blur(3px)'
-                                                    : 'none',
-                                        }}
                                         rows={4}
                                         readOnly
                                     />

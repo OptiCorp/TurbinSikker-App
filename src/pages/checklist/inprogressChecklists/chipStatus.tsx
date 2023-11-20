@@ -9,7 +9,6 @@ type ChipStatusProps = {
 
 export const ChipStatus: FC<ChipStatusProps> = ({ workflow }) => {
     const formattedUpdateDate = formatDate(workflow?.updatedDate ?? '')
-    const createdDate = formatDate(workflow?.createdDate ?? '')
 
     switch (workflow.status) {
         case 'Sent':

@@ -14,28 +14,47 @@ export const useAddTaskForm = () => {
     const methods = useForm<AddTaskForm>({
         defaultValues: { id: '', category: '' },
     })
-    const {
-        handleSubmit,
-        control,
-        reset,
-        resetField,
-        formState: { isSubmitSuccessful },
-    } = methods
+    const { handleSubmit, control, reset, resetField, watch } = methods
     const [selectedOption, setSelectedOption] = useState('')
     const { openSnackbar, refreshList, setRefreshList } = useGlobal()
     const api = apiService()
     const [category, setCategory] = useState<Category[]>([])
+    const [checklistsData, setChecklistsData] = useState<Task[]>([])
+
+    useEffect(() => {
+        if (!tasks && !checklistId) return
+        ;(async () => {
+            try {
+                const checklistTaskData =
+                    await api.getAllTasksByChecklistId(checklistId)
+
+                setChecklistsData(checklistTaskData)
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [currentUser?.id, checklistId])
 
     const onSubmit: SubmitHandler<AddTaskForm> = async (data: AddTaskForm) => {
+        const taskAlreadyExist = checklistsData.some(
+            (Task) => Task.id === data.id
+        )
+
+        if (taskAlreadyExist) {
+            if (openSnackbar)
+                openSnackbar('task already excist on this checklist')
+         
+            return
+        }
+
         try {
             const res = await api.addTaskToChecklist(data.id, checklistId)
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task added')
                 if (res.ok) setRefreshList((prev) => !prev)
 
-                if (res.ok) methods.reset({ category: '', id: '' })
+                if (res.ok) methods.reset()
             }
-           
         } catch (error) {
             console.log(error)
         }
@@ -55,12 +74,11 @@ export const useAddTaskForm = () => {
                     })
                 )
                 setCategory(categories)
-           
             } catch (error) {
                 console.log(error)
             }
         })()
-    }, [currentUser?.id])
+    }, [currentUser?.id, refreshList, selectedOption])
 
     useEffect(() => {
         ;(async (): Promise<void> => {
@@ -89,6 +107,7 @@ export const useAddTaskForm = () => {
         reset,
         resetField,
         category,
+        watch,
         selectedOption,
         tasks,
     }

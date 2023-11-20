@@ -25,13 +25,14 @@ export const LeaderInprogressChecklists: FunctionComponent<
     return (
         <>
             {workflow.workflows.map((workflow) => (
-                <>
+                <StyledTableRow
+                    key={workflow.checklist.id}
+                    onClick={() => clickHandler(workflow.checklist.id)}
+                >
                     {workflow.status === 'Sent' && (
-                        <StyledTableRow
-                            onClick={() => clickHandler(workflow.checklist.id)}
-                        >
+                        <>
                             <Table.Cell>
-                                <CellContent>
+                                <CellContent key={workflow.id}>
                                     <Typography variant="body_long_bold">
                                         {workflow.checklist.title}
                                     </Typography>
@@ -57,9 +58,9 @@ export const LeaderInprogressChecklists: FunctionComponent<
                                     <ChipStatus workflow={workflow} />{' '}
                                 </CellStatus>
                             </Table.Cell>
-                        </StyledTableRow>
+                        </>
                     )}
-                </>
+                </StyledTableRow>
             ))}
         </>
     )

@@ -11,21 +11,12 @@ import {
 import CustomDialog from '../../components/modal/useModalHook'
 import { NavActionsComponent } from '../../components/navigation/hooks/NavActionBtn'
 
-import {
-    Controller,
-    DeepMap,
-    FieldError,
-    FieldValues,
-    useFormContext,
-} from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
 import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { FillOutChecklistForm } from './hooks/types'
 import { CustomTaskField, RejectWrap } from './styles'
-
-export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
-    DeepMap<TFieldValues, FieldError>
 
 export type DialogProps = {
     workflow: WorkflowResponse
@@ -33,6 +24,9 @@ export type DialogProps = {
 
 export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
     const methods = useFormContext<FillOutChecklistForm>()
+    const {
+        formState: { errors },
+    } = methods
     const [rejectDialogShowing, setRejectDialogShowing] = useState(false)
     const [approveDialogShow, setApproveDialogShow] = useState(false)
 
@@ -43,13 +37,18 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                 as="button"
                 secondButtonColor="primary"
                 buttonVariant="outlined"
-                secondOnClick={() => setApproveDialogShow(true)}
+                secondOnClick={() => {
+                    setApproveDialogShow(true)
+
+                    methods.setValue('status', 'Done')
+                }}
                 isShown={true}
                 ButtonMessage="Reject"
                 type="button"
                 primaryType="button"
                 onClick={() => {
                     setRejectDialogShowing(true)
+                    methods.setValue('status', 'Rejected')
                 }}
                 SecondButtonMessage="approve"
             />
@@ -88,8 +87,11 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                                 key="comment"
                                 id="comment"
                                 {...methods.register('comment', {
-                                    required: 'This is required.',
-                                    minLength: 10,
+                                    required: 'minimum 5 characters!',
+                                    minLength: {
+                                        value: 5,
+                                        message: 'min length is 5',
+                                    },
                                 })}
                                 defaultValue="write here"
                                 multiline
@@ -106,6 +108,14 @@ export const DialogLeader: FunctionComponent<DialogProps> = ({ workflow }) => {
                             />
                         )}
                     />
+                    {errors.comment && (
+                        <span role="alert">
+                            <Typography color="red">
+                                {' '}
+                                {errors.comment.message}
+                            </Typography>
+                        </span>
+                    )}
                 </RejectWrap>
             </CustomDialog>
 

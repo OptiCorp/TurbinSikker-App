@@ -2,6 +2,7 @@ import { Typography } from '@equinor/eds-core-react'
 import { useEffect, useState } from 'react'
 import { AddTasks } from '../../../components/addtasks/AddTasks'
 import CustomDialog from '../../../components/modal/useModalHook'
+
 import { NavActionsComponent } from '../../../components/navigation/hooks/NavActionBtn'
 import { EditHeader } from './EditHeader'
 import { EditList } from './editList/EditList'

@@ -1,21 +1,23 @@
-import { Dialog, Icon, TopBar } from '@equinor/eds-core-react'
+import { Icon, TopBar } from '@equinor/eds-core-react'
 import { arrow_back_ios, menu, notifications } from '@equinor/eds-icons'
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import useGlobal from '../../context/globalContextProvider'
 import apiService from '../../services/api'
 
-import { Notifications, Checklist, WorkflowResponse, Workflow } from '../../services/apiTypes'
+import {
+    Checklist,
+    Notifications,
+    WorkflowResponse,
+} from '../../services/apiTypes'
 
-
-
+import { WebPubSubClient } from '@azure/web-pubsub-client'
 import { useRoles } from '../../services/useRoles'
 import { COLORS } from '../../style/GlobalStyles'
-import Sidebar from '../sidebar/Sidebar'
-import NotificationList from '../notifications/NotificationList'
-import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
-import { WebPubSubClient } from '@azure/web-pubsub-client'
 import { Badge } from '../badge'
+import NotificationList from '../notifications/NotificationList'
+import Sidebar from '../sidebar/Sidebar'
+import { HeaderContents, HeaderLocation, NewTopBar } from './styles'
 
 export const Header = () => {
     const navigate = useNavigate()
@@ -23,7 +25,7 @@ export const Header = () => {
     const [checklist, setChecklist] = useState<Checklist>()
     const location = useLocation()
     const [open, setOpen] = useState(false)
-    const { isInspector, isLeader } = useRoles()
+    const { isLeader } = useRoles()
     const api = apiService()
 
     const [numberOfUnreads, setNumberOfUnreads] = useState(0)
@@ -44,45 +46,54 @@ export const Header = () => {
     }
     const basePath = useBasePath()
 
-
     const { currentUser, pubSubToken, openSnackbar } = useGlobal()
-    const [workflow, setWorkFlow] = useState<WorkflowResponse | undefined>(undefined)
-
+    const [workflow, setWorkFlow] = useState<WorkflowResponse | undefined>(
+        undefined
+    )
 
     const [title, setTitle] = useState('')
 
-    const [notificationsList, setNotificationsList] = useState<Notifications[]>([])
-    const [badgeColor, setBadgeColor] = useState("orange")
+    const [notificationsList, setNotificationsList] = useState<Notifications[]>(
+        []
+    )
+    const [badgeColor, setBadgeColor] = useState('orange')
 
     const getAllNotifications = async () => {
         if (currentUser) {
-            const notifications = await api.getNotificationsByUser(currentUser.id);
-            const unreadNotifications = notifications.filter((notification) => notification.notificationStatus === "Unread")
-            if (unreadNotifications.some(notification => notification.notificationType.toLowerCase() === "error")) {
-                setBadgeColor("red")
+            const notifications = await api.getNotificationsByUser(
+                currentUser.id
+            )
+            const unreadNotifications = notifications.filter(
+                (notification) => notification.notificationStatus === 'Unread'
+            )
+            if (
+                unreadNotifications.some(
+                    (notification) =>
+                        notification.notificationType.toLowerCase() === 'error'
+                )
+            ) {
+                setBadgeColor('red')
             } else {
-                setBadgeColor("orange")
+                setBadgeColor('orange')
             }
             setNotificationsList(notifications)
             setNumberOfUnreads(unreadNotifications.length)
-
         }
     }
 
     useEffect(() => {
-        console.log("token: " + pubSubToken)
         const pubSubClient = new WebPubSubClient(pubSubToken)
 
-        pubSubClient?.on("server-message", (e) => {
+        pubSubClient?.on('server-message', (e) => {
             if (currentUser) {
-                var notificationType = e.message.data.toString().split(' ')[0];
-                var reveiverId = e.message.data.toString().split(' ')[1];
+                var notificationType = e.message.data.toString().split(' ')[0]
+                var reveiverId = e.message.data.toString().split(' ')[1]
                 if (reveiverId === currentUser.id) {
                     getAllNotifications()
-                    if (notificationType === "error") {
-                        if (openSnackbar) openSnackbar("Invoice failed")
+                    if (notificationType === 'error') {
+                        if (openSnackbar) openSnackbar('Invoice failed')
                     } else {
-                        if (openSnackbar) openSnackbar("Invoice sent")
+                        if (openSnackbar) openSnackbar('Invoice sent')
                     }
                 }
             }
@@ -91,19 +102,15 @@ export const Header = () => {
         pubSubClient?.start()
 
         if (currentUser) {
-            (async () => {
-                // const notifications = await api.getNotificationsByUser(currentUser.id);
-                // setNotificationsList(notifications)
-                // setRead(notifications.some(notification => notification.notificationStatus === "Unread"))
+            ;(async () => {
                 await getAllNotifications()
             })()
         }
         return () => {
-            pubSubClient?.off("server-message", () => { })
+            pubSubClient?.off('server-message', () => {})
             pubSubClient?.stop()
         }
     }, [])
-
 
     const { id, workflowId, taskId, punchId } = useParams() as {
         id: string
@@ -113,7 +120,7 @@ export const Header = () => {
     }
     useEffect(() => {
         if (!workflow && !checklist && id && currentUser?.id) {
-            (async () => {
+            ;(async () => {
                 try {
                     const checklistData = await api.getChecklist(id)
                     setChecklist(checklistData)
@@ -122,7 +129,7 @@ export const Header = () => {
                 }
             })()
         } else {
-            (async () => {
+            ;(async () => {
                 if (workflowId)
                     try {
                         const workFlowData = await api.getWorkflow(workflowId)
@@ -150,7 +157,7 @@ export const Header = () => {
             pathTitle = checklist?.title || ''
         } else if (location.pathname.includes('ForReviewChecklists')) {
             pathTitle = 'For review'
-        } else if (location.pathname.includes('EditCheckList' ) )  {
+        } else if (location.pathname.includes('EditCheckList')) {
             pathTitle = 'Edit' + ' ' + checklist?.title || ''
         } else if (location.pathname === '/SendCheckList/') {
             pathTitle = 'Send checklist' || ''
@@ -167,11 +174,13 @@ export const Header = () => {
         } else if (location.pathname.includes(workflowId && taskId)) {
             pathTitle = 'Create punch'
         } else if (location.pathname.includes('Checklists')) {
-            pathTitle = `${isLeader ? 'Checklists in progress' : 'Outgoing checklists'
-                }`
+            pathTitle = `${
+                isLeader ? 'Checklists in progress' : 'Outgoing checklists'
+            }`
         } else if (location.pathname.includes('MyCheckLists')) {
-            pathTitle = `${isLeader ? 'Checklists templates' : 'Incomming checklists'
-                }`
+            pathTitle = `${
+                isLeader ? 'Checklists templates' : 'Incomming checklists'
+            }`
         } else {
             pathTitle =
                 basePath?.match(/[A-Z][a-z]+|[0-9]+/g)?.join('') ||
@@ -185,11 +194,15 @@ export const Header = () => {
         navigate(-1)
     }
 
-
     return (
         <>
             <Sidebar open={open} setOpen={setOpen} />
-            <NotificationList open={notificationsOpen} setOpen={setNotificationsOpen} getAllNotificationsParent={getAllNotifications} notificationsList={notificationsList} />
+            <NotificationList
+                open={notificationsOpen}
+                setOpen={setNotificationsOpen}
+                getAllNotificationsParent={getAllNotifications}
+                notificationsList={notificationsList}
+            />
             <NewTopBar>
                 <TopBar.Header>
                     {activeUrl === '/' ? null : (
@@ -207,12 +220,16 @@ export const Header = () => {
                 </TopBar.CustomContent>
                 <TopBar.Actions>
                     <Badge value={numberOfUnreads} color={badgeColor}>
-                        <Icon data={notifications}
+                        <Icon
+                            data={notifications}
                             size={32}
                             style={{
-                                color: COLORS.white
+                                color: COLORS.white,
                             }}
-                            onClick={() => setNotificationsOpen(!notificationsOpen)} />
+                            onClick={() =>
+                                setNotificationsOpen(!notificationsOpen)
+                            }
+                        />
                     </Badge>
                     <Icon
                         data={menu}

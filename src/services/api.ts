@@ -341,7 +341,7 @@ const apiService = () => {
         return response
     }
 
-    const getAllTasksByChecklistId = async (id: string): Promise<Task> => {
+    const getAllTasksByChecklistId = async (id: string): Promise<Task[]> => {
         const data = await getByFetch(`GetAllTasksByChecklistId?id=${id}`)
         return data
     }
@@ -426,13 +426,20 @@ const apiService = () => {
         return data
     }
 
-    const addCategory = async (
-        category: Pick<Category, 'name'> /* name: string */
-    ): Promise<void> => {
-        await postByFetch(`AddCategory`, {
-            category,
-            /* name: name, */
+    // const addCategory = async (
+    //     category: Pick<Category, 'name'> /* name: string */
+    // ): Promise<void> => {
+    //     await postByFetch(`AddCategory`, {
+    //         category,
+    //         /* name: name, */
+    //     })
+    // }
+
+    const addCategory = async (name: string) => {
+        const response = await postByFetch('AddCategory', {
+            name: name,
         })
+        return response.json()
     }
 
     const updateCategory = async (update: Category): Promise<void> => {

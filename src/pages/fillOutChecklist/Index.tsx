@@ -23,7 +23,7 @@ export const FillOutCheckList = () => {
     const { handleSubmit } = methods
 
     const { isInspector, isLeader } = useRoles()
-    const { snackbar, setSnackbarText } = useSnackBar()
+    const { snackbar } = useSnackBar()
 
     const formattedUpdateDate = formatDate(workflow?.updatedDate || '')
 
@@ -73,7 +73,7 @@ export const FillOutCheckList = () => {
                             </List>
                         </InfoHeader>
                     )}
-                    s
+
                     <>
                         <PreviewWrapper>
                             <>

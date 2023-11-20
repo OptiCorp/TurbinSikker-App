@@ -38,15 +38,7 @@ export const Profile: FunctionComponent = () => {
             <Wrapper>
                 <ImageContainer>
                     {state ? (
-                        <img
-                            src={state ? state : Image}
-                            className={Image}
-                            id="output"
-                            width="150"
-                            height="150"
-                            alt="test"
-                            style={{ borderRadius: '50%' }}
-                        />
+                        <Image state={state} />
                     ) : (
                         <Placeholder
                             style={{ display: state ? 'null' : 'block' }}

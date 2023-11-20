@@ -31,6 +31,7 @@ export const useFillChecklistForm = () => {
     const api = apiService()
     const { currentUser, openSnackbar, setRefreshList } = useGlobal()
     const [workflow, setWorkflow] = useState<WorkflowResponse>()
+
     const { isInspector, isLeader } = useRoles()
 
     const methods = useForm<FillOutChecklistForm>()
@@ -64,12 +65,14 @@ export const useFillChecklistForm = () => {
     const onSubmit: SubmitHandler<FillOutChecklistForm> = async (
         data: FillOutChecklistForm
     ) => {
-        if (isLeader && data.status === 'Done') {
+        if (
+            (isLeader && data.status ==='Done' )
+        ) {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
-                    'Done',
+          data.status,
                     data.completionTimeMinutes,
                     methods.watch('taskInfos'),
                     ''
@@ -87,12 +90,12 @@ export const useFillChecklistForm = () => {
                 console.error(error)
                 setSubmitDialogShowing(false)
             }
-        } else if (isLeader && data.comment) {
+        } else if (isLeader && data.comment && data.status === 'Rejected') {
             try {
                 const res = await api.updateWorkflow(
                     workflowId,
                     data.userId,
-                    'Rejected',
+                   data.status,
                     data.completionTimeMinutes,
                     methods.watch('taskInfos'),
                     data.comment

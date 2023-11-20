@@ -4,15 +4,16 @@ import { COLORS } from '../../../style/GlobalStyles'
 
 export const BackgroundWrap = styled.div`
     display: flex;
-    height: min(80vh);
+
     align-items: left;
     flex-direction: column;
     padding: 1rem 1rem;
     overflow: auto;
+    height: 790px;
+    overflow-x: hidden;
+    padding-bottom: 5rem;
 
     background: ${COLORS.primary};
-
-    padding-bottom: 4rem;
 `
 
 export const StyledTableRow = styled(Table.Row)`
