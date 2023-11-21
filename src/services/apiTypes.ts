@@ -37,7 +37,6 @@ export type PunchItem = {
         id?: string
         description?: string
     }
-    // uploads: UploadEntity
 }
 
 export type Category = {

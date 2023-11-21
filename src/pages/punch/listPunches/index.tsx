@@ -105,7 +105,7 @@ function ListPunches() {
                                 >
                                     <Table.Cell>
                                         <TextWrapper>
-                                            Ticket-{punch.id}
+                                            Ticket-{punch?.id.split('-')[0]}
                                         </TextWrapper>
                                     </Table.Cell>
                                     <Table.Cell>

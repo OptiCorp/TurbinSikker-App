@@ -4,7 +4,7 @@ import { RoutesContainer } from './RoutesContainer'
 import { SnackBarComponent } from './components/snackbar/Snackbar'
 import { GlobalProvider } from './context/globalContextProvider'
 import { Login } from './pages/login'
-import './style/App.css'
+
 
 const App = () => {
     const isAuthenticated = useIsAuthenticated()
@@ -14,7 +14,6 @@ const App = () => {
             <div className="wrapper">
                 {isAuthenticated && (
                     <GlobalProvider>
-                        
                         <SnackBarComponent />
                         <RoutesContainer />
                     </GlobalProvider>
