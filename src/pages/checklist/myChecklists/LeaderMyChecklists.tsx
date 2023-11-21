@@ -47,9 +47,7 @@ export const LeaderMyChecklist: FunctionComponent<CheckListRowProps> = ({
     return (
         <>
             {checklist?.id && (
-                <StyledTableRow
-                    onClick={() => clickHandler(checklist.id || '')}
-                >
+                <StyledTableRow onClick={() => clickHandler(checklist.id)}>
                     <Table.Cell>
                         <CellContentMyList>
                             <Typography variant="body_long_bold">

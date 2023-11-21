@@ -27,7 +27,6 @@ export const Profile: FunctionComponent = () => {
     const loadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             setstate(URL.createObjectURL(event.target.files[0]))
-            console.log(URL.createObjectURL(event.target.files[0]))
         }
     }
     const { currentUser } = useGlobal()

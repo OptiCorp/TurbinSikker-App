@@ -83,6 +83,7 @@ export const SelectComponent = () => {
                         render={({ field: { onChange, value } }) => (
                             <Select
                                 options={options}
+                                isClearable={false}
                                 isMulti={true}
                                 value={options.find(
                                     (c: { value: string }) => c.value === value

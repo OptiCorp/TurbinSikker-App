@@ -68,7 +68,7 @@ export const EditList = ({ tasks }: Props) => {
 
         try {
             const res = await api.deleteTask(task.id)
-            console.log(task.id, 'test')
+          
             if (res.ok) {
                 if (openSnackbar) openSnackbar('Task deleted')
                 setDialogDelete(false)
