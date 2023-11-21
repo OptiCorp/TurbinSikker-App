@@ -70,8 +70,10 @@ export const useAddWorkFlowForm = () => {
                     data.userIds.includes(workflow.user.id)
             )
         )
-
+        console.log(isChecklistAlreadyExists)
         if (isChecklistAlreadyExists) {
+            setChecklistAlreadySent(true)
+
             if (openSnackbar)
                 openSnackbar(
                     'The user has already been sent the same checklist'

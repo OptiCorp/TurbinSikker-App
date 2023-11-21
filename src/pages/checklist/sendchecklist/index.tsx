@@ -19,8 +19,8 @@ export const SendCheckList = () => {
 
     const { handleSubmit } = methods
     const navigate = useNavigate()
-    const { snackbar, setSnackbarText } = useSnackBar()
-
+    const { snackbar } = useSnackBar()
+    console.log(checklistAlreadySent)
     return (
         <>
             <FormProvider {...methods}>
