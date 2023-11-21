@@ -19,7 +19,6 @@ const request = {
 }
 
 const apiService = () => {
-    // Generic function for get requests
     const getByFetch = async (url: string): Promise<any> => {
         return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
             const getOperation = {
@@ -56,40 +55,10 @@ const apiService = () => {
             }
             const res = await fetch(`${API_URL}/${url}`, postOperation)
             return res
-            /*   if (res.ok) {
-                const contentType = res.headers.get('content-type')
-                if (contentType && contentType.includes('application/json')) {
-                    const jsonResult = await res.json()
-                    const resultObj = jsonResult
-                    return resultObj
-                }
-            } else {
-                console.error('Post by fetch failed. Url=' + url, res)
-            } */
         } catch (error) {
             console.error('An error occurred:', error)
             throw error
         }
-        /* 
-        return pca.acquireTokenSilent(request).then(async (tokenResponse) => {
-            const postOperation = {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${tokenResponse.accessToken}`,
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-                body: JSON.stringify(bodyData),
-            }
-            const res = await fetch(`${API_URL}/${url}`, postOperation)
-            if (res.ok) {
-                const jsonResult = await res.json()
-                const resultObj = jsonResult
-                return resultObj
-            } else {
-                console.error('Post by fetch failed. Url=' + url, res)
-            }
-        }) */
     }
 
     const postFileByFetch = async (url: string, file: FormData) => {
@@ -426,15 +395,6 @@ const apiService = () => {
         return data
     }
 
-    // const addCategory = async (
-    //     category: Pick<Category, 'name'> /* name: string */
-    // ): Promise<void> => {
-    //     await postByFetch(`AddCategory`, {
-    //         category,
-    //         /* name: name, */
-    //     })
-    // }
-
     const addCategory = async (name: string) => {
         const response = await postByFetch('AddCategory', {
             name: name,
@@ -684,7 +644,6 @@ const apiService = () => {
         updateUpload,
         deleteUpload,
         getAllInvoices,
-        // getAllInvoicePdfs,
         getInvoice,
         getInvoicePdfByInvoiceId,
         addInvoice,

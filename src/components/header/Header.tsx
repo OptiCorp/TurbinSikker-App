@@ -137,7 +137,7 @@ export const Header = () => {
                         setWorkFlow(workFlowData)
                     } catch (error) {
                         console.log(error)
-                        console.log('test')
+                   
                     }
             })()
         }
@@ -197,7 +197,7 @@ export const Header = () => {
     const onClick = () => {
         navigate(-1)
     }
-    console.log(checklist?.title)
+   
 
     return (
         <>
