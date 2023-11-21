@@ -20,6 +20,7 @@ import {
 } from 'react-hook-form'
 import { WorkflowResponse } from '../../services/apiTypes'
 
+import { UserChip } from '../checklist/inprogressChecklists/UserChip'
 import { FillOutChecklistForm } from './hooks/types'
 
 export type FieldErrors<TFieldValues extends FieldValues = FieldValues> =
@@ -103,7 +104,7 @@ export const DialogInspector: FunctionComponent<DialogProps> = ({
                 <Dialog.CustomContent>
                     <Typography style={{ marginBottom: '10px' }}>
                         This will commit {workflow.checklist.title} to
-                        {workflow.creator.username}
+                        <UserChip workflow={workflow} />
                     </Typography>
 
                     <div>

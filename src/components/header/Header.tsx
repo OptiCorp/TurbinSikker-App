@@ -119,7 +119,8 @@ export const Header = () => {
         punchId: string
     }
     useEffect(() => {
-        if (!workflow && !checklist && id && currentUser?.id) {
+        if (!currentUser?.id || !id) return
+        if (!workflow) {
             ;(async () => {
                 try {
                     const checklistData = await api.getChecklist(id)
@@ -140,7 +141,7 @@ export const Header = () => {
                     }
             })()
         }
-    }, [currentUser?.id, id, workflowId])
+    }, [currentUser?.id, workflowId, id])
 
     useEffect(() => {
         let pathTitle = ''
@@ -153,7 +154,10 @@ export const Header = () => {
             pathTitle = 'Add user'
         } else if (location.pathname === '/ListUsers/') {
             pathTitle = 'List of users'
-        } else if (location.pathname.includes('PreviewCheckList')) {
+        } else if (
+            location.pathname.includes('PreviewCheckList') &&
+            checklist
+        ) {
             pathTitle = checklist?.title || ''
         } else if (location.pathname.includes('ForReviewChecklists')) {
             pathTitle = 'For review'
@@ -193,6 +197,7 @@ export const Header = () => {
     const onClick = () => {
         navigate(-1)
     }
+    console.log(checklist?.title)
 
     return (
         <>
