@@ -13,26 +13,16 @@ Inspectors can create punches and submit checklists.
 
 #### Made with React, Typescript, Azure, SQL, C#, .NET
 
+***
+![overview-both roles](https://github.com/OptiCorp/TurbinSikker-App/assets/112854862/2fa16a5a-cf22-4aa5-9964-aef1ed8bd266)
 
-Leader view
-
-![Frame 3](https://github.com/OptiCorp/TurbinSikker-App/assets/112854862/33816a94-53c1-4cf7-81f8-391c4f0fe711)
-
-
-Inspector view
+**Azure connection is not currently in use, but [Userflows and screenshots are available in the wiki](https://github.com/OptiCorp/TurbinSikker-App/wiki)**
 
 
 
-![asdsadas](https://github.com/OptiCorp/TurbinSikker-App/assets/112854862/bf5a5cf0-8ef1-4533-9e01-0d7ef1ee6b5f)
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-## Description
-
-An in-depth paragraph about your project and overview of use.
-
+***
 ## Getting Started
 
 ### Prerequisites
@@ -63,3 +53,5 @@ Typescript
 ```bash
 npm run dev
 ```
+
+<p align="center">(<a href="#readme-top">back to top</a>)</p>
